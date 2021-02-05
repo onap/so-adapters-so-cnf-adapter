@@ -13,7 +13,7 @@ RUN mkdir -p /app/certificates
 RUN mkdir -p /app/logs
 RUN mkdir -p /app/ca-certificates
 RUN apk update && apk add apache2-utils
-COPY target/mso-cnf-adapter-1.7.1-SNAPSHOT.jar /app/app.jar
+COPY target/so-cnf-adapter-1.7.1-SNAPSHOT.jar /app/app.jar
 #COPY target/${JAR_FILE} /app/app.jar
 
 COPY configs/logging/logback-spring.xml /app

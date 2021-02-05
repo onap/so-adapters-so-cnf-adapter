@@ -29,9 +29,9 @@
     <version>1.7.1-SNAPSHOT</version>
   </parent>
   <groupId>org.onap.so.adapters</groupId>
-  <artifactId>mso-cnf-adapter</artifactId>
+  <artifactId>so-cnf-adapter</artifactId>
   <packaging>jar</packaging>
-  <name>mso-cnf-adapter</name>
+  <name>so-cnf-adapter</name>
   <description>Web service endpoint for cnf operations</description>
   <dependencyManagement>
     <dependencies>
@@ -186,16 +186,10 @@
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-spring-boot-starter-jaxrs</artifactId>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpmime -->
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpmime</artifactId>
     </dependency>
-    <!-- <dependency>
-      <groupId>org.apache.cxf</groupId>
-      <artifactId>cxf-rt-rs-service-description-swagger</artifactId>
-      <version>${cxf.version}</version>
-    </dependency> -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -205,41 +199,5 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
-    <!--  <dependency>
-      <groupId>org.onap.so</groupId>
-      <artifactId>mso-requests-db</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.onap.so</groupId>
-      <artifactId>mso-requests-db-repositories</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.mariadb.jdbc</groupId>
-      <artifactId>mariadb-java-client</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>ch.vorburger.mariaDB4j</groupId>
-      <artifactId>mariaDB4j</artifactId>
-      <version>2.2.3</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-configuration-processor</artifactId>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>com.squareup.okhttp3</groupId>
-      <artifactId>okhttp</artifactId>
-      <version>3.14.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <version>1.18.2</version>
-    </dependency> -->
   </dependencies>
 </project>
