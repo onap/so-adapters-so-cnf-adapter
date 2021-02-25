@@ -136,25 +136,16 @@
         </dependencies>
       </plugin>
       <plugin>
-        <groupId>com.spotify</groupId>
-             <artifactId>dockerfile-maven-plugin</artifactId>
-             <version>1.4.3</version>
-	     <dependencies>
-		    <dependency>
-		      <groupId>javax.activation</groupId>
-		      <artifactId>activation</artifactId>
-		      <version>1.1.1</version>
-		    </dependency>
-  	     </dependencies>
-             <executions>
-                 <execution>
-                     <id>docker-build</id>
-                     <goals>
-                         <goal>build</goal>
-                     </goals>
-                 </execution>
-             </executions>
-             <configuration>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>docker-build</id>
+            <phase>install</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
               <dockerFile>Dockerfile</dockerFile>
               <executable>docker</executable>
               <workingDirectory>${project.basedir}</workingDirectory>
@@ -168,10 +159,10 @@
                 <JAR_FILE>${project.artifactId}-${project.version}.jar</JAR_FILE>
                 <ARTIFACT_ID>${project.artifactId}</ARTIFACT_ID>
               </buildArgs>
-	      <repository>${project.artifactId}</repository>
-                 <tag>${project.version}</tag>
             </configuration>
-         </plugin>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
   <dependencies>
