@@ -160,11 +160,6 @@
       <version>1.2.4.RELEASE</version>
     </dependency>
     <dependency>
-      <groupId>org.onap.so</groupId>
-      <artifactId>aai-client</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
       <groupId>com.sun.xml.ws</groupId>
       <artifactId>jaxws-ri</artifactId>
       <version>2.3.0</version>
