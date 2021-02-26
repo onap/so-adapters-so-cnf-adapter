@@ -3,8 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.onap.so.adapters.so-cnf-adapter</groupId>
-        <artifactId>so-cnf-adapter</artifactId>
-        <version>1.8.0-SNAPSHOT</version>
+        <artifactId>packages</artifactId>
+        <version>1.7.1-SNAPSHOT</version>
     </parent>
     <groupId>org.onap.so.adapters.so-cnf-adapter.packages</groupId>
     <version>1.8.0-SNAPSHOT</version>
