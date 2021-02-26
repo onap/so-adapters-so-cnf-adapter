@@ -1,5 +1,0 @@
-# Default behavior
-* text=auto
-
-# Files to have unix style line endings on checkout
-*.sh text eol=lf
