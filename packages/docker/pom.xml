@@ -74,7 +74,7 @@
                             </build>
                         </image>
                         <image>
-                            <name>so-cnf-adapter</name>
+                            <name>${docker.image.prefix}/so-cnf-adapter</name>
                             <build>
                                 <cleanup>try</cleanup>
                                 <dockerFile>docker-files/Dockerfile.so-app</dockerFile>
@@ -131,7 +131,7 @@
                             <goal>push</goal>
                         </goals>
                         <configuration>
-                            <image>so-cnf-adapter</image>
+                            <image>${docker.image.prefix}/so-cnf-adapter</image>
                         </configuration>
                     </execution>
                 </executions>
