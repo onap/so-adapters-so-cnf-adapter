@@ -7,6 +7,7 @@
         <version>1.8.0-SNAPSHOT</version>
     </parent>
     <groupId>org.onap.so.adapters.so-cnf-adapter.packages</groupId>
+    <version>1.8.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <artifactId>docker</artifactId>
     <name>SO CNF Adapter Docker Packaging</name>
