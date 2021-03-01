@@ -30,20 +30,7 @@
     </parent>
   <artifactId>so-cnf-adapter-application</artifactId>
   <version>1.8.0-SNAPSHOT</version>
-  <name>so-cnf-adapter</name>
-  <packaging>jar</packaging>
-  <description>Web service endpoint for cnf operations</description>
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-dependencies</artifactId>
-        <version>${springboot.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+  <name>SO CNF Application Jar</name>
   <build>
     <finalName>${project.artifactId}-${project.version}</finalName>
     <plugins>
