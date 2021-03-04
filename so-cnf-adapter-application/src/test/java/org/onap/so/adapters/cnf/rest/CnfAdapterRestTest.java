@@ -33,13 +33,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import static org.junit.Assert.assertEquals;
 
 
@@ -143,7 +140,19 @@ public class CnfAdapterRestTest {
         String rbName = "xyz";
         String rbVersion = "v1";
         String profileName = "p1";
+        MulticloudInstanceRequest request = null;
         InstanceMiniResponse instanceMiniResponse = new InstanceMiniResponse(HttpStatus.OK.toString());
+
+        instanceMiniResponse.setId("a");
+        instanceMiniResponse.setNameSpace("ab");
+        instanceMiniResponse.setErrorMsg("Error");
+        instanceMiniResponse.setRequest(request);
+
+        instanceMiniResponse.getId();
+        instanceMiniResponse.getNameSpace();
+        instanceMiniResponse.getRequest();
+        instanceMiniResponse.getErrorMsg();
+
         List<InstanceMiniResponse> instancList = new ArrayList<InstanceMiniResponse>();
         instancList.add(instanceMiniResponse);
         InstanceMiniResponseList instanceMiniRespList = new InstanceMiniResponseList(HttpStatus.OK.toString());
@@ -172,14 +181,15 @@ public class CnfAdapterRestTest {
         rb.setLabels(labels);
         rb.setRbName("rb");
         rb.setRbVersion("p1");
-        ReflectionTestUtils.setField(cnfAdapterRest,"uri","http://localhost");
-try{
-        cnfAdapterRest.createRB(rb);
-}
-catch(Exception e)
-{
-assert(true);
-}
+
+     //   ReflectionTestUtils.setField(cnfAdapterRest, "uri", "http://localhost");
+        try {
+            cnfAdapterRest.createRB(rb);
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
     }
 
     @Test
@@ -187,15 +197,14 @@ assert(true);
 
         String RbName = "rb";
         String RbVersion = "p1";
-
-        ReflectionTestUtils.setField(cnfAdapterRest,"uri","http://localhost");
-try{
+     //   ReflectionTestUtils.setField(cnfAdapterRest, "uri", "http://localhost");
+        try{
         cnfAdapterRest.getRB(RbName, RbVersion);
-}
-catch(Exception e)
-{
-assert(true);
-}
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
     }
 
     @Test
@@ -203,14 +212,14 @@ assert(true);
 
         String RbName = "rb";
         String RbVersion = "p1";
-        ReflectionTestUtils.setField(cnfAdapterRest,"uri","http://localhost");
-try{
+    //    ReflectionTestUtils.setField(cnfAdapterRest, "uri", "http://localhost");
+        try{
         cnfAdapterRest.deleteRB(RbName, RbVersion);
-}
-catch(Exception e)
-{
-assert(true);
-}
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
     }
 
     @Test
@@ -218,27 +227,27 @@ assert(true);
 
         String RbName = "rb";
 
-        ReflectionTestUtils.setField(cnfAdapterRest,"uri","http://localhost");
-try{
+      //  ReflectionTestUtils.setField(cnfAdapterRest, "uri", "http://localhost");
+        try{
         cnfAdapterRest.getListOfRB(RbName);
-}
-catch(Exception e)
-{
-assert(true);
-}
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
     }
 
     @Test
     public void getListOfRBWithoutUsingRBNameTest() throws Exception {
 
-        ReflectionTestUtils.setField(cnfAdapterRest,"uri","http://localhost");
-try{
+      //  ReflectionTestUtils.setField(cnfAdapterRest, "uri", "http://localhost");
+        try{
         cnfAdapterRest.getListOfRBWithoutUsingRBName();
-}
-catch(Exception e)
-{
-assert(true);
-}
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
     }
 
     @Test
@@ -250,15 +259,13 @@ assert(true);
         MultipartFile file = Mockito.mock(MultipartFile.class);
         Mockito.when(file.getOriginalFilename()).thenReturn("first value");
 
-        ReflectionTestUtils.setField(cnfAdapterRest,"uri","http://localhost");
+    //    ReflectionTestUtils.setField(cnfAdapterRest, "uri", "http://localhost");
         try {
             cnfAdapterRest.uploadArtifactForRB(file, RbName, RbVersion);
+        } catch (Exception exp) {
+            assert(true);
         }
-        catch (Exception exp)
-        {
-          assert(true);
-        }
- }
+    }
 
     @Test
     public void createProfileTest() throws Exception {
@@ -266,14 +273,14 @@ assert(true);
         String RbName = "rb";
         String RbVersion = "p1";
         ProfileEntity fE = new ProfileEntity();
-        ReflectionTestUtils.setField(cnfAdapterRest,"uri","http://localhost");
-try{
-            cnfAdapterRest.createProfile(fE, RbName, RbVersion);
-}
-catch(Exception e)
-{
-assert(true);
-}
+      //  ReflectionTestUtils.setField(cnfAdapterRest, "uri", "http://localhost");
+        try{
+        cnfAdapterRest.createProfile(fE, RbName, RbVersion);
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
     }
 
     @Test
@@ -282,14 +289,14 @@ assert(true);
         String RbName = "rb";
         String RbVersion = "p1";
         String prName = "p";
-        ReflectionTestUtils.setField(cnfAdapterRest,"uri","http://localhost");
-try{
+     //   ReflectionTestUtils.setField(cnfAdapterRest, "uri", "http://localhost");
+        try{
         cnfAdapterRest.getProfile(prName, RbName, RbVersion);
-}
-catch(Exception e)
-{
-assert(true);
-}
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
     }
 
     @Test
@@ -297,15 +304,15 @@ assert(true);
 
         String RbName = "rb";
         String RbVersion = "p1";
-        ReflectionTestUtils.setField(cnfAdapterRest,"uri","http://localhost");
-try{
+     //   ReflectionTestUtils.setField(cnfAdapterRest, "uri", "http://localhost");
+        try{
         cnfAdapterRest.getListOfProfile(RbName, RbVersion);
-}
-catch(Exception e)
-{
-assert(true);
-}
-  }
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
+    }
 
     @Test
     public void deleteProfileTest() throws Exception {
@@ -313,14 +320,14 @@ assert(true);
         String RbName = "rb";
         String RbVersion = "p1";
         String prName = "p";
-        ReflectionTestUtils.setField(cnfAdapterRest,"uri","http://localhost");
-try{
+     //   ReflectionTestUtils.setField(cnfAdapterRest, "uri", "http://localhost");
+        try{
         cnfAdapterRest.deleteProfile(prName, RbName, RbVersion);
-}
-catch(Exception e)
-{
-assert(true);
-}
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
     }
 
     @Test
@@ -332,17 +339,15 @@ assert(true);
 
         MultipartFile file = Mockito.mock(MultipartFile.class);
         Mockito.when(file.getOriginalFilename()).thenReturn("OK");
-        ReflectionTestUtils.setField(cnfAdapterRest,"uri","http://localhost");
+     //   ReflectionTestUtils.setField(cnfAdapterRest, "uri", "http://localhost");
 
         try {
             cnfAdapterRest.uploadArtifactForProfile(file, RbName, RbVersion, prName);
-        }
-        catch(Exception exp)
-        {
-         assert(true);
+        } catch (Exception exp) {
+            assert(true);
         }
 
-   }
+    }
 
     @Test
     public void createConfigurationTest() throws Exception {
@@ -351,14 +356,14 @@ assert(true);
         String RbVersion = "p1";
         String prName = "p";
         ConfigurationEntity cE = new ConfigurationEntity();
-        ReflectionTestUtils.setField(cnfAdapterRest,"uri","http://localhost");
-try{
+      //  ReflectionTestUtils.setField(cnfAdapterRest, "uri", "http://localhost");
+        try{
         cnfAdapterRest.createConfiguration(cE, prName, RbName, RbVersion);
-}
-catch(Exception e)
-{
-assert(true);
-}
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
     }
 
     @Test
@@ -368,14 +373,14 @@ assert(true);
         String RbVersion = "p1";
         String prName = "p";
         String cfgName = "cfg";
-        ReflectionTestUtils.setField(cnfAdapterRest,"uri","http://localhost");
-try{
+    //    ReflectionTestUtils.setField(cnfAdapterRest, "uri", "http://localhost");
+        try{
         cnfAdapterRest.getConfiguration(prName, RbName, RbVersion, cfgName);
-}
-catch(Exception e)
-{
-assert(true);
-}
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
     }
 
     @Test
@@ -385,14 +390,14 @@ assert(true);
         String RbVersion = "p1";
         String prName = "p";
         String cfgName = "cfg";
-        ReflectionTestUtils.setField(cnfAdapterRest,"uri","http://localhost");
-try{
+     //   ReflectionTestUtils.setField(cnfAdapterRest, "uri", "http://localhost");
+        try{
         cnfAdapterRest.deleteConfiguration(prName, RbName, RbVersion, cfgName);
-}
-catch(Exception e)
-{
-assert(true);
-}
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
     }
 
     @Test
@@ -403,14 +408,14 @@ assert(true);
         String prName = "p";
         String cfgName = "cfg";
         ConfigurationEntity cE = new ConfigurationEntity();
-        ReflectionTestUtils.setField(cnfAdapterRest,"uri","http://localhost");
-try{
+     //   ReflectionTestUtils.setField(cnfAdapterRest, "uri", "http://localhost");
+        try{
         cnfAdapterRest.updateConfiguration(cE, prName, RbName, RbVersion, cfgName);
-}
-catch(Exception e)
-{
-assert(true);
-}
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
     }
 
     @Test
@@ -420,56 +425,56 @@ assert(true);
         String RbVersion = "p1";
         String prName = "p";
         Tag tag = new Tag();
-        ReflectionTestUtils.setField(cnfAdapterRest,"uri","http://localhost");
-try{
+     //   ReflectionTestUtils.setField(cnfAdapterRest, "uri", "http://localhost");
+        try{
         cnfAdapterRest.tagConfigurationValue(tag, RbName, RbVersion, prName);
-}
-catch(Exception e)
-{
-assert(true);
-}
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
     }
 
     @Test
     public void createConnectivityInfoTest() throws Exception {
 
         ConnectivityInfo cIE = new ConnectivityInfo();
-        ReflectionTestUtils.setField(cnfAdapterRest,"uri","http://localhost");
-try{
+     //   ReflectionTestUtils.setField(cnfAdapterRest, "uri", "http://localhost");
+        try{
         cnfAdapterRest.createConnectivityInfo(cIE);
-}
-catch(Exception e)
-{
-assert(true);
-}
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
     }
 
     @Test
     public void getConnectivityInfoTest() throws Exception {
 
         String connName = "con";
-        ReflectionTestUtils.setField(cnfAdapterRest,"uri","http://localhost");
-try{
+     //   ReflectionTestUtils.setField(cnfAdapterRest, "uri", "http://localhost");
+        try{
         cnfAdapterRest.getConnectivityInfo(connName);
-}
-catch(Exception e)
-{
-assert(true);
-}
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
     }
 
     @Test
     public void deleteConnectivityInfoTest() throws Exception {
 
         String connName = "con";
-        ReflectionTestUtils.setField(cnfAdapterRest,"uri","http://localhost");
-try{
+    //    ReflectionTestUtils.setField(cnfAdapterRest, "uri", "http://localhost");
+        try{
         cnfAdapterRest.deleteConnectivityInfo(connName);
-}
-catch(Exception e)
-{
-assert(true);
-}
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
     }
 
     @Test
@@ -478,14 +483,14 @@ assert(true);
         String RbName = "rb";
         String RbVersion = "p1";
         ConfigTemplateEntity tE = new ConfigTemplateEntity();
-        ReflectionTestUtils.setField(cnfAdapterRest,"uri","http://localhost");
-try{
+     //   ReflectionTestUtils.setField(cnfAdapterRest, "uri", "http://localhost");
+        try{
         cnfAdapterRest.createConfigTemplate(tE, RbName, RbVersion);
-}
-catch(Exception e)
-{
-assert(true);
-}
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
     }
 
     @Test
@@ -494,14 +499,14 @@ assert(true);
         String RbName = "rb";
         String RbVersion = "p1";
         String tName = "t";
-        ReflectionTestUtils.setField(cnfAdapterRest,"uri","http://localhost");
-try{
+     //   ReflectionTestUtils.setField(cnfAdapterRest, "uri", "http://localhost");
+        try{
         cnfAdapterRest.getConfigTemplate(RbName, RbVersion, tName);
-}
-catch(Exception e)
-{
-assert(true);
-}
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
     }
 
 
@@ -511,15 +516,14 @@ assert(true);
         String RbName = "rb";
         String RbVersion = "p1";
         String tName = "t";
-        ReflectionTestUtils.setField(cnfAdapterRest,"uri","http://localhost");
-try{
+     //   ReflectionTestUtils.setField(cnfAdapterRest, "uri", "http://localhost");
+        try{
         cnfAdapterRest.deleteTemplate(RbName, RbVersion, tName);
-}
-catch(Exception e)
-{
-  assert(true);
-}
-
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
     }
 
     @Test
@@ -530,13 +534,11 @@ catch(Exception e)
         String tName = "t";
         MultipartFile file = Mockito.mock(MultipartFile.class);
         Mockito.when(file.getOriginalFilename()).thenReturn("First value");
-        ReflectionTestUtils.setField(cnfAdapterRest,"uri","http://localhost");
+     //   ReflectionTestUtils.setField(cnfAdapterRest, "uri", "http://localhost");
         try {
             cnfAdapterRest.uploadTarFileForTemplate(file, RbName, RbVersion, tName);
-        }
-        catch (Exception exp)
-        {
-         assert(true);
+        } catch (Exception exp) {
+            assert(true);
         }
     }
 
@@ -546,14 +548,14 @@ catch(Exception e)
         String RbName = "rb";
         String RbVersion = "p1";
         String prName = "p";
-        ReflectionTestUtils.setField(cnfAdapterRest,"uri","http://localhost");
-try{
+     //   ReflectionTestUtils.setField(cnfAdapterRest, "uri", "http://localhost");
+        try{
         cnfAdapterRest.rollbackConfiguration(rE, RbName, RbVersion, prName);
-}
-catch(Exception e)
-{
-assert(true);
-}
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
     }
 }
 
