@@ -83,14 +83,19 @@ public class CnfAdapterService {
             logger.info("CnfAdapterService createInstance called");
             MulticloudInstanceRequest multicloudInstanceRequest = new MulticloudInstanceRequest();
             ResponseEntity<String> instanceResponse = null;
-            if (bpmnInstanceRequest.getK8sRBProfileName() != null) {
+            if (bpmnInstanceRequest.getK8sRBProfileName() != null) {    
                 multicloudInstanceRequest.setCloudRegion(bpmnInstanceRequest.getCloudRegionId());
                 multicloudInstanceRequest.setLabels(bpmnInstanceRequest.getLabels());
                 multicloudInstanceRequest.setOverrideValues(bpmnInstanceRequest.getOverrideValues());
                 multicloudInstanceRequest.setProfileName(bpmnInstanceRequest.getK8sRBProfileName());
                 multicloudInstanceRequest.setRbName(bpmnInstanceRequest.getModelInvariantId());
                 multicloudInstanceRequest.setRbVersion(bpmnInstanceRequest.getModelVersionId());
-                multicloudInstanceRequest.setVfModuleUuid(bpmnInstanceRequest.getVfModuleUUID());
+                
+                if (bpmnInstanceRequest.getK8sRBInstanceReleaseName() != null)
+                    multicloudInstanceRequest.setReleaseName(bpmnInstanceRequest.getK8sRBInstanceReleaseName());
+                else
+                    multicloudInstanceRequest.setReleaseName(
+                        bpmnInstanceRequest.getK8sRBProfileName() + "-" + bpmnInstanceRequest.getVfModuleUUID());
             } else {
                 logger.error("k8sProfileName should not be null");
                 // return instanceResponse;
