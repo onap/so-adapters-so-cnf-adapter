@@ -1,0 +1,9 @@
+---
+distribution_type: 'container'
+container_release_tag: '1.8.3'
+project: 'so'
+log_dir: 'so-adapters-so-cnf-adapter-maven-docker-stage-master/67/'
+ref: '97e688e678447226d565c71c04fbdaac53d98f88'
+containers:
+    - name: 'so/so-cnf-adapter'
+      version: '1.8.2-20210405T1107'
