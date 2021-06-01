@@ -177,6 +177,28 @@ public class CnfAdapterService {
 
     }
 
+    public String getInstanceQueryByInstanceId(String instanceId) {
+        logger.info("CnfAdapterService getInstanceQueryByInstanceId called");
+        ResponseEntity<String> instanceResponse = null;
+        try {
+            String uri = "http://multicloud-k8s:9015"; // TODO: What is the correct uri?
+            String path = "/v1/instance/" + instanceId + "/query";
+            String endpoint = UriBuilder.fromUri(uri).path(path).build().toString();
+            HttpEntity<?> requestEntity = new HttpEntity<>(getHttpHeaders());
+            instanceResponse = restTemplate.exchange(endpoint, HttpMethod.GET, requestEntity, String.class);
+            return instanceResponse.getBody();
+        } catch (HttpClientErrorException e) {
+            logger.error("Error Calling Multicloud, e");
+            if (HttpStatus.SC_NOT_FOUND == e.getStatusCode().value()) {
+                throw new EntityNotFoundException(e.getResponseBodyAsString());
+            }
+            throw e;
+        } catch (HttpStatusCodeException e) {
+            logger.error("Error in Multicloud, e");
+            throw e;
+        }
+    }
+
     public String getInstanceByRBNameOrRBVersionOrProfileName(String rbName, String rbVersion, String profileName)
             throws JsonParseException, JsonMappingException, IOException {
 
