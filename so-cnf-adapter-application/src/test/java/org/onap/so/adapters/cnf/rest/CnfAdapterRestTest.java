@@ -31,7 +31,6 @@ import org.onap.so.adapters.cnf.service.CnfAdapterService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -132,6 +131,19 @@ public class CnfAdapterRestTest {
         cnfAdapterRest.getInstanceStatusByInstanceId(instanceId);
         Assert.assertNotNull(instanceStatusResponse);
         assertEquals(HttpStatus.OK, instanceStatusResponse.getStatusCode());
+    }
+
+    @Test
+    public void getInstanceQueryByInstanceIdTest() throws Exception {
+        String instanceId = "123";
+        String queryResponseMock = "queryResponseMock";
+        CnfAdapterService cnfAdapterService = Mockito.mock(CnfAdapterService.class);
+
+        Mockito.when(cnfAdapterService.getInstanceQueryByInstanceId(instanceId)).thenReturn(queryResponseMock);
+
+        cnfAdapterRest.getInstanceQueryByInstanceId(instanceId);
+
+        Assert.assertNotNull(queryResponseMock);
     }
 
     @Test
@@ -558,5 +570,6 @@ public class CnfAdapterRestTest {
         }
     }
 }
+
 
 
