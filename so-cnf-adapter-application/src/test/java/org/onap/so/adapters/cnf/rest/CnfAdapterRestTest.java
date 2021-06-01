@@ -31,13 +31,13 @@ import org.onap.so.adapters.cnf.service.CnfAdapterService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Java6Assertions.assertThat;
 
 
 @RunWith(SpringRunner.class)
@@ -132,6 +132,17 @@ public class CnfAdapterRestTest {
         cnfAdapterRest.getInstanceStatusByInstanceId(instanceId);
         Assert.assertNotNull(instanceStatusResponse);
         assertEquals(HttpStatus.OK, instanceStatusResponse.getStatusCode());
+    }
+
+    @Test
+    public void getInstanceQueryByInstanceIdTest() {
+        String instanceId = "123";
+        String queryResponseMock = "queryResponseMock";
+
+        Mockito.when(cnfAdapterService.getInstanceQueryByInstanceId(instanceId)).thenReturn(queryResponseMock);
+
+        String result = cnfAdapterRest.getInstanceQueryByInstanceId(instanceId);
+        assertThat(result).isEqualTo(queryResponseMock);
     }
 
     @Test
@@ -558,5 +569,6 @@ public class CnfAdapterRestTest {
         }
     }
 }
+
 
 

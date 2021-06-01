@@ -115,6 +115,15 @@ public class CnfAdapterRest {
 
     }
 
+    @ResponseBody
+    @RequestMapping(value = {"/api/cnf-adapter/v1/instance/{instanceId}/query"}, method = RequestMethod.GET,
+            produces = "application/json")
+    public String getInstanceQueryByInstanceId(@PathVariable("instanceId") String instanceId) {
+        logger.info("getInstanceQueryByInstanceId called.");
+
+        return cnfAdapterService.getInstanceQueryByInstanceId(instanceId);
+    }
+
     @RequestMapping(value = {"/api/cnf-adapter/v1/instance"}, method = RequestMethod.GET, produces = "application/json")
     public String getInstanceByRBNameOrRBVersionOrProfileName(
             @RequestParam(value = "rb-name", required = false) String rbName,
