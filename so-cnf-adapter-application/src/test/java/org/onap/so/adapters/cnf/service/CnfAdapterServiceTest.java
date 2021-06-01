@@ -105,6 +105,11 @@ public class CnfAdapterServiceTest {
     }
 
     @Test
+    public void getInstanceQueryByInstanceIdTest() {
+        cnfAdapterService.getInstanceQueryByInstanceId("ins");
+    }
+
+    @Test
     public void getInstanceByRBNameOrRBVersionOrProfileNameTest() throws Exception {
         String rbName = "rb";
         String rbVersion = "rv1";
@@ -130,5 +135,6 @@ public class CnfAdapterServiceTest {
 
     }
 }
+
 
 
