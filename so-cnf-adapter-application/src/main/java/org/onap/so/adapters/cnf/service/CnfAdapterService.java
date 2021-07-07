@@ -26,8 +26,11 @@ import java.util.List;
 import javax.persistence.EntityNotFoundException;
 import javax.ws.rs.core.UriBuilder;
 import org.apache.http.HttpStatus;
+import org.checkerframework.checker.units.qual.A;
 import org.onap.so.adapters.cnf.model.BpmnInstanceRequest;
 import org.onap.so.adapters.cnf.model.MulticloudInstanceRequest;
+import org.onap.so.adapters.cnf.model.halthcheck.HealthCheckRequest;
+import org.onap.so.adapters.cnf.service.healthcheck.HealthCheckService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,33 +51,15 @@ public class CnfAdapterService {
     private static final Logger logger = LoggerFactory.getLogger(CnfAdapterService.class);
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private HealthCheckService healthCheckService;
     private static final String INSTANCE_CREATE_PATH = "/v1/instance";
     private static final String HEALTH_CHECK = "/v1/healthcheck";
 
-    public String healthCheck() {
+    public String healthCheck(HealthCheckRequest healthCheckRequest) {
 
         logger.info("CnfAdapterService healthCheck called");
-        ResponseEntity<String> result = null;
-        try {
-
-            // String uri = env.getRequiredProperty("multicloud.endpoint"); //TODO:
-            // This needs to be added as well
-            // for configuration
-            String uri = "http://multicloud-k8s:9015"; // TODO: What is the correct uri?
-            String endpoint = UriBuilder.fromUri(uri).path(HEALTH_CHECK).build().toString();
-            HttpEntity<?> requestEntity = new HttpEntity<>(getHttpHeaders());
-            result = restTemplate.exchange(endpoint, HttpMethod.GET, requestEntity, String.class);
-            return result.getBody();
-        } catch (HttpClientErrorException e) {
-            logger.error("Error Calling Multicloud, e");
-            if (HttpStatus.SC_NOT_FOUND == e.getStatusCode().value()) {
-                throw new EntityNotFoundException(e.getResponseBodyAsString());
-            }
-            throw e;
-        } catch (HttpStatusCodeException e) {
-            logger.error("Error in Multicloud, e");
-            throw e;
-        }
+        return healthCheckService.healthCheck(healthCheckRequest).toString();
     }
 
     public String createInstance(BpmnInstanceRequest bpmnInstanceRequest)
