@@ -20,8 +20,10 @@
 
 package org.onap.so.adapters.cnf.rest;
 
-import java.io.File;
-import java.io.IOException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
@@ -37,7 +39,9 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.onap.so.adapters.cnf.MulticloudConfiguration;
+import org.onap.so.adapters.cnf.client.SoCallbackClient;
 import org.onap.so.adapters.cnf.model.BpmnInstanceRequest;
+import org.onap.so.adapters.cnf.model.CheckInstanceRequest;
 import org.onap.so.adapters.cnf.model.ConfigTemplateEntity;
 import org.onap.so.adapters.cnf.model.ConfigurationEntity;
 import org.onap.so.adapters.cnf.model.ConfigurationRollbackEntity;
@@ -45,10 +49,13 @@ import org.onap.so.adapters.cnf.model.ConnectivityInfo;
 import org.onap.so.adapters.cnf.model.ProfileEntity;
 import org.onap.so.adapters.cnf.model.ResourceBundleEntity;
 import org.onap.so.adapters.cnf.model.Tag;
+import org.onap.so.adapters.cnf.model.healthcheck.HealthCheckResponse;
+import org.onap.so.adapters.cnf.model.statuscheck.StatusCheckResponse;
 import org.onap.so.adapters.cnf.service.CnfAdapterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,11 +63,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.multipart.MultipartFile;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.ForkJoinPool;
 
 @RestController
 public class CnfAdapterRest {
@@ -68,22 +76,41 @@ public class CnfAdapterRest {
     private static final Logger logger = LoggerFactory.getLogger(CnfAdapterRest.class);
     private final CloseableHttpClient httpClient = HttpClients.createDefault();
     private final CnfAdapterService cnfAdapterService;
+    private final SoCallbackClient callbackClient;
     private final String uri;
 
     @Autowired
-    public CnfAdapterRest(CnfAdapterService cnfAdapterService, MulticloudConfiguration multicloudConfiguration) {
+    public CnfAdapterRest(CnfAdapterService cnfAdapterService,
+                          SoCallbackClient callbackClient,
+                          MulticloudConfiguration multicloudConfiguration) {
         this.cnfAdapterService = cnfAdapterService;
+        this.callbackClient = callbackClient;
         this.uri = multicloudConfiguration.getMulticloudUrl();
     }
 
     @ResponseBody
-    @RequestMapping(value = {"/api/cnf-adapter/v1/healthcheck"}, method = RequestMethod.GET,
+    @RequestMapping(value = {"/api/cnf-adapter/v1/healthcheck"}, method = RequestMethod.POST,
             produces = "application/json")
-    public String healthCheck() throws Exception {
-
+    public DeferredResult<ResponseEntity> healthCheck(@RequestBody CheckInstanceRequest healthCheckRequest) {
         logger.info("healthCheck called.");
-        return cnfAdapterService.healthCheck();
+        DeferredResult<ResponseEntity> response = new DeferredResult<>();
 
+        ForkJoinPool.commonPool().submit(() -> {
+            logger.info("Processing healthCheck service");
+            HealthCheckResponse healthCheckResponse = null;
+            try {
+                healthCheckResponse = cnfAdapterService.healthCheck(healthCheckRequest);
+            } catch (Exception e) {
+                StatusCheckResponse errorStatusCheck = new StatusCheckResponse();
+                errorStatusCheck.setErrorMessage(e.getMessage());
+                callbackClient.sendPostCallback(healthCheckRequest.getCallbackUrl(), errorStatusCheck);
+                return;
+            }
+            callbackClient.sendPostCallback(healthCheckRequest.getCallbackUrl(), healthCheckResponse);
+        });
+
+        response.setResult(ResponseEntity.accepted().build());
+        return response;
     }
 
     @ResponseBody
