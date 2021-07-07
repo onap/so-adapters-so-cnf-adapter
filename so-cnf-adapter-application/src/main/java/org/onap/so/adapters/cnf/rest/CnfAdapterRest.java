@@ -45,6 +45,8 @@ import org.onap.so.adapters.cnf.model.ConnectivityInfo;
 import org.onap.so.adapters.cnf.model.ProfileEntity;
 import org.onap.so.adapters.cnf.model.ResourceBundleEntity;
 import org.onap.so.adapters.cnf.model.Tag;
+import org.onap.so.adapters.cnf.model.halthcheck.HealthCheckRequest;
+import org.onap.so.adapters.cnf.model.halthcheck.HealthCheckResponse;
 import org.onap.so.adapters.cnf.service.CnfAdapterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +58,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -77,13 +80,13 @@ public class CnfAdapterRest {
     }
 
     @ResponseBody
-    @RequestMapping(value = {"/api/cnf-adapter/v1/healthcheck"}, method = RequestMethod.GET,
+    @RequestMapping(value = {"/api/cnf-adapter/v1/healthcheck"}, method = RequestMethod.POST,
             produces = "application/json")
-    public String healthCheck() throws Exception {
-
+    public DeferredResult<HealthCheckResponse> healthCheck(@RequestBody HealthCheckRequest healthCheckRequest) {
         logger.info("healthCheck called.");
-        return cnfAdapterService.healthCheck();
-
+        DeferredResult<HealthCheckResponse> response = new DeferredResult<>();
+        response.setResult(cnfAdapterService.healthCheck(healthCheckRequest));
+        return response;
     }
 
     @ResponseBody
