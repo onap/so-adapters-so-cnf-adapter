@@ -48,16 +48,7 @@ public class CnfAdapterServiceTest {
     @Mock
     ResponseEntity<String> instanceResponse;
 
-    @Test
-    public void healthCheckTest() throws Exception {
-        try {
-            cnfAdapterService.healthCheck();
-        }
-        catch (Exception exp) {
-          assert(true);
-        }
-
-    }
+    
     @Test
     public void createInstanceTest() throws Exception {
         Map<String, String> labels = new HashMap<String, String>();
