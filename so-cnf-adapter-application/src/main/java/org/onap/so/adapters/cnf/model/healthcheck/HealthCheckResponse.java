@@ -13,6 +13,9 @@ public class HealthCheckResponse {
     @JsonProperty("result")
     private List<HealthCheckInstanceResponse> instanceResponse;
 
+    @JsonProperty("error")
+    private String errorMessage;
+
     public List<HealthCheckInstanceResponse> getInstanceResponse() {
         return instanceResponse;
     }
@@ -21,11 +24,19 @@ public class HealthCheckResponse {
         this.instanceResponse = instanceResponse;
     }
 
-    @Override
-    public String toString() {
-        return "StatusCheckResponse{" +
-                "instanceResponse=" + instanceResponse +
-                '}';
+    public String getErrorMessage() {
+        return errorMessage;
     }
 
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
+    @Override
+    public String toString() {
+        return "HealthCheckResponse{" +
+                "instanceResponse=" + instanceResponse +
+                ", errorMessage='" + errorMessage + '\'' +
+                '}';
+    }
 }

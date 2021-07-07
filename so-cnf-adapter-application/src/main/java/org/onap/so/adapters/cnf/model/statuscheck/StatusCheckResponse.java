@@ -13,6 +13,9 @@ public class StatusCheckResponse {
     @JsonProperty("result")
     private List<StatusCheckInstanceResponse> instanceResponse;
 
+    @JsonProperty("errorMessage")
+    private String errorMessage;
+
     public List<StatusCheckInstanceResponse> getInstanceResponse() {
         return instanceResponse;
     }
@@ -21,11 +24,19 @@ public class StatusCheckResponse {
         this.instanceResponse = instanceResponse;
     }
 
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
     @Override
     public String toString() {
         return "StatusCheckResponse{" +
                 "instanceResponse=" + instanceResponse +
+                ", errorMessage='" + errorMessage + '\'' +
                 '}';
     }
-
 }
