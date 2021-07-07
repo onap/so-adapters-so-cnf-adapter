@@ -28,10 +28,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.onap.so.adapters.cnf.MulticloudConfiguration;
 import org.onap.so.adapters.cnf.model.*;
+import org.onap.so.adapters.cnf.model.healthcheck.HealthCheckRequest;
+import org.onap.so.adapters.cnf.model.healthcheck.HealthCheckResponse;
 import org.onap.so.adapters.cnf.service.CnfAdapterService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,13 +64,16 @@ public class CnfAdapterRestTest {
 
     @Test
     public void healthCheckTest() throws Exception {
-
-        ResponseEntity<String> response = new ResponseEntity<String>(HttpStatus.OK);
+        HealthCheckResponse response = new HealthCheckResponse();
+        DeferredResult<HealthCheckResponse> deferredResponse = new DeferredResult<>();
+        deferredResponse.setResult(response);
         CnfAdapterService cnfAdapterService = Mockito.mock(CnfAdapterService.class);
-        Mockito.when(cnfAdapterService.healthCheck()).thenReturn(String.valueOf(response));
-        cnfAdapterRest.healthCheck();
+        HealthCheckRequest healthCheckRequest = Mockito.mock(HealthCheckRequest.class);
+        Mockito.when(cnfAdapterService.healthCheck(healthCheckRequest)).thenReturn(response);
+
+        cnfAdapterRest.healthCheck(healthCheckRequest);
+
         Assert.assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
@@ -573,6 +579,3 @@ public class CnfAdapterRestTest {
         }
     }
 }
-
-
-
