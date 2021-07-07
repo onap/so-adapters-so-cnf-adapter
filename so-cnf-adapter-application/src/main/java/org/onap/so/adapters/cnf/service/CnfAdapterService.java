@@ -29,6 +29,9 @@ import org.apache.http.HttpStatus;
 import org.onap.so.adapters.cnf.MulticloudConfiguration;
 import org.onap.so.adapters.cnf.model.BpmnInstanceRequest;
 import org.onap.so.adapters.cnf.model.MulticloudInstanceRequest;
+import org.onap.so.adapters.cnf.model.halthcheck.HealthCheckRequest;
+import org.onap.so.adapters.cnf.model.halthcheck.HealthCheckResponse;
+import org.onap.so.adapters.cnf.service.healthcheck.HealthCheckService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,43 +51,23 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 public class CnfAdapterService {
     private static final Logger logger = LoggerFactory.getLogger(CnfAdapterService.class);
     private static final String INSTANCE_CREATE_PATH = "/v1/instance";
-    private static final String HEALTH_CHECK = "/v1/healthcheck";
 
     private final RestTemplate restTemplate;
+    private HealthCheckService healthCheckService;
     private final String uri;
 
     @Autowired
     public CnfAdapterService(RestTemplate restTemplate,
+                             HealthCheckService healthCheckService,
                              MulticloudConfiguration multicloudConfiguration) {
         this.restTemplate = restTemplate;
+        this.healthCheckService = healthCheckService;
         this.uri = multicloudConfiguration.getMulticloudUrl();
     }
 
-    public String healthCheck() {
-
+    public HealthCheckResponse healthCheck(HealthCheckRequest healthCheckRequest) {
         logger.info("CnfAdapterService healthCheck called");
-        ResponseEntity<String> result = null;
-        try {
-
-            // String uri = env.getRequiredProperty("multicloud.endpoint"); //TODO:
-            // This needs to be added as well
-            // for configuration
-            String endpoint = UriBuilder.fromUri(uri).path(HEALTH_CHECK).build().toString();
-            HttpEntity<?> requestEntity = new HttpEntity<>(getHttpHeaders());
-            logger.info("request: " + requestEntity);
-            result = restTemplate.exchange(endpoint, HttpMethod.GET, requestEntity, String.class);
-            logger.info("response: " + result);
-            return result.getBody();
-        } catch (HttpClientErrorException e) {
-            logger.error("Error Calling Multicloud, e");
-            if (HttpStatus.SC_NOT_FOUND == e.getStatusCode().value()) {
-                throw new EntityNotFoundException(e.getResponseBodyAsString());
-            }
-            throw e;
-        } catch (HttpStatusCodeException e) {
-            logger.error("Error in Multicloud", e);
-            throw e;
-        }
+        return healthCheckService.healthCheck(healthCheckRequest);
     }
 
     public String createInstance(BpmnInstanceRequest bpmnInstanceRequest)
