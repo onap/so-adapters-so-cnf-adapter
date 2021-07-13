@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.onap.so.adapters.cnf.MulticloudConfiguration;
 import org.onap.so.adapters.cnf.model.BpmnInstanceRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -33,7 +34,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RunWith(SpringRunner.class)
-
 public class CnfAdapterServiceTest {
     private static final String INSTANCE_CREATE_PATH = "/v1/instance";
     @Mock
@@ -41,6 +41,9 @@ public class CnfAdapterServiceTest {
 
     @InjectMocks
     CnfAdapterService cnfAdapterService;
+
+    @Mock
+    private MulticloudConfiguration multicloudConfiguration;
 
     @Mock
     ResponseEntity<String> instanceResponse;
