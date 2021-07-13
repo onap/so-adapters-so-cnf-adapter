@@ -26,6 +26,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.onap.so.adapters.cnf.MulticloudConfiguration;
 import org.onap.so.adapters.cnf.model.*;
 import org.onap.so.adapters.cnf.service.CnfAdapterService;
 import org.springframework.http.HttpStatus;
@@ -48,6 +49,9 @@ public class CnfAdapterRestTest {
 
     @Mock
     CnfAdapterService cnfAdapterService;
+
+    @Mock
+    private MulticloudConfiguration multicloudConfiguration;
 
     @Mock
     ResponseEntity<InstanceMiniResponseList> instacneMiniResponseList;
