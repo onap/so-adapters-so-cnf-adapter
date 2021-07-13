@@ -36,6 +36,7 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.onap.so.adapters.cnf.MulticloudConfiguration;
 import org.onap.so.adapters.cnf.model.BpmnInstanceRequest;
 import org.onap.so.adapters.cnf.model.ConfigTemplateEntity;
 import org.onap.so.adapters.cnf.model.ConfigurationEntity;
@@ -66,10 +67,14 @@ public class CnfAdapterRest {
 
     private static final Logger logger = LoggerFactory.getLogger(CnfAdapterRest.class);
     private final CloseableHttpClient httpClient = HttpClients.createDefault();
-    private String uri = "http://multicloud-k8s:9015";
+    private final CnfAdapterService cnfAdapterService;
+    private final String uri;
 
     @Autowired
-    private CnfAdapterService cnfAdapterService;
+    public CnfAdapterRest(CnfAdapterService cnfAdapterService, MulticloudConfiguration multicloudConfiguration) {
+        this.cnfAdapterService = cnfAdapterService;
+        this.uri = multicloudConfiguration.getMulticloudUrl();
+    }
 
     @ResponseBody
     @RequestMapping(value = {"/api/cnf-adapter/v1/healthcheck"}, method = RequestMethod.GET,
