@@ -26,6 +26,7 @@ import java.util.List;
 import javax.persistence.EntityNotFoundException;
 import javax.ws.rs.core.UriBuilder;
 import org.apache.http.HttpStatus;
+import org.onap.so.adapters.cnf.MulticloudConfiguration;
 import org.onap.so.adapters.cnf.model.BpmnInstanceRequest;
 import org.onap.so.adapters.cnf.model.MulticloudInstanceRequest;
 import org.slf4j.Logger;
@@ -46,10 +47,18 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 @Service
 public class CnfAdapterService {
     private static final Logger logger = LoggerFactory.getLogger(CnfAdapterService.class);
-    @Autowired
-    private RestTemplate restTemplate;
     private static final String INSTANCE_CREATE_PATH = "/v1/instance";
     private static final String HEALTH_CHECK = "/v1/healthcheck";
+
+    private final RestTemplate restTemplate;
+    private final String uri;
+
+    @Autowired
+    public CnfAdapterService(RestTemplate restTemplate,
+                             MulticloudConfiguration multicloudConfiguration) {
+        this.restTemplate = restTemplate;
+        this.uri = multicloudConfiguration.getMulticloudUrl();
+    }
 
     public String healthCheck() {
 
@@ -60,7 +69,6 @@ public class CnfAdapterService {
             // String uri = env.getRequiredProperty("multicloud.endpoint"); //TODO:
             // This needs to be added as well
             // for configuration
-            String uri = "http://multicloud-k8s:9015"; // TODO: What is the correct uri?
             String endpoint = UriBuilder.fromUri(uri).path(HEALTH_CHECK).build().toString();
             HttpEntity<?> requestEntity = new HttpEntity<>(getHttpHeaders());
             result = restTemplate.exchange(endpoint, HttpMethod.GET, requestEntity, String.class);
@@ -103,7 +111,6 @@ public class CnfAdapterService {
             // String uri = env.getRequiredProperty("multicloud.endpoint"); //TODO:
             // This needs to be added as well
             // for configuration
-            String uri = "http://multicloud-k8s:9015"; // TODO: What is the correct uri?
             String endpoint = UriBuilder.fromUri(uri).path(INSTANCE_CREATE_PATH).build().toString();
             HttpEntity<?> entity = getHttpEntity(multicloudInstanceRequest);
             instanceResponse = restTemplate.exchange(endpoint, HttpMethod.POST, entity, String.class);
@@ -130,7 +137,6 @@ public class CnfAdapterService {
             // String uri = env.getRequiredProperty("multicloud.endpoint"); //TODO:
             // This needs to be added as well
             // for configuration
-            String uri = "http://multicloud-k8s:9015"; // TODO: What is the correct uri?
             String path = "/v1/instance/" + instanceId;
             String endpoint = UriBuilder.fromUri(uri).path(path).build().toString();
             HttpEntity<?> requestEntity = new HttpEntity<>(getHttpHeaders());
@@ -158,7 +164,6 @@ public class CnfAdapterService {
             // String uri = env.getRequiredProperty("multicloud.endpoint"); //TODO:
             // This needs to be added as well
             // for configuration
-            String uri = "http://multicloud-k8s:9015"; // TODO: What is the correct uri?
             String path = "/v1/instance/" + instanceId + "/status";
             String endpoint = UriBuilder.fromUri(uri).path(path).build().toString();
             HttpEntity<?> requestEntity = new HttpEntity<>(getHttpHeaders());
@@ -181,7 +186,6 @@ public class CnfAdapterService {
         logger.info("CnfAdapterService getInstanceQueryByInstanceId called");
         ResponseEntity<String> instanceResponse = null;
         try {
-            String uri = "http://multicloud-k8s:9015";
             String path = "/v1/instance/" + instanceId + "/query";
             String endpoint = UriBuilder.fromUri(uri).path(path).build().toString();
             HttpEntity<?> requestEntity = new HttpEntity<>(getHttpHeaders());
@@ -205,7 +209,6 @@ public class CnfAdapterService {
             // String uri = env.getRequiredProperty("multicloud.endpoint"); //TODO:
             // This needs to be added as well
             // for configuration
-            String uri = "http://multicloud-k8s:9015"; // TODO: What is the correct uri?
             String path =
                     "/v1/instance" + "?rb-name=" + rbName + "&rb-version=" + rbVersion + "&profile-name=" + profileName;
             String endPoint = uri + path;
@@ -234,7 +237,6 @@ public class CnfAdapterService {
             // String uri = env.getRequiredProperty("multicloud.endpoint"); //TODO:
             // This needs to be added as well
             // for configuration
-            String uri = "http://multicloud-k8s:9015"; // TODO: What is the correct uri?
             String path = "/v1/instance/" + instanceId;
             String endpoint = UriBuilder.fromUri(uri).path(path).build().toString();
             HttpEntity<?> requestEntity = new HttpEntity<>(getHttpHeaders());
