@@ -1,0 +1,7 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+2: Lukasz Muszkieta <lukasz.muszkieta@nokia.com>
+Submitted-by: Lukasz Muszkieta <lukasz.muszkieta@nokia.com>
+Submitted-at: Wed, 21 Jul 2021 12:06:04 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/so/adapters/so-cnf-adapter/+/122593
+Project: so/adapters/so-cnf-adapter
+Branch: refs/heads/master
