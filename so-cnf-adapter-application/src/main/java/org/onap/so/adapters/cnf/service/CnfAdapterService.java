@@ -71,7 +71,9 @@ public class CnfAdapterService {
             // for configuration
             String endpoint = UriBuilder.fromUri(uri).path(HEALTH_CHECK).build().toString();
             HttpEntity<?> requestEntity = new HttpEntity<>(getHttpHeaders());
+            logger.info("request: " + requestEntity);
             result = restTemplate.exchange(endpoint, HttpMethod.GET, requestEntity, String.class);
+            logger.info("response: " + result);
             return result.getBody();
         } catch (HttpClientErrorException e) {
             logger.error("Error Calling Multicloud, e");
@@ -97,13 +99,22 @@ public class CnfAdapterService {
                 multicloudInstanceRequest.setOverrideValues(bpmnInstanceRequest.getOverrideValues());
                 multicloudInstanceRequest.setProfileName(bpmnInstanceRequest.getK8sRBProfileName());
                 multicloudInstanceRequest.setRbName(bpmnInstanceRequest.getModelInvariantId());
-                multicloudInstanceRequest.setRbVersion(bpmnInstanceRequest.getModelVersionId());
+                if (bpmnInstanceRequest.getModelCustomizationId() != null) {
+                    multicloudInstanceRequest.setRbVersion(bpmnInstanceRequest.getModelCustomizationId());
+                    logger.info("vfModuleModelCustomizationId used for rb-version: " + multicloudInstanceRequest.getRbVersion());
+                } else {
+                    multicloudInstanceRequest.setRbVersion(bpmnInstanceRequest.getModelVersionId());
+                    logger.info("vfModuleModelUUID used for rb-version: " + multicloudInstanceRequest.getRbVersion());
+                }
                 
-                if (bpmnInstanceRequest.getK8sRBInstanceReleaseName() != null)
+                if (bpmnInstanceRequest.getK8sRBInstanceReleaseName() != null) {
                     multicloudInstanceRequest.setReleaseName(bpmnInstanceRequest.getK8sRBInstanceReleaseName());
-                else
+                    logger.info("Specified release name used: " + multicloudInstanceRequest.getReleaseName());
+                } else {
                     multicloudInstanceRequest.setReleaseName(
-                        bpmnInstanceRequest.getK8sRBProfileName() + "-" + bpmnInstanceRequest.getVfModuleUUID());
+                            bpmnInstanceRequest.getK8sRBProfileName() + "-" + bpmnInstanceRequest.getVfModuleUUID());
+                    logger.info("Generated release name used: " + multicloudInstanceRequest.getReleaseName());
+                }
             } else {
                 logger.error("k8sProfileName should not be null");
                 // return instanceResponse;
@@ -113,7 +124,9 @@ public class CnfAdapterService {
             // for configuration
             String endpoint = UriBuilder.fromUri(uri).path(INSTANCE_CREATE_PATH).build().toString();
             HttpEntity<?> entity = getHttpEntity(multicloudInstanceRequest);
+            logger.info("request: " + entity);
             instanceResponse = restTemplate.exchange(endpoint, HttpMethod.POST, entity, String.class);
+            logger.info("response: " + instanceResponse);
             return instanceResponse.getBody();
         } catch (HttpClientErrorException e) {
             logger.error("Error Calling Multicloud, e");
@@ -140,7 +153,9 @@ public class CnfAdapterService {
             String path = "/v1/instance/" + instanceId;
             String endpoint = UriBuilder.fromUri(uri).path(path).build().toString();
             HttpEntity<?> requestEntity = new HttpEntity<>(getHttpHeaders());
+            logger.info("request: " + requestEntity);
             instanceResponse = restTemplate.exchange(endpoint, HttpMethod.GET, requestEntity, String.class);
+            logger.info("response: " + instanceResponse);
             return instanceResponse.getBody();
         } catch (HttpClientErrorException e) {
             logger.error("Error Calling Multicloud, e");
@@ -167,7 +182,9 @@ public class CnfAdapterService {
             String path = "/v1/instance/" + instanceId + "/status";
             String endpoint = UriBuilder.fromUri(uri).path(path).build().toString();
             HttpEntity<?> requestEntity = new HttpEntity<>(getHttpHeaders());
+            logger.info("request: " + requestEntity);
             instanceResponse = restTemplate.exchange(endpoint, HttpMethod.GET, requestEntity, String.class);
+            logger.info("response: " + instanceResponse);
             return instanceResponse.getBody();
         } catch (HttpClientErrorException e) {
             logger.error("Error Calling Multicloud, e");
@@ -189,7 +206,9 @@ public class CnfAdapterService {
             String path = "/v1/instance/" + instanceId + "/query";
             String endpoint = UriBuilder.fromUri(uri).path(path).build().toString();
             HttpEntity<?> requestEntity = new HttpEntity<>(getHttpHeaders());
+            logger.info("request: " + requestEntity);
             instanceResponse = restTemplate.exchange(endpoint, HttpMethod.GET, requestEntity, String.class);
+            logger.info("response: " + instanceResponse);
             return instanceResponse.getBody();
         } catch (HttpClientErrorException e) {
             if (HttpStatus.SC_NOT_FOUND == e.getStatusCode().value()) {
@@ -240,7 +259,9 @@ public class CnfAdapterService {
             String path = "/v1/instance/" + instanceId;
             String endpoint = UriBuilder.fromUri(uri).path(path).build().toString();
             HttpEntity<?> requestEntity = new HttpEntity<>(getHttpHeaders());
+            logger.info("request: " + requestEntity);
             result = restTemplate.exchange(endpoint, HttpMethod.DELETE, requestEntity, String.class);
+            logger.info("response: " + result);
             return result.getBody();
         } catch (HttpClientErrorException e) {
             logger.error("Error Calling Multicloud, e");

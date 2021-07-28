@@ -13,11 +13,17 @@ public class BpmnInstanceRequest {
     @JsonProperty(value = "modelVersionId")
     private String modelVersionId;
 
+    @JsonProperty(value = "modelCustomizationId")
+    private String modelCustomizationId;
+
     @JsonProperty(value = "k8sRBInstanceReleaseName")
     private String k8sRBInstanceReleaseName;
 
     @JsonProperty(value = "k8sRBProfileName")
     private String k8sRBProfileName;
+
+    @JsonProperty("k8sRBInstanceStatusCheck")
+    private Boolean k8sRBInstanceStatusCheck = false;
 
     @JsonProperty(value = "cloudRegionId")
     private String cloudRegionId;
@@ -47,6 +53,14 @@ public class BpmnInstanceRequest {
         this.modelVersionId = modelVersionId;
     }
 
+    public String getModelCustomizationId() {
+        return modelCustomizationId;
+    }
+
+    public void setModelCustomizationId(String modelCustomizationId) {
+        this.modelCustomizationId = modelCustomizationId;
+    }
+
     public String getK8sRBProfileName() {
         return k8sRBProfileName;
     }
@@ -61,6 +75,12 @@ public class BpmnInstanceRequest {
 
     public void setK8sRBInstanceReleaseName(String k8sRBInstanceReleaseName) {
         this.k8sRBInstanceReleaseName = k8sRBInstanceReleaseName;
+    }
+
+    public Boolean getK8sRBInstanceStatusCheck() { return k8sRBInstanceStatusCheck; }
+
+    public void setK8sRBInstanceStatusCheck(Boolean k8sRBInstanceStatusCheck) {
+        this.k8sRBInstanceStatusCheck = k8sRBInstanceStatusCheck;
     }
 
     public String getCloudRegionId() {
