@@ -22,6 +22,8 @@ package org.onap.so.adapters.cnf.rest;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
@@ -81,10 +83,20 @@ public class CnfAdapterRest {
     @ResponseBody
     @RequestMapping(value = {"/api/cnf-adapter/v1/healthcheck"}, method = RequestMethod.POST,
             produces = "application/json")
-    public DeferredResult<String> healthCheck(@RequestBody HealthCheckRequest healthCheckRequest) throws Exception {
+    public DeferredResult<String> healthCheck(@RequestBody HealthCheckRequest healthCheckRequest) {
         logger.info("healthCheck called.");
         DeferredResult<String> response = new DeferredResult<>();
         response.setResult(cnfAdapterService.healthCheck(healthCheckRequest));
+        return response;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = {"/api/cnf-adapter/v1/statuscheck"}, method = RequestMethod.POST,
+            produces = "application/json")
+    public DeferredResult<Map<String, String>> statusCheck(@RequestBody String heatStackId) {
+        logger.info("statusCheck called.");
+        DeferredResult<Map<String, String>> response = new DeferredResult<>();
+        response.setResult(cnfAdapterService.statusCheck(heatStackId));
         return response;
     }
 
