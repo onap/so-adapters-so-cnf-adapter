@@ -1,10 +1,10 @@
-package org.onap.so.adapters.cnf.model.halthcheck;
+package org.onap.so.adapters.cnf.model.statuscheck;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties
-public class HealthCheckInstanceResponse {
+public class StatusCheckInstanceResponse {
 
     @JsonProperty("instanceId")
     private String instanceId;
@@ -13,11 +13,11 @@ public class HealthCheckInstanceResponse {
     private String reason;
 
     @JsonProperty("status")
-    private String status;
+    private boolean status;
 
-    public HealthCheckInstanceResponse() { }
+    public StatusCheckInstanceResponse() { }
 
-    public HealthCheckInstanceResponse(String instanceId, String reason, String status) {
+    public StatusCheckInstanceResponse(String instanceId, String reason, boolean status) {
         this.instanceId = instanceId;
         this.reason = reason;
         this.status = status;
@@ -39,11 +39,11 @@ public class HealthCheckInstanceResponse {
         this.reason = reason;
     }
 
-    public String getStatus() {
+    public boolean isStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 

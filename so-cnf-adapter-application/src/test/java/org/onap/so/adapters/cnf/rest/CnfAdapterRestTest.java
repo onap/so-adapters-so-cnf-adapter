@@ -28,7 +28,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.onap.so.adapters.cnf.MulticloudConfiguration;
 import org.onap.so.adapters.cnf.model.*;
-import org.onap.so.adapters.cnf.model.HealthCheckRequest;
+import org.onap.so.adapters.cnf.model.CheckInstanceRequest;
 import org.onap.so.adapters.cnf.model.halthcheck.HealthCheckResponse;
 import org.onap.so.adapters.cnf.service.CnfAdapterService;
 import org.springframework.http.HttpStatus;
@@ -68,10 +68,10 @@ public class CnfAdapterRestTest {
         DeferredResult<HealthCheckResponse> deferredResponse = new DeferredResult<>();
         deferredResponse.setResult(response);
         CnfAdapterService cnfAdapterService = Mockito.mock(CnfAdapterService.class);
-        HealthCheckRequest healthCheckRequest = Mockito.mock(HealthCheckRequest.class);
-        Mockito.when(cnfAdapterService.healthCheck(healthCheckRequest)).thenReturn(response);
+        CheckInstanceRequest checkInstanceRequest = Mockito.mock(CheckInstanceRequest.class);
+        Mockito.when(cnfAdapterService.healthCheck(checkInstanceRequest)).thenReturn(response);
 
-        cnfAdapterRest.healthCheck(healthCheckRequest);
+        cnfAdapterRest.healthCheck(checkInstanceRequest);
 
         Assert.assertNotNull(response);
     }

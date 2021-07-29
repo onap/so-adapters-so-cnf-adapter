@@ -5,10 +5,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.onap.so.adapters.cnf.MulticloudConfiguration;
 import org.onap.so.adapters.cnf.model.halthcheck.K8sRbInstanceHealthCheck;
 import org.onap.so.adapters.cnf.model.halthcheck.K8sRbInstanceHealthCheckSimple;
+import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -31,6 +35,21 @@ public class MulticloudClient {
         this.restTemplate = restTemplate;
         this.multicloudConfiguration = multicloudConfiguration;
         this.objectMapper = new ObjectMapper();
+    }
+
+    public K8sRbInstanceStatus getInstanceStatus(String instanceId) {
+        MulticloudApiUrl multicloudApiUrl = new MulticloudApiUrl(multicloudConfiguration);
+        multicloudApiUrl.setInstanceId(instanceId);
+        String endpoint = multicloudApiUrl.apiUrl() + "/status";
+        ResponseEntity<String> result  = restTemplate.exchange(endpoint, GET, getHttpEntity(), String.class);
+        String body = result.getBody();
+        log.info("getInstanceStatus response body: {}", body);
+
+        try {
+            return objectMapper.readValue(body, K8sRbInstanceStatus.class);
+        } catch (JsonProcessingException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     public K8sRbInstanceHealthCheckSimple startInstanceHealthCheck(String instanceId) {

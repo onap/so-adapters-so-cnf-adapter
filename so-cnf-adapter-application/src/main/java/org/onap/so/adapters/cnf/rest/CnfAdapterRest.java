@@ -20,14 +20,12 @@
 
 package org.onap.so.adapters.cnf.rest;
 
-import java.io.File;
-import java.io.IOException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.*;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
@@ -37,33 +35,19 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.onap.so.adapters.cnf.MulticloudConfiguration;
-import org.onap.so.adapters.cnf.model.BpmnInstanceRequest;
-import org.onap.so.adapters.cnf.model.ConfigTemplateEntity;
-import org.onap.so.adapters.cnf.model.ConfigurationEntity;
-import org.onap.so.adapters.cnf.model.ConfigurationRollbackEntity;
-import org.onap.so.adapters.cnf.model.ConnectivityInfo;
-import org.onap.so.adapters.cnf.model.ProfileEntity;
-import org.onap.so.adapters.cnf.model.ResourceBundleEntity;
-import org.onap.so.adapters.cnf.model.Tag;
-import org.onap.so.adapters.cnf.model.halthcheck.HealthCheckRequest;
+import org.onap.so.adapters.cnf.model.*;
 import org.onap.so.adapters.cnf.model.halthcheck.HealthCheckResponse;
+import org.onap.so.adapters.cnf.model.statuscheck.StatusCheckResponse;
 import org.onap.so.adapters.cnf.service.CnfAdapterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.multipart.MultipartFile;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+
+import java.io.File;
+import java.io.IOException;
 
 @RestController
 public class CnfAdapterRest {
@@ -82,10 +66,20 @@ public class CnfAdapterRest {
     @ResponseBody
     @RequestMapping(value = {"/api/cnf-adapter/v1/healthcheck"}, method = RequestMethod.POST,
             produces = "application/json")
-    public DeferredResult<HealthCheckResponse> healthCheck(@RequestBody HealthCheckRequest healthCheckRequest) {
+    public DeferredResult<HealthCheckResponse> healthCheck(@RequestBody CheckInstanceRequest instanceRequest) {
         logger.info("healthCheck called.");
         DeferredResult<HealthCheckResponse> response = new DeferredResult<>();
-        response.setResult(cnfAdapterService.healthCheck(healthCheckRequest));
+        response.setResult(cnfAdapterService.healthCheck(instanceRequest));
+        return response;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = {"/api/cnf-adapter/v1/statuscheck"}, method = RequestMethod.POST,
+            produces = "application/json")
+    public DeferredResult<StatusCheckResponse> statusCheck(@RequestBody CheckInstanceRequest instanceRequest) {
+        logger.info("statusCheck called.");
+        DeferredResult<StatusCheckResponse> response = new DeferredResult<>();
+        response.setResult(cnfAdapterService.statusCheck(instanceRequest));
         return response;
     }
 

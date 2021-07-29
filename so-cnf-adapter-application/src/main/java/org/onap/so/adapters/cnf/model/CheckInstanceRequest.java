@@ -1,12 +1,13 @@
-package org.onap.so.adapters.cnf.model.halthcheck;
+package org.onap.so.adapters.cnf.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.onap.so.adapters.cnf.model.halthcheck.InstanceRequest;
 
 import java.util.List;
 
 @JsonIgnoreProperties
-public class HealthCheckRequest {
+public class CheckInstanceRequest {
 
     @JsonProperty("requestedInstances")
     private List<InstanceRequest> instances;
@@ -32,7 +33,7 @@ public class HealthCheckRequest {
 
     @Override
     public String toString() {
-        return "HealthCheckRequest{" +
+        return "CheckInstanceRequest{" +
                 "instances=" + instances +
                 ", callbackUrl='" + callbackUrl + '\'' +
                 '}';

@@ -1,4 +1,4 @@
-package org.onap.so.adapters.cnf.model.halthcheck;
+package org.onap.so.adapters.cnf.model.statuscheck;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,16 +6,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 @JsonIgnoreProperties
-public class HealthCheckResponse {
+public class StatusCheckResponse {
 
     @JsonProperty("result")
-    private List<HealthCheckInstanceResponse> instanceResponse;
+    private List<StatusCheckInstanceResponse> instanceResponse;
 
-    public List<HealthCheckInstanceResponse> getInstanceResponse() {
+    public List<StatusCheckInstanceResponse> getInstanceResponse() {
         return instanceResponse;
     }
 
-    public void setInstanceResponse(List<HealthCheckInstanceResponse> instanceResponse) {
+    public void setInstanceResponse(List<StatusCheckInstanceResponse> instanceResponse) {
         this.instanceResponse = instanceResponse;
     }
 

@@ -2,6 +2,7 @@ package org.onap.so.adapters.cnf.service.healthcheck;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.onap.so.adapters.cnf.client.MulticloudClient;
+import org.onap.so.adapters.cnf.model.CheckInstanceRequest;
 import org.onap.so.adapters.cnf.model.halthcheck.*;
 import org.onap.so.adapters.cnf.service.CnfAdapterService;
 import org.slf4j.Logger;
@@ -28,21 +29,21 @@ public class HealthCheckService {
         this.instanceApi = multicloudClient;
     }
 
-    public HealthCheckResponse healthCheck(HealthCheckRequest healthCheckRequest) {
+    public HealthCheckResponse healthCheck(CheckInstanceRequest checkInstanceRequest) {
         log.info("Health check - START");
 
-        List<HealthCheckInstance> instanceHealthCheckList = startInstanceHealthCheck(healthCheckRequest);
+        List<HealthCheckInstance> instanceHealthCheckList = startInstanceHealthCheck(checkInstanceRequest);
         HealthCheckResponse statuses = getStatuses(instanceHealthCheckList);
         log.info("Health check - END");
 
         return statuses;
     }
 
-    private List<HealthCheckInstance> startInstanceHealthCheck(HealthCheckRequest healthCheckRequest) {
+    private List<HealthCheckInstance> startInstanceHealthCheck(CheckInstanceRequest checkInstanceRequest) {
         log.debug("startInstanceHealthCheck - START");
         List<HealthCheckInstance> healthCheckInstanceList = new ArrayList<>();
 
-        healthCheckRequest.getInstances().forEach(instance -> {
+        checkInstanceRequest.getInstances().forEach(instance -> {
             String instanceId = instance.getInstanceId();
             K8sRbInstanceHealthCheckSimple response = instanceApi.startInstanceHealthCheck(instanceId);
             log.info("K8sRbInstanceHealthCheckSimple: {}", response);
