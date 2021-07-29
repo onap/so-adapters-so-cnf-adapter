@@ -23,6 +23,7 @@ package org.onap.so.adapters.cnf.service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityNotFoundException;
 import javax.ws.rs.core.UriBuilder;
 import org.apache.http.HttpStatus;
@@ -31,6 +32,7 @@ import org.onap.so.adapters.cnf.model.BpmnInstanceRequest;
 import org.onap.so.adapters.cnf.model.MulticloudInstanceRequest;
 import org.onap.so.adapters.cnf.model.halthcheck.HealthCheckRequest;
 import org.onap.so.adapters.cnf.service.healthcheck.HealthCheckService;
+import org.onap.so.adapters.cnf.service.statuscheck.SimpleStatusCheckService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,21 +55,28 @@ public class CnfAdapterService {
 
     private final RestTemplate restTemplate;
     private HealthCheckService healthCheckService;
+    private SimpleStatusCheckService simpleStatusCheckService;
     private final String uri;
 
     @Autowired
     public CnfAdapterService(RestTemplate restTemplate,
                              HealthCheckService healthCheckService,
+                             SimpleStatusCheckService simpleStatusCheckService,
                              MulticloudConfiguration multicloudConfiguration) {
         this.restTemplate = restTemplate;
         this.healthCheckService = healthCheckService;
+        this.simpleStatusCheckService = simpleStatusCheckService;
         this.uri = multicloudConfiguration.getMulticloudUrl();
     }
 
     public String healthCheck(HealthCheckRequest healthCheckRequest) {
-
         logger.info("CnfAdapterService healthCheck called");
         return healthCheckService.healthCheck(healthCheckRequest).toString();
+    }
+
+    public Map<String, String> statusCheck(String heatStackId) {
+        logger.info("CnfAdapterService statusCheck called");
+        return simpleStatusCheckService.getStatusCheck(heatStackId);
     }
 
     public String createInstance(BpmnInstanceRequest bpmnInstanceRequest)
