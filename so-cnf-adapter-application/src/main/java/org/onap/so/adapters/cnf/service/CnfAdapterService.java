@@ -23,6 +23,7 @@ package org.onap.so.adapters.cnf.service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
 import javax.ws.rs.core.UriBuilder;
 import org.apache.http.HttpStatus;
