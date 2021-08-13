@@ -42,8 +42,10 @@ import org.onap.so.adapters.cnf.MulticloudConfiguration;
 import org.onap.so.adapters.cnf.client.CallbackClient;
 import org.onap.so.adapters.cnf.model.*;
 import org.onap.so.adapters.cnf.model.healthcheck.HealthCheckResponse;
+import org.onap.so.adapters.cnf.model.instantiation.AaiUpdateRequest;
 import org.onap.so.adapters.cnf.model.statuscheck.StatusCheckResponse;
 import org.onap.so.adapters.cnf.service.CnfAdapterService;
+import org.onap.so.adapters.cnf.service.aai.AaiService;
 import org.onap.so.adapters.cnf.service.statuscheck.SimpleStatusCheckService;
 import org.onap.so.client.exception.BadResponseException;
 import org.slf4j.Logger;
@@ -71,16 +73,18 @@ public class CnfAdapterRest {
     private final CloseableHttpClient httpClient = HttpClients.createDefault();
     private final SimpleStatusCheckService simpleStatusCheckService;
     private final CnfAdapterService cnfAdapterService;
+    private final AaiService aaiService;
     private final CallbackClient callbackClient;
     private final String uri;
 
     @Autowired
     public CnfAdapterRest(SimpleStatusCheckService simpleStatusCheckService,
                           CnfAdapterService cnfAdapterService,
-                          CallbackClient callbackClient,
+                          AaiService aaiService, CallbackClient callbackClient,
                           MulticloudConfiguration multicloudConfiguration) {
         this.simpleStatusCheckService = simpleStatusCheckService;
         this.cnfAdapterService = cnfAdapterService;
+        this.aaiService = aaiService;
         this.callbackClient = callbackClient;
         this.uri = multicloudConfiguration.getMulticloudUrl();
     }
@@ -102,6 +106,25 @@ public class CnfAdapterRest {
                 return;
             }
             callbackClient.sendPostCallback(healthCheckRequest.getCallbackUrl(), healthCheckResponse);
+        });
+
+        response.setResult(ResponseEntity.accepted().build());
+        return response;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = {"/api/cnf-adapter/v1/aai-update/"}, method = RequestMethod.POST,
+            produces = "application/json")
+    public DeferredResult<ResponseEntity> aaiUpdate(@RequestBody AaiUpdateRequest aaiUpdateRequest) {
+        logger.info("aai-update called.");
+        DeferredResult<ResponseEntity> response = new DeferredResult<>();
+
+
+        ForkJoinPool.commonPool().submit(() -> {
+            logger.info("Processing aai update");
+            aaiService.aaiUpdate(aaiUpdateRequest);
+            callbackClient.sendPostCallback(aaiUpdateRequest.getCallbackUrl(), "200");
+            return response;
         });
 
         response.setResult(ResponseEntity.accepted().build());
@@ -206,7 +229,7 @@ public class CnfAdapterRest {
 
         // TODO
         // Below URL should be changed as appropriate multicloud URL.
-        HttpPost post = new HttpPost(uri +"/v1/rb/definition");
+        HttpPost post = new HttpPost(uri + "/v1/rb/definition");
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         String requestBody = objectMapper.writeValueAsString(rB);
@@ -214,7 +237,7 @@ public class CnfAdapterRest {
         post.setEntity(requestEntity);
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
-                CloseableHttpResponse response = httpClient.execute(post)) {
+             CloseableHttpResponse response = httpClient.execute(post)) {
             logger.info("response:" + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
@@ -230,7 +253,7 @@ public class CnfAdapterRest {
 
         // TODO
         // Below URL should be changed as appropriate multicloud URL.
-        HttpGet req = new HttpGet(uri +"/v1/rb/definition/" + rbName + "/" + rbVersion);
+        HttpGet req = new HttpGet(uri + "/v1/rb/definition/" + rbName + "/" + rbVersion);
         try (CloseableHttpResponse response = httpClient.execute(req)) {
             logger.info("response:" + response.getEntity());
             return EntityUtils.toString(response.getEntity());
@@ -247,7 +270,7 @@ public class CnfAdapterRest {
 
         // TODO
         // Below URL should be changed as appropriate multicloud URL.
-        HttpDelete req = new HttpDelete(uri +"/v1/rb/definition/" + rbName + "/" + rbVersion);
+        HttpDelete req = new HttpDelete(uri + "/v1/rb/definition/" + rbName + "/" + rbVersion);
 
         try (CloseableHttpResponse response = httpClient.execute(req)) {
             logger.info("response:" + response.getEntity());
@@ -265,7 +288,7 @@ public class CnfAdapterRest {
 
         // TODO
         // Below URL should be changed as appropriate multicloud URL.
-        HttpGet req = new HttpGet(uri +"/v1/rb/definition/" + rbName);
+        HttpGet req = new HttpGet(uri + "/v1/rb/definition/" + rbName);
 
         try (CloseableHttpResponse response = httpClient.execute(req)) {
             logger.info("response:" + response.getEntity());
@@ -283,7 +306,7 @@ public class CnfAdapterRest {
 
         // TODO
         // Below URL should be changed as appropriate multicloud URL.
-        HttpGet req = new HttpGet(uri +"/v1/rb/definition");
+        HttpGet req = new HttpGet(uri + "/v1/rb/definition");
 
         try (CloseableHttpResponse response = httpClient.execute(req)) {
             logger.info("response:" + response.getEntity());
@@ -296,7 +319,7 @@ public class CnfAdapterRest {
     @RequestMapping(value = {"/api/cnf-adapter/v1/rb/definition/{rb-name}/{rb-version}/content"},
             method = RequestMethod.POST, produces = "multipart/form-data")
     public String uploadArtifactForRB(@RequestParam("file") MultipartFile file, @PathVariable("rb-name") String rbName,
-            @PathVariable("rb-version") String rbVersion) throws Exception {
+                                      @PathVariable("rb-version") String rbVersion) throws Exception {
 
         logger.info("Upload  Artifact For RB called.");
 
@@ -311,13 +334,13 @@ public class CnfAdapterRest {
         // TODO
         // Below URL should be changed as appropriate multicloud URL.
         HttpPost post =
-                new HttpPost(uri +"/v1/rb/definition/" + rbName + "/" + rbVersion + "/content");
+                new HttpPost(uri + "/v1/rb/definition/" + rbName + "/" + rbVersion + "/content");
         post.setHeader("Content-Type", "multipart/form-data");
         logger.info(String.valueOf(post));
         post.setEntity(entity);
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
-                CloseableHttpResponse response = httpClient.execute(post)) {
+             CloseableHttpResponse response = httpClient.execute(post)) {
             logger.info("response:" + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
@@ -327,21 +350,21 @@ public class CnfAdapterRest {
     @RequestMapping(value = {"/api/cnf-adapter/v1/rb/definition/{rb-name}/{rb-version}/profile"},
             method = RequestMethod.POST, produces = "application/json")
     public String createProfile(@RequestBody ProfileEntity fE, @PathVariable("rb-name") String rbName,
-            @PathVariable("rb-version") String rbVersion) throws Exception {
+                                @PathVariable("rb-version") String rbVersion) throws Exception {
 
         logger.info("create Profile called.");
 
         // TODO
         // Below URL should be changed as appropriate multicloud URL.
         HttpPost post =
-                new HttpPost(uri +"/v1/rb/definition/" + rbName + "/" + rbVersion + "/profile");
+                new HttpPost(uri + "/v1/rb/definition/" + rbName + "/" + rbVersion + "/profile");
         ObjectMapper objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(fE);
         StringEntity requestEntity = new StringEntity(requestBody, ContentType.APPLICATION_JSON);
         post.setEntity(requestEntity);
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
-                CloseableHttpResponse response = httpClient.execute(post)) {
+             CloseableHttpResponse response = httpClient.execute(post)) {
             logger.info("response:" + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
@@ -351,14 +374,14 @@ public class CnfAdapterRest {
     @RequestMapping(value = {"/api/cnf-adapter/v1/rb/definition/{rb-name}/{rb-version}/profile/{pr-name}"},
             method = RequestMethod.GET, produces = "application/json")
     public String getProfile(@PathVariable("rb-name") String rbName, @PathVariable("rb-version") String rbVersion,
-            @PathVariable("pr-name") String prName) throws Exception {
+                             @PathVariable("pr-name") String prName) throws Exception {
 
         logger.info("get Profile called.");
 
         // TODO
         // Below URL should be changed as appropriate multicloud URL.
         HttpGet req = new HttpGet(
-                uri +"/v1/rb/definition/" + rbName + "/" + rbVersion + "/profile/" + prName);
+                uri + "/v1/rb/definition/" + rbName + "/" + rbVersion + "/profile/" + prName);
 
         try (CloseableHttpResponse response = httpClient.execute(req)) {
             logger.info("response:" + response.getEntity());
@@ -377,7 +400,7 @@ public class CnfAdapterRest {
         // TODO
         // Below URL should be changed as appropriate multicloud URL.
         HttpGet req =
-                new HttpGet(uri +"/v1/rb/definition/" + rbName + "/" + rbVersion + "/profile");
+                new HttpGet(uri + "/v1/rb/definition/" + rbName + "/" + rbVersion + "/profile");
 
         try (CloseableHttpResponse response = httpClient.execute(req)) {
             logger.info("response:" + response.getEntity());
@@ -389,14 +412,14 @@ public class CnfAdapterRest {
     @RequestMapping(value = {"/api/cnf-adapter/v1/rb/definition/{rb-name}/{rb-version}/profile/{pr-name}"},
             method = RequestMethod.DELETE, produces = "application/json")
     public String deleteProfile(@PathVariable("rb-name") String rbName, @PathVariable("rb-version") String rbVersion,
-            @PathVariable("pr-name") String prName) throws Exception {
+                                @PathVariable("pr-name") String prName) throws Exception {
 
         logger.info("delete Profile called.");
 
         // TODO
         // Below URL should be changed as appropriate multicloud URL.
         HttpDelete req = new HttpDelete(
-                uri +"/v1/rb/definition/" + rbName + "/" + rbVersion + "/profile/" + prName);
+                uri + "/v1/rb/definition/" + rbName + "/" + rbVersion + "/profile/" + prName);
 
         try (CloseableHttpResponse response = httpClient.execute(req)) {
             logger.info("response:" + response.getEntity());
@@ -409,8 +432,8 @@ public class CnfAdapterRest {
     @RequestMapping(value = {"/api/cnf-adapter/v1/rb/definition/{rb-name}/{rb-version}/profile/{pr-name}/content"},
             method = RequestMethod.POST, produces = "multipart/form-data")
     public String uploadArtifactForProfile(@RequestParam("file") MultipartFile file,
-            @PathVariable("rb-name") String rbName, @PathVariable("rb-version") String rbVersion,
-            @PathVariable("pr-name") String prName) throws Exception {
+                                           @PathVariable("rb-name") String rbName, @PathVariable("rb-version") String rbVersion,
+                                           @PathVariable("pr-name") String prName) throws Exception {
 
         logger.info("Upload  Artifact For Profile called.");
 
@@ -424,7 +447,7 @@ public class CnfAdapterRest {
 
         // TODO
         // Below URL should be changed as appropriate multicloud URL.
-        HttpPost post = new HttpPost(uri +"/v1/rb/definition/" + rbName + "/" + rbVersion
+        HttpPost post = new HttpPost(uri + "/v1/rb/definition/" + rbName + "/" + rbVersion
                 + "/profile/" + prName + "/content");
         post.setHeader("Content-Type", "multipart/form-data");
 
@@ -432,7 +455,7 @@ public class CnfAdapterRest {
         post.setEntity(entity);
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
-                CloseableHttpResponse response = httpClient.execute(post)) {
+             CloseableHttpResponse response = httpClient.execute(post)) {
             logger.info("response:" + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
@@ -442,14 +465,14 @@ public class CnfAdapterRest {
     @RequestMapping(value = {"/api/cnf-adapter/v1/definition/{rb-name}/{rb-version}/profile/{profile-name}/config"},
             method = RequestMethod.POST, produces = "application/json")
     public String createConfiguration(@RequestBody ConfigurationEntity cE, @PathVariable("rb-name") String rbName,
-            @PathVariable("rb-version") String rbVersion, @PathVariable("profile-name") String prName)
+                                      @PathVariable("rb-version") String rbVersion, @PathVariable("profile-name") String prName)
             throws Exception {
 
         logger.info("create Configuration called.");
 
         // TODO
         // Below URL should be changed as appropriate multicloud URL.
-        HttpPost post = new HttpPost(uri +"/v1/definition/" + rbName + "/" + rbVersion
+        HttpPost post = new HttpPost(uri + "/v1/definition/" + rbName + "/" + rbVersion
                 + "/profile/" + prName + "/config");
         ObjectMapper objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(cE);
@@ -457,7 +480,7 @@ public class CnfAdapterRest {
         post.setEntity(requestEntity);
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
-                CloseableHttpResponse response = httpClient.execute(post)) {
+             CloseableHttpResponse response = httpClient.execute(post)) {
             logger.info("response:" + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
@@ -468,13 +491,13 @@ public class CnfAdapterRest {
             value = {"/api/cnf-adapter/v1/definition/{rb-name}/{rb-version}/profile/{profile-name}/config/{cfg-name}"},
             method = RequestMethod.GET, produces = "application/json")
     public String getConfiguration(@PathVariable("rb-name") String rbName, @PathVariable("rb-version") String rbVersion,
-            @PathVariable("profile-name") String prName, @PathVariable("cfg-name") String cfgName) throws Exception {
+                                   @PathVariable("profile-name") String prName, @PathVariable("cfg-name") String cfgName) throws Exception {
 
         logger.info("get Configuration called.");
 
         // TODO
         // Below URL should be changed as appropriate multicloud URL.
-        HttpGet req = new HttpGet(uri +"/v1/definition/" + rbName + "/" + rbVersion + "/profile/"
+        HttpGet req = new HttpGet(uri + "/v1/definition/" + rbName + "/" + rbVersion + "/profile/"
                 + prName + "/config/" + cfgName);
 
         try (CloseableHttpResponse response = httpClient.execute(req)) {
@@ -488,14 +511,14 @@ public class CnfAdapterRest {
             value = {"/api/cnf-adapter/v1/definition/{rb-name}/{rb-version}/profile/{profile-name}/config/{cfg-name}"},
             method = RequestMethod.DELETE, produces = "application/json")
     public String deleteConfiguration(@PathVariable("rb-name") String rbName,
-            @PathVariable("rb-version") String rbVersion, @PathVariable("profile-name") String prName,
-            @PathVariable("cfg-name") String cfgName) throws Exception {
+                                      @PathVariable("rb-version") String rbVersion, @PathVariable("profile-name") String prName,
+                                      @PathVariable("cfg-name") String cfgName) throws Exception {
 
         logger.info("delete Configuration called.");
 
         // TODO
         // Below URL should be changed as appropriate multicloud URL.
-        HttpDelete req = new HttpDelete(uri +"/v1/definition/" + rbName + "/" + rbVersion
+        HttpDelete req = new HttpDelete(uri + "/v1/definition/" + rbName + "/" + rbVersion
                 + "/profile/" + prName + "/config/" + cfgName);
 
         try (CloseableHttpResponse response = httpClient.execute(req)) {
@@ -510,14 +533,14 @@ public class CnfAdapterRest {
             value = {"/api/cnf-adapter/v1/definition/{rb-name}/{rb-version}/profile/{profile-name}/config/{cfg-name}"},
             method = RequestMethod.PUT, produces = "application/json")
     public String updateConfiguration(@RequestBody ConfigurationEntity cE, @PathVariable("rb-name") String rbName,
-            @PathVariable("rb-version") String rbVersion, @PathVariable("profile-name") String prName,
-            @PathVariable("cfg-name") String cfgName) throws Exception {
+                                      @PathVariable("rb-version") String rbVersion, @PathVariable("profile-name") String prName,
+                                      @PathVariable("cfg-name") String cfgName) throws Exception {
 
         logger.info("update Configuration called.");
 
         // TODO
         // Below URL should be changed as appropriate multicloud URL.
-        HttpPut post = new HttpPut(uri +"/v1/definition/" + rbName + "/" + rbVersion + "/profile/"
+        HttpPut post = new HttpPut(uri + "/v1/definition/" + rbName + "/" + rbVersion + "/profile/"
                 + prName + "/config/" + cfgName);
         ObjectMapper objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(cE);
@@ -525,7 +548,7 @@ public class CnfAdapterRest {
         post.setEntity(requestEntity);
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
-                CloseableHttpResponse response = httpClient.execute(post)) {
+             CloseableHttpResponse response = httpClient.execute(post)) {
             logger.info("response:" + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
@@ -535,12 +558,12 @@ public class CnfAdapterRest {
     @RequestMapping(value = {"/api/cnf-adapter/v1/definition/{rb-name}/{rb-version}/profile/{profile-name}/tagit"},
             method = RequestMethod.POST, produces = "application/json")
     public String tagConfigurationValue(@RequestBody Tag tag, @PathVariable("rb-name") String rbName,
-            @PathVariable("rb-version") String rbVersion, @PathVariable("pr-name") String prName) throws Exception {
+                                        @PathVariable("rb-version") String rbVersion, @PathVariable("pr-name") String prName) throws Exception {
         logger.info("Tag Configuration called.");
 
         // TODO
         // Below URL should be changed as appropriate multicloud URL.
-        HttpPost post = new HttpPost(uri +"/v1/definition/" + rbName + "/" + rbVersion
+        HttpPost post = new HttpPost(uri + "/v1/definition/" + rbName + "/" + rbVersion
                 + "/profile/" + prName + "/config/tagit");
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -549,7 +572,7 @@ public class CnfAdapterRest {
         post.setEntity(requestEntity);
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
-                CloseableHttpResponse response = httpClient.execute(post)) {
+             CloseableHttpResponse response = httpClient.execute(post)) {
             logger.info("response:" + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
@@ -564,14 +587,14 @@ public class CnfAdapterRest {
 
         // TODO
         // Below URL should be changed as appropriate multicloud URL.
-        HttpPost post = new HttpPost(uri +"/v1/connectivity-info");
+        HttpPost post = new HttpPost(uri + "/v1/connectivity-info");
         ObjectMapper objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(cIE);
         StringEntity requestEntity = new StringEntity(requestBody, ContentType.APPLICATION_JSON);
         post.setEntity(requestEntity);
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
-                CloseableHttpResponse response = httpClient.execute(post)) {
+             CloseableHttpResponse response = httpClient.execute(post)) {
             logger.info("response:" + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
@@ -586,7 +609,7 @@ public class CnfAdapterRest {
 
         // TODO
         // Below URL should be changed as appropriate multicloud URL.
-        HttpGet req = new HttpGet(uri +"/v1/connectivity-info/" + connName);
+        HttpGet req = new HttpGet(uri + "/v1/connectivity-info/" + connName);
 
         try (CloseableHttpResponse response = httpClient.execute(req)) {
             logger.info("response:" + response.getEntity());
@@ -603,7 +626,7 @@ public class CnfAdapterRest {
 
         // TODO
         // Below URL should be changed as appropriate multicloud URL.
-        HttpDelete req = new HttpDelete(uri +"/v1/connectivity-info/" + connName);
+        HttpDelete req = new HttpDelete(uri + "/v1/connectivity-info/" + connName);
 
         try (CloseableHttpResponse response = httpClient.execute(req)) {
             logger.info("response:" + response.getEntity());
@@ -616,21 +639,21 @@ public class CnfAdapterRest {
     @RequestMapping(value = {"/api/cnf-adapter/v1/rb/definition/{rb-name}/{rb-version}/config-template"},
             method = RequestMethod.POST, produces = "application/json")
     public String createConfigTemplate(@RequestBody ConfigTemplateEntity tE, @PathVariable("rb-name") String rbName,
-            @PathVariable("rb-version") String rbVersion) throws Exception {
+                                       @PathVariable("rb-version") String rbVersion) throws Exception {
 
         logger.info("createConfigTemplate called.");
 
         // TODO
         // Below URL should be changed as appropriate multicloud URL.
         HttpPost post = new HttpPost(
-                uri +"/v1/rb/definition/" + rbName + "/" + rbVersion + "/config-template");
+                uri + "/v1/rb/definition/" + rbName + "/" + rbVersion + "/config-template");
         ObjectMapper objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(tE);
         StringEntity requestEntity = new StringEntity(requestBody, ContentType.APPLICATION_JSON);
         post.setEntity(requestEntity);
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
-                CloseableHttpResponse response = httpClient.execute(post)) {
+             CloseableHttpResponse response = httpClient.execute(post)) {
             logger.info("response:" + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
@@ -640,13 +663,13 @@ public class CnfAdapterRest {
     @RequestMapping(value = {"/api/cnf-adapter/v1/rb/definition/{rb-name}/{rb-version}/config-template/{tname}"},
             method = RequestMethod.GET, produces = "application/json")
     public String getConfigTemplate(@PathVariable("rb-name") String rbName,
-            @PathVariable("rb-version") String rbVersion, @PathVariable("tname") String tName) throws Exception {
+                                    @PathVariable("rb-version") String rbVersion, @PathVariable("tname") String tName) throws Exception {
 
         logger.info("getConfigTemplate called.");
 
         // TODO
         // Below URL should be changed as appropriate multicloud URL.
-        HttpGet req = new HttpGet(uri +"/v1/rb/definition/" + rbName + "/" + rbVersion
+        HttpGet req = new HttpGet(uri + "/v1/rb/definition/" + rbName + "/" + rbVersion
                 + "/config-template/" + tName);
 
         try (CloseableHttpResponse response = httpClient.execute(req)) {
@@ -659,13 +682,13 @@ public class CnfAdapterRest {
     @RequestMapping(value = {"/api/cnf-adapter/v1/rb/definition/{rb-name}/{rb-version}/config-template/{tname}"},
             method = RequestMethod.DELETE, produces = "application/json")
     public String deleteTemplate(@PathVariable("rb-name") String rbName, @PathVariable("rb-version") String rbVersion,
-            @PathVariable("tname") String tName) throws Exception {
+                                 @PathVariable("tname") String tName) throws Exception {
 
         logger.info("deleteTemplate called.");
 
         // TODO
         // Below URL should be changed as appropriate multicloud URL.
-        HttpDelete req = new HttpDelete(uri +"/v1/rb/definition/" + rbName + "/" + rbVersion
+        HttpDelete req = new HttpDelete(uri + "/v1/rb/definition/" + rbName + "/" + rbVersion
                 + "/config-template/" + tName);
 
         try (CloseableHttpResponse response = httpClient.execute(req)) {
@@ -680,8 +703,8 @@ public class CnfAdapterRest {
             value = {"/api/cnf-adapter/v1/rb/definition/{rb-name}/{rb-version}/config-template/{tname}/content"},
             method = RequestMethod.POST, produces = "multipart/form-data")
     public String uploadTarFileForTemplate(@RequestParam("file") MultipartFile file,
-            @PathVariable("rb-name") String rbName, @PathVariable("rb-version") String rbVersion,
-            @PathVariable("tname") String tName) throws Exception {
+                                           @PathVariable("rb-name") String rbName, @PathVariable("rb-version") String rbVersion,
+                                           @PathVariable("tname") String tName) throws Exception {
 
         logger.info("uploadTarFileForTemplate called.");
 
@@ -695,7 +718,7 @@ public class CnfAdapterRest {
 
         // TODO
         // Below URL should be changed as appropriate multicloud URL.
-        HttpPost post = new HttpPost(uri +"/v1/rb/definition/" + rbName + "/" + rbVersion
+        HttpPost post = new HttpPost(uri + "/v1/rb/definition/" + rbName + "/" + rbVersion
                 + "/config-template/" + tName + "/content");
         post.setHeader("Content-Type", "multipart/form-data");
 
@@ -703,7 +726,7 @@ public class CnfAdapterRest {
         post.setEntity(entity);
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
-                CloseableHttpResponse response = httpClient.execute(post)) {
+             CloseableHttpResponse response = httpClient.execute(post)) {
             logger.info("response:" + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
@@ -713,13 +736,13 @@ public class CnfAdapterRest {
     @RequestMapping(value = {"/api/cnf-adapter/v1/definition/{rbName}/{rbVersion}/profile/{prName}/config/rollback"},
             method = RequestMethod.DELETE, produces = "application/json")
     public String rollbackConfiguration(@RequestBody ConfigurationRollbackEntity rE,
-            @PathVariable("rbName") String rbName, @PathVariable("rbVersion") String rbVersion,
-            @PathVariable("prName") String prName) throws Exception {
+                                        @PathVariable("rbName") String rbName, @PathVariable("rbVersion") String rbVersion,
+                                        @PathVariable("prName") String prName) throws Exception {
         logger.info("rollbackConfiguration called.");
 
         // TODO
         // Below URL should be changed as appropriate multicloud URL.
-        HttpPost post = new HttpPost(uri +"/v1/definition/" + rbName + "/" + rbVersion
+        HttpPost post = new HttpPost(uri + "/v1/definition/" + rbName + "/" + rbVersion
                 + "/profile/" + prName + "/config/rollback");
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -728,7 +751,7 @@ public class CnfAdapterRest {
         post.setEntity(requestEntity);
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
-                CloseableHttpResponse response = httpClient.execute(post)) {
+             CloseableHttpResponse response = httpClient.execute(post)) {
             logger.info("response:" + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
