@@ -32,6 +32,7 @@ import org.onap.so.adapters.cnf.model.CheckInstanceRequest;
 import org.onap.so.adapters.cnf.model.MulticloudInstanceRequest;
 import org.onap.so.adapters.cnf.model.healthcheck.HealthCheckResponse;
 import org.onap.so.adapters.cnf.service.healthcheck.HealthCheckService;
+import org.onap.so.adapters.cnf.service.statuscheck.SimpleStatusCheckService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,15 +54,18 @@ public class CnfAdapterService {
     private static final String INSTANCE_CREATE_PATH = "/v1/instance";
 
     private final RestTemplate restTemplate;
-    private HealthCheckService healthCheckService;
+    private final HealthCheckService healthCheckService;
+    private final SimpleStatusCheckService simpleStatusCheckService;
     private final String uri;
 
     @Autowired
     public CnfAdapterService(RestTemplate restTemplate,
                              HealthCheckService healthCheckService,
+                             SimpleStatusCheckService simpleStatusCheckService,
                              MulticloudConfiguration multicloudConfiguration) {
         this.restTemplate = restTemplate;
         this.healthCheckService = healthCheckService;
+        this.simpleStatusCheckService = simpleStatusCheckService;
         this.uri = multicloudConfiguration.getMulticloudUrl();
     }
 
