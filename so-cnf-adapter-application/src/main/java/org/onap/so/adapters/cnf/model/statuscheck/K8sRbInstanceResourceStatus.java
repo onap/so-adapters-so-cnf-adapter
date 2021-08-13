@@ -18,7 +18,7 @@ public class K8sRbInstanceResourceStatus {
     private K8sRbInstanceGvk gvk;
 
     @JsonProperty("status")
-    private Map<String, Object> status;
+    private K8sStatus status;
 
     public String getName() {
         return name;
@@ -36,11 +36,11 @@ public class K8sRbInstanceResourceStatus {
         this.gvk = gvk;
     }
 
-    public Map<String, Object> getStatus() {
+    public K8sStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Map<String, Object> status) {
+    public void setStatus(K8sStatus status) {
         this.status = status;
     }
 
