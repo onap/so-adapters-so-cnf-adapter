@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0f41cc7_6728a451",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/client/CallbackClient.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 6641
+      },
+      "writtenOn": "2021-08-13T15:39:51Z",
+      "side": 1,
+      "message": "if you get exception you will send as a callback nulled request which may cause some error on the other side - it may be better to send a request to indicate failure (request was procssed but you are unable to send response)",
+      "revId": "7d6d9d1f6674f22fe36a57f60d0a16c8163f5ffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "314b19e3_59558ed6",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/client/MulticloudClient.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 6641
+      },
+      "writtenOn": "2021-08-13T15:39:51Z",
+      "side": 1,
+      "message": "i think it is not needed any more",
+      "revId": "7d6d9d1f6674f22fe36a57f60d0a16c8163f5ffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da0581f3_340f170e",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/client/MulticloudClient.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 6641
+      },
+      "writtenOn": "2021-08-13T15:39:51Z",
+      "side": 1,
+      "message": "too chatty - this should be debug as you are dumping response, in info just log status code liek 200, etc; of course having dump of the body in debug will be helpful ;)",
+      "revId": "7d6d9d1f6674f22fe36a57f60d0a16c8163f5ffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7eab29f_7120e1bc",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/client/MulticloudClient.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 6641
+      },
+      "writtenOn": "2021-08-13T15:39:51Z",
+      "side": 1,
+      "message": "can you just throw RuntimeException ? I am not sure if IllegalStateException is the best one here.",
+      "revId": "7d6d9d1f6674f22fe36a57f60d0a16c8163f5ffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
