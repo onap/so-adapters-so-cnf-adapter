@@ -52,6 +52,8 @@ import org.onap.so.adapters.cnf.model.Tag;
 import org.onap.so.adapters.cnf.model.healthcheck.HealthCheckResponse;
 import org.onap.so.adapters.cnf.model.statuscheck.StatusCheckResponse;
 import org.onap.so.adapters.cnf.service.CnfAdapterService;
+import org.onap.so.adapters.cnf.service.statuscheck.SimpleStatusCheckService;
+import org.onap.so.client.exception.BadResponseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,14 +77,17 @@ public class CnfAdapterRest {
 
     private static final Logger logger = LoggerFactory.getLogger(CnfAdapterRest.class);
     private final CloseableHttpClient httpClient = HttpClients.createDefault();
+    private final SimpleStatusCheckService simpleStatusCheckService;
     private final CnfAdapterService cnfAdapterService;
     private final SoCallbackClient callbackClient;
     private final String uri;
 
     @Autowired
-    public CnfAdapterRest(CnfAdapterService cnfAdapterService,
+    public CnfAdapterRest(SimpleStatusCheckService simpleStatusCheckService,
+                          CnfAdapterService cnfAdapterService,
                           SoCallbackClient callbackClient,
                           MulticloudConfiguration multicloudConfiguration) {
+        this.simpleStatusCheckService = simpleStatusCheckService;
         this.cnfAdapterService = cnfAdapterService;
         this.callbackClient = callbackClient;
         this.uri = multicloudConfiguration.getMulticloudUrl();
@@ -107,6 +112,31 @@ public class CnfAdapterRest {
                 return;
             }
             callbackClient.sendPostCallback(healthCheckRequest.getCallbackUrl(), healthCheckResponse);
+        });
+
+        response.setResult(ResponseEntity.accepted().build());
+        return response;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = {"/api/cnf-adapter/v1/statuscheck"}, method = RequestMethod.POST,
+            produces = "application/json")
+    public DeferredResult<ResponseEntity> statusCheck(@RequestBody CheckInstanceRequest statusCheckRequest) {
+        logger.info("statusCheck called.");
+        DeferredResult<ResponseEntity> response = new DeferredResult<>();
+
+        ForkJoinPool.commonPool().submit(() -> {
+            logger.info("Processing healthCheck service");
+            StatusCheckResponse statusCheckResponse = null;
+            try {
+                statusCheckResponse = simpleStatusCheckService.statusCheck(statusCheckRequest);
+            } catch (BadResponseException e) {
+                StatusCheckResponse errorStatusCheck = new StatusCheckResponse();
+                errorStatusCheck.setErrorMessage(e.getMessage());
+                callbackClient.sendPostCallback(statusCheckRequest.getCallbackUrl(), e);
+                return;
+            }
+            callbackClient.sendPostCallback(statusCheckRequest.getCallbackUrl(), statusCheckResponse);
         });
 
         response.setResult(ResponseEntity.accepted().build());

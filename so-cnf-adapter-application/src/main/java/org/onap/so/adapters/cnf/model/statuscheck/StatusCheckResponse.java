@@ -13,7 +13,7 @@ public class StatusCheckResponse {
     @JsonProperty("result")
     private List<StatusCheckInstanceResponse> instanceResponse;
 
-    @JsonProperty("errorMessage")
+    @JsonProperty("error")
     private String errorMessage;
 
     public List<StatusCheckInstanceResponse> getInstanceResponse() {
