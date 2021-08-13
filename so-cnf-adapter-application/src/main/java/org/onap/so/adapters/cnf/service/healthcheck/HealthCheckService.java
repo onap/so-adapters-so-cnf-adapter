@@ -29,21 +29,21 @@ public class HealthCheckService {
         this.instanceApi = multicloudClient;
     }
 
-    public HealthCheckResponse healthCheck(CheckInstanceRequest healthCheckRequest) {
+    public HealthCheckResponse healthCheck(CheckInstanceRequest checkInstanceRequest) {
         log.info("Health check - START");
 
-        List<HealthCheckInstance> instanceHealthCheckList = startInstanceHealthCheck(healthCheckRequest);
+        List<HealthCheckInstance> instanceHealthCheckList = startInstanceHealthCheck(checkInstanceRequest);
         HealthCheckResponse statuses = getStatuses(instanceHealthCheckList);
         log.info("Health check - END");
 
         return statuses;
     }
 
-    private List<HealthCheckInstance> startInstanceHealthCheck(CheckInstanceRequest healthCheckRequest) {
+    private List<HealthCheckInstance> startInstanceHealthCheck(CheckInstanceRequest checkInstanceRequest) {
         log.debug("startInstanceHealthCheck - START");
         List<HealthCheckInstance> healthCheckInstanceList = new ArrayList<>();
 
-        healthCheckRequest.getInstances().forEach(instance -> {
+        checkInstanceRequest.getInstances().forEach(instance -> {
             String instanceId = instance.getInstanceId();
             K8sRbInstanceHealthCheckSimple response = instanceApi.startInstanceHealthCheck(instanceId);
             log.info("K8sRbInstanceHealthCheckSimple: {}", response);

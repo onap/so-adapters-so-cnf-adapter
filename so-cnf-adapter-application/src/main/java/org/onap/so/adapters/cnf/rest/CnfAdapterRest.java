@@ -45,6 +45,8 @@ import org.onap.so.adapters.cnf.client.CallbackClient;
 import org.onap.so.adapters.cnf.model.*;
 import org.onap.so.adapters.cnf.model.healthcheck.HealthCheckInstanceResponse;
 import org.onap.so.adapters.cnf.model.healthcheck.HealthCheckResponse;
+import org.onap.so.adapters.cnf.model.statuscheck.StatusCheckInstanceResponse;
+import org.onap.so.adapters.cnf.model.statuscheck.StatusCheckResponse;
 import org.onap.so.adapters.cnf.service.CnfAdapterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,6 +100,30 @@ public class CnfAdapterRest {
             instanceResponse.add(new HealthCheckInstanceResponse("blissful_panini", "Something", "UP"));
             mockResponse.setInstanceResponse(instanceResponse);
             callbackClient.sendPostCallback(healthCheckRequest.getCallbackUrl(), mockResponse);
+        });
+
+        response.setResult(ResponseEntity.accepted().build());
+        return response;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = {"/api/cnf-adapter/v1/statuscheck"}, method = RequestMethod.POST,
+            produces = "application/json")
+    public DeferredResult<ResponseEntity> statusCheck(@RequestBody CheckInstanceRequest statusCheckRequest) {
+        logger.info("statusCheck called.");
+        DeferredResult<ResponseEntity> response = new DeferredResult<>();
+
+        ForkJoinPool.commonPool().submit(() -> {
+            logger.info("Processing healthCheck service");
+            // TODO: Mock response will be replaced for HealthCheckService.healthCheck()
+            StatusCheckResponse mockResponse = new StatusCheckResponse();
+            List<StatusCheckInstanceResponse> instanceResponse = new ArrayList<>();
+            instanceResponse.add(new StatusCheckInstanceResponse("infallible_sanderson", "Something", true));
+            instanceResponse.add(new StatusCheckInstanceResponse("gallant_hoover", "Something", true));
+            instanceResponse.add(new StatusCheckInstanceResponse("flamboyant_lederberg", "Something", true));
+            instanceResponse.add(new StatusCheckInstanceResponse("blissful_panini", "Something", true));
+            mockResponse.setInstanceResponse(instanceResponse);
+            callbackClient.sendPostCallback(statusCheckRequest.getCallbackUrl(), mockResponse);
         });
 
         response.setResult(ResponseEntity.accepted().build());
