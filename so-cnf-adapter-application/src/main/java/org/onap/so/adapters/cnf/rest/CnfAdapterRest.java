@@ -45,7 +45,9 @@ import org.onap.so.adapters.cnf.model.ResourceBundleEntity;
 import org.onap.so.adapters.cnf.model.Tag;
 import org.onap.so.adapters.cnf.model.healthcheck.HealthCheckRequest;
 import org.onap.so.adapters.cnf.model.healthcheck.HealthCheckResponse;
+import org.onap.so.adapters.cnf.model.instantiation.AaiUpdateRequest;
 import org.onap.so.adapters.cnf.service.CnfAdapterService;
+import org.onap.so.adapters.cnf.service.aai.AaiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,11 +70,14 @@ public class CnfAdapterRest {
     private static final Logger logger = LoggerFactory.getLogger(CnfAdapterRest.class);
     private final CloseableHttpClient httpClient = HttpClients.createDefault();
     private final CnfAdapterService cnfAdapterService;
+    private final AaiService aaiService;
     private final String uri;
 
     @Autowired
-    public CnfAdapterRest(CnfAdapterService cnfAdapterService, MulticloudConfiguration multicloudConfiguration) {
+    public CnfAdapterRest(CnfAdapterService cnfAdapterService, AaiService aaiService,
+                          MulticloudConfiguration multicloudConfiguration) {
         this.cnfAdapterService = cnfAdapterService;
+        this.aaiService = aaiService;
         this.uri = multicloudConfiguration.getMulticloudUrl();
     }
 
@@ -85,6 +90,17 @@ public class CnfAdapterRest {
         response.setResult(cnfAdapterService.healthCheck(healthCheckRequest));
         return response;
     }
+
+    @ResponseBody
+    @RequestMapping(value = {"/api/cnf-adapter/v1/aai-update/"}, method = RequestMethod.POST,
+            produces = "application/json")
+    public DeferredResult<Object> aaiUpdate(@RequestBody AaiUpdateRequest aaiUpdateRequest) {
+        aaiService.aaiUpdate(aaiUpdateRequest);
+
+        return null;
+    }
+
+
 
     @ResponseBody
     @RequestMapping(value = {"/api/cnf-adapter/v1/instance"}, method = RequestMethod.POST,
