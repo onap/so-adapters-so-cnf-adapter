@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "81b26d0c_fdc6d93a",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/client/CallbackClient.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 6863
+      },
+      "writtenOn": "2021-08-17T14:41:33Z",
+      "side": 1,
+      "message": "I simplified it",
+      "parentUuid": "a0f41cc7_6728a451",
+      "revId": "7d6d9d1f6674f22fe36a57f60d0a16c8163f5ffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2d9b35b5_e917a7ed",
         "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/client/MulticloudClient.java",
         "patchSetId": 3
@@ -30,6 +48,30 @@
       "writtenOn": "2021-08-17T13:08:53Z",
       "side": 1,
       "message": "why do we have separate component for new api endpoints?",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 31
+      },
+      "revId": "7d6d9d1f6674f22fe36a57f60d0a16c8163f5ffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00316fde_72514925",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/client/MulticloudClient.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 6863
+      },
+      "writtenOn": "2021-08-17T14:41:33Z",
+      "side": 1,
+      "message": "In SO-CNF-Adapter there is no rest client for connection with k8s-multicloud so I created new one.\nWhat is your proposal instead?",
+      "parentUuid": "2d9b35b5_e917a7ed",
       "range": {
         "startLine": 24,
         "startChar": 0,
