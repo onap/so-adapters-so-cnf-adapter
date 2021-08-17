@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3efbfa5b_0d2f5cce",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/aai/AaiIdGeneratorService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-17T12:45:28Z",
+      "side": 1,
+      "message": "we need to add here also identifiers of the owner, region and tenant to which this object will belong to. All these parameters will let to make this hash unique in ONAP if cleanup of previous instance is performed properly. We have to think if instance Id should be added as well.",
+      "range": {
+        "startLine": 18,
+        "startChar": 8,
+        "endLine": 18,
+        "endChar": 109
+      },
+      "revId": "0f73f129215d3f261b694c1b9f23830b2546df64",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fa09168_08999fa4",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/aai/AaiService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-17T12:45:28Z",
+      "side": 1,
+      "message": "what if it fails?",
+      "range": {
+        "startLine": 38,
+        "startChar": 7,
+        "endLine": 38,
+        "endChar": 92
+      },
+      "revId": "0f73f129215d3f261b694c1b9f23830b2546df64",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b50099b_24e8166b",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/aai/AaiService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-17T12:45:28Z",
+      "side": 1,
+      "message": "we need to use cloud infrastructure api and we will need here information from the aai update request to pass the identifiers.",
+      "range": {
+        "startLine": 50,
+        "startChar": 8,
+        "endLine": 50,
+        "endChar": 111
+      },
+      "revId": "0f73f129215d3f261b694c1b9f23830b2546df64",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3c06647_8d7eded1",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/aai/AaiService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-17T12:45:28Z",
+      "side": 1,
+      "message": "depth is used for GET operations",
+      "range": {
+        "startLine": 52,
+        "startChar": 14,
+        "endLine": 52,
+        "endChar": 33
+      },
+      "revId": "0f73f129215d3f261b694c1b9f23830b2546df64",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d9de37b_36507c2d",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/aai/AaiService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-17T12:45:28Z",
+      "side": 1,
+      "message": "why don\u0027t we parse labels?",
+      "range": {
+        "startLine": 77,
+        "startChar": 8,
+        "endLine": 77,
+        "endChar": 44
+      },
+      "revId": "0f73f129215d3f261b694c1b9f23830b2546df64",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c27b840b_41bbbddb",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/aai/AaiService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-17T12:45:28Z",
+      "side": 1,
+      "message": "we should use query api instead. This call needs to guarantee that caller will receive results of only this k8s-resource object. Instead here will receive collections of data for entire instance.",
+      "range": {
+        "startLine": 78,
+        "startChar": 8,
+        "endLine": 78,
+        "endChar": 133
+      },
+      "revId": "0f73f129215d3f261b694c1b9f23830b2546df64",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
