@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "2d9b35b5_e917a7ed",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/client/MulticloudClient.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-17T13:08:53Z",
+      "side": 1,
+      "message": "why do we have separate component for new api endpoints?",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 31
+      },
+      "revId": "7d6d9d1f6674f22fe36a57f60d0a16c8163f5ffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "314b19e3_59558ed6",
         "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/client/MulticloudClient.java",
         "patchSetId": 3
@@ -64,6 +87,282 @@
       "writtenOn": "2021-08-13T15:39:51Z",
       "side": 1,
       "message": "can you just throw RuntimeException ? I am not sure if IllegalStateException is the best one here.",
+      "revId": "7d6d9d1f6674f22fe36a57f60d0a16c8163f5ffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f891648_3be3d2ae",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/model/CheckInstanceRequest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-17T13:08:53Z",
+      "side": 1,
+      "message": "annotations",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 35
+      },
+      "revId": "7d6d9d1f6674f22fe36a57f60d0a16c8163f5ffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "820f9777_26ccc402",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/model/InstanceRequest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-17T13:08:53Z",
+      "side": 1,
+      "message": "we should ignore new fields, if they are present in the body.\npleae make annotations the same like in the other resource objects in cnf adapter, icnluding \n\n@JsonInclude(JsonInclude.Include.NON_NULL)\n@JsonIgnoreProperties(value \u003d \"true\")",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 30
+      },
+      "revId": "7d6d9d1f6674f22fe36a57f60d0a16c8163f5ffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ea7418d_9e55acf3",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/model/healthcheck/HealthCheckInstanceResponse.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-17T13:08:53Z",
+      "side": 1,
+      "message": "annotations",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 21
+      },
+      "revId": "7d6d9d1f6674f22fe36a57f60d0a16c8163f5ffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf4f57e0_0d109888",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/model/healthcheck/HealthCheckResponse.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-17T13:08:53Z",
+      "side": 1,
+      "message": "annotations",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 34
+      },
+      "revId": "7d6d9d1f6674f22fe36a57f60d0a16c8163f5ffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1bb3ca89_d54a9df8",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/model/healthcheck/K8sRbInstanceHealthCheck.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-17T13:08:53Z",
+      "side": 1,
+      "message": "annotations",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 39
+      },
+      "revId": "7d6d9d1f6674f22fe36a57f60d0a16c8163f5ffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6f83f62_cd1362a1",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/model/healthcheck/K8sRbInstanceHealthCheckSimple.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-17T13:08:53Z",
+      "side": 1,
+      "message": "annotations",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 0
+      },
+      "revId": "7d6d9d1f6674f22fe36a57f60d0a16c8163f5ffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d94f57a_f4fcd1e2",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/model/statuscheck/K8sRbInstanceGvk.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-17T13:08:53Z",
+      "side": 1,
+      "message": "annotations",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 31
+      },
+      "revId": "7d6d9d1f6674f22fe36a57f60d0a16c8163f5ffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c07c79a_4982932c",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/model/statuscheck/K8sRbInstanceRequest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-17T13:08:53Z",
+      "side": 1,
+      "message": "annotations",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 28
+      },
+      "revId": "7d6d9d1f6674f22fe36a57f60d0a16c8163f5ffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ae51eee_4b60787e",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/model/statuscheck/K8sRbInstanceResourceStatus.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-17T13:08:53Z",
+      "side": 1,
+      "message": "annotations",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 42
+      },
+      "revId": "7d6d9d1f6674f22fe36a57f60d0a16c8163f5ffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd03ace9_6d925340",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/model/statuscheck/K8sRbInstanceStatus.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-17T13:08:53Z",
+      "side": 1,
+      "message": "annotations",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 34
+      },
+      "revId": "7d6d9d1f6674f22fe36a57f60d0a16c8163f5ffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e5d03da_bbcb6e2b",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/model/statuscheck/StatusCheckInstanceResponse.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-17T13:08:53Z",
+      "side": 1,
+      "message": "annotations",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 42
+      },
+      "revId": "7d6d9d1f6674f22fe36a57f60d0a16c8163f5ffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cb14b8f_8ac67aea",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/model/statuscheck/StatusCheckResponse.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-17T13:08:53Z",
+      "side": 1,
+      "message": "annotations",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 34
+      },
       "revId": "7d6d9d1f6674f22fe36a57f60d0a16c8163f5ffc",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
