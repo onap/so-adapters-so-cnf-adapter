@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20eeef51_9b6b04ef",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/client/CallbackClient.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-18T20:42:13Z",
+      "side": 1,
+      "message": "SoCallbackClient rather",
+      "range": {
+        "startLine": 15,
+        "startChar": 13,
+        "endLine": 15,
+        "endChar": 27
+      },
+      "revId": "3a9fb17a94b3dba18a646a454fdc54c0fa508355",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd026ac5_d242d82b",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/client/MulticloudClient.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-18T20:42:13Z",
+      "side": 1,
+      "message": "in the future i see that rather we should have definition, connectivy info, instance clients, etc",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 31
+      },
+      "revId": "3a9fb17a94b3dba18a646a454fdc54c0fa508355",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "230168b6_f6f15b6e",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/client/MulticloudClient.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-18T20:42:13Z",
+      "side": 1,
+      "message": "connection?",
+      "range": {
+        "startLine": 115,
+        "startChar": 54,
+        "endLine": 115,
+        "endChar": 66
+      },
+      "revId": "3a9fb17a94b3dba18a646a454fdc54c0fa508355",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b78a6c9_59af64cf",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/client/MulticloudClient.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-18T20:42:13Z",
+      "side": 1,
+      "message": "it looks like this client is more \"instance\" client and should handle now, and in the future all calls to instance/ urls",
+      "range": {
+        "startLine": 119,
+        "startChar": 18,
+        "endLine": 119,
+        "endChar": 36
+      },
+      "revId": "3a9fb17a94b3dba18a646a454fdc54c0fa508355",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68275fb4_c86111d1",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/model/statuscheck/K8sRbInstanceRequest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-18T20:42:13Z",
+      "side": 1,
+      "message": "it duplicates https://github.com/onap/so-adapters-so-cnf-adapter/blob/master/so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/model/MulticloudInstanceRequest.java",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 28
+      },
+      "revId": "3a9fb17a94b3dba18a646a454fdc54c0fa508355",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
