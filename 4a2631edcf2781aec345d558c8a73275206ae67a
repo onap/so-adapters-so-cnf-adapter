@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0dd6d98e_a5ba8460",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/statuscheck/SimpleStatusCheckService.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-18T20:47:23Z",
+      "side": 1,
+      "message": "why we have it in a separate service? We can\u0027t handle it in CnfAdapterService?",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 39
+      },
+      "revId": "4a2631edcf2781aec345d558c8a73275206ae67a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
