@@ -140,6 +140,29 @@
     },
     {
       "key": {
+        "uuid": "aa466cad_f4789465",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/aai/AaiService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-18T21:37:25Z",
+      "side": 1,
+      "message": "no asterisks",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 19
+      },
+      "revId": "7edaaf5e6217acc5b0b196f2ddc0400d34d80321",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "639a1d17_45b9dbd8",
         "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/aai/AaiService.java",
         "patchSetId": 2
@@ -156,6 +179,29 @@
         "startChar": 2,
         "endLine": 41,
         "endChar": 46
+      },
+      "revId": "7edaaf5e6217acc5b0b196f2ddc0400d34d80321",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79db4b69_f629d3a7",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/aai/AaiService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-18T21:37:25Z",
+      "side": 1,
+      "message": "parseK8sResource",
+      "range": {
+        "startLine": 62,
+        "startChar": 24,
+        "endLine": 62,
+        "endChar": 29
       },
       "revId": "7edaaf5e6217acc5b0b196f2ddc0400d34d80321",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
@@ -225,6 +271,29 @@
         "startChar": 52,
         "endLine": 79,
         "endChar": 116
+      },
+      "revId": "7edaaf5e6217acc5b0b196f2ddc0400d34d80321",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "059093c2_eecf76f7",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/aai/AaiService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-18T21:37:25Z",
+      "side": 1,
+      "message": "K8sResource - later to be replaced with class from aai-schema",
+      "range": {
+        "startLine": 83,
+        "startChar": 18,
+        "endLine": 83,
+        "endChar": 29
       },
       "revId": "7edaaf5e6217acc5b0b196f2ddc0400d34d80321",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
