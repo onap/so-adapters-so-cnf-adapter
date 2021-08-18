@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d6be0e90_3d55dfe6",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/aai/AaiIdGeneratorService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 6863
+      },
+      "writtenOn": "2021-08-18T14:28:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3efbfa5b_0d2f5cce",
+      "range": {
+        "startLine": 18,
+        "startChar": 8,
+        "endLine": 18,
+        "endChar": 109
+      },
+      "revId": "0f73f129215d3f261b694c1b9f23830b2546df64",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5fa09168_08999fa4",
         "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/aai/AaiService.java",
         "patchSetId": 1
@@ -71,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "b371da5f_56a7821d",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/aai/AaiService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 6863
+      },
+      "writtenOn": "2021-08-18T14:28:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b50099b_24e8166b",
+      "range": {
+        "startLine": 50,
+        "startChar": 8,
+        "endLine": 50,
+        "endChar": 111
+      },
+      "revId": "0f73f129215d3f261b694c1b9f23830b2546df64",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d3c06647_8d7eded1",
         "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/aai/AaiService.java",
         "patchSetId": 1
@@ -91,6 +139,30 @@
       "revId": "0f73f129215d3f261b694c1b9f23830b2546df64",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a6be210_5ced4e44",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/aai/AaiService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 6863
+      },
+      "writtenOn": "2021-08-18T14:28:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d3c06647_8d7eded1",
+      "range": {
+        "startLine": 52,
+        "startChar": 14,
+        "endLine": 52,
+        "endChar": 33
+      },
+      "revId": "0f73f129215d3f261b694c1b9f23830b2546df64",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -137,6 +209,30 @@
       "revId": "0f73f129215d3f261b694c1b9f23830b2546df64",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd3ca98c_15b7f27b",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/aai/AaiService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 6863
+      },
+      "writtenOn": "2021-08-18T14:28:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c27b840b_41bbbddb",
+      "range": {
+        "startLine": 78,
+        "startChar": 8,
+        "endLine": 78,
+        "endChar": 133
+      },
+      "revId": "0f73f129215d3f261b694c1b9f23830b2546df64",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
