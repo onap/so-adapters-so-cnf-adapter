@@ -22,6 +22,30 @@
       "revId": "4a2631edcf2781aec345d558c8a73275206ae67a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53d676f8_b49b5c33",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/statuscheck/SimpleStatusCheckService.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 6863
+      },
+      "writtenOn": "2021-08-19T11:11:21Z",
+      "side": 1,
+      "message": "I would rather merge this service and HealtthcheckService into one than put it into CnfAdapterService. I think CnfAdapterSerivice has too many functionality.",
+      "parentUuid": "0dd6d98e_a5ba8460",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 39
+      },
+      "revId": "4a2631edcf2781aec345d558c8a73275206ae67a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
