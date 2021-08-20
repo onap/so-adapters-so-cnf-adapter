@@ -3,7 +3,7 @@ package org.onap.so.adapters.cnf.model.instantiation;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties
-public class AaiUpdateRequest {
+public class AaiRequest {
 
     private String instanceId;
     private String cloudRegion;
@@ -53,7 +53,7 @@ public class AaiUpdateRequest {
 
     @Override
     public String toString() {
-        return "AaiUpdateRequest{" +
+        return "AaiRequest{" +
                 "instanceId='" + instanceId + '\'' +
                 ", cloudRegion='" + cloudRegion + '\'' +
                 ", cloudOwner='" + cloudOwner + '\'' +
