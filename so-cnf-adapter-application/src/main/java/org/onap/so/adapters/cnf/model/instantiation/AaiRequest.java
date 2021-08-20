@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(value = "true")
-public class AaiUpdateRequest {
+public class AaiRequest {
 
     @JsonProperty("instanceId")
     private String instanceId;
@@ -61,7 +61,7 @@ public class AaiUpdateRequest {
 
     @Override
     public String toString() {
-        return "AaiUpdateRequest{" +
+        return "AaiRequest{" +
                 "instanceId='" + instanceId + '\'' +
                 ", cloudRegion='" + cloudRegion + '\'' +
                 ", cloudOwner='" + cloudOwner + '\'' +

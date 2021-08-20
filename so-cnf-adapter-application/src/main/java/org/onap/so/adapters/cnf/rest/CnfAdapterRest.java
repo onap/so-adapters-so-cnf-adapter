@@ -51,7 +51,7 @@ import org.onap.so.adapters.cnf.model.ResourceBundleEntity;
 import org.onap.so.adapters.cnf.model.Tag;
 import org.onap.so.adapters.cnf.model.aai.AaiCallbackResponse;
 import org.onap.so.adapters.cnf.model.healthcheck.HealthCheckResponse;
-import org.onap.so.adapters.cnf.model.instantiation.AaiUpdateRequest;
+import org.onap.so.adapters.cnf.model.instantiation.AaiRequest;
 import org.onap.so.adapters.cnf.model.statuscheck.StatusCheckResponse;
 import org.onap.so.adapters.cnf.service.CnfAdapterService;
 import org.onap.so.adapters.cnf.service.aai.AaiService;
@@ -127,16 +127,36 @@ public class CnfAdapterRest {
     @ResponseBody
     @RequestMapping(value = {"/api/cnf-adapter/v1/aai-update/"}, method = RequestMethod.POST,
             produces = "application/json")
-    public DeferredResult<ResponseEntity> aaiUpdate(@RequestBody AaiUpdateRequest aaiUpdateRequest) {
+    public DeferredResult<ResponseEntity> aaiUpdate(@RequestBody AaiRequest aaiRequest) {
         logger.info("aai-update called.");
         DeferredResult<ResponseEntity> response = new DeferredResult<>();
 
         ForkJoinPool.commonPool().submit(() -> {
             logger.info("Processing aai update");
-//            aaiService.aaiUpdate(aaiUpdateRequest);
+//            aaiService.aaiUpdate(aaiRequest);
             AaiCallbackResponse mockCallbackResponse = new AaiCallbackResponse();
             mockCallbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.COMPLETED);
-            callbackClient.sendPostCallback(aaiUpdateRequest.getCallbackUrl(), mockCallbackResponse);
+            callbackClient.sendPostCallback(aaiRequest.getCallbackUrl(), mockCallbackResponse);
+            return response;
+        });
+
+        response.setResult(ResponseEntity.accepted().build());
+        return response;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = {"/api/cnf-adapter/v1/aai-delete/"}, method = RequestMethod.POST,
+            produces = "application/json")
+    public DeferredResult<ResponseEntity> aaiDelete(@RequestBody AaiRequest aaiRequest) {
+        logger.info("aai-delete called.");
+        DeferredResult<ResponseEntity> response = new DeferredResult<>();
+
+        ForkJoinPool.commonPool().submit(() -> {
+            logger.info("Processing aai delete");
+//            aaiService.aaiDelete(aaiRequest);
+            AaiCallbackResponse mockCallbackResponse = new AaiCallbackResponse();
+            mockCallbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.COMPLETED);
+            callbackClient.sendPostCallback(aaiRequest.getCallbackUrl(), mockCallbackResponse);
             return response;
         });
 

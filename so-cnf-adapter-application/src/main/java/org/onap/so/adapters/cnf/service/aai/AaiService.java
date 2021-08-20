@@ -1,13 +1,12 @@
 package org.onap.so.adapters.cnf.service.aai;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.onap.aaiclient.client.aai.AAIResourcesClient;
 import org.onap.aaiclient.client.aai.entities.uri.AAIResourceUri;
 import org.onap.aaiclient.client.aai.entities.uri.AAIUriFactory;
 import org.onap.aaiclient.client.generated.fluentbuilders.AAIFluentTypeBuilder;
 import org.onap.so.adapters.cnf.client.MulticloudClient;
-import org.onap.so.adapters.cnf.model.instantiation.AaiUpdateRequest;
+import org.onap.so.adapters.cnf.model.instantiation.AaiRequest;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceGvk;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceResourceStatus;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceStatus;
@@ -31,22 +30,42 @@ public class AaiService {
         this.aaiIdGeneratorService = aaiIdGeneratorService;
     }
 
-    public void aaiUpdate(AaiUpdateRequest aaiUpdateRequest) throws BadResponseException {
-        String instanceId = aaiUpdateRequest.getInstanceId();
+    public void aaiUpdate(AaiRequest aaiRequest) throws BadResponseException {
+        String instanceId = aaiRequest.getInstanceId();
         K8sRbInstanceStatus instanceStatus = multicloudClient.getInstanceStatus(instanceId);
 
         List<K8sRbInstanceResourceStatus> resourcesStatus = instanceStatus.getResourcesStatus();
         List<ParseResult> parsedStatus = resourcesStatus.stream()
-                .map(status -> parse(status, aaiUpdateRequest))
+                .map(status -> parse(status, aaiRequest))
                 .collect(Collectors.toList());
 
-        parsedStatus.forEach(status -> sendPostRequestToAai(status, aaiUpdateRequest));
+        parsedStatus.forEach(status -> sendUpdateRequestToAai(status, aaiRequest));
     }
 
-    private void sendPostRequestToAai(ParseResult parseResult, AaiUpdateRequest aaiUpdateRequest) {
+    public void aaiDelete(AaiRequest aaiRequest) throws BadResponseException {
+        String instanceId = aaiRequest.getInstanceId();
+        K8sRbInstanceStatus instanceStatus = multicloudClient.getInstanceStatus(instanceId);
+
+        List<K8sRbInstanceResourceStatus> resourcesStatus = instanceStatus.getResourcesStatus();
+        List<ParseResult> parsedStatus = resourcesStatus.stream()
+                .map(status -> parse(status, aaiRequest))
+                .collect(Collectors.toList());
+
+        parsedStatus.forEach(status -> sendDeleteRequestToAai(aaiRequest));
+    }
+
+    private void sendDeleteRequestToAai(AaiRequest aaiRequest) {
         AAIResourceUri aaiUri = AAIUriFactory.createResourceUri(AAIFluentTypeBuilder.cloudInfrastructure()
-                .cloudRegion(aaiUpdateRequest.getCloudOwner(), aaiUpdateRequest.getCloudRegion())
-                .tenant(aaiUpdateRequest.getTenantId())
+                .cloudRegion(aaiRequest.getCloudOwner(), aaiRequest.getCloudRegion())
+                .tenant(aaiRequest.getTenantId())
+                .build());
+        getAaiClient().delete(aaiUri);
+    }
+
+    private void sendUpdateRequestToAai(ParseResult parseResult, AaiRequest aaiRequest) {
+        AAIResourceUri aaiUri = AAIUriFactory.createResourceUri(AAIFluentTypeBuilder.cloudInfrastructure()
+                .cloudRegion(aaiRequest.getCloudOwner(), aaiRequest.getCloudRegion())
+                .tenant(aaiRequest.getTenantId())
                 .build());
         String payload = gson.toJson(parseResult);
         getAaiClient().create(aaiUri, payload);
@@ -59,11 +78,11 @@ public class AaiService {
         return aaiClient;
     }
 
-    private ParseResult parse(K8sRbInstanceResourceStatus status, AaiUpdateRequest aaiUpdateRequest) {
+    private ParseResult parse(K8sRbInstanceResourceStatus status, AaiRequest aaiRequest) {
         ParseResult result = new ParseResult();
         K8sRbInstanceGvk gvk = status.getGvk();
         K8sStatusMetadata metadata = status.getStatus().getK8sStatusMetadata();
-        String id = aaiIdGeneratorService.generateId(status, aaiUpdateRequest);
+        String id = aaiIdGeneratorService.generateId(status, aaiRequest);
         result.setId(id);
         result.setName(status.getName());
         result.setGroup(gvk.getGroup());
@@ -76,7 +95,7 @@ public class AaiService {
             labels.add(value);
         });
         result.setLabels(labels);
-        result.setK8sResourceSelfLink(String.format("http://so-cnf-adapter:8090/api/cnf-adapter/v1/instance/%s/query", aaiUpdateRequest.getInstanceId()));
+        result.setK8sResourceSelfLink(String.format("http://so-cnf-adapter:8090/api/cnf-adapter/v1/instance/%s/query", aaiRequest.getInstanceId()));
         return result;
     }
 
