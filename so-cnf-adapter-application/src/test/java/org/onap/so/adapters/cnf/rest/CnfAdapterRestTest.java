@@ -144,13 +144,32 @@ public class CnfAdapterRestTest {
     }
 
     @Test
-    public void getInstanceQueryByInstanceIdTest() {
+    public void queryInstanceResourcesTest() {
         String instanceId = "123";
+        String kind = "Service";
+        String apiVersion = "v1";
         String queryResponseMock = "queryResponseMock";
 
-        Mockito.when(cnfAdapterService.getInstanceQueryByInstanceId(instanceId)).thenReturn(queryResponseMock);
+        Mockito.when(cnfAdapterService.queryInstanceResources(instanceId, kind, apiVersion, null, null,
+                null)).thenReturn(queryResponseMock);
 
-        String result = cnfAdapterRest.getInstanceQueryByInstanceId(instanceId);
+        String result = cnfAdapterRest.queryInstanceResources(instanceId, kind, apiVersion, null, null,
+                null);
+        assertThat(result).isEqualTo(queryResponseMock);
+    }
+
+    @Test
+    public void queryResourcesTest() {
+        String kind = "Service";
+        String apiVersion = "v1";
+        String cloudRegion = "region";
+        String queryResponseMock = "queryResponseMock";
+
+        Mockito.when(cnfAdapterService.queryResources(kind, apiVersion, null, null,
+                null, cloudRegion)).thenReturn(queryResponseMock);
+
+        String result = cnfAdapterRest.queryResources(kind, apiVersion, null, null,
+                null, cloudRegion);
         assertThat(result).isEqualTo(queryResponseMock);
     }
 

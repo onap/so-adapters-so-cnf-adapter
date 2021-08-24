@@ -226,10 +226,31 @@ public class CnfAdapterRest {
     @ResponseBody
     @RequestMapping(value = {"/api/cnf-adapter/v1/instance/{instanceId}/query"}, method = RequestMethod.GET,
             produces = "application/json")
-    public String getInstanceQueryByInstanceId(@PathVariable("instanceId") String instanceId) {
-        logger.info("getInstanceQueryByInstanceId called.");
+    public String queryInstanceResources(
+            @PathVariable("instanceId") String instanceId,
+            @RequestParam(value = "Kind") String kind,
+            @RequestParam(value = "ApiVersion") String apiVersion,
+            @RequestParam(value = "Labels", required = false) String labels,
+            @RequestParam(value = "Namespace", required = false) String namespace,
+            @RequestParam(value = "Name", required = false) String name) {
+        logger.info("queryInstanceResources called.");
 
-        return cnfAdapterService.getInstanceQueryByInstanceId(instanceId);
+        return cnfAdapterService.queryInstanceResources(instanceId, kind, apiVersion, name, labels, namespace);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = {"/api/cnf-adapter/v1/query"}, method = RequestMethod.GET,
+            produces = "application/json")
+    public String queryResources(
+            @RequestParam(value = "Kind") String kind,
+            @RequestParam(value = "ApiVersion") String apiVersion,
+            @RequestParam(value = "Labels", required = false) String labels,
+            @RequestParam(value = "Namespace", required = false) String namespace,
+            @RequestParam(value = "Name", required = false) String name,
+            @RequestParam(value = "CloudRegion") String cloudRegion) {
+        logger.info("queryResources called.");
+
+        return cnfAdapterService.queryResources(kind, apiVersion, name, labels, namespace, cloudRegion);
     }
 
     @RequestMapping(value = {"/api/cnf-adapter/v1/instance"}, method = RequestMethod.GET, produces = "application/json")

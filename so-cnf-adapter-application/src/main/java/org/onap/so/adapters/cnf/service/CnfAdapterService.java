@@ -20,11 +20,8 @@
 
 package org.onap.so.adapters.cnf.service;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.EntityNotFoundException;
-import javax.ws.rs.core.UriBuilder;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.http.HttpStatus;
 import org.onap.so.adapters.cnf.MulticloudConfiguration;
 import org.onap.so.adapters.cnf.model.BpmnInstanceRequest;
@@ -45,8 +42,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
+
+import javax.persistence.EntityNotFoundException;
+import javax.ws.rs.core.UriBuilder;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CnfAdapterService {
@@ -186,17 +187,54 @@ public class CnfAdapterService {
 
     }
 
-    public String getInstanceQueryByInstanceId(String instanceId) {
-        logger.info("CnfAdapterService getInstanceQueryByInstanceId called");
-        ResponseEntity<String> instanceResponse = null;
+    public String queryInstanceResources(String instanceId, String kind, String apiVersion, String name, String labels,
+                                         String namespace) {
+        logger.info("CnfAdapterService queryInstanceResources called");
+        ResponseEntity<String> queryResponse = null;
         try {
             String path = "/v1/instance/" + instanceId + "/query";
-            String endpoint = UriBuilder.fromUri(uri).path(path).build().toString();
+            UriBuilder builder = UriBuilder.fromUri(uri).path(path).queryParam("Kind", kind).
+                    queryParam("ApiVersion", apiVersion);
+            if (namespace != null)
+                builder = builder.queryParam("Namespace", namespace);
+            if (name != null)
+                builder = builder.queryParam("Name", name);
+            if (labels != null)
+                builder = builder.queryParam("Labels", labels);
+            String endpoint = builder.build().toString();
             HttpEntity<?> requestEntity = new HttpEntity<>(getHttpHeaders());
             logger.info("request: " + requestEntity);
-            instanceResponse = restTemplate.exchange(endpoint, HttpMethod.GET, requestEntity, String.class);
-            logger.info("response: " + instanceResponse);
-            return instanceResponse.getBody();
+            queryResponse = restTemplate.exchange(endpoint, HttpMethod.GET, requestEntity, String.class);
+            logger.info("response: " + queryResponse);
+            return queryResponse.getBody();
+        } catch (HttpClientErrorException e) {
+            if (HttpStatus.SC_NOT_FOUND == e.getStatusCode().value()) {
+                throw new EntityNotFoundException(e.getResponseBodyAsString());
+            }
+            throw e;
+        }
+    }
+
+    public String queryResources(String kind, String apiVersion, String name, String labels,
+                                 String namespace, String cloudRegion) {
+        logger.info("CnfAdapterService queryResources called");
+        ResponseEntity<String> queryResponse = null;
+        try {
+            String path = "/v1/query";
+            UriBuilder builder = UriBuilder.fromUri(uri).path(path).queryParam("Kind", kind).
+                    queryParam("ApiVersion", apiVersion).queryParam("CloudRegion", cloudRegion);
+            if (namespace != null)
+                builder = builder.queryParam("Namespace", namespace);
+            if (name != null)
+                builder = builder.queryParam("Name", name);
+            if (labels != null)
+                builder = builder.queryParam("Labels", labels);
+            String endpoint = builder.build().toString();
+            HttpEntity<?> requestEntity = new HttpEntity<>(getHttpHeaders());
+            logger.info("request: " + requestEntity);
+            queryResponse = restTemplate.exchange(endpoint, HttpMethod.GET, requestEntity, String.class);
+            logger.info("response: " + queryResponse);
+            return queryResponse.getBody();
         } catch (HttpClientErrorException e) {
             if (HttpStatus.SC_NOT_FOUND == e.getStatusCode().value()) {
                 throw new EntityNotFoundException(e.getResponseBodyAsString());
