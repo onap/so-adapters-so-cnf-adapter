@@ -20,37 +20,257 @@
 
 package org.onap.so.adapters.cnf.service;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.onap.so.adapters.cnf.MulticloudConfiguration;
 import org.onap.so.adapters.cnf.model.BpmnInstanceRequest;
+import org.onap.so.adapters.cnf.service.healthcheck.HealthCheckService;
+import org.onap.so.adapters.cnf.service.statuscheck.SimpleStatusCheckService;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.EntityNotFoundException;
+
+import lombok.Data;
+
 @RunWith(SpringRunner.class)
 public class CnfAdapterServiceTest {
-    private static final String INSTANCE_CREATE_PATH = "/v1/instance";
+
+    private static final String INSTANCE_ID = "ins";
+
+    private CnfAdapterService cnfAdapterService;
+
     @Mock
     private RestTemplate restTemplate;
 
-    @InjectMocks
-    CnfAdapterService cnfAdapterService;
+    @Mock
+    HealthCheckService healthCheckService;
 
     @Mock
-    private MulticloudConfiguration multicloudConfiguration;
+    SimpleStatusCheckService simpleStatusCheckService;
 
-    @Mock
-    ResponseEntity<String> instanceResponse;
 
-    
+    @Before
+    public void setUp() {
+        MulticloudConfiguration multicloudConfiguration = mock(MulticloudConfiguration.class);
+        doReturn("http://test.url").when(multicloudConfiguration).getMulticloudUrl();
+        cnfAdapterService = spy(new CnfAdapterService(restTemplate, healthCheckService, simpleStatusCheckService, multicloudConfiguration));
+    }
+
+
     @Test
     public void createInstanceTest() throws Exception {
+        try {
+            cnfAdapterService.createInstance(getBpmnInstanceRequest());
+        } catch (Exception exp) {
+            assert (true);
+        }
+    }
+
+    @Test(expected = EntityNotFoundException.class)
+    public void testcreateInstanceHttpException() {
+        doThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND)).when(restTemplate).exchange(ArgumentMatchers.anyString(),
+                ArgumentMatchers.any(HttpMethod.class), ArgumentMatchers.any(), ArgumentMatchers.<Class<String>>any());
+        try {
+            cnfAdapterService.createInstance(getBpmnInstanceRequest());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test(expected = HttpStatusCodeException.class)
+    public void testcreateInstanceHttpStatusCodeException() {
+        doThrow(new HttpServerErrorException(HttpStatus.CONFLICT)).when(restTemplate).exchange(ArgumentMatchers.anyString(),
+                ArgumentMatchers.any(HttpMethod.class), ArgumentMatchers.any(), ArgumentMatchers.<Class<String>>any());
+        try {
+            cnfAdapterService.createInstance(getBpmnInstanceRequest());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void getInstanceByInstanceIdTest() throws Exception {
+        try {
+            cnfAdapterService.getInstanceByInstanceId(INSTANCE_ID);
+        } catch (Exception exp) {
+            assert (true);
+        }
+    }
+
+    @Test(expected = EntityNotFoundException.class)
+    public void testInstanceByInstanceIdHttpException() {
+        doThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND)).when(restTemplate).exchange(ArgumentMatchers.anyString(),
+                ArgumentMatchers.any(HttpMethod.class), ArgumentMatchers.any(), ArgumentMatchers.<Class<String>>any());
+        try {
+            cnfAdapterService.getInstanceByInstanceId(INSTANCE_ID);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test(expected = HttpStatusCodeException.class)
+    public void testInstanceByInstanceIdHttpStatusCodeException() {
+        doThrow(new HttpServerErrorException(HttpStatus.CONFLICT)).when(restTemplate).exchange(ArgumentMatchers.anyString(),
+                ArgumentMatchers.any(HttpMethod.class), ArgumentMatchers.any(), ArgumentMatchers.<Class<String>>any());
+        try {
+            cnfAdapterService.getInstanceByInstanceId(INSTANCE_ID);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void getInstanceStatusByInstanceIdTest() throws Exception {
+        try {
+            cnfAdapterService.getInstanceStatusByInstanceId(INSTANCE_ID);
+        } catch (Exception exp) {
+            assert (true);
+        }
+    }
+
+    @Test(expected = EntityNotFoundException.class)
+    public void testInstanceStatusByInstanceIdHttpException() {
+        doThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND)).when(restTemplate).exchange(ArgumentMatchers.anyString(),
+                ArgumentMatchers.any(HttpMethod.class), ArgumentMatchers.any(), ArgumentMatchers.<Class<String>>any());
+        try {
+            cnfAdapterService.getInstanceStatusByInstanceId(INSTANCE_ID);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test(expected = HttpStatusCodeException.class)
+    public void testInstanceStatusByInstanceIdHttpStatusCodeException() {
+        doThrow(new HttpServerErrorException(HttpStatus.CONFLICT)).when(restTemplate).exchange(ArgumentMatchers.anyString(),
+                ArgumentMatchers.any(HttpMethod.class), ArgumentMatchers.any(), ArgumentMatchers.<Class<String>>any());
+        try {
+            cnfAdapterService.getInstanceStatusByInstanceId(INSTANCE_ID);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void getInstanceByRBNameOrRBVersionOrProfileNameTest() throws Exception {
+        RbNameVersionData rbNameVersionData = new RbNameVersionData();
+        try {
+            cnfAdapterService.getInstanceByRBNameOrRBVersionOrProfileName(rbNameVersionData.getRbName(), rbNameVersionData.getRbVersion(),
+                    rbNameVersionData.getProfileName());
+        } catch (Exception exp) {
+            assert (true);
+        }
+    }
+
+    @Test(expected = EntityNotFoundException.class)
+    public void testInstanceByRBNameOrRBVersionOrProfileNameHttpException() {
+        RbNameVersionData rbNameVersionData = new RbNameVersionData();
+        doThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND)).when(restTemplate).exchange(ArgumentMatchers.anyString(),
+                ArgumentMatchers.any(HttpMethod.class), ArgumentMatchers.any(), ArgumentMatchers.<Class<String>>any());
+        try {
+            cnfAdapterService.getInstanceByRBNameOrRBVersionOrProfileName(rbNameVersionData.getRbName(), rbNameVersionData.getRbVersion(),
+                    rbNameVersionData.getProfileName());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test(expected = HttpStatusCodeException.class)
+    public void testInstanceByRBNameOrRBVersionOrProfileNameHttpStatusCodeException() {
+        RbNameVersionData rbNameVersionData = new RbNameVersionData();
+        doThrow(new HttpServerErrorException(HttpStatus.CONFLICT)).when(restTemplate).exchange(ArgumentMatchers.anyString(),
+                ArgumentMatchers.any(HttpMethod.class), ArgumentMatchers.any(), ArgumentMatchers.<Class<String>>any());
+        try {
+            cnfAdapterService.getInstanceByRBNameOrRBVersionOrProfileName(rbNameVersionData.getRbName(), rbNameVersionData.getRbVersion(),
+                    rbNameVersionData.getProfileName());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void deleteInstanceByInstanceIdTest() throws Exception {
+        try {
+            cnfAdapterService.deleteInstanceByInstanceId(INSTANCE_ID);
+        } catch (Exception exp) {
+            assert (true);
+        }
+    }
+
+    @Test(expected = EntityNotFoundException.class)
+    public void testdeleteInstanceByInstanceIdHttpException() {
+        doThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND)).when(restTemplate).exchange(ArgumentMatchers.anyString(),
+                ArgumentMatchers.any(HttpMethod.class), ArgumentMatchers.any(), ArgumentMatchers.<Class<String>>any());
+        try {
+            cnfAdapterService.deleteInstanceByInstanceId(INSTANCE_ID);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test(expected = HttpStatusCodeException.class)
+    public void testdeleteInstanceByInstanceIdException() {
+        doThrow(new HttpServerErrorException(HttpStatus.CONFLICT)).when(restTemplate).exchange(ArgumentMatchers.anyString(),
+                ArgumentMatchers.any(HttpMethod.class), ArgumentMatchers.any(), ArgumentMatchers.<Class<String>>any());
+        try {
+            cnfAdapterService.deleteInstanceByInstanceId(INSTANCE_ID);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void queryInstanceResourcesTest() {
+        try {
+            cnfAdapterService.queryInstanceResources(INSTANCE_ID, "", "", "", "", "");
+        } catch (Exception exp) {
+            assert (true);
+        }
+    }
+
+    @Test(expected = EntityNotFoundException.class)
+    public void queryInstanceResourcesException() {
+        doThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND)).when(restTemplate).exchange(ArgumentMatchers.anyString(),
+                ArgumentMatchers.any(HttpMethod.class), ArgumentMatchers.any(), ArgumentMatchers.<Class<String>>any());
+        cnfAdapterService.queryInstanceResources(INSTANCE_ID, "", "", "", "", "");
+    }
+
+    @Test
+    public void queryResourcesTest() {
+        try {
+            cnfAdapterService.queryResources(INSTANCE_ID, "", "", "", "", "");
+        } catch (Exception exp) {
+            assert (true);
+        }
+    }
+
+    @Test(expected = EntityNotFoundException.class)
+    public void queryResourcesException() {
+        doThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND)).when(restTemplate).exchange(ArgumentMatchers.anyString(),
+                ArgumentMatchers.any(HttpMethod.class), ArgumentMatchers.any(), ArgumentMatchers.<Class<String>>any());
+        cnfAdapterService.queryResources(INSTANCE_ID, "", "", "", "", "");
+    }
+
+    private BpmnInstanceRequest getBpmnInstanceRequest() {
         Map<String, String> labels = new HashMap<String, String>();
         labels.put("custom-label-1", "label1");
         Map<String, String> overrideValues = new HashMap<String, String>();
@@ -65,63 +285,15 @@ public class CnfAdapterServiceTest {
         bpmnInstanceRequest.setOverrideValues(overrideValues);
         bpmnInstanceRequest.setVfModuleUUID("20200824");
         bpmnInstanceRequest.setK8sRBProfileName("K8sRBProfileName is required");
-        try {
-            cnfAdapterService.createInstance(bpmnInstanceRequest);
-        }
-        catch (Exception exp) {
-        assert(true);
-        }
-
+        return bpmnInstanceRequest;
     }
 
-    @Test
-    public void getInstanceByInstanceIdTest() throws Exception {
-        String instanceId = "ins";
-        try {
-            cnfAdapterService.getInstanceByInstanceId(instanceId);
-        }
-        catch (Exception exp) {
-         assert(true);
-        }
+    @Data
+    private class RbNameVersionData {
 
-    }
-
-    @Test
-    public void getInstanceStatusByInstanceIdTest() throws Exception {
-        String instanceId = "ins";
-        try {
-            cnfAdapterService.getInstanceStatusByInstanceId(instanceId);
-        }
-        catch (Exception exp) {
-         assert(true);
-        }
-
-    }
-
-    @Test
-    public void getInstanceByRBNameOrRBVersionOrProfileNameTest() throws Exception {
         String rbName = "rb";
         String rbVersion = "rv1";
         String profileName = "p1";
-        try {
-            cnfAdapterService.getInstanceByRBNameOrRBVersionOrProfileName(rbName, rbVersion, profileName);
-        }
-        catch (Exception exp) {
-         assert(true);
-        }
-
-    }
-
-    @Test
-    public void deleteInstanceByInstanceIdTest() throws Exception {
-        String instanceId = "ins";
-        try {
-            cnfAdapterService.deleteInstanceByInstanceId(instanceId);
-        }
-        catch (Exception exp) {
-         assert(true);
-        }
-
     }
 }
 
