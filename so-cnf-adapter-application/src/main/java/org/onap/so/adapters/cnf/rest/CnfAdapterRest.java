@@ -20,6 +20,8 @@
 
 package org.onap.so.adapters.cnf.rest;
 
+import static java.util.Objects.requireNonNullElse;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -128,22 +130,19 @@ public class CnfAdapterRest {
     @ResponseBody
     @RequestMapping(value = {"/api/cnf-adapter/v1/aai-update/"}, method = RequestMethod.POST,
             produces = "application/json")
-    public DeferredResult<ResponseEntity> aaiUpdate(@RequestBody AaiRequest aaiRequest) {
+    public DeferredResult<ResponseEntity<String>> aaiUpdate(@RequestBody AaiRequest aaiRequest) {
         logger.info("aai-update called.");
-        DeferredResult<ResponseEntity> response = new DeferredResult<>();
+        DeferredResult<ResponseEntity<String>> response = createDeferredResultObj();
+        registerCallback(response, aaiRequest.getCallbackUrl());
 
-        new Thread(() -> {
+        ForkJoinPool.commonPool().submit(() -> {
             logger.info("Processing aai update");
-//            aaiService.aaiUpdate(aaiRequest);
-            AaiCallbackResponse mockCallbackResponse = new AaiCallbackResponse();
-            mockCallbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.COMPLETED);
             try {
-                Thread.sleep(10_000L);
-            } catch (InterruptedException e) {
-                logger.error("InterruptedException occurred when aai-update");
+                aaiService.aaiUpdate(aaiRequest);
+            } catch (BadResponseException e) {
+                response.setResult(ResponseEntity.badRequest().body(e.getMessage()));
             }
-            callbackClient.sendPostCallback(aaiRequest.getCallbackUrl(), mockCallbackResponse);
-        }).start();
+        });
 
         response.setResult(ResponseEntity.accepted().build());
         return response;
@@ -152,24 +151,20 @@ public class CnfAdapterRest {
     @ResponseBody
     @RequestMapping(value = {"/api/cnf-adapter/v1/aai-delete/"}, method = RequestMethod.POST,
             produces = "application/json")
-    public DeferredResult<ResponseEntity> aaiDelete(@RequestBody AaiRequest aaiRequest) {
+    public DeferredResult<ResponseEntity<String>> aaiDelete(@RequestBody AaiRequest aaiRequest) {
         logger.info("aai-delete called.");
-        DeferredResult<ResponseEntity> response = new DeferredResult<>();
+        DeferredResult<ResponseEntity<String>> response = createDeferredResultObj();
+        registerCallback(response, aaiRequest.getCallbackUrl());
 
-        new Thread(() -> {
+        ForkJoinPool.commonPool().submit(() -> {
             logger.info("Processing aai delete");
-//            aaiService.aaiDelete(aaiRequest);
-            AaiCallbackResponse mockCallbackResponse = new AaiCallbackResponse();
-            mockCallbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.COMPLETED);
             try {
-                Thread.sleep(10_000L);
-            } catch (InterruptedException e) {
-                logger.error("InterruptedException occurred when aai-delete");
+                aaiService.aaiDelete(aaiRequest);
+            } catch (BadResponseException e) {
+                response.setResult(ResponseEntity.badRequest().body(e.getMessage()));
             }
-            callbackClient.sendPostCallback(aaiRequest.getCallbackUrl(), mockCallbackResponse);
-        }).start();
+        });
 
-        response.setResult(ResponseEntity.accepted().build());
         return response;
     }
 
@@ -180,7 +175,7 @@ public class CnfAdapterRest {
         logger.info("statusCheck called.");
         DeferredResult<ResponseEntity> response = new DeferredResult<>();
 
-        new Thread(() -> {
+        ForkJoinPool.commonPool().submit(() -> {
             logger.info("Processing healthCheck service");
             StatusCheckResponse statusCheckResponse = null;
             try {
@@ -192,7 +187,7 @@ public class CnfAdapterRest {
                 return;
             }
             callbackClient.sendPostCallback(statusCheckRequest.getCallbackUrl(), statusCheckResponse);
-        }).start();
+        });
 
         response.setResult(ResponseEntity.accepted().build());
         return response;
@@ -820,6 +815,37 @@ public class CnfAdapterRest {
             logger.info("response:" + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
+    }
+
+    private DeferredResult<ResponseEntity<String>> createDeferredResultObj() {
+        DeferredResult<ResponseEntity<String>> response = new DeferredResult<>();
+        response.setResult(ResponseEntity.accepted().build());
+        return response;
+    }
+
+    private void registerCallback(DeferredResult<ResponseEntity<String>> response, String callbackURL) {
+        response.onError(t -> {
+            logger.error("Generic error during processing the request: ", t);
+            sendCallback(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(t.getMessage()), callbackURL);
+        });
+
+        response.onCompletion(() -> {
+            ResponseEntity<String> responseFromAai = (ResponseEntity<String>) response.getResult();
+            sendCallback(responseFromAai, callbackURL);
+        });
+    }
+
+    private void sendCallback(ResponseEntity<String> response, String callbackURL) {
+        HttpStatus status = requireNonNullElse(response.getStatusCode(), HttpStatus.INTERNAL_SERVER_ERROR);
+        AaiCallbackResponse callbackResponse = new AaiCallbackResponse();
+        if (status == HttpStatus.ACCEPTED) {
+            callbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.COMPLETED);
+        } else {
+            logger.debug("FAILED callback status will be send, because error occurs during processing the request {}",
+                    response.getBody());
+            callbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.FAILED);
+        }
+        callbackClient.sendPostCallback(callbackURL, callbackResponse);
     }
 
 }

@@ -85,6 +85,6 @@ public class AaiServiceTest {
         aaiServiceTested.aaiDelete(aaiRequest);
 
         verify(responseParser, atLeast(1)).parse(status, aaiRequest);
-        verify(aaiRequestSender, atLeast(1)).sendDeleteRequestToAai(aaiRequest);
+        verify(aaiRequestSender, atLeast(1)).sendDeleteRequestToAai(parseResult,  aaiRequest);
     }
 }
