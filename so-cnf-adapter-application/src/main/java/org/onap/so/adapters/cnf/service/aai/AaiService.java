@@ -1,14 +1,13 @@
 package org.onap.so.adapters.cnf.service.aai;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import org.onap.so.adapters.cnf.client.MulticloudClient;
 import org.onap.so.adapters.cnf.model.instantiation.AaiRequest;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceResourceStatus;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceStatus;
 import org.onap.so.client.exception.BadResponseException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class AaiService {
@@ -26,13 +25,17 @@ public class AaiService {
     public void aaiUpdate(AaiRequest aaiRequest) throws BadResponseException {
         List<ParseResult> parseStatus = parseStatus(aaiRequest);
 
-        parseStatus.forEach(status -> aaiRequestSender.sendUpdateRequestToAai(status, aaiRequest));
+        for (ParseResult status : parseStatus) {
+            aaiRequestSender.sendUpdateRequestToAai(status, aaiRequest);
+        }
     }
 
     public void aaiDelete(AaiRequest aaiRequest) throws BadResponseException {
         List<ParseResult> parseStatus = parseStatus(aaiRequest);
 
-        parseStatus.forEach(status -> aaiRequestSender.sendDeleteRequestToAai(aaiRequest));
+        for (ParseResult status : parseStatus) {
+            aaiRequestSender.sendDeleteRequestToAai(status, aaiRequest);
+        }
     }
 
     private List<ParseResult> parseStatus(AaiRequest aaiRequest) throws BadResponseException {
