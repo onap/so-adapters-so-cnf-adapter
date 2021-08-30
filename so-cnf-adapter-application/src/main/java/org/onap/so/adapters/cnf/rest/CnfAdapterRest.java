@@ -136,6 +136,7 @@ public class CnfAdapterRest {
 //            aaiService.aaiUpdate(aaiRequest);
             AaiCallbackResponse mockCallbackResponse = new AaiCallbackResponse();
             mockCallbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.COMPLETED);
+            Thread.sleep(10_000L);
             callbackClient.sendPostCallback(aaiRequest.getCallbackUrl(), mockCallbackResponse);
             return response;
         });
@@ -156,6 +157,7 @@ public class CnfAdapterRest {
 //            aaiService.aaiDelete(aaiRequest);
             AaiCallbackResponse mockCallbackResponse = new AaiCallbackResponse();
             mockCallbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.COMPLETED);
+            Thread.sleep(10_000L);
             callbackClient.sendPostCallback(aaiRequest.getCallbackUrl(), mockCallbackResponse);
             return response;
         });
