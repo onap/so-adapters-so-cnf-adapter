@@ -60,6 +60,7 @@ import org.onap.so.client.exception.BadResponseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -106,7 +107,7 @@ public class CnfAdapterRest {
         logger.info("healthCheck called.");
         DeferredResult<ResponseEntity> response = new DeferredResult<>();
 
-        ForkJoinPool.commonPool().submit(() -> {
+        new Thread(() -> {
             logger.info("Processing healthCheck service");
             HealthCheckResponse healthCheckResponse = null;
             try {
@@ -118,7 +119,7 @@ public class CnfAdapterRest {
                 return;
             }
             callbackClient.sendPostCallback(healthCheckRequest.getCallbackUrl(), healthCheckResponse);
-        });
+        }).start();
 
         response.setResult(ResponseEntity.accepted().build());
         return response;
@@ -131,14 +132,18 @@ public class CnfAdapterRest {
         logger.info("aai-update called.");
         DeferredResult<ResponseEntity> response = new DeferredResult<>();
 
-        ForkJoinPool.commonPool().submit(() -> {
+        new Thread(() -> {
             logger.info("Processing aai update");
 //            aaiService.aaiUpdate(aaiRequest);
             AaiCallbackResponse mockCallbackResponse = new AaiCallbackResponse();
             mockCallbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.COMPLETED);
+            try {
+                Thread.sleep(10_000L);
+            } catch (InterruptedException e) {
+                logger.error("InterruptedException occurred when aai-update");
+            }
             callbackClient.sendPostCallback(aaiRequest.getCallbackUrl(), mockCallbackResponse);
-            return response;
-        });
+        }).start();
 
         response.setResult(ResponseEntity.accepted().build());
         return response;
@@ -151,14 +156,18 @@ public class CnfAdapterRest {
         logger.info("aai-delete called.");
         DeferredResult<ResponseEntity> response = new DeferredResult<>();
 
-        ForkJoinPool.commonPool().submit(() -> {
+        new Thread(() -> {
             logger.info("Processing aai delete");
 //            aaiService.aaiDelete(aaiRequest);
             AaiCallbackResponse mockCallbackResponse = new AaiCallbackResponse();
             mockCallbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.COMPLETED);
+            try {
+                Thread.sleep(10_000L);
+            } catch (InterruptedException e) {
+                logger.error("InterruptedException occurred when aai-delete");
+            }
             callbackClient.sendPostCallback(aaiRequest.getCallbackUrl(), mockCallbackResponse);
-            return response;
-        });
+        }).start();
 
         response.setResult(ResponseEntity.accepted().build());
         return response;
@@ -171,7 +180,7 @@ public class CnfAdapterRest {
         logger.info("statusCheck called.");
         DeferredResult<ResponseEntity> response = new DeferredResult<>();
 
-        ForkJoinPool.commonPool().submit(() -> {
+        new Thread(() -> {
             logger.info("Processing healthCheck service");
             StatusCheckResponse statusCheckResponse = null;
             try {
@@ -183,7 +192,7 @@ public class CnfAdapterRest {
                 return;
             }
             callbackClient.sendPostCallback(statusCheckRequest.getCallbackUrl(), statusCheckResponse);
-        });
+        }).start();
 
         response.setResult(ResponseEntity.accepted().build());
         return response;
