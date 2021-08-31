@@ -61,4 +61,8 @@ multicloud:
 #  security:
  #   enabled: false
  #   basic:
+mso:
+  adapters:
+    requestDb:
+      auth:
 #      enabled: false
