@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baac6aa5_e5a4c2ec",
+        "filename": "so-cnf-adapter-application/src/main/resources/application.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-08-31T11:44:05Z",
+      "side": 1,
+      "message": "value should be taken from different source and we should use only \"auth\" field. We will keep config the same as other adapters.",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 24
+      },
+      "revId": "142b745c90ee658668b83cc1d88997a84f0e5713",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
