@@ -1,7 +1,8 @@
 package org.onap.so.adapters.cnf.client;
 
 import com.google.gson.Gson;
-import org.onap.so.adapters.cnf.BpmnInfraConfiguration;
+import org.onap.so.security.SoUserCredentialConfiguration;
+import org.onap.so.security.UserCredentials;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -21,12 +22,18 @@ public class SoCallbackClient {
     private final static Gson gson = new Gson();
 
     private final RestTemplate restTemplate;
-    private final BpmnInfraConfiguration bpmnInfraConfiguration;
+    private final SoUserCredentialConfiguration userCredentialConfiguration;
+    private final String role = "ACTUATOR";
+    private final UserCredentials credentials;
 
     @Autowired
-    public SoCallbackClient(RestTemplate restTemplate, BpmnInfraConfiguration bpmnInfraConfiguration) {
+    public SoCallbackClient(RestTemplate restTemplate, SoUserCredentialConfiguration userCredentialConfiguration) {
         this.restTemplate = restTemplate;
-        this.bpmnInfraConfiguration = bpmnInfraConfiguration;
+        this.userCredentialConfiguration = userCredentialConfiguration;
+        if (!userCredentialConfiguration.getRoles().contains(role))
+            throw new RuntimeException("Missing authentication role: " + role);
+        credentials = userCredentialConfiguration.getUsercredentials().stream().filter(
+                creds -> role.equals(creds.getRole())).findAny().orElse(null);
     }
 
     public ResponseEntity<String> sendPostCallback(String url, Object body) {
@@ -39,7 +46,7 @@ public class SoCallbackClient {
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
         headers.setAccept(acceptableMediaTypes);
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.add(HttpHeaders.AUTHORIZATION, bpmnInfraConfiguration.getAuth());
+        headers.setBasicAuth(credentials.getUsername(), credentials.getPassword());
 
         return new HttpEntity<>(gson.toJson(body), headers);
     }
