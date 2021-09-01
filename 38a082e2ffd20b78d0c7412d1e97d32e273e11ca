@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a79e3390_fffda980",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/client/SoCallbackClient.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-09-01T10:08:24Z",
+      "side": 1,
+      "message": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization\n\nHeader should look like\nAuthorization: Basic YnBlbDpwYXNzd29yZDEk\n\nconfig key from application.yaml contains \"Basic YnBlbDpwYXNzd29yZDEk\"",
+      "range": {
+        "startLine": 42,
+        "startChar": 7,
+        "endLine": 42,
+        "endChar": 101
+      },
+      "revId": "38a082e2ffd20b78d0c7412d1e97d32e273e11ca",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
