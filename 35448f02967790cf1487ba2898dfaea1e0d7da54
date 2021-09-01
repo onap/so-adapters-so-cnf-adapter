@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47bdc90a_e906e671",
+        "filename": "so-cnf-adapter-application/src/main/resources/application.yaml",
+        "patchSetId": 5
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 6641
+      },
+      "writtenOn": "2021-09-01T11:34:38Z",
+      "side": 1,
+      "message": "instead of commenting just remove it",
+      "revId": "35448f02967790cf1487ba2898dfaea1e0d7da54",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
