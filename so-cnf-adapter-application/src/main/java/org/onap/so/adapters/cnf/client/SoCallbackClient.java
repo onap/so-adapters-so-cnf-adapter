@@ -1,6 +1,7 @@
 package org.onap.so.adapters.cnf.client;
 
 import com.google.gson.Gson;
+import org.onap.so.adapters.cnf.BasicSecurityConfig;
 import org.onap.so.security.SoUserCredentialConfiguration;
 import org.onap.so.security.UserCredentials;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,12 @@ public class SoCallbackClient {
     private final static Gson gson = new Gson();
 
     private final RestTemplate restTemplate;
-    private final SoUserCredentialConfiguration userCredentialConfiguration;
+    private final BasicSecurityConfig userCredentialConfiguration;
     private final String role = "ACTUATOR";
     private final UserCredentials credentials;
 
     @Autowired
-    public SoCallbackClient(RestTemplate restTemplate, SoUserCredentialConfiguration userCredentialConfiguration) {
+    public SoCallbackClient(RestTemplate restTemplate, BasicSecurityConfig userCredentialConfiguration) {
         this.restTemplate = restTemplate;
         this.userCredentialConfiguration = userCredentialConfiguration;
         if (!userCredentialConfiguration.getRoles().contains(role))
