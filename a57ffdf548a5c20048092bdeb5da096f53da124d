@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f9657d4_7ca86fc3",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/aai/AaiRequestSender.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-09-02T20:51:12Z",
+      "side": 1,
+      "message": "each k8sresource object must be related with genericvnf and vf-module. We need to add also this relations to k8s object. Perhaps we need to modify the incomming aai request for aai update operation",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 31
+      },
+      "revId": "a57ffdf548a5c20048092bdeb5da096f53da124d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
