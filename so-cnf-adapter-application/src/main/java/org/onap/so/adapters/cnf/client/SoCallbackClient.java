@@ -43,9 +43,9 @@ public class SoCallbackClient {
     private HttpEntity<?> httpEntity(Object body) {
         HttpHeaders headers = new HttpHeaders();
         List<MediaType> acceptableMediaTypes = new ArrayList<>();
-        acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
+        acceptableMediaTypes.add(MediaType.TEXT_PLAIN);
         headers.setAccept(acceptableMediaTypes);
-        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setContentType(MediaType.TEXT_PLAIN);
         headers.setBasicAuth(credentials.getUsername(), credentials.getPassword());
 
         return new HttpEntity<>(gson.toJson(body), headers);

@@ -9,32 +9,32 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class AaiCallbackResponse {
 
     @JsonProperty("status")
-    private CompletionStatus completionStatus;
+    private CompletionStatus status;
 
     @JsonProperty("statusMessage")
-    private String message;
+    private String statusMessage = "";
 
     public CompletionStatus getCompletionStatus() {
-        return completionStatus;
+        return status;
     }
 
-    public void setCompletionStatus(CompletionStatus completionStatus) {
-        this.completionStatus = completionStatus;
+    public void setCompletionStatus(CompletionStatus status) {
+        this.status = status;
     }
 
     public String getMessage() {
-        return message;
+        return statusMessage;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMessage(String statusMessage) {
+        this.statusMessage = statusMessage;
     }
 
     @Override
     public String toString() {
         return "AaiCallbackResponse{" +
-                "completionStatus=" + completionStatus +
-                ", message='" + message + '\'' +
+                "status=" + status +
+                ", statusMessage='" + statusMessage + '\'' +
                 '}';
     }
 
