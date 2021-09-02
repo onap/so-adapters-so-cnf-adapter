@@ -20,6 +20,7 @@
 
 package org.onap.so.adapters.cnf;
 
+import org.onap.so.security.SoUserCredentialConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -31,10 +32,14 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"org.onap.so.adapters.cnf", "org.onap.so.security"})
+@ComponentScan(basePackages = {"org.onap.so.adapters.cnf", "org.onap.so.security"},
+        includeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,
+                classes = SoUserCredentialConfiguration.class), @ComponentScan.Filter(type = FilterType.REGEX,
+                pattern="org.onap.so.adapters.cnf")})
 @EnableAutoConfiguration(exclude = {LiquibaseAutoConfiguration.class, HibernateJpaAutoConfiguration.class,
         DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class,
         SecurityAutoConfiguration.class})
