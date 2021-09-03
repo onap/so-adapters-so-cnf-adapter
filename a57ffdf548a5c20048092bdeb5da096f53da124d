@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "f4fae777_e343fceb",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/rest/CnfAdapterRest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 6641
+      },
+      "writtenOn": "2021-09-03T07:37:31Z",
+      "side": 1,
+      "message": "no needed as create method will set it",
+      "revId": "a57ffdf548a5c20048092bdeb5da096f53da124d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c2b0685_de57063a",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/rest/CnfAdapterRest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 6641
+      },
+      "writtenOn": "2021-09-03T07:37:31Z",
+      "side": 1,
+      "message": "a log out would be helpful here",
+      "revId": "a57ffdf548a5c20048092bdeb5da096f53da124d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8f9657d4_7ca86fc3",
         "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/aai/AaiRequestSender.java",
         "patchSetId": 2
