@@ -30,8 +30,6 @@ public class AaiServiceTest {
     @Mock
     private MulticloudClient multicloudClient;
     @Mock
-    private AaiRequestSender aaiRequestSender;
-    @Mock
     private AaiResponseParser responseParser;
     @Mock
     private AaiConfiguration aaiConfiguration;
@@ -45,8 +43,8 @@ public class AaiServiceTest {
         K8sRbInstanceResourceStatus status = mock(K8sRbInstanceResourceStatus.class);
         List<K8sRbInstanceResourceStatus> resourcesStatus = new ArrayList<>();
         resourcesStatus.add(status);
-        ParseResult parseResult = mock(ParseResult.class);
-        List<ParseResult> parseResultList = new ArrayList<>();
+        K8sResource parseResult = mock(K8sResource.class);
+        List<K8sResource> parseResultList = new ArrayList<>();
         parseResultList.add(parseResult);
 
         // when
@@ -54,14 +52,11 @@ public class AaiServiceTest {
         when(multicloudClient.getInstanceStatus(instanceId)).thenReturn(instanceStatus);
         when(instanceStatus.getResourcesStatus()).thenReturn(resourcesStatus);
         when(responseParser.parse(status, aaiRequest)).thenReturn(parseResult);
-        when(aaiConfiguration.isEnabled()).thenReturn(true);
-        doNothing().when(aaiRequestSender).sendUpdateRequestToAai(parseResult, aaiRequest);
 
         // then
         aaiServiceTested.aaiUpdate(aaiRequest);
 
         verify(responseParser, atLeast(1)).parse(status, aaiRequest);
-        verify(aaiRequestSender, atLeast(1)).sendUpdateRequestToAai(parseResult, aaiRequest);
     }
 
 
@@ -74,8 +69,8 @@ public class AaiServiceTest {
         K8sRbInstanceResourceStatus status = mock(K8sRbInstanceResourceStatus.class);
         List<K8sRbInstanceResourceStatus> resourcesStatus = new ArrayList<>();
         resourcesStatus.add(status);
-        ParseResult parseResult = mock(ParseResult.class);
-        List<ParseResult> parseResultList = new ArrayList<>();
+        K8sResource parseResult = mock(K8sResource.class);
+        List<K8sResource> parseResultList = new ArrayList<>();
         parseResultList.add(parseResult);
 
         // when
@@ -83,13 +78,10 @@ public class AaiServiceTest {
         when(multicloudClient.getInstanceStatus(instanceId)).thenReturn(instanceStatus);
         when(instanceStatus.getResourcesStatus()).thenReturn(resourcesStatus);
         when(responseParser.parse(status, aaiRequest)).thenReturn(parseResult);
-        when(aaiConfiguration.isEnabled()).thenReturn(true);
-        doNothing().when(aaiRequestSender).sendUpdateRequestToAai(parseResult, aaiRequest);
 
         // then
         aaiServiceTested.aaiDelete(aaiRequest);
 
         verify(responseParser, atLeast(1)).parse(status, aaiRequest);
-        verify(aaiRequestSender, atLeast(1)).sendDeleteRequestToAai(aaiRequest);
     }
 }
