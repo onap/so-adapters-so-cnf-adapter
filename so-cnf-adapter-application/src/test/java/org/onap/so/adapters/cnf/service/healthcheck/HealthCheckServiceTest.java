@@ -1,22 +1,10 @@
 package org.onap.so.adapters.cnf.service.healthcheck;
 
-import static java.util.Arrays.asList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.UUID;
-
+import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.onap.so.adapters.cnf.client.MulticloudClient;
 import org.onap.so.adapters.cnf.model.CheckInstanceRequest;
@@ -24,8 +12,20 @@ import org.onap.so.adapters.cnf.model.InstanceRequest;
 import org.onap.so.adapters.cnf.model.healthcheck.HealthCheckResponse;
 import org.onap.so.adapters.cnf.model.healthcheck.K8sRbInstanceHealthCheck;
 import org.onap.so.adapters.cnf.model.healthcheck.K8sRbInstanceHealthCheckSimple;
-import org.onap.so.client.exception.BadResponseException;
+import org.onap.so.adapters.cnf.model.instantiation.AaiRequest;
+import org.onap.so.adapters.cnf.service.aai.K8sResource;
+import org.onap.so.adapters.cnf.util.IAaiRepository;
+import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.UUID;
+
+import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+@SpringBootTest
 class HealthCheckServiceTest {
 
     @InjectMocks
@@ -52,6 +52,33 @@ class HealthCheckServiceTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    @Test
+    @Ignore
+    public void testUpdate() {
+    	IAaiRepository repo = IAaiRepository.instance(true);
+    	K8sResource res = new K8sResource();
+    	res.setGroup("TEST-GROUP");
+    	res.setId("TEST-ID");
+    	res.setK8sResourceSelfLink("TEST-SELF-LINK");
+    	res.setKind("TEST-KIND");
+    	res.setLabels(java.util.Collections.EMPTY_LIST);
+    	res.setName("TEST-NAME");
+    	res.setNamespace("TEST-NAMESPACE");
+    	res.setVersion("TEST-VERSION");
+    	
+    	AaiRequest req = new AaiRequest();
+    	req.setCallbackUrl("REQ-CALLBACK");
+    	req.setCloudOwner("TEST-OWNER");
+    	req.setCloudRegion("TEST-REGION");
+    	req.setGenericVnfId("TEST-VNFID");
+    	req.setInstanceId("TEST-INSTANCE");
+    	req.setTenantId("TEST-TENANT");
+    	req.setVfModuleId("TEST-VF-MODULE");
+    	
+    	repo.update(res, req);
+    	fail("Failed");
     }
 
     private CheckInstanceRequest getTestCheckInstanceRequest(){
