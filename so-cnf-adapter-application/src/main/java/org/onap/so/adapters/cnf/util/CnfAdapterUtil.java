@@ -21,17 +21,20 @@
 package org.onap.so.adapters.cnf.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.IOException;
+
 import org.onap.so.adapters.cnf.exceptions.ApplicationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.onap.logging.filter.base.ErrorCode;
+
 import static org.onap.so.logger.LoggingAnchor.THREE;
 import static org.onap.so.logger.MessageEnum.RA_NS_EXC;
 
-public class CNfAdapterUtil {
+public class CnfAdapterUtil {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CNfAdapterUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CnfAdapterUtil.class);
 
     public static final int BAD_REQUEST = 400;
 
@@ -62,7 +65,7 @@ public class CNfAdapterUtil {
         }
     }
 
-    private CNfAdapterUtil() {
+    private CnfAdapterUtil() {
 
     }
 

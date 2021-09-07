@@ -1,19 +1,16 @@
 package org.onap.so.adapters.cnf.service.aai;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.onap.so.adapters.cnf.model.instantiation.AaiRequest;
-import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceGvk;
-import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceResourceStatus;
+import org.onap.so.adapters.cnf.util.IAaiRepository;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @RunWith(SpringRunner.class)
 public class AaiIdGeneratorServiceTest {
-
+/*
     private AaiIdGeneratorService tested = new AaiIdGeneratorService();
 
     @Test
@@ -47,5 +44,31 @@ public class AaiIdGeneratorServiceTest {
         String expected = "a1b2c1f3dd0c76d65c6dbe97b17e0239163bc2c08e8e88e167bb90de9c7b0da1";
 
         Assert.assertEquals(expected, actual);
+    }
+  */  
+    @Test
+    public void testUpdate() {
+    	IAaiRepository repo = IAaiRepository.instance(true);
+    	KubernetesResource res = new KubernetesResource();
+    	res.setGroup("TEST-GROUP");
+    	res.setId("TEST-ID");
+    	res.setK8sResourceSelfLink("TEST-SELF-LINK");
+    	res.setKind("TEST-KIND");
+    	res.setLabels(java.util.Collections.EMPTY_LIST);
+    	res.setName("TEST-NAME");
+    	res.setNamespace("TEST-NAMESPACE");
+    	res.setVersion("TEST-VERSION");
+    	
+    	AaiRequest req = new AaiRequest();
+    	req.setCallbackUrl("REQ-CALLBACK");
+    	req.setCloudOwner("TEST-OWNER");
+    	req.setCloudRegion("TEST-REGION");
+    	req.setGenericVnfId("TEST-VNFID");
+    	req.setInstanceId("TEST-INSTANCE");
+    	req.setTenantId("TEST-TENANT");
+    	req.setVfModuleId("TEST-VF-MODULE");
+    	
+    	repo.update(res, req);
+    	fail("Failed");
     }
 }

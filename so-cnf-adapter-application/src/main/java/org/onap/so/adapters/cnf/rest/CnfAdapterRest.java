@@ -134,7 +134,11 @@ public class CnfAdapterRest {
 
         new Thread(() -> {
             logger.info("Processing aai update");
-//            aaiService.aaiUpdate(aaiRequest);
+            try {
+                aaiService.aaiUpdate(aaiRequest);
+            } catch (BadResponseException e) {
+                throw new RuntimeException("Failed to insert resource into AAI", e);
+            }
             AaiCallbackResponse mockCallbackResponse = new AaiCallbackResponse();
             mockCallbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.COMPLETED);
             try {
@@ -158,7 +162,11 @@ public class CnfAdapterRest {
 
         new Thread(() -> {
             logger.info("Processing aai delete");
-//            aaiService.aaiDelete(aaiRequest);
+            try {
+                aaiService.aaiDelete(aaiRequest);
+            } catch (BadResponseException e) {
+                throw new RuntimeException("Failed to delete resource from AAI", e);
+            }
             AaiCallbackResponse mockCallbackResponse = new AaiCallbackResponse();
             mockCallbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.COMPLETED);
             try {

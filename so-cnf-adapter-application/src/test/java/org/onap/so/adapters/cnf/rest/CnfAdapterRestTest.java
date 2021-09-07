@@ -27,7 +27,21 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.onap.so.adapters.cnf.MulticloudConfiguration;
-import org.onap.so.adapters.cnf.model.*;
+import org.onap.so.adapters.cnf.model.BpmnInstanceRequest;
+import org.onap.so.adapters.cnf.model.CheckInstanceRequest;
+import org.onap.so.adapters.cnf.model.ConfigTemplateEntity;
+import org.onap.so.adapters.cnf.model.ConfigurationEntity;
+import org.onap.so.adapters.cnf.model.ConfigurationRollbackEntity;
+import org.onap.so.adapters.cnf.model.ConnectivityInfo;
+import org.onap.so.adapters.cnf.model.InstanceMiniResponse;
+import org.onap.so.adapters.cnf.model.InstanceMiniResponseList;
+import org.onap.so.adapters.cnf.model.InstanceResponse;
+import org.onap.so.adapters.cnf.model.InstanceStatusResponse;
+import org.onap.so.adapters.cnf.model.MulticloudInstanceRequest;
+import org.onap.so.adapters.cnf.model.ProfileEntity;
+import org.onap.so.adapters.cnf.model.Resource;
+import org.onap.so.adapters.cnf.model.ResourceBundleEntity;
+import org.onap.so.adapters.cnf.model.Tag;
 import org.onap.so.adapters.cnf.model.healthcheck.HealthCheckResponse;
 import org.onap.so.adapters.cnf.service.CnfAdapterService;
 import org.springframework.http.HttpStatus;
@@ -35,12 +49,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import static org.junit.Assert.assertEquals;
+
 import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 
 @RunWith(SpringRunner.class)
