@@ -45,6 +45,23 @@
       "revId": "22b0b27fbd4073ca97d3aa6e65fc6fdd22feb2b3",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9dc0fbf6_b309401f",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/aai/AaiRequestSender.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 6641
+      },
+      "writtenOn": "2021-09-07T09:54:06Z",
+      "side": 1,
+      "message": "relations created during instantiation should also be deleted here",
+      "revId": "22b0b27fbd4073ca97d3aa6e65fc6fdd22feb2b3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
