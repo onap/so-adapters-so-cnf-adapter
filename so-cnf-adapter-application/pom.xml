@@ -94,6 +94,15 @@
             </resource>
         </resources>
   </build>
+  <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.onap.aai.schema-service</groupId>
+                <artifactId>aai-schema</artifactId>
+                <version>1.9.1</version>
+            </dependency>
+        </dependencies>
+  </dependencyManagement>
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
