@@ -22,8 +22,11 @@ package org.onap.so.adapters.cnf.exceptions;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.onap.so.adapters.cnf.model.*;
-import org.springframework.http.HttpStatus;
+import org.onap.so.adapters.cnf.model.GroupVersionKind;
+import org.onap.so.adapters.cnf.model.InstanceStatusResponse;
+import org.onap.so.adapters.cnf.model.MulticloudInstanceRequest;
+import org.onap.so.adapters.cnf.model.PodStatus;
+import org.onap.so.adapters.cnf.model.Resource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -89,4 +92,5 @@ public class ApplicationExceptionTest {
         applicationexception.buildErrorResponse();
 
     }
+
 }

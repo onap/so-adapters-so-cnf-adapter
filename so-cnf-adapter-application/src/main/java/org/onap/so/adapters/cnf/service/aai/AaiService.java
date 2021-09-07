@@ -5,6 +5,7 @@ import org.onap.so.adapters.cnf.client.MulticloudClient;
 import org.onap.so.adapters.cnf.model.instantiation.AaiRequest;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceResourceStatus;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceStatus;
+import org.onap.so.adapters.cnf.util.IAaiRepository;
 import org.onap.so.client.exception.BadResponseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,39 +20,31 @@ public class AaiService {
     private final static Logger log = LoggerFactory.getLogger(AaiService.class);
 
     private final MulticloudClient multicloudClient;
-    private final AaiRequestSender aaiRequestSender;
     private final AaiResponseParser responseParser;
-    private final AaiConfiguration aaiConfiguration;
+    private final AaiConfiguration configuration;
 
-    public AaiService(MulticloudClient multicloudClient,
-                      AaiRequestSender aaiRequestSender,
-                      AaiResponseParser responseParser,
-                      AaiConfiguration aaiConfiguration) {
+    public AaiService(MulticloudClient multicloudClient, AaiResponseParser responseParser, AaiConfiguration configuration) {
         this.multicloudClient = multicloudClient;
-        this.aaiRequestSender = aaiRequestSender;
         this.responseParser = responseParser;
-        this.aaiConfiguration = aaiConfiguration;
+        this.configuration = configuration;
     }
 
     public void aaiUpdate(AaiRequest aaiRequest) throws BadResponseException {
-        if (aaiConfiguration.isEnabled()) {
-            List<ParseResult> parseStatus = parseStatus(aaiRequest);
-            parseStatus.forEach(status -> aaiRequestSender.sendUpdateRequestToAai(status, aaiRequest));
-        } else {
-            log.info("aai.enabled=false, do not execute aaiUpdate flow");
-        }
+        List<KubernetesResource> parseStatus = parseStatus(aaiRequest);
+        IAaiRepository aaiRepository = IAaiRepository.instance(configuration.isEnabled());
+        parseStatus.forEach(status -> aaiRepository.update(status, aaiRequest));
+        aaiRepository.commit(true);
     }
 
     public void aaiDelete(AaiRequest aaiRequest) throws BadResponseException {
-        if (aaiConfiguration.isEnabled()) {
-            List<ParseResult> parseStatus = parseStatus(aaiRequest);
-            parseStatus.forEach(status -> aaiRequestSender.sendDeleteRequestToAai(aaiRequest));
-        } else {
-            log.info("aai.enabled=false, do not execute aaiDelete flow");
-        }
+        List<KubernetesResource> parseStatus = parseStatus(aaiRequest);
+
+        IAaiRepository aaiRepository = IAaiRepository.instance(configuration.isEnabled());
+        parseStatus.forEach(status -> aaiRepository.delete(aaiRequest));
+        aaiRepository.commit(true);
     }
 
-    private List<ParseResult> parseStatus(AaiRequest aaiRequest) throws BadResponseException {
+    private List<KubernetesResource> parseStatus(AaiRequest aaiRequest) throws BadResponseException {
         String instanceId = aaiRequest.getInstanceId();
         K8sRbInstanceStatus instanceStatus = multicloudClient.getInstanceStatus(instanceId);
 

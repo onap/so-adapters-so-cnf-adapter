@@ -1,3 +1,23 @@
+/*-
+ * ============LICENSE_START=======================================================
+ * ONAP - SO
+ * ================================================================================
+ * Copyright (C) 2021 Samsung Electronics Co. Ltd. All rights reserved.
+ * ================================================================================
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ============LICENSE_END=========================================================
+ */
+
 package org.onap.so.adapters.cnf.service.aai;
 
 import org.junit.Assert;
@@ -12,8 +32,6 @@ import org.onap.so.adapters.cnf.model.statuscheck.K8sStatus;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sStatusMetadata;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +41,9 @@ import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 public class AaiResponseParserTest {
+
+    private final static String INSTANCE_ID = "k8splugin.io/rb-instance-id";
+    private final static String INSTANCE_ID_VALUE = "rb-instance-id_value";
 
     @InjectMocks
     private AaiResponseParser aaiResponseParser;
@@ -42,6 +63,7 @@ public class AaiResponseParserTest {
         String namespace = "namespace";
         Map<String, String> labelsMap = new HashMap<>();
         labelsMap.put("key", "value");
+        labelsMap.put(INSTANCE_ID, INSTANCE_ID_VALUE);
         K8sRbInstanceResourceStatus status = mock(K8sRbInstanceResourceStatus.class);
         AaiRequest aaiRequest = mock(AaiRequest.class);
         K8sRbInstanceGvk gvk = mock(K8sRbInstanceGvk.class);
@@ -63,7 +85,7 @@ public class AaiResponseParserTest {
         when(metadata.getLabels()).thenReturn(labelsMap);
 
         // then
-        ParseResult actual = aaiResponseParser.parse(status, aaiRequest);
+        KubernetesResource actual = aaiResponseParser.parse(status, aaiRequest);
 
         Assert.assertNotNull(actual);
         assertEquals(id, actual.getId());
@@ -72,30 +94,9 @@ public class AaiResponseParserTest {
         assertEquals(version, actual.getVersion());
         assertEquals(kind, actual.getKind());
         assertEquals(namespace, actual.getNamespace());
-        assertEquals(2, actual.getLabels().size());
-        assertEquals("http://so-cnf-adapter:8090/api/cnf-adapter/v1/instance/id/query", actual.getK8sResourceSelfLink());
-
-    }
-
-    ParseResult parse(K8sRbInstanceResourceStatus status, AaiRequest aaiRequest) {
-        ParseResult result = new ParseResult();
-        K8sRbInstanceGvk gvk = status.getGvk();
-        K8sStatus k8sStatus = status.getStatus();
-        K8sStatusMetadata metadata = k8sStatus.getK8sStatusMetadata();
-        String id = aaiIdGeneratorService.generateId(status, aaiRequest);
-        result.setId(id);
-        result.setName(status.getName());
-        result.setGroup(gvk.getGroup());
-        result.setVersion(gvk.getVersion());
-        result.setKind(gvk.getKind());
-        result.setNamespace(metadata.getNamespace());
-        Collection<String> labels = new ArrayList<>();
-        metadata.getLabels().forEach((key, value) -> {
-            labels.add(key);
-            labels.add(value);
-        });
-        result.setLabels(labels);
-        result.setK8sResourceSelfLink(String.format("http://so-cnf-adapter:8090/api/cnf-adapter/v1/instance/%s/query", aaiRequest.getInstanceId()));
-        return result;
+        assertEquals(4, actual.getLabels().size());
+        assertEquals(INSTANCE_ID, actual.getLabels().get(0));
+        assertEquals(INSTANCE_ID_VALUE, actual.getLabels().get(1));
+        assertEquals("http://so-cnf-adapter:8090/api/cnf-adapter/v1/instance/id/query?ApiVersion=version&Kind=kind&Name=name&Namespace=namespace", actual.getK8sResourceSelfLink());
     }
 }
