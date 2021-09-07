@@ -2,7 +2,7 @@ package org.onap.so.adapters.cnf.service.aai;
 
 import java.util.Collection;
 
-class ParseResult {
+public class K8sResource {
     private String id;
     private String name;
     private String group;

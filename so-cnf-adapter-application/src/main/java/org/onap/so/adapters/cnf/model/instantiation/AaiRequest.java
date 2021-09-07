@@ -18,6 +18,10 @@ public class AaiRequest {
     private String tenantId;
     @JsonProperty("callbackUrl")
     private String callbackUrl;
+    @JsonProperty("vnfId")
+    private String vnfId;
+    @JsonProperty("vfModuleId")
+    private String vfModuleId;
 
     public String getInstanceId() {
         return instanceId;
@@ -59,6 +63,22 @@ public class AaiRequest {
         this.callbackUrl = callbackUrl;
     }
 
+    public String getVnfId() {
+        return vnfId;
+    }
+
+    public void setVnfId(String vnfId) {
+        this.vnfId = vnfId;
+    }
+
+    public String getVfModuleId() {
+        return vfModuleId;
+    }
+
+    public void setVfModuleId(String vfModuleId) {
+        this.vfModuleId = vfModuleId;
+    }
+
     @Override
     public String toString() {
         return "AaiRequest{" +
@@ -67,6 +87,8 @@ public class AaiRequest {
                 ", cloudOwner='" + cloudOwner + '\'' +
                 ", tenantId='" + tenantId + '\'' +
                 ", callbackUrl='" + callbackUrl + '\'' +
+                ", vnfId='" + vnfId + '\'' +
+                ", vfModuleId='" + vfModuleId + '\'' +
                 '}';
     }
 }
