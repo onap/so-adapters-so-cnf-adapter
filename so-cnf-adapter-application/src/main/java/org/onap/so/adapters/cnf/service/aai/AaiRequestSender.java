@@ -21,9 +21,28 @@ class AaiRequestSender {
                 .build());
         String payload = gson.toJson(parseResult);
         getAaiClient().create(aaiUri, payload);
+
+        String vnfId = aaiRequest.getVnfId();
+        String vfModuleId = aaiRequest.getVfModuleId();
+        if (vnfId != null && vfModuleId != null) {
+            aaiUri = AAIUriFactory.createResourceUri(AAIFluentTypeBuilder.network()
+                    .genericVnf(vnfId)
+                    .vfModule(vfModuleId)
+                    .build());
+            getAaiClient().create(aaiUri, payload);
+        }
     }
 
     void sendDeleteRequestToAai(AaiRequest aaiRequest) {
+        String vnfId = aaiRequest.getVnfId();
+        String vfModuleId = aaiRequest.getVfModuleId();
+        if (vnfId != null && vfModuleId != null) {
+            AAIResourceUri aaiUri = AAIUriFactory.createResourceUri(AAIFluentTypeBuilder.network()
+                    .genericVnf(aaiRequest.getVnfId())
+                    .vfModule(aaiRequest.getVfModuleId())
+                    .build());
+            getAaiClient().delete(aaiUri);
+        }
         AAIResourceUri aaiUri = AAIUriFactory.createResourceUri(AAIFluentTypeBuilder.cloudInfrastructure()
                 .cloudRegion(aaiRequest.getCloudOwner(), aaiRequest.getCloudRegion())
                 .tenant(aaiRequest.getTenantId())
