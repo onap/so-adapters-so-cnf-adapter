@@ -63,7 +63,7 @@ public class AaiResponseParserTest {
         when(metadata.getLabels()).thenReturn(labelsMap);
 
         // then
-        ParseResult actual = aaiResponseParser.parse(status, aaiRequest);
+        K8sResource actual = aaiResponseParser.parse(status, aaiRequest);
 
         Assert.assertNotNull(actual);
         assertEquals(id, actual.getId());
@@ -77,8 +77,8 @@ public class AaiResponseParserTest {
 
     }
 
-    ParseResult parse(K8sRbInstanceResourceStatus status, AaiRequest aaiRequest) {
-        ParseResult result = new ParseResult();
+    K8sResource parse(K8sRbInstanceResourceStatus status, AaiRequest aaiRequest) {
+        K8sResource result = new K8sResource();
         K8sRbInstanceGvk gvk = status.getGvk();
         K8sStatus k8sStatus = status.getStatus();
         K8sStatusMetadata metadata = k8sStatus.getK8sStatusMetadata();
