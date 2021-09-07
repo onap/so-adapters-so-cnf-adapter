@@ -23,7 +23,6 @@ package org.onap.so.adapters.cnf.exceptions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.onap.so.adapters.cnf.model.*;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
