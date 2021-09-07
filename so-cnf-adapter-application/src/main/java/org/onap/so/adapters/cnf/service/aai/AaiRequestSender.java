@@ -21,6 +21,12 @@ class AaiRequestSender {
                 .build());
         String payload = gson.toJson(parseResult);
         getAaiClient().create(aaiUri, payload);
+
+        aaiUri = AAIUriFactory.createResourceUri(AAIFluentTypeBuilder.network()
+                .genericVnf(aaiRequest.getVnfId())
+                .vfModule(aaiRequest.getVfModuleId())
+                .build());
+        getAaiClient().create(aaiUri, payload);
     }
 
     void sendDeleteRequestToAai(AaiRequest aaiRequest) {
