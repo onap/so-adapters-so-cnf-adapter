@@ -6,8 +6,10 @@ import org.junit.runner.RunWith;
 import org.onap.so.adapters.cnf.model.instantiation.AaiRequest;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceGvk;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceResourceStatus;
+import org.onap.so.adapters.cnf.util.IAaiRepository;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

@@ -34,7 +34,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"org.onap.so.adapters.cnf"})
+@ComponentScan(basePackages = {"org.onap.so.adapters.cnf", "org.onap.so.spring"})
 @EnableAutoConfiguration(exclude = {LiquibaseAutoConfiguration.class, HibernateJpaAutoConfiguration.class,
         DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class,
         SecurityAutoConfiguration.class})
