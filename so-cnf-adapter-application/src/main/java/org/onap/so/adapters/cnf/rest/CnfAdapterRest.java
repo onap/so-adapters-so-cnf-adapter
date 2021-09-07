@@ -17,7 +17,6 @@
  * limitations under the License.
  * ============LICENSE_END=========================================================
  */
-
 package org.onap.so.adapters.cnf.rest;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -134,7 +133,11 @@ public class CnfAdapterRest {
 
         new Thread(() -> {
             logger.info("Processing aai update");
-//            aaiService.aaiUpdate(aaiRequest);
+            try {
+                aaiService.aaiUpdate(aaiRequest);
+            } catch (BadResponseException e) {
+                throw new RuntimeException("Failed to insert resource into AAI", e);
+            }
             AaiCallbackResponse mockCallbackResponse = new AaiCallbackResponse();
             mockCallbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.COMPLETED);
             try {
@@ -156,18 +159,23 @@ public class CnfAdapterRest {
         logger.info("aai-delete called.");
         DeferredResult<ResponseEntity> response = new DeferredResult<>();
 
-        new Thread(() -> {
+        ForkJoinPool.commonPool().execute(() -> {
             logger.info("Processing aai delete");
-//            aaiService.aaiDelete(aaiRequest);
             AaiCallbackResponse mockCallbackResponse = new AaiCallbackResponse();
-            mockCallbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.COMPLETED);
+            try {
+                aaiService.aaiDelete(aaiRequest);
+                mockCallbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.COMPLETED);
+            } catch (BadResponseException e) {
+                logger.warn("Failed to delete resource from AAI", e);
+                mockCallbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.FAILED);
+            }
             try {
                 Thread.sleep(10_000L);
             } catch (InterruptedException e) {
                 logger.error("InterruptedException occurred when aai-delete");
             }
             callbackClient.sendPostCallback(aaiRequest.getCallbackUrl(), mockCallbackResponse);
-        }).start();
+        });
 
         response.setResult(ResponseEntity.accepted().build());
         return response;
