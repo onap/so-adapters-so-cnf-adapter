@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.onap.so.adapters.cnf.AaiConfiguration;
 import org.onap.so.adapters.cnf.client.MulticloudClient;
 import org.onap.so.adapters.cnf.model.instantiation.AaiRequest;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceResourceStatus;
@@ -32,6 +33,8 @@ public class AaiServiceTest {
     private AaiRequestSender aaiRequestSender;
     @Mock
     private AaiResponseParser responseParser;
+    @Mock
+    private AaiConfiguration aaiConfiguration;
 
     @Test
     public void shouldTestAaiUpdate() throws BadResponseException {
@@ -51,6 +54,7 @@ public class AaiServiceTest {
         when(multicloudClient.getInstanceStatus(instanceId)).thenReturn(instanceStatus);
         when(instanceStatus.getResourcesStatus()).thenReturn(resourcesStatus);
         when(responseParser.parse(status, aaiRequest)).thenReturn(parseResult);
+        when(aaiConfiguration.isEnabled()).thenReturn(true);
         doNothing().when(aaiRequestSender).sendUpdateRequestToAai(parseResult, aaiRequest);
 
         // then
@@ -79,6 +83,7 @@ public class AaiServiceTest {
         when(multicloudClient.getInstanceStatus(instanceId)).thenReturn(instanceStatus);
         when(instanceStatus.getResourcesStatus()).thenReturn(resourcesStatus);
         when(responseParser.parse(status, aaiRequest)).thenReturn(parseResult);
+        when(aaiConfiguration.isEnabled()).thenReturn(true);
         doNothing().when(aaiRequestSender).sendUpdateRequestToAai(parseResult, aaiRequest);
 
         // then

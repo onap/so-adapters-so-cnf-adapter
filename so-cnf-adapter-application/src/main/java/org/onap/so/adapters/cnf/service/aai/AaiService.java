@@ -1,10 +1,13 @@
 package org.onap.so.adapters.cnf.service.aai;
 
+import org.onap.so.adapters.cnf.AaiConfiguration;
 import org.onap.so.adapters.cnf.client.MulticloudClient;
 import org.onap.so.adapters.cnf.model.instantiation.AaiRequest;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceResourceStatus;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceStatus;
 import org.onap.so.client.exception.BadResponseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,26 +16,39 @@ import java.util.stream.Collectors;
 @Service
 public class AaiService {
 
+    private final static Logger log = LoggerFactory.getLogger(AaiService.class);
+
     private final MulticloudClient multicloudClient;
     private final AaiRequestSender aaiRequestSender;
     private final AaiResponseParser responseParser;
+    private final AaiConfiguration aaiConfiguration;
 
-    public AaiService(MulticloudClient multicloudClient, AaiRequestSender aaiRequestSender, AaiResponseParser responseParser) {
+    public AaiService(MulticloudClient multicloudClient,
+                      AaiRequestSender aaiRequestSender,
+                      AaiResponseParser responseParser,
+                      AaiConfiguration aaiConfiguration) {
         this.multicloudClient = multicloudClient;
         this.aaiRequestSender = aaiRequestSender;
         this.responseParser = responseParser;
+        this.aaiConfiguration = aaiConfiguration;
     }
 
     public void aaiUpdate(AaiRequest aaiRequest) throws BadResponseException {
-        List<ParseResult> parseStatus = parseStatus(aaiRequest);
-
-        parseStatus.forEach(status -> aaiRequestSender.sendUpdateRequestToAai(status, aaiRequest));
+        if (aaiConfiguration.isEnabled()) {
+            List<ParseResult> parseStatus = parseStatus(aaiRequest);
+            parseStatus.forEach(status -> aaiRequestSender.sendUpdateRequestToAai(status, aaiRequest));
+        } else {
+            log.info("aai.enabled=false, do not execute aaiUpdate flow");
+        }
     }
 
     public void aaiDelete(AaiRequest aaiRequest) throws BadResponseException {
-        List<ParseResult> parseStatus = parseStatus(aaiRequest);
-
-        parseStatus.forEach(status -> aaiRequestSender.sendDeleteRequestToAai(aaiRequest));
+        if (aaiConfiguration.isEnabled()) {
+            List<ParseResult> parseStatus = parseStatus(aaiRequest);
+            parseStatus.forEach(status -> aaiRequestSender.sendDeleteRequestToAai(aaiRequest));
+        } else {
+            log.info("aai.enabled=false, do not execute aaiDelete flow");
+        }
     }
 
     private List<ParseResult> parseStatus(AaiRequest aaiRequest) throws BadResponseException {
