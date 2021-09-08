@@ -23,6 +23,9 @@
 #logging:
 #  path: logs
 
+aai:
+  enabled: false
+
 spring:
   security:
     usercredentials:
