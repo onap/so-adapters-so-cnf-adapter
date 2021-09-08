@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df392827_07921f14",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/model/instantiation/AaiRequest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 6641
+      },
+      "writtenOn": "2021-09-08T09:05:29Z",
+      "side": 1,
+      "message": "adding those annotations is not needed if JSON property and class attribute share the same name - no need to do anything about it right now that in the future you should avoid adding it.",
+      "revId": "ba9953d34a076e49a0de7d60a5e51188ef8ddf90",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a007714_33b877ab",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/model/instantiation/AaiRequest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 6641
+      },
+      "writtenOn": "2021-09-08T09:05:29Z",
+      "side": 1,
+      "message": "generally if you can use lombok you can generate all the getters/setters, toString, etc using simple annotations - in plus those auto generated method does not impact test coverage",
+      "revId": "ba9953d34a076e49a0de7d60a5e51188ef8ddf90",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
