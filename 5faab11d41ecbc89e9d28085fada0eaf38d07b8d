@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73173e8f_b0221751",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/AaiConfiguration.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-09-13T07:51:00Z",
+      "side": 1,
+      "message": "this parameter should have default value false if is not defined in the application.yaml file. Also adapter needs to work properly if this value is not defined in the application.yaml",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 28
+      },
+      "revId": "5faab11d41ecbc89e9d28085fada0eaf38d07b8d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
