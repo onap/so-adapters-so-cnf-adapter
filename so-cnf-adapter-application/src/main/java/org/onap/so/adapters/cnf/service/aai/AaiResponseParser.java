@@ -1,5 +1,6 @@
 package org.onap.so.adapters.cnf.service.aai;
 
+import org.apache.http.client.utils.URIBuilder;
 import org.onap.so.adapters.cnf.model.instantiation.AaiRequest;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceGvk;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceResourceStatus;
@@ -7,6 +8,7 @@ import org.onap.so.adapters.cnf.model.statuscheck.K8sStatus;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sStatusMetadata;
 import org.springframework.stereotype.Component;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -37,8 +39,25 @@ public class AaiResponseParser {
             labels.add(value);
         });
         result.setLabels(labels);
-        result.setK8sResourceSelfLink(String.format("http://so-cnf-adapter:8090/api/cnf-adapter/v1/instance/%s/query", aaiRequest.getInstanceId()));
+
+        URIBuilder uriBuilder = new URIBuilder();
+        String selfLink = null;
+        try {
+            selfLink = uriBuilder
+                    .setScheme("http")
+                    .setHost("so-cnf-adapter")
+                    .setPort(8090)
+                    .setPath("/api/cnf-adapter/v1/instance/" + aaiRequest.getInstanceId() + "/query")
+                    .setParameter("ApiVersion", gvk.getVersion())
+                    .setParameter("Kind", gvk.getKind())
+                    .setParameter("Name", status.getName())
+                    .setParameter("Namespace", metadata.getNamespace())
+                    .build()
+                    .toString();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+        result.setK8sResourceSelfLink(selfLink);
         return result;
     }
-
 }

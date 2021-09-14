@@ -73,7 +73,7 @@ public class AaiResponseParserTest {
         assertEquals(kind, actual.getKind());
         assertEquals(namespace, actual.getNamespace());
         assertEquals(2, actual.getLabels().size());
-        assertEquals("http://so-cnf-adapter:8090/api/cnf-adapter/v1/instance/id/query", actual.getK8sResourceSelfLink());
+        assertEquals("http://so-cnf-adapter:8090/api/cnf-adapter/v1/instance/id/query?ApiVersion=version&Kind=kind&Name=name&Namespace=namespace", actual.getK8sResourceSelfLink());
 
     }
 
