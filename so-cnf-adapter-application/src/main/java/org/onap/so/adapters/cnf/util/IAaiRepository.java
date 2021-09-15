@@ -23,15 +23,14 @@ import org.onap.so.adapters.cnf.model.instantiation.AaiRequest;
 import org.onap.so.adapters.cnf.service.aai.K8sResource;
 
 public interface IAaiRepository {
-    static IAaiRepository instance(boolean enabled) {
-        if (enabled)
-            return AaiRepository.instance();
-        else
-            return AaiRepositoryDummy.instance();
-    }
+	static IAaiRepository instance(boolean enabled) {
+		if(enabled)
+			return AaiRepository.instance();
+		else
+			return AaiRepositoryDummy.instance();
+	}
 
-    void update(K8sResource resource, AaiRequest request);
-
-    void delete(AaiRequest request);
-
+	void update(K8sResource resource, AaiRequest request);
+	void delete(AaiRequest request);
+	
 }

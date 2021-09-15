@@ -32,8 +32,6 @@ import org.onap.so.adapters.cnf.model.statuscheck.K8sStatus;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sStatusMetadata;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -101,5 +99,4 @@ public class AaiResponseParserTest {
         assertEquals(INSTANCE_ID_VALUE, actual.getLabels().get(1));
         assertEquals("http://so-cnf-adapter:8090/api/cnf-adapter/v1/instance/id/query?ApiVersion=version&Kind=kind&Name=name&Namespace=namespace", actual.getK8sResourceSelfLink());
     }
-
 }

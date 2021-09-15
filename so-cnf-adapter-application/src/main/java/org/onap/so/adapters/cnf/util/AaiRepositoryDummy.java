@@ -27,33 +27,39 @@ import org.slf4j.LoggerFactory;
 
 import static java.lang.Thread.sleep;
 
+
 public class AaiRepositoryDummy implements IAaiRepository {
-    private static final Logger logger = LoggerFactory.getLogger(IAaiRepository.class);
-    private static final IAaiRepository instance = new AaiRepositoryDummy();
+	private static final Logger logger = LoggerFactory.getLogger(IAaiRepository.class);
+	private static final IAaiRepository instance = new AaiRepositoryDummy();
+	
+	private static final Long SLEEP_TIME = 3000l;
+	
+	public static IAaiRepository instance() {
+		return instance;
+	}
+	
+	private AaiRepositoryDummy() {
+		
+	}
 
-    public static IAaiRepository instance() {
-        return instance;
-    }
+	@Override
+	public void update(K8sResource resource, AaiRequest request) {
+		logger.info("aai synchronization disabled - mocking update AAI with resource {} and request {}", resource, request);
+		try {
+			sleep(SLEEP_TIME);
+		} catch (InterruptedException e) {
+			logger.debug("aai synchronization disabled [update] - sleep failed");
+		}
+	}
 
-    private AaiRepositoryDummy() { }
+	@Override
+	public void delete(AaiRequest aaiRequest) {
+		logger.info("aai synchronization disabled - mocking delete from AAI resource {}", aaiRequest);
+		try {
+			sleep(SLEEP_TIME);
+		} catch (InterruptedException e) {
+			logger.debug("aai synchronization disabled [delete] - sleep failed");
+		}
 
-    @Override
-    public void update(K8sResource resource, AaiRequest request) {
-        logger.info("aai synchronization disabled - mocking update AAI with resource {} and request {}", resource, request);
-        try {
-            sleep(3000L);
-        } catch (InterruptedException e) {
-            logger.error("Interruption exception when mock update");
-        }
-    }
-
-    @Override
-    public void delete(AaiRequest aaiRequest) {
-        logger.info("aai synchronization disabled - mocking delete from AAI resource {}", aaiRequest);
-        try {
-            sleep(3000L);
-        } catch (InterruptedException e) {
-            logger.error("Interruption exception when mock delete");
-        }
-    }
+	}
 }
