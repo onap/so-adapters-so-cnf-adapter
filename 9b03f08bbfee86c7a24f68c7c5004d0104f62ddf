@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c08bacff_27a537b5",
+        "filename": "so-cnf-adapter-application/src/test/java/org/onap/so/adapters/cnf/service/CnfAdapterServiceTest.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 6863
+      },
+      "writtenOn": "2021-09-16T12:19:21Z",
+      "side": 1,
+      "message": "Wildcard",
+      "revId": "9b03f08bbfee86c7a24f68c7c5004d0104f62ddf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23e4a4a0_e9dc4390",
+        "filename": "so-cnf-adapter-application/src/test/java/org/onap/so/adapters/cnf/service/aai/AaiIdGeneratorServiceTest.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 6863
+      },
+      "writtenOn": "2021-09-16T12:19:21Z",
+      "side": 1,
+      "message": "Why this test is disabled?",
+      "revId": "9b03f08bbfee86c7a24f68c7c5004d0104f62ddf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}

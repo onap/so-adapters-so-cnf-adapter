@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7cac2177_ef89f57c",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/model/instantiation/AaiRequest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 6863
+      },
+      "writtenOn": "2021-09-16T12:19:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d50a42d2_ea525f67",
+      "revId": "fdca5e715502824e8eb80739f8bfebaa93335d49",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f0ae0a07_6db8bf18",
         "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/util/AaiRepository.java",
         "patchSetId": 12
