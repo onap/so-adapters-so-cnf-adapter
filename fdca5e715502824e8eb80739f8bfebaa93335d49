@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d50a42d2_ea525f67",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/model/instantiation/AaiRequest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 6863
+      },
+      "writtenOn": "2021-09-16T06:29:37Z",
+      "side": 1,
+      "message": "i think that toString() should be last method in that class",
+      "revId": "fdca5e715502824e8eb80739f8bfebaa93335d49",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0ae0a07_6db8bf18",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/util/AaiRepository.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 6863
+      },
+      "writtenOn": "2021-09-16T06:29:37Z",
+      "side": 1,
+      "message": "i think this method is in // TODO state",
+      "revId": "fdca5e715502824e8eb80739f8bfebaa93335d49",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "592eebf6_6e5b1192",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/util/AaiRepository.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 6863
+      },
+      "writtenOn": "2021-09-16T06:29:37Z",
+      "side": 1,
+      "message": "i think this method is in // TODO state",
+      "revId": "fdca5e715502824e8eb80739f8bfebaa93335d49",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcf5c0e7_f724f6b2",
+        "filename": "so-cnf-adapter-application/src/test/java/org/onap/so/adapters/cnf/service/CnfAdapterServiceTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 6863
+      },
+      "writtenOn": "2021-09-16T06:29:37Z",
+      "side": 1,
+      "message": "I think we do not like wildcards \nPrevious version was better",
+      "revId": "fdca5e715502824e8eb80739f8bfebaa93335d49",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad3e4cbd_bdb677c6",
+        "filename": "so-cnf-adapter-application/src/test/java/org/onap/so/adapters/cnf/service/aai/AaiIdGeneratorServiceTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 6863
+      },
+      "writtenOn": "2021-09-16T06:29:37Z",
+      "side": 1,
+      "message": "I whould rather test it in some AaiRepositoryTest than here",
+      "revId": "fdca5e715502824e8eb80739f8bfebaa93335d49",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b747ea7_df13be66",
+        "filename": "so-cnf-adapter-application/src/test/java/org/onap/so/adapters/cnf/service/aai/AaiServiceTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 6863
+      },
+      "writtenOn": "2021-09-16T06:29:37Z",
+      "side": 1,
+      "message": "I think we do not like wildcards \nPrevious version was better",
+      "revId": "fdca5e715502824e8eb80739f8bfebaa93335d49",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7064138c_48a2c529",
+        "filename": "so-cnf-adapter-application/src/test/java/org/onap/so/adapters/cnf/service/healthcheck/HealthCheckServiceTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 6863
+      },
+      "writtenOn": "2021-09-16T06:29:37Z",
+      "side": 1,
+      "message": "why this annotation\n@RunWith(SpringRunner.class) has a problem?",
+      "revId": "fdca5e715502824e8eb80739f8bfebaa93335d49",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9406869a_d8b96753",
+        "filename": "so-cnf-adapter-application/src/test/java/org/onap/so/adapters/cnf/service/healthcheck/HealthCheckServiceTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 6863
+      },
+      "writtenOn": "2021-09-16T06:29:37Z",
+      "side": 1,
+      "message": "Duplicated with AaiIdGeneratorServiceTest and ignored?",
+      "revId": "fdca5e715502824e8eb80739f8bfebaa93335d49",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
