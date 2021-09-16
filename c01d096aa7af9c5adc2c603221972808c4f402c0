@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c5773310_a3aab454",
+        "filename": "so-cnf-adapter-application/pom.xml",
+        "patchSetId": 20
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 6641
+      },
+      "writtenOn": "2021-09-16T18:56:29Z",
+      "side": 1,
+      "message": "this should not be needed but due to simultaneous release of AAI, SO and CNF adapter we need this work around.",
+      "revId": "c01d096aa7af9c5adc2c603221972808c4f402c0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
