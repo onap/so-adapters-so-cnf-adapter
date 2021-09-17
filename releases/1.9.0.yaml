@@ -1,0 +1,9 @@
+---
+distribution_type: 'container'
+container_release_tag: '1.9.0'
+project: 'so'
+log_dir: 'so-adapters-so-cnf-adapter-maven-docker-stage-master/236/'
+ref: 'e71ed345425a2cb734ec89ad1ec19953fde33023'
+containers:
+    - name: 'so/so-cnf-adapter'
+      version: '1.9.0-20210916T1034'
