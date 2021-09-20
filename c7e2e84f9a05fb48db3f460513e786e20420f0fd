@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c6bd2297_45dc26d1",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/exceptions/ApplicationException.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 5335
+      },
+      "writtenOn": "2021-09-20T11:59:01Z",
+      "side": 1,
+      "message": "[Minor] Dublicated by line 23.",
+      "revId": "c7e2e84f9a05fb48db3f460513e786e20420f0fd",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "040d58b5_53b51761",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/model/instantiation/AaiRequest.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 5335
+      },
+      "writtenOn": "2021-09-20T11:59:01Z",
+      "side": 1,
+      "message": "[Minor] Samsung copyright missing.",
+      "revId": "c7e2e84f9a05fb48db3f460513e786e20420f0fd",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
