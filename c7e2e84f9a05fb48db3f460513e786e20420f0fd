@@ -33,6 +33,80 @@
       "revId": "c7e2e84f9a05fb48db3f460513e786e20420f0fd",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e1d5dcb_b6588f97",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/aai/AaiService.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 5335
+      },
+      "writtenOn": "2021-09-20T12:18:33Z",
+      "side": 1,
+      "message": "[Minor] This field isn\u0027t used",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 7
+      },
+      "revId": "c7e2e84f9a05fb48db3f460513e786e20420f0fd",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7c7b105_db64075c",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/util/AaiClientPropertiesImpl.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 5335
+      },
+      "writtenOn": "2021-09-20T12:18:33Z",
+      "side": 1,
+      "message": "[Minor] missing Samsung copyright\n\nPlease recheck all file in this commit.",
+      "revId": "c7e2e84f9a05fb48db3f460513e786e20420f0fd",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c8847f8_e57e1bbf",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/util/AaiClientPropertiesImpl.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 5335
+      },
+      "writtenOn": "2021-09-20T12:18:33Z",
+      "side": 1,
+      "message": "[Minor] Those fields can be final:\n\n    private **final** String aaiEndpoint;\n    private **final** String auth;\n    private **final** String key;\n    private **final** Long readTimeout;\n    private **final** Long connectionTimeout;\n    private **final** boolean enableCaching;\n    private **final** Long cacheMaxAge;",
+      "revId": "c7e2e84f9a05fb48db3f460513e786e20420f0fd",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4609e01_eb8822da",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/util/AaiRepository.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 5335
+      },
+      "writtenOn": "2021-09-20T12:18:33Z",
+      "side": 1,
+      "message": "[Minor] Bad keyworld order and logger entry:\n\n    private static final Logger logger \u003d LoggerFactory.getLogger(AaiRepository.class);\n    private static final Gson gson \u003d new Gson();",
+      "revId": "c7e2e84f9a05fb48db3f460513e786e20420f0fd",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
