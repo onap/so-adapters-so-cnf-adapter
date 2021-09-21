@@ -22,38 +22,52 @@ package org.onap.so.adapters.cnf.util;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.GeneralSecurityException;
 
+import org.apache.commons.codec.binary.Base64;
 import org.onap.aaiclient.client.aai.AAIProperties;
 import org.onap.aaiclient.client.aai.AAIVersion;
 import org.onap.so.client.CacheProperties;
 import org.onap.so.spring.SpringContextHelper;
+import org.onap.so.utils.CryptoUtils;
 import org.springframework.context.ApplicationContext;
 
 public class AaiClientPropertiesImpl implements AAIProperties {
 
-    private String aaiEndpoint;
-    private String auth;
-    private String key;
-    private Long readTimeout;
-    private Long connectionTimeout;
-    private boolean enableCaching;
-    private Long cacheMaxAge;
+    private final static String aaiEndpoint;
+    private final static String auth;
+    private final static String key;
+    private final static Long readTimeout;
+    private final static Long connectionTimeout;
+    private final static boolean enableCaching;
+    private final static Long cacheMaxAge;
     private static final String SYSTEM_NAME = "MSO";
 
-    public AaiClientPropertiesImpl() {
+    static {
         ApplicationContext context = SpringContextHelper.getAppContext();
         aaiEndpoint = context.getEnvironment().getProperty("aai.endpoint");
-        this.auth = context.getEnvironment().getProperty("aai.auth");
-        this.key = context.getEnvironment().getProperty("mso.msoKey");
-        this.readTimeout = context.getEnvironment().getProperty("aai.readTimeout", Long.class, 60000L);
-        this.connectionTimeout = context.getEnvironment().getProperty("aai.connectionTimeout", Long.class, 60000L);
-        this.enableCaching = context.getEnvironment().getProperty("aai.caching.enabled", Boolean.class, false);
-        this.cacheMaxAge = context.getEnvironment().getProperty("aai.caching.maxAge", Long.class, 60000L);
+        readTimeout = context.getEnvironment().getProperty("aai.readTimeout", Long.class, 60000L);
+        connectionTimeout = context.getEnvironment().getProperty("aai.connectionTimeout", Long.class, 60000L);
+        enableCaching = context.getEnvironment().getProperty("aai.caching.enabled", Boolean.class, false);
+        cacheMaxAge = context.getEnvironment().getProperty("aai.caching.maxAge", Long.class, 60000L);
+        key = "07a7159d3bf51a0e53be7a8f89699be7";
+        String authTmp = context.getEnvironment().getProperty("aai.auth");
+        if (authTmp != null && !authTmp.isEmpty() && authTmp.split(" ").length == 2) {
+            authTmp = authTmp.split(" ")[1].trim();
+            authTmp = new String(Base64.decodeBase64(authTmp));
+            try {
+                authTmp = CryptoUtils.encrypt(authTmp, key);
+            } catch (GeneralSecurityException e) {
+                authTmp = "";
+                e.printStackTrace();
+            }
+        }
+        auth = authTmp;
     }
 
     @Override
     public URL getEndpoint() throws MalformedURLException {
-        return new URL(aaiEndpoint);
+        return new URL(aaiEndpoint != null ? aaiEndpoint : "");
     }
 
     @Override
@@ -67,28 +81,26 @@ public class AaiClientPropertiesImpl implements AAIProperties {
     }
 
     @Override
-    public String getAuth() {
-        return this.auth;
-    }
+    public String getAuth() { return auth; }
 
     @Override
     public String getKey() {
-        return this.key;
+        return key;
     }
 
     @Override
     public Long getReadTimeout() {
-        return this.readTimeout;
+        return readTimeout;
     }
 
     @Override
     public Long getConnectionTimeout() {
-        return this.connectionTimeout;
+        return connectionTimeout;
     }
 
     @Override
     public boolean isCachingEnabled() {
-        return this.enableCaching;
+        return enableCaching;
     }
 
     @Override

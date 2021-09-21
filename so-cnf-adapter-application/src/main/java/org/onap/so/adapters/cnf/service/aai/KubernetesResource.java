@@ -20,8 +20,16 @@
 
 package org.onap.so.adapters.cnf.service.aai;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.base.Objects;
+
+import java.util.Collections;
 import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class KubernetesResource {
     private String id;
     private String name;
@@ -30,7 +38,15 @@ public class KubernetesResource {
     private String kind;
     private String namespace;
     private List<String> labels;
-    private String k8sResourceSelfLink;
+    private String selflink;
+    @JsonProperty("data-owner")
+    private String dataOwner;
+    @JsonProperty("data-source")
+    private String dataSource;
+    @JsonProperty("data-source-version")
+    private String dataSourceVersion;
+    @JsonProperty("resource-version")
+    private String resourceVersion;
 
     public String getId() {
         return id;
@@ -85,14 +101,59 @@ public class KubernetesResource {
     }
 
     public void setLabels(List<String> labels) {
+        if (labels != null)
+            Collections.sort(labels);
         this.labels = labels;
     }
 
-    public String getK8sResourceSelfLink() {
-        return k8sResourceSelfLink;
+    public String getSelflink() { return selflink; }
+
+    public void setSelflink(String selflink) { this.selflink = selflink; }
+
+    public String getDataOwner() {
+        return dataOwner;
     }
 
-    public void setK8sResourceSelfLink(String k8sResourceSelfLink) {
-        this.k8sResourceSelfLink = k8sResourceSelfLink;
+    public void setDataOwner(String dataOwner) {
+        this.dataOwner = dataOwner;
+    }
+
+    public String getDataSource() {
+        return dataSource;
+    }
+
+    public void setDataSource(String dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public String getDataSourceVersion() {
+        return dataSourceVersion;
+    }
+
+    public void setDataSourceVersion(String dataSourceVersion) {
+        this.dataSourceVersion = dataSourceVersion;
+    }
+
+    public String getResourceVersion() {
+        return resourceVersion;
+    }
+
+    public void setResourceVersion(String resourceVersion) {
+        this.resourceVersion = resourceVersion;
+    }
+
+    public boolean compare(KubernetesResource reference) {
+        boolean result = reference != null &&
+                Objects.equal(id, reference.id) &&
+                Objects.equal(name, reference.name) &&
+                Objects.equal(version, reference.version) &&
+                Objects.equal(kind, reference.kind) &&
+                Objects.equal(group, reference.group) &&
+                Objects.equal(namespace, reference.namespace) &&
+                Objects.equal(dataOwner, reference.dataOwner) &&
+                Objects.equal(dataSource, reference.dataSource) &&
+                Objects.equal(dataSourceVersion, reference.dataSourceVersion);
+                Objects.equal(labels, reference.labels);
+        return result;
     }
 }
