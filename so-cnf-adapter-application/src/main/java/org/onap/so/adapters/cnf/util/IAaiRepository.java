@@ -24,6 +24,8 @@ import org.onap.so.adapters.cnf.service.aai.KubernetesResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 import static java.lang.Thread.sleep;
 
 public interface IAaiRepository {
@@ -36,15 +38,15 @@ public interface IAaiRepository {
 
     void update(KubernetesResource resource, AaiRequest request);
 
-    void delete(KubernetesResource resource, AaiRequest request);
+    void delete(AaiRequest request, List<KubernetesResource> excludedList);
 
-    void commit(boolean dryRun);
+    void commit(boolean dryRun) throws RuntimeException;
 
     static class AaiRepositoryDummy implements IAaiRepository {
         private static final Logger logger = LoggerFactory.getLogger(IAaiRepository.class);
         private static final IAaiRepository instance = new AaiRepositoryDummy();
 
-        private static final Long SLEEP_TIME = 3000l;
+        private static final Long SLEEP_TIME = 5000l;
 
         public static IAaiRepository instance() {
             return instance;
@@ -65,7 +67,7 @@ public interface IAaiRepository {
         }
 
         @Override
-        public void delete(KubernetesResource resource, AaiRequest aaiRequest) {
+        public void delete(AaiRequest aaiRequest, List<KubernetesResource> excludedList) {
             logger.info("aai synchronization disabled - mocking delete from AAI resource {}", aaiRequest);
             try {
                 sleep(SLEEP_TIME);

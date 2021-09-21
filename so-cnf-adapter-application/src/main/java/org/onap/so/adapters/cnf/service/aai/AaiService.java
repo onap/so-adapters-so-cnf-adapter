@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,18 +31,17 @@ public class AaiService {
     }
 
     public void aaiUpdate(AaiRequest aaiRequest) throws BadResponseException {
-        List<KubernetesResource> parseStatus = parseStatus(aaiRequest);
+        List<KubernetesResource> k8sResList = parseStatus(aaiRequest);
         IAaiRepository aaiRepository = IAaiRepository.instance(configuration.isEnabled());
-        parseStatus.forEach(status -> aaiRepository.update(status, aaiRequest));
-        aaiRepository.commit(true);
+        k8sResList.forEach(status -> aaiRepository.update(status, aaiRequest));
+        aaiRepository.delete(aaiRequest, k8sResList);
+        aaiRepository.commit(false);
     }
 
     public void aaiDelete(AaiRequest aaiRequest) throws BadResponseException {
-        List<KubernetesResource> parseStatus = parseStatus(aaiRequest);
-
         IAaiRepository aaiRepository = IAaiRepository.instance(configuration.isEnabled());
-        parseStatus.forEach(status -> aaiRepository.delete(status, aaiRequest));
-        aaiRepository.commit(true);
+        aaiRepository.delete(aaiRequest, List.of());
+        aaiRepository.commit(false);
     }
 
     private List<KubernetesResource> parseStatus(AaiRequest aaiRequest) throws BadResponseException {

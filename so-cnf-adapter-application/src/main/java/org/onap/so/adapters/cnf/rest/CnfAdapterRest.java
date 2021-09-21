@@ -133,19 +133,16 @@ public class CnfAdapterRest {
 
         new Thread(() -> {
             logger.info("Processing aai update");
+            AaiCallbackResponse callbackResponse = new AaiCallbackResponse();
             try {
                 aaiService.aaiUpdate(aaiRequest);
+                callbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.COMPLETED);
             } catch (BadResponseException e) {
-                throw new RuntimeException("Failed to insert resource into AAI", e);
+                logger.warn("Failed to create resource in AAI", e);
+                callbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.FAILED);
+                callbackResponse.setMessage(e.getMessage());
             }
-            AaiCallbackResponse mockCallbackResponse = new AaiCallbackResponse();
-            mockCallbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.COMPLETED);
-            try {
-                Thread.sleep(10_000L);
-            } catch (InterruptedException e) {
-                logger.error("InterruptedException occurred when aai-update");
-            }
-            callbackClient.sendPostCallback(aaiRequest.getCallbackUrl(), mockCallbackResponse);
+            callbackClient.sendPostCallback(aaiRequest.getCallbackUrl(), callbackResponse);
         }).start();
 
         response.setResult(ResponseEntity.accepted().build());
@@ -161,20 +158,16 @@ public class CnfAdapterRest {
 
         ForkJoinPool.commonPool().execute(() -> {
             logger.info("Processing aai delete");
-            AaiCallbackResponse mockCallbackResponse = new AaiCallbackResponse();
+            AaiCallbackResponse callbackResponse = new AaiCallbackResponse();
             try {
                 aaiService.aaiDelete(aaiRequest);
-                mockCallbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.COMPLETED);
+                callbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.COMPLETED);
             } catch (BadResponseException e) {
                 logger.warn("Failed to delete resource from AAI", e);
-                mockCallbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.FAILED);
+                callbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.FAILED);
+                callbackResponse.setMessage(e.getMessage());
             }
-            try {
-                Thread.sleep(10_000L);
-            } catch (InterruptedException e) {
-                logger.error("InterruptedException occurred when aai-delete");
-            }
-            callbackClient.sendPostCallback(aaiRequest.getCallbackUrl(), mockCallbackResponse);
+            callbackClient.sendPostCallback(aaiRequest.getCallbackUrl(), callbackResponse);
         });
 
         response.setResult(ResponseEntity.accepted().build());

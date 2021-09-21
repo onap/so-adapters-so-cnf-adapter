@@ -55,7 +55,13 @@ public class AaiResponseParser {
         result.setGroup(gvk.getGroup());
         result.setVersion(gvk.getVersion());
         result.setKind(gvk.getKind());
-        result.setNamespace(metadata.getNamespace());
+        result.setDataOwner("CnfAdapter");
+        result.setDataSource("K8sPlugin");
+        result.setDataSourceVersion(metadata.getResourceVersion());
+        if (metadata.getNamespace() != null)
+            result.setNamespace(metadata.getNamespace());
+        else
+            result.setNamespace("");
         List<String> labels = parseLabels(metadata.getLabels());
         result.setLabels(labels);
         URIBuilder uriBuilder = new URIBuilder();
@@ -69,13 +75,13 @@ public class AaiResponseParser {
                     .setParameter("ApiVersion", gvk.getVersion())
                     .setParameter("Kind", gvk.getKind())
                     .setParameter("Name", status.getName())
-                    .setParameter("Namespace", metadata.getNamespace())
+                    .setParameter("Namespace", result.getNamespace())
                     .build()
                     .toString();
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
-        result.setK8sResourceSelfLink(selfLink);
+        result.setSelflink(selfLink);
         return result;
     }
 
@@ -84,18 +90,14 @@ public class AaiResponseParser {
         labels.entrySet().stream()
                 .filter(i -> i.getKey().equals(INSTANCE_ID))
                 .findFirst()
-                .ifPresent(i -> addInstanceIdFist(i, result));
+                .ifPresent(i -> addLabelEntry(i, result));
         labels.entrySet().stream()
                 .filter(i -> !i.getKey().equals(INSTANCE_ID))
-                .forEach(i -> {
-                    result.add(i.getKey());
-                    result.add(i.getValue());
-                });
+                .forEach(i -> addLabelEntry(i, result));
         return result;
     }
 
-    private void addInstanceIdFist(Map.Entry<String, String> instanceId, List<String> result) {
-        result.add(instanceId.getKey());
-        result.add(instanceId.getValue());
+    private void addLabelEntry(Map.Entry<String, String> label, List<String> labels) {
+        labels.add(label.getKey() + "=" + label.getValue());
     }
 }
