@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties(value = "true")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class K8sRbInstanceGvk {
 
     @JsonProperty("Group")

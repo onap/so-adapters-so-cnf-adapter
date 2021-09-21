@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties(value = "true")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class K8sRbInstanceResourceStatus {
 
     @JsonProperty("name")

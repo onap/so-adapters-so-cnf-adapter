@@ -55,7 +55,10 @@ public class AaiResponseParser {
         result.setGroup(gvk.getGroup());
         result.setVersion(gvk.getVersion());
         result.setKind(gvk.getKind());
-        result.setNamespace(metadata.getNamespace());
+        if (metadata.getNamespace() != null)
+            result.setNamespace(metadata.getNamespace());
+        else
+            result.setNamespace("");
         List<String> labels = parseLabels(metadata.getLabels());
         result.setLabels(labels);
         URIBuilder uriBuilder = new URIBuilder();
@@ -69,13 +72,13 @@ public class AaiResponseParser {
                     .setParameter("ApiVersion", gvk.getVersion())
                     .setParameter("Kind", gvk.getKind())
                     .setParameter("Name", status.getName())
-                    .setParameter("Namespace", metadata.getNamespace())
+                    .setParameter("Namespace", result.getNamespace())
                     .build()
                     .toString();
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
-        result.setK8sResourceSelfLink(selfLink);
+        result.setSelflink(selfLink);
         return result;
     }
 

@@ -38,13 +38,13 @@ public interface IAaiRepository {
 
     void delete(KubernetesResource resource, AaiRequest request);
 
-    void commit(boolean dryRun);
+    void commit(boolean dryRun) throws RuntimeException;
 
     static class AaiRepositoryDummy implements IAaiRepository {
         private static final Logger logger = LoggerFactory.getLogger(IAaiRepository.class);
         private static final IAaiRepository instance = new AaiRepositoryDummy();
 
-        private static final Long SLEEP_TIME = 3000l;
+        private static final Long SLEEP_TIME = 5000l;
 
         public static IAaiRepository instance() {
             return instance;

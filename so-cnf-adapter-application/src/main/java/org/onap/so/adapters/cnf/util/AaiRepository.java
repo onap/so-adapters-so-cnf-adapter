@@ -20,6 +20,7 @@
 package org.onap.so.adapters.cnf.util;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.onap.aaiclient.client.aai.AAIResourcesClient;
 import org.onap.aaiclient.client.aai.AAITransactionalClient;
 import org.onap.aaiclient.client.aai.AAIVersion;
@@ -40,7 +41,7 @@ import java.util.stream.Collectors;
 
 public class AaiRepository implements IAaiRepository {
     private final static Logger logger = LoggerFactory.getLogger(IAaiRepository.class);
-    private final static Gson gson = new Gson();
+    private final static Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
     private final AAIResourcesClient aaiClient;
     private final AAITransactionalClient transaction;
@@ -79,9 +80,13 @@ public class AaiRepository implements IAaiRepository {
         logger.debug("K8s resource URI: " + k8sResourceUri + " with payload [" + payload + "]");
         transaction.createIfNotExists(k8sResourceUri, Optional.of(payload));
         // add edge from vf module to k8s resource
-        final String genericVnfId = aaiRequest.getGenericVnfId();
+        final String genericVnfId = null;//aaiRequest.getGenericVnfId();
         final String vfModuleId = aaiRequest.getVfModuleId();
 
+        if (genericVnfId == null || vfModuleId == null) {
+            logger.debug("No genericVnfId or vfModuleId to create relations for payload [\" + payload + \"]\");");
+            return;
+        }
 
         var vfModuleUri = AAIUriFactory.createResourceUri(
                 AAIFluentTypeBuilder.network().genericVnf(genericVnfId).vfModule(vfModuleId));
