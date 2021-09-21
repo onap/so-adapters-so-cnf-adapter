@@ -1,0 +1,8 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+1: Krystian Kedron <k.kedron@partner.samsung.com>
+Code-Review+2: Lukasz Rajewski <lukasz.rajewski@orange.com>
+Submitted-by: Lukasz Rajewski <lukasz.rajewski@orange.com>
+Submitted-at: Tue, 21 Sep 2021 08:18:21 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/so/adapters/so-cnf-adapter/+/123910
+Project: so/adapters/so-cnf-adapter
+Branch: refs/heads/master
