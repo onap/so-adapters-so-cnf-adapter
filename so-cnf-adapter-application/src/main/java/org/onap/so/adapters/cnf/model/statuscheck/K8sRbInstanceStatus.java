@@ -8,7 +8,7 @@ import org.onap.so.adapters.cnf.model.MulticloudInstanceRequest;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties(value = "true")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class K8sRbInstanceStatus {
 
     @JsonProperty("request")

@@ -19,7 +19,10 @@
  */
 package org.onap.so.adapters.cnf.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.onap.aaiclient.client.aai.AAIResourcesClient;
 import org.onap.aaiclient.client.aai.AAITransactionalClient;
 import org.onap.aaiclient.client.aai.AAIVersion;
@@ -40,10 +43,11 @@ import java.util.stream.Collectors;
 
 public class AaiRepository implements IAaiRepository {
     private final static Logger logger = LoggerFactory.getLogger(IAaiRepository.class);
-    private final static Gson gson = new Gson();
+    private final static Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
     private final AAIResourcesClient aaiClient;
-    private final AAITransactionalClient transaction;
+    private final ObjectMapper objectMapper;
+    private AAITransactionalClient transaction;
 
     public static IAaiRepository instance() {
         return new AaiRepository();
@@ -51,13 +55,22 @@ public class AaiRepository implements IAaiRepository {
 
     private AaiRepository() {
         aaiClient = new AAIResourcesClient(AAIVersion.LATEST);
-        transaction = aaiClient.beginTransaction();
+        this.objectMapper = new ObjectMapper();
+    }
+
+    private AAITransactionalClient getTransaction() {
+        if (transaction == null)
+            transaction = aaiClient.beginTransaction();
+        return transaction;
     }
 
     @Override
     public void commit(boolean dryrun) {
         try {
-            transaction.execute(dryrun);
+            if (transaction != null)
+                transaction.execute(dryrun);
+            else
+                logger.info("Nothing to commit in AAI");
         } catch (BulkProcessFailed bulkProcessFailed) {
             throw new RuntimeException("Failed to exectute transaction", bulkProcessFailed);
         }
@@ -77,45 +90,59 @@ public class AaiRepository implements IAaiRepository {
 
         String payload = gson.toJson(resource);
         logger.debug("K8s resource URI: " + k8sResourceUri + " with payload [" + payload + "]");
-        transaction.createIfNotExists(k8sResourceUri, Optional.of(payload));
-        // add edge from vf module to k8s resource
+
+        var k8sResourceInstance = aaiClient.get(k8sResourceUri);
+        boolean updateK8sResource = true;
+        if (!k8sResourceInstance.isEmpty()) {
+            try {
+                KubernetesResource resourceReference = objectMapper.readValue(k8sResourceInstance.getJson(), KubernetesResource.class);
+                updateK8sResource = false;//TODO !resourceReference.compare(resource);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        if (updateK8sResource)
+            getTransaction().create(k8sResourceUri, payload);
+
         final String genericVnfId = aaiRequest.getGenericVnfId();
         final String vfModuleId = aaiRequest.getVfModuleId();
 
+        if (genericVnfId == null || vfModuleId == null) {
+            logger.debug("No genericVnfId or vfModuleId to create relations for payload [\" + payload + \"]\");");
+            return;
+        }
 
         var vfModuleUri = AAIUriFactory.createResourceUri(
                 AAIFluentTypeBuilder.network().genericVnf(genericVnfId).vfModule(vfModuleId));
         var instance = aaiClient.get(vfModuleUri);
 
-        var foundUri = instance.getRelationships().get().getRelatedUris(Types.K8S_RESOURCE)
-                .stream().filter(resourceUri -> resourceUri
-                        .getURIKeys()
-                        .get("k8s_resource-id")
-                        .startsWith(resource.getId()))
-                .findFirst();
-
-        transaction.connect(foundUri.get(), k8sResourceUri);
+        if (instance.isEmpty())
+            logger.error("Specified VfModule [" + vfModuleId + "] does not exist in AAI");
+        else if (k8sResourceInstance.isEmpty() || !k8sResourceInstance.hasRelationshipsTo(Types.VF_MODULE)) {
+            getTransaction().connect(vfModuleUri, k8sResourceUri);
+        }
 
         var genericVnfUri = AAIUriFactory.createResourceUri(
                 AAIFluentTypeBuilder.network().genericVnf(genericVnfId));
         instance = aaiClient.get(genericVnfUri);
 
-        foundUri = instance.getRelationships().get().getRelatedUris(Types.K8S_RESOURCE)
-                .stream().filter(resourceUri -> resourceUri
-                        .getURIKeys()
-                        .get("k8s_resource-id")  // FIXME double check names
-                        .startsWith(resource.getId()))
-                .findFirst();
-
-        transaction.connect(foundUri.get(), k8sResourceUri);
+        if (instance.isEmpty())
+            logger.error("Specified GenericVnf [" + genericVnfId + "] does not exist in AAI");
+        else if (k8sResourceInstance.isEmpty() || !k8sResourceInstance.hasRelationshipsTo(Types.GENERIC_VNF)) {
+            getTransaction().connect(genericVnfUri, k8sResourceUri);
+        }
     }
 
     @Override
     public void delete(KubernetesResource resource, AaiRequest aaiRequest) {
         logger.info("deleting from AAI resource {}", aaiRequest);
-        // dge from vf module to k8s resource
         final String genericVnfId = aaiRequest.getGenericVnfId();
         final String vfModuleId = aaiRequest.getVfModuleId();
+
+        if (genericVnfId == null || vfModuleId == null) {
+            logger.debug("No genericVnfId or vfModuleId to delete k8s-resources");
+            return;
+        }
 
         var vfModuleUri = AAIUriFactory.createResourceUri(
                 AAIFluentTypeBuilder.network().genericVnf(genericVnfId).vfModule(vfModuleId));
@@ -125,7 +152,6 @@ public class AaiRepository implements IAaiRepository {
             List<KubernetesResource> resources = instance.getRelationships().get().getByType(Types.K8S_RESOURCE)
                     .stream()
                     .map(r -> r.asBean(KubernetesResource.class))
-                    .filter(r -> r.get().getLabels().get(1).equals(resource.getLabels().get(1)))
                     .map(Optional::get)
                     .collect(Collectors.toList());
             resources.stream().map(r -> {
@@ -136,8 +162,7 @@ public class AaiRepository implements IAaiRepository {
                 AAIResourceUri k8sResourceUri =
                         AAIUriFactory.createResourceUri(k8sResource.build(), aaiRequest.getCloudOwner(), aaiRequest.getCloudRegion(), aaiRequest.getTenantId(), r.getId());
                 return k8sResourceUri;
-            }).forEach(uri -> transaction.delete(uri));
+            }).forEach(uri -> getTransaction().delete(uri));
         }
-
     }
 }

@@ -33,7 +33,7 @@ public class AaiService {
         List<KubernetesResource> parseStatus = parseStatus(aaiRequest);
         IAaiRepository aaiRepository = IAaiRepository.instance(configuration.isEnabled());
         parseStatus.forEach(status -> aaiRepository.update(status, aaiRequest));
-        aaiRepository.commit(true);
+        aaiRepository.commit(false);
     }
 
     public void aaiDelete(AaiRequest aaiRequest) throws BadResponseException {
@@ -41,7 +41,7 @@ public class AaiService {
 
         IAaiRepository aaiRepository = IAaiRepository.instance(configuration.isEnabled());
         parseStatus.forEach(status -> aaiRepository.delete(status, aaiRequest));
-        aaiRepository.commit(true);
+        aaiRepository.commit(false);
     }
 
     private List<KubernetesResource> parseStatus(AaiRequest aaiRequest) throws BadResponseException {
