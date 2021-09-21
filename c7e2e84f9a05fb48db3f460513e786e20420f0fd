@@ -36,6 +36,75 @@
     },
     {
       "key": {
+        "uuid": "baae820c_407f64b7",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/model/instantiation/AaiRequest.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 7825
+      },
+      "writtenOn": "2021-09-21T08:30:57Z",
+      "side": 1,
+      "message": "Generally Samsung copyright is required to all modified files by us, as I\u0027ve found out.",
+      "parentUuid": "040d58b5_53b51761",
+      "revId": "c7e2e84f9a05fb48db3f460513e786e20420f0fd",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26d32e03_8521946e",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/rest/CnfAdapterRest.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 7825
+      },
+      "writtenOn": "2021-09-21T08:30:57Z",
+      "side": 1,
+      "message": "[Minor] It is not recommended to throw generic exception like RuntimeException, it is better to have something like \"throw new MyOwnRuntimeException()\". Sonar will complain here.",
+      "revId": "c7e2e84f9a05fb48db3f460513e786e20420f0fd",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39343993_7ef8e875",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/aai/AaiResponseParser.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 7825
+      },
+      "writtenOn": "2021-09-21T08:30:57Z",
+      "side": 1,
+      "message": "[Minor] Modifiers should be declared in that order: private static final ... by Java Language Specification",
+      "revId": "c7e2e84f9a05fb48db3f460513e786e20420f0fd",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ecf2aba_cf6d99e0",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/aai/AaiResponseParser.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 7825
+      },
+      "writtenOn": "2021-09-21T08:30:57Z",
+      "side": 1,
+      "message": "[Minor] Is spelling correct here, \"Fist\", shouldn\u0027t be First?",
+      "revId": "c7e2e84f9a05fb48db3f460513e786e20420f0fd",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7e1d5dcb_b6588f97",
         "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/aai/AaiService.java",
         "patchSetId": 21
@@ -104,6 +173,159 @@
       "writtenOn": "2021-09-20T12:18:33Z",
       "side": 1,
       "message": "[Minor] Bad keyworld order and logger entry:\n\n    private static final Logger logger \u003d LoggerFactory.getLogger(AaiRepository.class);\n    private static final Gson gson \u003d new Gson();",
+      "revId": "c7e2e84f9a05fb48db3f460513e786e20420f0fd",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46655c1c_c9820d26",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/util/AaiRepository.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 7825
+      },
+      "writtenOn": "2021-09-21T08:30:57Z",
+      "side": 1,
+      "message": "[Minor] Generic exception is not recommended",
+      "revId": "c7e2e84f9a05fb48db3f460513e786e20420f0fd",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ba71963_a3def853",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/util/AaiRepository.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 7825
+      },
+      "writtenOn": "2021-09-21T08:30:57Z",
+      "side": 1,
+      "message": "[Minor] It is better to use built-in string formatting instead of string concatenation, because the concatenation will be performed every time the method is called, whether or not the log level is low enough to show the message. Like (\"Something went wrong: {0} \", message)",
+      "revId": "c7e2e84f9a05fb48db3f460513e786e20420f0fd",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc9668a9_affda979",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/util/AaiRepository.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 7825
+      },
+      "writtenOn": "2021-09-21T08:30:57Z",
+      "side": 1,
+      "message": "[Minor] Are we sure that instance.getRelationships().get() does not return \"No value present\"?",
+      "revId": "c7e2e84f9a05fb48db3f460513e786e20420f0fd",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75fcb8c6_7a3862be",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/util/AaiRepository.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 7825
+      },
+      "writtenOn": "2021-09-21T08:30:57Z",
+      "side": 1,
+      "message": "[Minor] Are we sure that foundUri.get() does not return \"No value present\"?",
+      "revId": "c7e2e84f9a05fb48db3f460513e786e20420f0fd",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e15b048_85957066",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/util/AaiRepository.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 7825
+      },
+      "writtenOn": "2021-09-21T08:30:57Z",
+      "side": 1,
+      "message": "[Minor] k8sResourceUri can be returned directly without declaring variable.",
+      "revId": "c7e2e84f9a05fb48db3f460513e786e20420f0fd",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64f145b8_3fe6e032",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/util/IAaiRepository.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 7825
+      },
+      "writtenOn": "2021-09-21T08:30:57Z",
+      "side": 1,
+      "message": "[Minor] Shouldn\u0027t be logger set up for AaiRepositoryDummy,class instead its parent?",
+      "revId": "c7e2e84f9a05fb48db3f460513e786e20420f0fd",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aaba9f7f_ca1db5ca",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/util/IAaiRepository.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 7825
+      },
+      "writtenOn": "2021-09-21T08:30:57Z",
+      "side": 1,
+      "message": "[Minor] After InterruptedException it is recommended to re-interrupt thread by calling Thread.currentThread().interrupt(); even in single-thread app.",
+      "revId": "c7e2e84f9a05fb48db3f460513e786e20420f0fd",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80dbc8e3_bde3f1e0",
+        "filename": "so-cnf-adapter-application/src/test/java/org/onap/so/adapters/cnf/service/aai/AaiIdGeneratorServiceTest.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 7825
+      },
+      "writtenOn": "2021-09-21T08:30:57Z",
+      "side": 1,
+      "message": "[Minor] This import does not seems to be used.",
+      "revId": "c7e2e84f9a05fb48db3f460513e786e20420f0fd",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3b1e360_0a4e53ef",
+        "filename": "so-cnf-adapter-application/src/test/java/org/onap/so/adapters/cnf/service/aai/AaiIdGeneratorServiceTest.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 7825
+      },
+      "writtenOn": "2021-09-21T08:30:57Z",
+      "side": 1,
+      "message": "[Minor] This import does not seems to be used.",
       "revId": "c7e2e84f9a05fb48db3f460513e786e20420f0fd",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
