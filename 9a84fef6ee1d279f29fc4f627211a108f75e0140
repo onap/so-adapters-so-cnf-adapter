@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2cd6a068_75521083",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/rest/CnfAdapterRest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-09-22T19:04:08Z",
+      "side": 1,
+      "message": "any idea what can be changed?",
+      "parentUuid": "0eaca184_d80499a4",
+      "revId": "9a84fef6ee1d279f29fc4f627211a108f75e0140",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bbf68feb_9ebdbc8c",
         "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/util/IAaiRepository.java",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2021-09-22T08:04:07Z",
       "side": 1,
       "message": "RuntimeException is unchecked ;)",
+      "revId": "9a84fef6ee1d279f29fc4f627211a108f75e0140",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "365ca6e8_d0ef471d",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/util/IAaiRepository.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-09-22T19:04:08Z",
+      "side": 1,
+      "message": "the idea is to break the process as continuation makes no sense. It does not make sense to handle it in any way",
+      "parentUuid": "bbf68feb_9ebdbc8c",
       "revId": "9a84fef6ee1d279f29fc4f627211a108f75e0140",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
