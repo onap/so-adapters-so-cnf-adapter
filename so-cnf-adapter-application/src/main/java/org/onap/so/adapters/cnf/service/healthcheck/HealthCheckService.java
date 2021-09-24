@@ -1,3 +1,24 @@
+/*-
+ * ============LICENSE_START=======================================================
+ * ONAP - SO
+ * ================================================================================
+ * Copyright (C) 2021 Samsung Electronics Co. Ltd. All rights reserved.
+ * Modifications Copyright (C) 2021 Orange.
+ * ================================================================================
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ============LICENSE_END=========================================================
+ */
+
 package org.onap.so.adapters.cnf.service.healthcheck;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -47,6 +68,20 @@ public class HealthCheckService {
         return statuses;
     }
 
+    public HealthCheckResponse healthCheckError(CheckInstanceRequest healthCheckRequest, Exception e) {
+        HealthCheckResponse result = new HealthCheckResponse();
+
+        List<HealthCheckInstanceResponse> instanceHealthCheckList = new ArrayList<>();
+        for (InstanceRequest instanceRequest : healthCheckRequest.getInstances()) {
+            HealthCheckInstanceResponse healthCheck = new HealthCheckInstanceResponse(
+                    instanceRequest.getInstanceId(), e.getMessage(), "Failed");
+            instanceHealthCheckList.add(healthCheck);
+        }
+
+        result.setInstanceResponse(instanceHealthCheckList);
+        return result;
+    }
+
     private List<HealthCheckInstance> startInstanceHealthCheck(CheckInstanceRequest healthCheckRequest) throws Exception {
         log.debug("startInstanceHealthCheck - START");
         List<HealthCheckInstance> healthCheckInstanceList = new ArrayList<>();
@@ -80,8 +115,7 @@ public class HealthCheckService {
                     InstanceStatusTuple instanceStatusTuple = future.get();
                     String instanceId = instanceStatusTuple.getInstanceId();
                     String status = instanceStatusTuple.getStatus();
-                    String reason = null;
-                    return new HealthCheckInstanceResponse(instanceId, reason, status);
+                    return new HealthCheckInstanceResponse(instanceId, null, status);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -122,7 +156,9 @@ public class HealthCheckService {
                 }
                 sleep(10_000L);
             }
-            return new InstanceStatusTuple(healthCheckInstance.getInstanceId(), "Timeout");
+            //Timeout
+            instanceApi.deleteInstanceHealthCheck(healthCheckInstance.getInstanceId(), healthCheckInstance.getHealthCheckInstance());
+            return new InstanceStatusTuple(healthCheckInstance.getInstanceId(), "Unknown");
         }
     }
 

@@ -78,20 +78,6 @@ public class CnfAdapterRestTest {
     ResponseEntity<InstanceStatusResponse> instanceStatusResponse;
 
     @Test
-    public void healthCheckTest() throws Exception {
-        HealthCheckResponse response = new HealthCheckResponse();
-        DeferredResult<HealthCheckResponse> deferredResponse = new DeferredResult<>();
-        deferredResponse.setResult(response);
-        CnfAdapterService cnfAdapterService = Mockito.mock(CnfAdapterService.class);
-        CheckInstanceRequest healthCheckRequest = Mockito.mock(CheckInstanceRequest.class);
-        Mockito.when(cnfAdapterService.healthCheck(healthCheckRequest)).thenReturn(response);
-
-        cnfAdapterRest.healthCheck(healthCheckRequest);
-
-        Assert.assertNotNull(response);
-    }
-
-    @Test
     public void createInstanceTest() throws Exception {
 
         Map<String, String> labels = new HashMap<String, String>();

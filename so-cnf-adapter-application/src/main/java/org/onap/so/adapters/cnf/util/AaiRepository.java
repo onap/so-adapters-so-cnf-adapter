@@ -3,6 +3,7 @@
  * ONAP - SO
  * ================================================================================
  * Copyright (C) 2021 Samsung Electronics Co. Ltd. All rights reserved.
+ * Modifications Copyright (C) 2021 Orange.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +18,7 @@
  * limitations under the License.
  * ============LICENSE_END=========================================================
  */
+
 package org.onap.so.adapters.cnf.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;

@@ -3,6 +3,8 @@
  * ONAP - SO
  * ================================================================================
  * Copyright (C) 2020 Huawei Technologies Co., Ltd. All rights reserved.
+ * Modifications Copyright (C) 2021 Samsung Technologies Co.
+ * Modifications Copyright (C) 2021 Orange.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,24 +57,13 @@ public class CnfAdapterService {
     private static final String INSTANCE_CREATE_PATH = "/v1/instance";
 
     private final RestTemplate restTemplate;
-    private final HealthCheckService healthCheckService;
-    private final SimpleStatusCheckService simpleStatusCheckService;
     private final String uri;
 
     @Autowired
     public CnfAdapterService(RestTemplate restTemplate,
-                             HealthCheckService healthCheckService,
-                             SimpleStatusCheckService simpleStatusCheckService,
                              MulticloudConfiguration multicloudConfiguration) {
         this.restTemplate = restTemplate;
-        this.healthCheckService = healthCheckService;
-        this.simpleStatusCheckService = simpleStatusCheckService;
         this.uri = multicloudConfiguration.getMulticloudUrl();
-    }
-
-    public HealthCheckResponse healthCheck(CheckInstanceRequest healthCheckRequest) throws Exception {
-        logger.info("CnfAdapterService healthCheck called");
-        return healthCheckService.healthCheck(healthCheckRequest);
     }
 
     public String createInstance(BpmnInstanceRequest bpmnInstanceRequest)

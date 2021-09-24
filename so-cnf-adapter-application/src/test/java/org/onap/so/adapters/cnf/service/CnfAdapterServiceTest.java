@@ -69,7 +69,7 @@ public class CnfAdapterServiceTest {
     public void setUp() {
         MulticloudConfiguration multicloudConfiguration = mock(MulticloudConfiguration.class);
         doReturn("http://test.url").when(multicloudConfiguration).getMulticloudUrl();
-        cnfAdapterService = spy(new CnfAdapterService(restTemplate, healthCheckService, simpleStatusCheckService, multicloudConfiguration));
+        cnfAdapterService = spy(new CnfAdapterService(restTemplate, multicloudConfiguration));
     }
 
 

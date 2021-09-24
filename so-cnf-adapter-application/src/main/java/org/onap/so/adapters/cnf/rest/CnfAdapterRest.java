@@ -3,6 +3,8 @@
  * ONAP - SO
  * ================================================================================
  * Copyright (C) 2020 Huawei Technologies Co., Ltd. All rights reserved.
+ * Modifications Copyright (C) 2021 Samsung Technologies Co.
+ * Modifications Copyright (C) 2021 Orange.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,6 +56,7 @@ import org.onap.so.adapters.cnf.model.instantiation.AaiRequest;
 import org.onap.so.adapters.cnf.model.statuscheck.StatusCheckResponse;
 import org.onap.so.adapters.cnf.service.CnfAdapterService;
 import org.onap.so.adapters.cnf.service.aai.AaiService;
+import org.onap.so.adapters.cnf.service.healthcheck.HealthCheckService;
 import org.onap.so.adapters.cnf.service.statuscheck.SimpleStatusCheckService;
 import org.onap.so.client.exception.BadResponseException;
 import org.slf4j.Logger;
@@ -81,6 +84,7 @@ public class CnfAdapterRest {
     private static final Logger logger = LoggerFactory.getLogger(CnfAdapterRest.class);
     private final CloseableHttpClient httpClient = HttpClients.createDefault();
     private final SimpleStatusCheckService simpleStatusCheckService;
+    private final HealthCheckService healthCheckService;
     private final CnfAdapterService cnfAdapterService;
     private final SoCallbackClient callbackClient;
     private final AaiService aaiService;
@@ -88,11 +92,13 @@ public class CnfAdapterRest {
 
     @Autowired
     public CnfAdapterRest(SimpleStatusCheckService simpleStatusCheckService,
+                          HealthCheckService healthCheckService,
                           CnfAdapterService cnfAdapterService,
                           SoCallbackClient callbackClient,
                           AaiService aaiService,
                           MulticloudConfiguration multicloudConfiguration) {
         this.simpleStatusCheckService = simpleStatusCheckService;
+        this.healthCheckService = healthCheckService;
         this.cnfAdapterService = cnfAdapterService;
         this.aaiService = aaiService;
         this.callbackClient = callbackClient;
@@ -107,15 +113,14 @@ public class CnfAdapterRest {
         DeferredResult<ResponseEntity> response = new DeferredResult<>();
 
         new Thread(() -> {
-            logger.info("Processing healthCheck service");
+            logger.info("Processing health check request");
+
             HealthCheckResponse healthCheckResponse = null;
             try {
-                healthCheckResponse = cnfAdapterService.healthCheck(healthCheckRequest);
+                healthCheckResponse = healthCheckService.healthCheck(healthCheckRequest);
             } catch (Exception e) {
-                HealthCheckResponse errorHealthCheck = new HealthCheckResponse();
-                errorHealthCheck.setErrorMessage(e.getMessage());
-                callbackClient.sendPostCallback(healthCheckRequest.getCallbackUrl(), errorHealthCheck);
-                return;
+                logger.error("END - Health check process failed", e);
+                healthCheckResponse = healthCheckService.healthCheckError(healthCheckRequest, e);
             }
             callbackClient.sendPostCallback(healthCheckRequest.getCallbackUrl(), healthCheckResponse);
         }).start();
@@ -182,15 +187,13 @@ public class CnfAdapterRest {
         DeferredResult<ResponseEntity> response = new DeferredResult<>();
 
         new Thread(() -> {
-            logger.info("Processing healthCheck service");
+            logger.info("Processing status check request");
             StatusCheckResponse statusCheckResponse = null;
             try {
                 statusCheckResponse = simpleStatusCheckService.statusCheck(statusCheckRequest);
-            } catch (BadResponseException e) {
-                StatusCheckResponse errorStatusCheck = new StatusCheckResponse();
-                errorStatusCheck.setErrorMessage(e.getMessage());
-                callbackClient.sendPostCallback(statusCheckRequest.getCallbackUrl(), e);
-                return;
+            } catch (Exception e) {
+                logger.error("END - Status check process failed", e);
+                statusCheckResponse = simpleStatusCheckService.statusCheckError(statusCheckRequest, e);
             }
             callbackClient.sendPostCallback(statusCheckRequest.getCallbackUrl(), statusCheckResponse);
         }).start();
