@@ -62,7 +62,6 @@ import org.onap.so.client.exception.BadResponseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -76,7 +75,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.ForkJoinPool;
 
 @RestController
 public class CnfAdapterRest {
@@ -161,7 +159,7 @@ public class CnfAdapterRest {
         logger.info("aai-delete called.");
         DeferredResult<ResponseEntity> response = new DeferredResult<>();
 
-        ForkJoinPool.commonPool().execute(() -> {
+        new Thread(() -> {
             logger.info("Processing aai delete");
             AaiCallbackResponse callbackResponse = new AaiCallbackResponse();
             try {
@@ -173,7 +171,7 @@ public class CnfAdapterRest {
                 callbackResponse.setMessage(e.getMessage());
             }
             callbackClient.sendPostCallback(aaiRequest.getCallbackUrl(), callbackResponse);
-        });
+        }).start();
 
         response.setResult(ResponseEntity.accepted().build());
         return response;
