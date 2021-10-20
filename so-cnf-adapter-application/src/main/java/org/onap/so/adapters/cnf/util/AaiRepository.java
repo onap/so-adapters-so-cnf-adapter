@@ -39,6 +39,7 @@ import org.onap.so.adapters.cnf.service.aai.KubernetesResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -49,7 +50,7 @@ public class AaiRepository implements IAaiRepository {
 
     private final AAIResourcesClient aaiClient;
     private final ObjectMapper objectMapper;
-    private AAITransactionalClient transaction;
+    private final AAITransactionHelper aaiTransactionHelper;
 
     public static IAaiRepository instance() {
         return new AaiRepository();
@@ -57,25 +58,17 @@ public class AaiRepository implements IAaiRepository {
 
     private AaiRepository() {
         aaiClient = new AAIResourcesClient(AAIVersion.LATEST);
+        aaiTransactionHelper = new AAITransactionHelper(aaiClient);
         this.objectMapper = new ObjectMapper();
     }
 
-    private AAITransactionalClient getTransaction() {
-        if (transaction == null)
-            transaction = aaiClient.beginTransaction();
-        return transaction;
+    private AAITransactionHelper getTransaction() {
+        return aaiTransactionHelper;
     }
 
     @Override
     public void commit(boolean dryrun) {
-        try {
-            if (transaction != null)
-                transaction.execute(dryrun);
-            else
-                logger.info("Nothing to commit in AAI");
-        } catch (BulkProcessFailed bulkProcessFailed) {
-            throw new RuntimeException("Failed to exectute transaction", bulkProcessFailed);
-        }
+        aaiTransactionHelper.execute(dryrun);
     }
 
     @Override
@@ -173,6 +166,57 @@ public class AaiRepository implements IAaiRepository {
                         .k8sResource(r.getId());
                 return AAIUriFactory.createResourceUri(k8sResource.build(), aaiRequest.getCloudOwner(), aaiRequest.getCloudRegion(), aaiRequest.getTenantId(), r.getId());
             }).forEach(uri -> getTransaction().delete(uri));
+        }
+    }
+
+    static class AAITransactionHelper {
+        private List<AAITransactionalClient> transactions;
+        private final AAIResourcesClient aaiClient;
+        private int transactionCount;
+
+        private static final int TRANSACTION_LIMIT = 30;
+
+        public AAITransactionHelper(AAIResourcesClient aaiClient) {
+            this.aaiClient = aaiClient;
+            transactions = new ArrayList<AAITransactionalClient>();
+            transactionCount = TRANSACTION_LIMIT;
+        }
+
+        private AAITransactionalClient getTransaction() {
+            if (transactionCount == TRANSACTION_LIMIT) {
+                transactions.add(aaiClient.beginTransaction());
+                transactionCount = 0;
+            }
+            return transactions.get(transactions.size() - 1);
+        }
+
+        public void execute(boolean dryRun) {
+            if (transactions.size() > 0) {
+                transactions.forEach(transaction -> {
+                    try {
+                        transaction.execute(dryRun);
+                    } catch (BulkProcessFailed e) {
+                        throw new RuntimeException("Failed to execute transaction", e);
+                    }
+                });
+                transactions.clear();
+            } else
+                logger.info("Nothing to commit in AAI");
+        }
+
+        void create(AAIResourceUri uri, String payload) {
+            getTransaction().create(uri, payload);
+            transactionCount++;
+        }
+
+        void connect(AAIResourceUri uriA, AAIResourceUri uriB) {
+            getTransaction().connect(uriA, uriB);
+            transactionCount++;
+        }
+
+        void delete(AAIResourceUri uri) {
+            getTransaction().delete(uri);
+            transactionCount++;
         }
     }
 }
