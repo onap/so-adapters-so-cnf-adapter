@@ -60,7 +60,14 @@ public class AaiService {
     }
 
     public void aaiDelete(AaiRequest aaiRequest) throws BadResponseException {
-        IAaiRepository aaiRepository = IAaiRepository.instance(configuration.isEnabled());
+        String instanceID = aaiRequest.getInstanceId();
+        boolean enabled = configuration.isEnabled();
+        if (instanceID == null || instanceID.isEmpty() || instanceID.equals("null")) {
+            //we skip deletion of resources instance that was not created properly and instance id was not stored in AAI
+            log.warn("Undefined instance ID aai-delete attempt. Skipping aai-delete");
+            enabled = false;
+        }
+        IAaiRepository aaiRepository = IAaiRepository.instance(enabled);
         aaiRepository.delete(aaiRequest, List.of());
         aaiRepository.commit(false);
     }

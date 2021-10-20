@@ -283,6 +283,11 @@ public class CnfAdapterRest {
             throws JsonParseException, JsonMappingException, IOException {
 
         logger.info("deleteInstanceByInstanceId called.");
+        if (instanceID == null || instanceID.isEmpty() || instanceID.equals("null")) {
+            //we skip deletion of instance that was not created properly and instance id was not stored in AAI
+            logger.warn("Undefined instance ID delete attempt. Skipping delete");
+            return "";
+        }
         return cnfAdapterService.deleteInstanceByInstanceId(instanceID);
 
     }
