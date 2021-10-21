@@ -39,8 +39,10 @@ import org.onap.so.adapters.cnf.service.aai.KubernetesResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ws.rs.NotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -165,6 +167,13 @@ public class AaiRepository implements IAaiRepository {
                         .tenant(aaiRequest.getTenantId())
                         .k8sResource(r.getId());
                 return AAIUriFactory.createResourceUri(k8sResource.build(), aaiRequest.getCloudOwner(), aaiRequest.getCloudRegion(), aaiRequest.getTenantId(), r.getId());
+            }).filter(r -> {
+                if (aaiClient.exists(r))
+                    return true;
+                else {
+                    logger.warn("K8sResource " + r.toString() + "] does not exist in AAI. Skipping delete in AAI");
+                    return false;
+                }
             }).forEach(uri -> getTransaction().delete(uri));
         }
     }

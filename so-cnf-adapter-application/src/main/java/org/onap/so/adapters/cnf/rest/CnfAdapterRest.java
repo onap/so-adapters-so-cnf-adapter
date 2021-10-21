@@ -140,7 +140,7 @@ public class CnfAdapterRest {
             try {
                 aaiService.aaiUpdate(aaiRequest);
                 callbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.COMPLETED);
-            } catch (BadResponseException e) {
+            } catch (Exception e) {
                 logger.warn("Failed to create resource in AAI", e);
                 callbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.FAILED);
                 callbackResponse.setMessage(e.getMessage());
@@ -165,7 +165,7 @@ public class CnfAdapterRest {
             try {
                 aaiService.aaiDelete(aaiRequest);
                 callbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.COMPLETED);
-            } catch (BadResponseException e) {
+            } catch (Exception e) {
                 logger.warn("Failed to delete resource from AAI", e);
                 callbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.FAILED);
                 callbackResponse.setMessage(e.getMessage());
