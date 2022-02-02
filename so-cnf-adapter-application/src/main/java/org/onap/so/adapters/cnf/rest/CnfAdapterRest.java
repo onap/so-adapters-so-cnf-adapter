@@ -54,6 +54,7 @@ import org.onap.so.adapters.cnf.model.aai.AaiCallbackResponse;
 import org.onap.so.adapters.cnf.model.healthcheck.HealthCheckResponse;
 import org.onap.so.adapters.cnf.model.instantiation.AaiRequest;
 import org.onap.so.adapters.cnf.model.statuscheck.StatusCheckResponse;
+import org.onap.so.adapters.cnf.model.upgrade.UpgradeRequest;
 import org.onap.so.adapters.cnf.service.CnfAdapterService;
 import org.onap.so.adapters.cnf.service.aai.AaiService;
 import org.onap.so.adapters.cnf.service.healthcheck.HealthCheckService;
@@ -102,6 +103,30 @@ public class CnfAdapterRest {
         this.callbackClient = callbackClient;
         this.uri = multicloudConfiguration.getMulticloudUrl();
     }
+
+    @ResponseBody
+    @RequestMapping(value = {"/api/cnf-adapter/v1/instance/{instanceID}/upgrade"}, method = RequestMethod.POST,
+            produces = "application/json")
+    public DeferredResult<ResponseEntity<String>> upgrade(@PathVariable("instanceID") String instanceId,
+                                                  @RequestBody UpgradeRequest upgradeRequest) {
+        logger.info("upgrade called.");
+        logger.warn("MOCK upgrade called.");
+        DeferredResult<ResponseEntity<String>> result = new DeferredResult<>();
+        new Thread(() -> {
+            logger.info("Processing upgrade request");
+            logger.warn("MOCK Processing upgrade request.");
+            try {
+                Thread.sleep(3000L);
+            } catch (InterruptedException e) {
+                logger.error("MOCK ERROR");
+            }
+        }).start();
+
+        result.setResult(ResponseEntity.accepted().body("MOCK BODY"));
+
+        return result;
+    }
+
 
     @ResponseBody
     @RequestMapping(value = {"/api/cnf-adapter/v1/healthcheck"}, method = RequestMethod.POST,
