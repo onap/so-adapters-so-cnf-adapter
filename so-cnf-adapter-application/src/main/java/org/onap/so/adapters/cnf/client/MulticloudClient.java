@@ -1,8 +1,30 @@
+/*-
+ * ============LICENSE_START=======================================================
+ * ONAP - SO
+ * ================================================================================
+ * Copyright (C) 2020 Huawei Technologies Co., Ltd. All rights reserved.
+ * Modifications Copyright (C) 2021 Samsung Technologies Co.
+ * Modifications Copyright (C) 2021 Orange.
+ * ================================================================================
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ============LICENSE_END=========================================================
+ */
 package org.onap.so.adapters.cnf.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.onap.so.adapters.cnf.MulticloudConfiguration;
+import org.onap.so.adapters.cnf.model.MulticloudInstanceRequest;
 import org.onap.so.adapters.cnf.model.healthcheck.K8sRbInstanceHealthCheck;
 import org.onap.so.adapters.cnf.model.healthcheck.K8sRbInstanceHealthCheckSimple;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceStatus;
@@ -37,6 +59,23 @@ public class MulticloudClient {
         this.restTemplate = restTemplate;
         this.multicloudConfiguration = multicloudConfiguration;
         this.objectMapper = new ObjectMapper();
+    }
+
+    public String upgradeInstance(String instanceId, MulticloudInstanceRequest upgradeRequest) throws BadResponseException {
+        MulticloudApiUrl multicloudApiUrl = new MulticloudApiUrl(multicloudConfiguration);
+        multicloudApiUrl.setInstanceId(instanceId);
+        String endpoint = multicloudApiUrl.apiUrl() + "/upgrade";
+        ResponseEntity<String> result = restTemplate.exchange(endpoint, POST, getHttpEntity(upgradeRequest), String.class);
+        checkResponseStatusCode(result);
+        log.info("upgradeInstance response status: {}", result.getStatusCode());
+        String body = result.getBody();
+        log.debug("upgradeInstance response body: {}", body);
+
+        try {
+            return objectMapper.readValue(body, String.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public K8sRbInstanceStatus getInstanceStatus(String instanceId) throws BadResponseException {
@@ -106,13 +145,24 @@ public class MulticloudClient {
     }
 
     private HttpEntity<?> getHttpEntity() {
+        HttpHeaders headers = getHttpHeaders();
+
+        return new HttpEntity<>(headers);
+    }
+
+    private HttpHeaders getHttpHeaders() {
         HttpHeaders headers = new HttpHeaders();
         List<MediaType> acceptableMediaTypes = new ArrayList<>();
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
         headers.setAccept(acceptableMediaTypes);
         headers.setContentType(MediaType.APPLICATION_JSON);
+        return headers;
+    }
 
-        return new HttpEntity<>(headers);
+    private HttpEntity<?> getHttpEntity(Object body) {
+        HttpHeaders headers = getHttpHeaders();
+
+        return new HttpEntity<>(body, headers);
     }
 
     private void checkResponseStatusCode(ResponseEntity<String> result) throws BadResponseException {
