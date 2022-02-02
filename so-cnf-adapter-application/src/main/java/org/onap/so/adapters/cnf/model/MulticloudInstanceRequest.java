@@ -84,4 +84,16 @@ public class MulticloudInstanceRequest {
         this.releaseName = releaseName;
     }
 
+    @Override
+    public String toString() {
+        return "MulticloudInstanceRequest{" +
+                "cloudRegion='" + cloudRegion + '\'' +
+                ", rbName='" + rbName + '\'' +
+                ", rbVersion='" + rbVersion + '\'' +
+                ", profileName='" + profileName + '\'' +
+                ", labels=" + labels +
+                ", overrideValues=" + overrideValues +
+                ", releaseName='" + releaseName + '\'' +
+                '}';
+    }
 }
