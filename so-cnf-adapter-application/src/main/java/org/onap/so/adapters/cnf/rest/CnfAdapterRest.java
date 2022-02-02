@@ -54,10 +54,12 @@ import org.onap.so.adapters.cnf.model.aai.AaiCallbackResponse;
 import org.onap.so.adapters.cnf.model.healthcheck.HealthCheckResponse;
 import org.onap.so.adapters.cnf.model.instantiation.AaiRequest;
 import org.onap.so.adapters.cnf.model.statuscheck.StatusCheckResponse;
+import org.onap.so.adapters.cnf.model.upgrade.InstanceUpgradeRequest;
 import org.onap.so.adapters.cnf.service.CnfAdapterService;
 import org.onap.so.adapters.cnf.service.aai.AaiService;
 import org.onap.so.adapters.cnf.service.healthcheck.HealthCheckService;
 import org.onap.so.adapters.cnf.service.statuscheck.SimpleStatusCheckService;
+import org.onap.so.adapters.cnf.service.upgrade.InstanceUpgradeService;
 import org.onap.so.client.exception.BadResponseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,6 +85,7 @@ public class CnfAdapterRest {
     private final CloseableHttpClient httpClient = HttpClients.createDefault();
     private final SimpleStatusCheckService simpleStatusCheckService;
     private final HealthCheckService healthCheckService;
+    private final InstanceUpgradeService instanceUpgradeService;
     private final CnfAdapterService cnfAdapterService;
     private final SoCallbackClient callbackClient;
     private final AaiService aaiService;
@@ -91,17 +94,29 @@ public class CnfAdapterRest {
     @Autowired
     public CnfAdapterRest(SimpleStatusCheckService simpleStatusCheckService,
                           HealthCheckService healthCheckService,
+                          InstanceUpgradeService instanceUpgradeService,
                           CnfAdapterService cnfAdapterService,
                           SoCallbackClient callbackClient,
                           AaiService aaiService,
                           MulticloudConfiguration multicloudConfiguration) {
         this.simpleStatusCheckService = simpleStatusCheckService;
         this.healthCheckService = healthCheckService;
+        this.instanceUpgradeService = instanceUpgradeService;
         this.cnfAdapterService = cnfAdapterService;
         this.aaiService = aaiService;
         this.callbackClient = callbackClient;
         this.uri = multicloudConfiguration.getMulticloudUrl();
     }
+
+    @ResponseBody
+    @RequestMapping(value = {"/api/cnf-adapter/v1/instance/{instanceID}/upgrade"}, method = RequestMethod.POST,
+            produces = "application/json", consumes = "application/json")
+    public String upgrade(@PathVariable("instanceID") String instanceId,
+                          @RequestBody InstanceUpgradeRequest upgradeRequest) throws BadResponseException {
+        logger.info("upgrade called.");
+        return instanceUpgradeService.upgradeInstance(instanceId, upgradeRequest);
+    }
+
 
     @ResponseBody
     @RequestMapping(value = {"/api/cnf-adapter/v1/healthcheck"}, method = RequestMethod.POST,
