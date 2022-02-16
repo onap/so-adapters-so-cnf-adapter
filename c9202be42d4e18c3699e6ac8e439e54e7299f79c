@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "07d8f859_cc924921",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/client/MulticloudClient.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 6641
+      },
+      "writtenOn": "2022-02-16T09:32:18Z",
+      "side": 1,
+      "message": "why not use HttpEntity\u003cVoid\u003e getHttpEntity() ?",
+      "revId": "c9202be42d4e18c3699e6ac8e439e54e7299f79c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d1567fe_69c6a7e8",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/client/MulticloudClient.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 6641
+      },
+      "writtenOn": "2022-02-16T09:32:18Z",
+      "side": 1,
+      "message": "why not use HttpEntity\u003cT\u003e getHttpEntity(T body) ?",
+      "revId": "c9202be42d4e18c3699e6ac8e439e54e7299f79c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e713b5b_46d3914a",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/rest/CnfAdapterRest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 6641
+      },
+      "writtenOn": "2022-02-16T09:32:18Z",
+      "side": 1,
+      "message": "can you add instanceID to logged out message? it may be easier to follow logs",
+      "revId": "c9202be42d4e18c3699e6ac8e439e54e7299f79c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0ee21c9_68b2f010",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/upgrade/InstanceUpgradeService.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 6641
+      },
+      "writtenOn": "2022-02-16T09:32:18Z",
+      "side": 1,
+      "message": "with new spring this is not needed as spring will pick the right constructor",
+      "revId": "c9202be42d4e18c3699e6ac8e439e54e7299f79c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "911fc6ed_f0b054cb",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/upgrade/InstanceUpgradeService.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 6641
+      },
+      "writtenOn": "2022-02-16T09:32:18Z",
+      "side": 1,
+      "message": "NullPointer may be better exception here ;)",
+      "revId": "c9202be42d4e18c3699e6ac8e439e54e7299f79c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
