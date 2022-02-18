@@ -94,6 +94,9 @@ public class AaiResponseParserTest {
         assertEquals(version, actual.getVersion());
         assertEquals(kind, actual.getKind());
         assertEquals(namespace, actual.getNamespace());
+        // FIXME: actual.getLabels looks like but should be 4 elements. Is it just simple fix expected = 2?
+        // 0:   k8splugin.io/rb-instance-id=rb-instance-id_value
+        // 1:   key=value
         assertEquals(4, actual.getLabels().size());
         assertEquals(INSTANCE_ID, actual.getLabels().get(0));
         assertEquals(INSTANCE_ID_VALUE, actual.getLabels().get(1));
