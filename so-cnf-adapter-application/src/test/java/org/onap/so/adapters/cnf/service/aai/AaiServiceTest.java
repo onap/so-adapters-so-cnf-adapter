@@ -76,11 +76,8 @@ public class AaiServiceTest {
         when(aaiRequest.getInstanceId()).thenReturn(instanceId);
         when(multicloudClient.getInstanceStatus(instanceId)).thenReturn(instanceStatus);
         when(instanceStatus.getResourcesStatus()).thenReturn(resourcesStatus);
-        when(responseParser.parse(status, aaiRequest)).thenReturn(parseResult);
 
         // then
         aaiServiceTested.aaiDelete(aaiRequest);
-
-        verify(responseParser, atLeast(1)).parse(status, aaiRequest);
     }
 }
