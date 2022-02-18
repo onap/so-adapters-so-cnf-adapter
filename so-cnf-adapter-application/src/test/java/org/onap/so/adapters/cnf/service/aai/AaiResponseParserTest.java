@@ -94,9 +94,9 @@ public class AaiResponseParserTest {
         assertEquals(version, actual.getVersion());
         assertEquals(kind, actual.getKind());
         assertEquals(namespace, actual.getNamespace());
-        assertEquals(4, actual.getLabels().size());
-        assertEquals(INSTANCE_ID, actual.getLabels().get(0));
-        assertEquals(INSTANCE_ID_VALUE, actual.getLabels().get(1));
+        assertEquals(2, actual.getLabels().size());
+        assertEquals("k8splugin.io/rb-instance-id=rb-instance-id_value", actual.getLabels().get(0));
+        assertEquals("key=value", actual.getLabels().get(1));
         assertEquals("http://so-cnf-adapter:8090/api/cnf-adapter/v1/instance/id/query?ApiVersion=version&Kind=kind&Name=name&Namespace=namespace", actual.getSelflink());
     }
 }

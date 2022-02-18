@@ -6,10 +6,10 @@ import org.junit.runner.RunWith;
 import org.onap.so.adapters.cnf.model.instantiation.AaiRequest;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceGvk;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceResourceStatus;
-import org.onap.so.adapters.cnf.util.IAaiRepository;
+import org.onap.so.adapters.cnf.model.statuscheck.K8sStatus;
+import org.onap.so.adapters.cnf.model.statuscheck.K8sStatusMetadata;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -30,12 +30,16 @@ public class AaiIdGeneratorServiceTest {
         String cloudRegion = "cloudRegion";
         String tenantId = "tenantId";
         K8sRbInstanceResourceStatus resourceStatus = mock(K8sRbInstanceResourceStatus.class);
+        K8sStatus status = mock(K8sStatus.class);
+        K8sStatusMetadata metadata = mock(K8sStatusMetadata.class);
         AaiRequest aaiRequest = mock(AaiRequest.class);
         K8sRbInstanceGvk gvk = mock(K8sRbInstanceGvk.class);
 
         // when
         when(resourceStatus.getGvk()).thenReturn(gvk);
         when(resourceStatus.getName()).thenReturn(name);
+        when(resourceStatus.getStatus()).thenReturn(status);
+        when(status.getK8sStatusMetadata()).thenReturn(metadata);
         when(gvk.getKind()).thenReturn(kind);
         when(gvk.getGroup()).thenReturn(group);
         when(gvk.getVersion()).thenReturn(version);
@@ -46,7 +50,7 @@ public class AaiIdGeneratorServiceTest {
 
         // then
         String actual = tested.generateId(resourceStatus, aaiRequest);
-        String expected = "a1b2c1f3dd0c76d65c6dbe97b17e0239163bc2c08e8e88e167bb90de9c7b0da1";
+        String expected = "335d6ab87744a3140b36e70eee7537e97523b5e09f26d1d0ee887fd5839f87e2";
 
         Assert.assertEquals(expected, actual);
     }
