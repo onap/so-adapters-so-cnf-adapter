@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cccd0fa0_cfb84b36",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/upgrade/InstanceUpgradeService.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 6641
+      },
+      "writtenOn": "2022-02-21T09:54:23Z",
+      "side": 1,
+      "message": "adding instance id to log may help with debbuging.",
+      "revId": "02b1d07da73cc7a852487e2e0b54711ef08f17e1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
