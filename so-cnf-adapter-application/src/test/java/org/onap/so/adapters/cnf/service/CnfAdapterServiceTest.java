@@ -17,7 +17,6 @@
  * limitations under the License.
  * ============LICENSE_END=========================================================
  */
-
 package org.onap.so.adapters.cnf.service;
 
 import lombok.Data;
@@ -30,7 +29,8 @@ import org.onap.so.adapters.cnf.MulticloudConfiguration;
 import org.onap.so.adapters.cnf.model.BpmnInstanceRequest;
 import org.onap.so.adapters.cnf.service.healthcheck.HealthCheckService;
 import org.onap.so.adapters.cnf.service.statuscheck.SimpleStatusCheckService;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.onap.so.adapters.cnf.service.synchrornization.SynchronizationService;
+import org.onap.so.client.exception.BadResponseException;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -66,12 +66,15 @@ public class CnfAdapterServiceTest {
     @Mock
     SimpleStatusCheckService simpleStatusCheckService;
 
+    @Mock
+    SynchronizationService synchronizationService;
+
 
     @Before
     public void setUp() {
         MulticloudConfiguration multicloudConfiguration = mock(MulticloudConfiguration.class);
         doReturn("http://test.url").when(multicloudConfiguration).getMulticloudUrl();
-        cnfAdapterService = spy(new CnfAdapterService(restTemplate, multicloudConfiguration));
+        cnfAdapterService = spy(new CnfAdapterService(restTemplate, synchronizationService, multicloudConfiguration));
     }
 
 
@@ -85,25 +88,17 @@ public class CnfAdapterServiceTest {
     }
 
     @Test(expected = EntityNotFoundException.class)
-    public void testcreateInstanceHttpException() {
+    public void testcreateInstanceHttpException() throws BadResponseException {
         doThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND)).when(restTemplate).exchange(ArgumentMatchers.anyString(),
                 ArgumentMatchers.any(HttpMethod.class), ArgumentMatchers.any(), ArgumentMatchers.<Class<String>>any());
-        try {
-            cnfAdapterService.createInstance(getBpmnInstanceRequest());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        cnfAdapterService.createInstance(getBpmnInstanceRequest());
     }
 
     @Test(expected = HttpStatusCodeException.class)
-    public void testcreateInstanceHttpStatusCodeException() {
+    public void testCreateInstanceHttpStatusCodeException() throws BadResponseException {
         doThrow(new HttpServerErrorException(HttpStatus.CONFLICT)).when(restTemplate).exchange(ArgumentMatchers.anyString(),
                 ArgumentMatchers.any(HttpMethod.class), ArgumentMatchers.any(), ArgumentMatchers.<Class<String>>any());
-        try {
-            cnfAdapterService.createInstance(getBpmnInstanceRequest());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        cnfAdapterService.createInstance(getBpmnInstanceRequest());
     }
 
     @Test
@@ -215,25 +210,17 @@ public class CnfAdapterServiceTest {
     }
 
     @Test(expected = EntityNotFoundException.class)
-    public void testdeleteInstanceByInstanceIdHttpException() {
+    public void testdeleteInstanceByInstanceIdHttpException() throws BadResponseException {
         doThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND)).when(restTemplate).exchange(ArgumentMatchers.anyString(),
                 ArgumentMatchers.any(HttpMethod.class), ArgumentMatchers.any(), ArgumentMatchers.<Class<String>>any());
-        try {
-            cnfAdapterService.deleteInstanceByInstanceId(INSTANCE_ID);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        cnfAdapterService.deleteInstanceByInstanceId(INSTANCE_ID);
     }
 
     @Test(expected = HttpStatusCodeException.class)
-    public void testdeleteInstanceByInstanceIdException() {
+    public void testDeleteInstanceByInstanceIdException() throws BadResponseException {
         doThrow(new HttpServerErrorException(HttpStatus.CONFLICT)).when(restTemplate).exchange(ArgumentMatchers.anyString(),
                 ArgumentMatchers.any(HttpMethod.class), ArgumentMatchers.any(), ArgumentMatchers.<Class<String>>any());
-        try {
-            cnfAdapterService.deleteInstanceByInstanceId(INSTANCE_ID);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        cnfAdapterService.deleteInstanceByInstanceId(INSTANCE_ID);
     }
 
     @Test
@@ -269,9 +256,9 @@ public class CnfAdapterServiceTest {
     }
 
     private BpmnInstanceRequest getBpmnInstanceRequest() {
-        Map<String, String> labels = new HashMap<String, String>();
+        Map<String, String> labels = new HashMap<>();
         labels.put("custom-label-1", "label1");
-        Map<String, String> overrideValues = new HashMap<String, String>();
+        Map<String, String> overrideValues = new HashMap<>();
         overrideValues.put("a", "b");
         labels.put("image.tag", "latest");
         labels.put("dcae_collector_ip", "1.2.3.4");
