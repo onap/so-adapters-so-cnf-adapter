@@ -218,9 +218,7 @@ public class CnfAdapterRest {
     @ResponseBody
     @RequestMapping(value = {"/api/cnf-adapter/v1/instance"}, method = RequestMethod.POST,
             produces = "application/json", consumes = "application/json")
-    public String createInstance(@RequestBody BpmnInstanceRequest bpmnInstanceRequest)
-            throws JsonParseException, JsonMappingException, IOException {
-
+    public String createInstance(@RequestBody BpmnInstanceRequest bpmnInstanceRequest) throws BadResponseException {
         logger.info("createInstance called.");
         return cnfAdapterService.createInstance(bpmnInstanceRequest);
     }
@@ -294,8 +292,7 @@ public class CnfAdapterRest {
     @ResponseBody
     @RequestMapping(value = {"/api/cnf-adapter/v1/instance/{instID}"}, method = RequestMethod.DELETE,
             produces = "application/json")
-    public String deleteInstanceByInstanceId(@PathVariable("instID") String instanceID)
-            throws JsonParseException, JsonMappingException, IOException {
+    public String deleteInstanceByInstanceId(@PathVariable("instID") String instanceID) throws BadResponseException {
 
         logger.info("deleteInstanceByInstanceId called.");
         if (instanceID == null || instanceID.isEmpty() || instanceID.equals("null")) {
