@@ -24,14 +24,14 @@ package org.onap.so.adapters.cnf.service;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.google.gson.Gson;
 import org.apache.http.HttpStatus;
+import org.json.JSONObject;
 import org.onap.so.adapters.cnf.MulticloudConfiguration;
 import org.onap.so.adapters.cnf.model.BpmnInstanceRequest;
-import org.onap.so.adapters.cnf.model.CheckInstanceRequest;
 import org.onap.so.adapters.cnf.model.MulticloudInstanceRequest;
-import org.onap.so.adapters.cnf.model.healthcheck.HealthCheckResponse;
-import org.onap.so.adapters.cnf.service.healthcheck.HealthCheckService;
-import org.onap.so.adapters.cnf.service.statuscheck.SimpleStatusCheckService;
+import org.onap.so.adapters.cnf.service.synchrornization.SynchronizationService;
+import org.onap.so.client.exception.BadResponseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,19 +55,22 @@ import java.util.List;
 public class CnfAdapterService {
     private static final Logger logger = LoggerFactory.getLogger(CnfAdapterService.class);
     private static final String INSTANCE_CREATE_PATH = "/v1/instance";
+    private static final Gson gson = new Gson();
 
     private final RestTemplate restTemplate;
+    private final SynchronizationService synchronizationService;
     private final String uri;
 
     @Autowired
     public CnfAdapterService(RestTemplate restTemplate,
+                             SynchronizationService synchronizationService,
                              MulticloudConfiguration multicloudConfiguration) {
         this.restTemplate = restTemplate;
+        this.synchronizationService = synchronizationService;
         this.uri = multicloudConfiguration.getMulticloudUrl();
     }
 
-    public String createInstance(BpmnInstanceRequest bpmnInstanceRequest)
-            throws JsonParseException, JsonMappingException, IOException {
+    public String createInstance(BpmnInstanceRequest bpmnInstanceRequest) throws BadResponseException {
         try {
             logger.info("CnfAdapterService createInstance called");
             MulticloudInstanceRequest multicloudInstanceRequest = new MulticloudInstanceRequest();
@@ -105,6 +108,8 @@ public class CnfAdapterService {
             HttpEntity<?> entity = getHttpEntity(multicloudInstanceRequest);
             logger.info("request: " + entity);
             instanceResponse = restTemplate.exchange(endpoint, HttpMethod.POST, entity, String.class);
+            String instanceId = getInstanceIdFromResponse(instanceResponse.getBody());
+            synchronizationService.createSubscription(instanceId);
             logger.info("response: " + instanceResponse);
             return instanceResponse.getBody();
         } catch (HttpClientErrorException e) {
@@ -262,8 +267,7 @@ public class CnfAdapterService {
         }
     }
 
-    public String deleteInstanceByInstanceId(String instanceId)
-            throws JsonParseException, JsonMappingException, IOException {
+    public String deleteInstanceByInstanceId(String instanceId) throws BadResponseException {
 
         logger.info("CnfAdapterService deleteInstanceByInstanceId called");
         ResponseEntity<String> result = null;
@@ -278,6 +282,7 @@ public class CnfAdapterService {
             logger.info("request: " + requestEntity);
             result = restTemplate.exchange(endpoint, HttpMethod.DELETE, requestEntity, String.class);
             logger.info("response: " + result);
+            synchronizationService.deleteSubscription(instanceId);
             return result.getBody();
         } catch (HttpClientErrorException e) {
             logger.error("Error Calling Multicloud, e");
@@ -310,4 +315,9 @@ public class CnfAdapterService {
         HttpHeaders headers = getHttpHeaders();
         return new HttpEntity<>(request, headers);
     }
+
+    private String getInstanceIdFromResponse(String response) {
+        return new JSONObject(response).get("id").toString();
+    }
+
 }
