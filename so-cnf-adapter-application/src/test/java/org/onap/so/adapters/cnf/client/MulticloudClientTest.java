@@ -27,16 +27,20 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.onap.so.adapters.cnf.model.InstanceResponse;
 import org.onap.so.adapters.cnf.model.MulticloudInstanceRequest;
 import org.onap.so.adapters.cnf.model.healthcheck.K8sRbInstanceHealthCheck;
 import org.onap.so.adapters.cnf.model.healthcheck.K8sRbInstanceHealthCheckSimple;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceStatus;
+import org.onap.so.adapters.cnf.model.synchronization.SubscriptionRequest;
+import org.onap.so.adapters.cnf.model.synchronization.SubscriptionResponse;
 import org.onap.so.client.exception.BadResponseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -66,9 +70,71 @@ public class MulticloudClientTest {
 
 
     @Test
+    public void shouldRegisterSubscription() throws BadResponseException {
+        // given
+        SubscriptionRequest request = mock(SubscriptionRequest.class);
+        ResponseEntity result = mock(ResponseEntity.class);
+        String body = "{\"name\":\"name\"}";
+
+        // when
+        when(multicloudApiUrl.apiUrl(instanceId)).thenReturn(endpoint);
+        when(restTemplate.exchange(eq(getUrl("/status/subscription")), eq(POST), any(), eq(String.class))).thenReturn(result);
+        when(result.getStatusCode()).thenReturn(HttpStatus.OK);
+        when(result.getBody()).thenReturn(body);
+
+        // then
+        SubscriptionResponse actual = tested.registerSubscription(instanceId, request);
+
+        assertEquals("name", actual.getName());
+        verify(multicloudApiUrl).apiUrl(instanceIdCaptor.capture());
+        assertInstanceIdCaperedValue(instanceIdCaptor.getValue());
+    }
+
+    @Test
+    public void shouldGetSubscription() throws BadResponseException {
+        // given
+        String request = "subscriptionId";
+        ResponseEntity result = mock(ResponseEntity.class);
+        String body = "{\"name\":\"name\"}";
+
+        // when
+        when(multicloudApiUrl.apiUrl(instanceId)).thenReturn(endpoint);
+        when(restTemplate.exchange(eq(getUrl("/status/subscription/" + request)), eq(GET), any(), eq(String.class))).thenReturn(result);
+        when(result.getStatusCode()).thenReturn(HttpStatus.OK);
+        when(result.getBody()).thenReturn(body);
+
+        // then
+        SubscriptionResponse actual = tested.getSubscription(instanceId, request);
+
+        assertEquals("name", actual.getName());
+        verify(multicloudApiUrl).apiUrl(instanceIdCaptor.capture());
+        assertInstanceIdCaperedValue(instanceIdCaptor.getValue());
+    }
+
+    @Test
+    public void shouldDeleteSubscription() throws BadResponseException {
+        // given
+        String request = "subscriptionId";
+        ResponseEntity result = mock(ResponseEntity.class);
+        String body = "{\"name\":\"name\"}";
+
+        // when
+        when(multicloudApiUrl.apiUrl(instanceId)).thenReturn(endpoint);
+        when(restTemplate.exchange(eq(getUrl("/status/subscription/" + request)), eq(DELETE), any(), eq(String.class))).thenReturn(result);
+        when(result.getStatusCode()).thenReturn(HttpStatus.OK);
+        when(result.getBody()).thenReturn(body);
+
+        // then
+        tested.deleteSubscription(instanceId, request);
+
+        verify(multicloudApiUrl).apiUrl(instanceIdCaptor.capture());
+        assertInstanceIdCaperedValue(instanceIdCaptor.getValue());
+    }
+
+    @Test
     public void shouldUpgradeInstance() throws BadResponseException {
         // given
-        MulticloudInstanceRequest upgradeRequest = mock(MulticloudInstanceRequest.class);
+        MulticloudInstanceRequest request = mock(MulticloudInstanceRequest.class);
         ResponseEntity result = mock(ResponseEntity.class);
         String body = "body";
 
@@ -79,7 +145,7 @@ public class MulticloudClientTest {
         when(result.getBody()).thenReturn(body);
 
         // then
-        String actual = tested.upgradeInstance(instanceId, upgradeRequest);
+        String actual = tested.upgradeInstance(instanceId, request);
 
         assertEquals(body, actual);
         verify(multicloudApiUrl).apiUrl(instanceIdCaptor.capture());
@@ -135,7 +201,7 @@ public class MulticloudClientTest {
 
         // when
         when(multicloudApiUrl.apiUrl(instanceId)).thenReturn(endpoint);
-        when(restTemplate.exchange(eq(getUrl("/healthcheck/"+healthCheckInstance)), eq(GET), any(), eq(String.class))).thenReturn(result);
+        when(restTemplate.exchange(eq(getUrl("/healthcheck/" + healthCheckInstance)), eq(GET), any(), eq(String.class))).thenReturn(result);
         when(result.getStatusCode()).thenReturn(HttpStatus.OK);
         when(result.getBody()).thenReturn(body);
 
@@ -156,7 +222,7 @@ public class MulticloudClientTest {
 
         // when
         when(multicloudApiUrl.apiUrl(instanceId)).thenReturn(endpoint);
-        when(restTemplate.exchange(eq(getUrl("/healthcheck/"+healthCheckInstance)), eq(DELETE), any(), eq(String.class))).thenReturn(result);
+        when(restTemplate.exchange(eq(getUrl("/healthcheck/" + healthCheckInstance)), eq(DELETE), any(), eq(String.class))).thenReturn(result);
         when(result.getStatusCode()).thenReturn(HttpStatus.OK);
         when(result.getBody()).thenReturn(body);
 
@@ -165,6 +231,29 @@ public class MulticloudClientTest {
 
         verify(multicloudApiUrl).apiUrl(instanceIdCaptor.capture());
         assertInstanceIdCaperedValue(instanceIdCaptor.getValue());
+    }
+
+    @Test
+    public void shouldGetAllInstances() throws BadResponseException {
+        // given
+        ResponseEntity result = mock(ResponseEntity.class);
+        String body = "[{\"id\":\"clever_proskuriakova\",\"release-name\":\"rel-1-apache\",\"namespace\":\"test-cnf\"}]";
+
+        // when
+        when(multicloudApiUrl.apiUrl("")).thenReturn(endpoint);
+        when(restTemplate.exchange(eq(getUrl("")), eq(GET), any(), eq(String.class))).thenReturn(result);
+        when(result.getStatusCode()).thenReturn(HttpStatus.OK);
+        when(result.getBody()).thenReturn(body);
+
+        // then
+        List<InstanceResponse> actual = tested.getAllInstances();
+
+        verify(multicloudApiUrl).apiUrl(instanceIdCaptor.capture());
+        assertEquals("", instanceIdCaptor.getValue());
+        assertEquals(1, actual.size());
+        assertEquals("clever_proskuriakova", actual.get(0).getId());
+        assertEquals("rel-1-apache", actual.get(0).getReleaseName());
+        assertEquals("test-cnf", actual.get(0).getNamespace());
     }
 
     private void assertInstanceIdCaperedValue(String instanceIdCapturedValue) {

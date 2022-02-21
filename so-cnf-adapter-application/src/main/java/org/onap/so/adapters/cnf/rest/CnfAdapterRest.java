@@ -59,6 +59,7 @@ import org.onap.so.adapters.cnf.service.CnfAdapterService;
 import org.onap.so.adapters.cnf.service.aai.AaiService;
 import org.onap.so.adapters.cnf.service.healthcheck.HealthCheckService;
 import org.onap.so.adapters.cnf.service.statuscheck.SimpleStatusCheckService;
+import org.onap.so.adapters.cnf.service.synchrornization.SynchronizationService;
 import org.onap.so.adapters.cnf.service.upgrade.InstanceUpgradeService;
 import org.onap.so.client.exception.BadResponseException;
 import org.slf4j.Logger;
@@ -89,6 +90,7 @@ public class CnfAdapterRest {
     private final CnfAdapterService cnfAdapterService;
     private final SoCallbackClient callbackClient;
     private final AaiService aaiService;
+    private final SynchronizationService synchronizationService;
     private final String uri;
 
     @Autowired
@@ -98,6 +100,7 @@ public class CnfAdapterRest {
                           CnfAdapterService cnfAdapterService,
                           SoCallbackClient callbackClient,
                           AaiService aaiService,
+                          SynchronizationService synchronizationService,
                           MulticloudConfiguration multicloudConfiguration) {
         this.simpleStatusCheckService = simpleStatusCheckService;
         this.healthCheckService = healthCheckService;
@@ -105,6 +108,7 @@ public class CnfAdapterRest {
         this.cnfAdapterService = cnfAdapterService;
         this.aaiService = aaiService;
         this.callbackClient = callbackClient;
+        this.synchronizationService = synchronizationService;
         this.uri = multicloudConfiguration.getMulticloudUrl();
     }
 
@@ -154,6 +158,7 @@ public class CnfAdapterRest {
             AaiCallbackResponse callbackResponse = new AaiCallbackResponse();
             try {
                 aaiService.aaiUpdate(aaiRequest);
+                synchronizationService.createSubscriptionIfNotExists(aaiRequest);
                 callbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.COMPLETED);
             } catch (Exception e) {
                 logger.warn("Failed to create resource in AAI", e);
@@ -178,6 +183,7 @@ public class CnfAdapterRest {
             logger.info("Processing aai delete");
             AaiCallbackResponse callbackResponse = new AaiCallbackResponse();
             try {
+                synchronizationService.deleteSubscriptionIfExists(aaiRequest);
                 aaiService.aaiDelete(aaiRequest);
                 callbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.COMPLETED);
             } catch (Exception e) {
@@ -218,9 +224,7 @@ public class CnfAdapterRest {
     @ResponseBody
     @RequestMapping(value = {"/api/cnf-adapter/v1/instance"}, method = RequestMethod.POST,
             produces = "application/json", consumes = "application/json")
-    public String createInstance(@RequestBody BpmnInstanceRequest bpmnInstanceRequest)
-            throws JsonParseException, JsonMappingException, IOException {
-
+    public String createInstance(@RequestBody BpmnInstanceRequest bpmnInstanceRequest) throws BadResponseException {
         logger.info("createInstance called.");
         return cnfAdapterService.createInstance(bpmnInstanceRequest);
     }
@@ -294,8 +298,7 @@ public class CnfAdapterRest {
     @ResponseBody
     @RequestMapping(value = {"/api/cnf-adapter/v1/instance/{instID}"}, method = RequestMethod.DELETE,
             produces = "application/json")
-    public String deleteInstanceByInstanceId(@PathVariable("instID") String instanceID)
-            throws JsonParseException, JsonMappingException, IOException {
+    public String deleteInstanceByInstanceId(@PathVariable("instID") String instanceID) throws BadResponseException {
 
         logger.info("deleteInstanceByInstanceId called.");
         if (instanceID == null || instanceID.isEmpty() || instanceID.equals("null")) {
