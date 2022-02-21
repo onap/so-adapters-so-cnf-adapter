@@ -16,6 +16,70 @@
       "revId": "02b1d07da73cc7a852487e2e0b54711ef08f17e1",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e593663_679c21ef",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/upgrade/InstanceUpgradeService.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2022-02-21T21:26:52Z",
+      "side": 1,
+      "message": "yes, please",
+      "parentUuid": "cccd0fa0_cfb84b36",
+      "revId": "02b1d07da73cc7a852487e2e0b54711ef08f17e1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b98c4f7_057449c9",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/upgrade/InstanceUpgradeService.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2022-02-21T21:26:52Z",
+      "side": 1,
+      "message": "we do not send release-name in the upgrade request",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 132
+      },
+      "revId": "02b1d07da73cc7a852487e2e0b54711ef08f17e1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "793cc5fd_d3c38bc1",
+        "filename": "so-cnf-adapter-application/src/test/java/org/onap/so/adapters/cnf/service/upgrade/InstanceUpgradeServiceTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2022-02-21T21:26:52Z",
+      "side": 1,
+      "message": "please remove it",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 98
+      },
+      "revId": "02b1d07da73cc7a852487e2e0b54711ef08f17e1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
