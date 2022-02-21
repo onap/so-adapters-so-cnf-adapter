@@ -24,14 +24,15 @@ package org.onap.so.adapters.cnf.service;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.google.gson.Gson;
 import org.apache.http.HttpStatus;
+import org.json.JSONObject;
 import org.onap.so.adapters.cnf.MulticloudConfiguration;
 import org.onap.so.adapters.cnf.model.BpmnInstanceRequest;
-import org.onap.so.adapters.cnf.model.CheckInstanceRequest;
 import org.onap.so.adapters.cnf.model.MulticloudInstanceRequest;
-import org.onap.so.adapters.cnf.model.healthcheck.HealthCheckResponse;
-import org.onap.so.adapters.cnf.service.healthcheck.HealthCheckService;
-import org.onap.so.adapters.cnf.service.statuscheck.SimpleStatusCheckService;
+import org.onap.so.adapters.cnf.model.aai.AaiRequest;
+import org.onap.so.adapters.cnf.service.synchrornization.SynchronizationService;
+import org.onap.so.client.exception.BadResponseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,8 +67,7 @@ public class CnfAdapterService {
         this.uri = multicloudConfiguration.getMulticloudUrl();
     }
 
-    public String createInstance(BpmnInstanceRequest bpmnInstanceRequest)
-            throws JsonParseException, JsonMappingException, IOException {
+    public String createInstance(BpmnInstanceRequest bpmnInstanceRequest) {
         try {
             logger.info("CnfAdapterService createInstance called");
             MulticloudInstanceRequest multicloudInstanceRequest = new MulticloudInstanceRequest();
@@ -262,8 +262,7 @@ public class CnfAdapterService {
         }
     }
 
-    public String deleteInstanceByInstanceId(String instanceId)
-            throws JsonParseException, JsonMappingException, IOException {
+    public String deleteInstanceByInstanceId(String instanceId) {
 
         logger.info("CnfAdapterService deleteInstanceByInstanceId called");
         ResponseEntity<String> result = null;
@@ -278,6 +277,7 @@ public class CnfAdapterService {
             logger.info("request: " + requestEntity);
             result = restTemplate.exchange(endpoint, HttpMethod.DELETE, requestEntity, String.class);
             logger.info("response: " + result);
+
             return result.getBody();
         } catch (HttpClientErrorException e) {
             logger.error("Error Calling Multicloud, e");

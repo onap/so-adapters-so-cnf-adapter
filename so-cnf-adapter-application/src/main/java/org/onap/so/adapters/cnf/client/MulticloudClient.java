@@ -23,11 +23,13 @@ package org.onap.so.adapters.cnf.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.onap.so.adapters.cnf.MulticloudConfiguration;
+import org.onap.so.adapters.cnf.model.InstanceResponse;
 import org.onap.so.adapters.cnf.model.MulticloudInstanceRequest;
 import org.onap.so.adapters.cnf.model.healthcheck.K8sRbInstanceHealthCheck;
 import org.onap.so.adapters.cnf.model.healthcheck.K8sRbInstanceHealthCheckSimple;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceStatus;
+import org.onap.so.adapters.cnf.model.synchronization.SubscriptionRequest;
+import org.onap.so.adapters.cnf.model.synchronization.SubscriptionResponse;
 import org.onap.so.client.exception.BadResponseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,9 +39,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.http.HttpMethod.DELETE;
@@ -59,6 +63,78 @@ public class MulticloudClient {
         this.restTemplate = restTemplate;
         this.multicloudApiUrl = multicloudApiUrl;
         this.objectMapper = new ObjectMapper();
+    }
+
+    public List<InstanceResponse> getAllInstances() throws BadResponseException {
+        String endpoint = multicloudApiUrl.apiUrl("");
+        ResponseEntity<String> result = restTemplate.exchange(endpoint, GET, getHttpEntity(), String.class);
+        checkResponseStatusCode(result);
+        log.info("getAllInstances response status: {}", result.getStatusCode());
+        String body = result.getBody();
+        log.debug("getAllInstances response body: {}", body);
+
+        try {
+            return Arrays.asList(objectMapper.readValue(body, InstanceResponse[].class));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public SubscriptionResponse registerSubscription(String instanceId, SubscriptionRequest subscriptionRequest) throws BadResponseException {
+        String endpoint = multicloudApiUrl.apiUrl(instanceId) + "/status/subscription";
+        ResponseEntity<String> result = restTemplate.exchange(endpoint, POST, getHttpEntity(subscriptionRequest), String.class);
+        checkResponseStatusCode(result);
+        log.info("registerSubscription response status: {}", result.getStatusCode());
+        String body = result.getBody();
+        log.debug("registerSubscription response body: {}", body);
+
+        try {
+            return objectMapper.readValue(body, SubscriptionResponse.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Boolean hasSubscription(String instanceId, String subscriptionId) throws BadResponseException {
+        String endpoint = multicloudApiUrl.apiUrl(instanceId) + "/status/subscription/" + subscriptionId;
+        try {
+            ResponseEntity<String> result = restTemplate.exchange(endpoint, GET, getHttpEntity(), String.class);
+            checkResponseStatusCode(result);
+            log.info("hasSubscription response status: {}", result.getStatusCode());
+            return true;
+        } catch (HttpServerErrorException e) {
+            if (e.getMessage().contains("no documents")) {
+                log.info("hasSubscription response status: {}", 500);
+                return false;
+            } else
+                throw e;
+        }
+    }
+
+    public SubscriptionResponse getSubscription(String instanceId, String subscriptionId) throws BadResponseException {
+        String endpoint = multicloudApiUrl.apiUrl(instanceId) + "/status/subscription/" + subscriptionId;
+        try {
+            ResponseEntity<String> result = restTemplate.exchange(endpoint, GET, getHttpEntity(), String.class);
+            checkResponseStatusCode(result);
+            log.info("getSubscription response status: {}", result.getStatusCode());
+            String body = result.getBody();
+            log.debug("getSubscription response body: {}", body);
+            return objectMapper.readValue(body, SubscriptionResponse.class);
+        } catch (HttpServerErrorException e) {
+            if (e.getMessage().contains("no documents")) {
+                throw new BadResponseException("Multicloud response status error 404");
+            } else
+                throw e;
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteSubscription(String instanceId, String subscriptionId) throws BadResponseException {
+        String endpoint = multicloudApiUrl.apiUrl(instanceId) + "/status/subscription/" + subscriptionId;
+        ResponseEntity<String> result = restTemplate.exchange(endpoint, DELETE, getHttpEntity(), String.class);
+        checkResponseStatusCode(result);
+        log.info("deleteSubscription response status: {}", result.getStatusCode());
     }
 
     public String upgradeInstance(String instanceId, MulticloudInstanceRequest upgradeRequest) throws BadResponseException {

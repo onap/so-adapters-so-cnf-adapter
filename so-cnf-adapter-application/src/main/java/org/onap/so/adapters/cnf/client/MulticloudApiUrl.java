@@ -13,7 +13,11 @@ class MulticloudApiUrl {
     }
 
     String apiUrl(String instanceId) {
-        return multicloudConfiguration.getMulticloudUrl() + "/v1/instance/" + instanceId;
+        String url = multicloudConfiguration.getMulticloudUrl() + "/v1/instance";
+        if (!instanceId.isEmpty()) {
+            url += "/" + instanceId;
+        }
+        return url;
     }
 
 }
