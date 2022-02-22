@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fcb893e9_f302cbf3",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/upgrade/InstanceUpgradeService.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 6863
+      },
+      "writtenOn": "2022-02-22T08:56:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e593663_679c21ef",
+      "revId": "02b1d07da73cc7a852487e2e0b54711ef08f17e1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2b98c4f7_057449c9",
         "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/upgrade/InstanceUpgradeService.java",
         "patchSetId": 6
@@ -60,6 +78,30 @@
     },
     {
       "key": {
+        "uuid": "3b3f3913_6c2f91cc",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/upgrade/InstanceUpgradeService.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 6863
+      },
+      "writtenOn": "2022-02-22T08:56:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b98c4f7_057449c9",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 132
+      },
+      "revId": "02b1d07da73cc7a852487e2e0b54711ef08f17e1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "793cc5fd_d3c38bc1",
         "filename": "so-cnf-adapter-application/src/test/java/org/onap/so/adapters/cnf/service/upgrade/InstanceUpgradeServiceTest.java",
         "patchSetId": 6
@@ -80,6 +122,30 @@
       "revId": "02b1d07da73cc7a852487e2e0b54711ef08f17e1",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f5066f9_b087e5dd",
+        "filename": "so-cnf-adapter-application/src/test/java/org/onap/so/adapters/cnf/service/upgrade/InstanceUpgradeServiceTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 6863
+      },
+      "writtenOn": "2022-02-22T08:56:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "793cc5fd_d3c38bc1",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 98
+      },
+      "revId": "02b1d07da73cc7a852487e2e0b54711ef08f17e1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
