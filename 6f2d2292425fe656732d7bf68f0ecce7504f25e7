@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4a33c302_59b215dd",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/rest/SubscriptionEndpointService.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2022-03-03T14:18:31Z",
+      "side": 1,
+      "message": "why we can\u0027t have one fixed endpoint and to recognize the subscription for which the notification comes from base on the url param?",
+      "range": {
+        "startLine": 12,
+        "startChar": 9,
+        "endLine": 12,
+        "endChar": 42
+      },
+      "revId": "6f2d2292425fe656732d7bf68f0ecce7504f25e7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "239f3f93_ddc3a070",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/rest/SubscriptionNotifyController.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2022-03-03T14:18:31Z",
+      "side": 1,
+      "message": "shouldn\u0027t we have soe request prefix like in case of other endpoints in the adapter?",
+      "range": {
+        "startLine": 33,
+        "startChar": 17,
+        "endLine": 33,
+        "endChar": 39
+      },
+      "revId": "6f2d2292425fe656732d7bf68f0ecce7504f25e7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79797710_30506615",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/CnfAdapterService.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2022-03-03T14:18:31Z",
+      "side": 1,
+      "message": "it should be in aai-update request",
+      "range": {
+        "startLine": 111,
+        "startChar": 2,
+        "endLine": 112,
+        "endChar": 66
+      },
+      "revId": "6f2d2292425fe656732d7bf68f0ecce7504f25e7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9c3f7e8_7aad2a04",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/CnfAdapterService.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2022-03-03T14:18:31Z",
+      "side": 1,
+      "message": "it should be in aai-delete request",
+      "range": {
+        "startLine": 285,
+        "startChar": 9,
+        "endLine": 285,
+        "endChar": 66
+      },
+      "revId": "6f2d2292425fe656732d7bf68f0ecce7504f25e7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc1bce7f_f38e8356",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/synchrornization/SynchronizationService.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2022-03-03T14:18:31Z",
+      "side": 1,
+      "message": "this is bad idea rather. When we restart cnf adapter, we lose information about the created subscriptions. If we want to keep it, we need to introiduce mechanism to buiuld map after he restart of cnf adapter and then we need to generated subscription name in doifferent way - like suggested below.",
+      "range": {
+        "startLine": 20,
+        "startChar": 18,
+        "endLine": 20,
+        "endChar": 92
+      },
+      "revId": "6f2d2292425fe656732d7bf68f0ecce7504f25e7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8376933_1f476021",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/synchrornization/SynchronizationService.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2022-03-03T14:18:31Z",
+      "side": 1,
+      "message": "we need something to verify if the subscription is already present to prevent its creation if not needed.",
+      "range": {
+        "startLine": 30,
+        "startChar": 3,
+        "endLine": 30,
+        "endChar": 34
+      },
+      "revId": "6f2d2292425fe656732d7bf68f0ecce7504f25e7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e8fb75c_8aa73bb0",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/synchrornization/SynchronizationService.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2022-03-03T14:18:31Z",
+      "side": 1,
+      "message": "if cnf adapter will restart we will have to re-create cnf adapter knowledge about subscriptions. If name would be random cnf adapter will not be able to recognize that subscription is already present. Better would be tu use some pattern like \u003cinstance-id\u003e+\"cnf-adapter\"",
+      "range": {
+        "startLine": 36,
+        "startChar": 8,
+        "endLine": 36,
+        "endChar": 51
+      },
+      "revId": "6f2d2292425fe656732d7bf68f0ecce7504f25e7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
