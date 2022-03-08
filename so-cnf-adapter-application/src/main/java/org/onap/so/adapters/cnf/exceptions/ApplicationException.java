@@ -20,7 +20,6 @@
 
 package org.onap.so.adapters.cnf.exceptions;
 
-import static org.onap.so.adapters.cnf.util.CnfAdapterUtil.marshal;
 import org.onap.so.adapters.cnf.model.ErrorResponse;
 import org.springframework.http.ResponseEntity;
 

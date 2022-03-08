@@ -23,8 +23,6 @@ package org.onap.so.adapters.cnf.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.onap.aaiclient.client.aai.AAIResourcesClient;
 import org.onap.aaiclient.client.aai.AAITransactionalClient;
 import org.onap.aaiclient.client.aai.AAIVersion;
@@ -34,21 +32,18 @@ import org.onap.aaiclient.client.generated.fluentbuilders.AAIFluentTypeBuilder;
 import org.onap.aaiclient.client.generated.fluentbuilders.AAIFluentTypeBuilder.Types;
 import org.onap.aaiclient.client.generated.fluentbuilders.K8sResource;
 import org.onap.aaiclient.client.graphinventory.exceptions.BulkProcessFailed;
-import org.onap.so.adapters.cnf.model.instantiation.AaiRequest;
+import org.onap.so.adapters.cnf.model.aai.AaiRequest;
 import org.onap.so.adapters.cnf.service.aai.KubernetesResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.NotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class AaiRepository implements IAaiRepository {
     private final static Logger logger = LoggerFactory.getLogger(IAaiRepository.class);
-    private final static Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
     private final AAIResourcesClient aaiClient;
     private final ObjectMapper objectMapper;
@@ -98,7 +93,7 @@ public class AaiRepository implements IAaiRepository {
             }
         }
         if (updateK8sResource) {
-            String payload = null;
+            String payload;
             try {
                 payload = objectMapper.writeValueAsString(resource);
             } catch (JsonProcessingException e) {
@@ -185,9 +180,9 @@ public class AaiRepository implements IAaiRepository {
 
         private static final int TRANSACTION_LIMIT = 30;
 
-        public AAITransactionHelper(AAIResourcesClient aaiClient) {
+        AAITransactionHelper(AAIResourcesClient aaiClient) {
             this.aaiClient = aaiClient;
-            transactions = new ArrayList<AAITransactionalClient>();
+            transactions = new ArrayList<>();
             transactionCount = TRANSACTION_LIMIT;
         }
 
@@ -199,7 +194,7 @@ public class AaiRepository implements IAaiRepository {
             return transactions.get(transactions.size() - 1);
         }
 
-        public void execute(boolean dryRun) {
+        void execute(boolean dryRun) {
             if (transactions.size() > 0) {
                 transactions.forEach(transaction -> {
                     try {
