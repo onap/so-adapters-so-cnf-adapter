@@ -25,7 +25,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.onap.so.adapters.cnf.model.instantiation.AaiRequest;
+import org.onap.so.adapters.cnf.model.aai.AaiRequest;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceGvk;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceResourceStatus;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sStatus;

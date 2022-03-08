@@ -52,19 +52,17 @@ public class MulticloudClient {
     private static final Logger log = LoggerFactory.getLogger(MulticloudClient.class);
 
     private final RestTemplate restTemplate;
-    private final MulticloudConfiguration multicloudConfiguration;
+    private final MulticloudApiUrl multicloudApiUrl;
     private final ObjectMapper objectMapper;
 
-    public MulticloudClient(RestTemplate restTemplate, MulticloudConfiguration multicloudConfiguration) {
+    public MulticloudClient(RestTemplate restTemplate, MulticloudApiUrl multicloudApiUrl) {
         this.restTemplate = restTemplate;
-        this.multicloudConfiguration = multicloudConfiguration;
+        this.multicloudApiUrl = multicloudApiUrl;
         this.objectMapper = new ObjectMapper();
     }
 
     public String upgradeInstance(String instanceId, MulticloudInstanceRequest upgradeRequest) throws BadResponseException {
-        MulticloudApiUrl multicloudApiUrl = new MulticloudApiUrl(multicloudConfiguration);
-        multicloudApiUrl.setInstanceId(instanceId);
-        String endpoint = multicloudApiUrl.apiUrl() + "/upgrade";
+        String endpoint = multicloudApiUrl.apiUrl(instanceId) + "/upgrade";
         ResponseEntity<String> result = restTemplate.exchange(endpoint, POST, getHttpEntity(upgradeRequest), String.class);
         checkResponseStatusCode(result);
         log.info("upgradeInstance response status: {}", result.getStatusCode());
@@ -74,9 +72,7 @@ public class MulticloudClient {
     }
 
     public K8sRbInstanceStatus getInstanceStatus(String instanceId) throws BadResponseException {
-        MulticloudApiUrl multicloudApiUrl = new MulticloudApiUrl(multicloudConfiguration);
-        multicloudApiUrl.setInstanceId(instanceId);
-        String endpoint = multicloudApiUrl.apiUrl() + "/status";
+        String endpoint = multicloudApiUrl.apiUrl(instanceId) + "/status";
         ResponseEntity<String> result = restTemplate.exchange(endpoint, GET, getHttpEntity(), String.class);
         checkResponseStatusCode(result);
         log.info("getInstanceStatus response status: {}", result.getStatusCode());
@@ -91,9 +87,7 @@ public class MulticloudClient {
     }
 
     public K8sRbInstanceHealthCheckSimple startInstanceHealthCheck(String instanceId) throws BadResponseException {
-        MulticloudApiUrl multicloudApiUrl = new MulticloudApiUrl(multicloudConfiguration);
-        multicloudApiUrl.setInstanceId(instanceId);
-        String endpoint = multicloudApiUrl.apiUrl() + "/healthcheck";
+        String endpoint = multicloudApiUrl.apiUrl(instanceId) + "/healthcheck";
         ResponseEntity<String> result = restTemplate.exchange(endpoint, POST, getHttpEntity(), String.class);
         checkResponseStatusCode(result);
         log.info("startInstanceHealthCheck response status: {}", result.getStatusCode());
@@ -108,9 +102,7 @@ public class MulticloudClient {
     }
 
     public K8sRbInstanceHealthCheck getInstanceHealthCheck(String instanceId, String healthCheckInstance) throws BadResponseException {
-        MulticloudApiUrl multicloudApiUrl = new MulticloudApiUrl(multicloudConfiguration);
-        multicloudApiUrl.setInstanceId(instanceId);
-        String endpoint = multicloudApiUrl.apiUrl() + "/healthcheck/" + healthCheckInstance;
+        String endpoint = multicloudApiUrl.apiUrl(instanceId) + "/healthcheck/" + healthCheckInstance;
         ResponseEntity<String> result = restTemplate.exchange(endpoint, GET, getHttpEntity(), String.class);
         checkResponseStatusCode(result);
         log.info("getInstanceHealthCheck response status: {}", result.getStatusCode());
@@ -125,9 +117,7 @@ public class MulticloudClient {
     }
 
     public void deleteInstanceHealthCheck(String instanceId, String healthCheckInstance) throws BadResponseException {
-        MulticloudApiUrl multicloudApiUrl = new MulticloudApiUrl(multicloudConfiguration);
-        multicloudApiUrl.setInstanceId(instanceId);
-        String endpoint = multicloudApiUrl.apiUrl() + "/healthcheck/" + healthCheckInstance;
+        String endpoint = multicloudApiUrl.apiUrl(instanceId) + "/healthcheck/" + healthCheckInstance;
         ResponseEntity<String> result = restTemplate.exchange(endpoint, DELETE, getHttpEntity(), String.class);
         checkResponseStatusCode(result);
         log.info("deleteInstanceHealthCheck response status: {}", result.getStatusCode());
@@ -164,25 +154,6 @@ public class MulticloudClient {
         HttpStatus statusCode = result.getStatusCode();
         if (!statusCode.is2xxSuccessful()) {
             throw new BadResponseException("Multicloud response status error", String.valueOf(statusCode.value()));
-        }
-    }
-
-    private class MulticloudApiUrl {
-
-        private String instanceId;
-        private final MulticloudConfiguration multicloudConfiguration;
-
-        MulticloudApiUrl(MulticloudConfiguration multicloudConfiguration1) {
-            this.multicloudConfiguration = multicloudConfiguration1;
-        }
-
-        String apiUrl() {
-            String instanceUri = multicloudConfiguration.getMulticloudUrl() + "/v1/instance/";
-            return instanceId.equals("") ? instanceUri : instanceUri + instanceId;
-        }
-
-        void setInstanceId(String instanceId) {
-            this.instanceId = instanceId;
         }
     }
 }
