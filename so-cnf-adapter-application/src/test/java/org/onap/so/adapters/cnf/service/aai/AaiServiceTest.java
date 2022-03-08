@@ -6,7 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.onap.so.adapters.cnf.AaiConfiguration;
 import org.onap.so.adapters.cnf.client.MulticloudClient;
-import org.onap.so.adapters.cnf.model.instantiation.AaiRequest;
+import org.onap.so.adapters.cnf.model.aai.AaiRequest;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceResourceStatus;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceStatus;
 import org.onap.so.client.exception.BadResponseException;
