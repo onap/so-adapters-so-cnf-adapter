@@ -52,7 +52,7 @@ import org.onap.so.adapters.cnf.model.ResourceBundleEntity;
 import org.onap.so.adapters.cnf.model.Tag;
 import org.onap.so.adapters.cnf.model.aai.AaiCallbackResponse;
 import org.onap.so.adapters.cnf.model.healthcheck.HealthCheckResponse;
-import org.onap.so.adapters.cnf.model.instantiation.AaiRequest;
+import org.onap.so.adapters.cnf.model.aai.AaiRequest;
 import org.onap.so.adapters.cnf.model.statuscheck.StatusCheckResponse;
 import org.onap.so.adapters.cnf.model.upgrade.InstanceUpgradeRequest;
 import org.onap.so.adapters.cnf.service.CnfAdapterService;
