@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "913aedf2_51e0ff33",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/rest/SubscriptionNotifyController.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2022-03-08T14:27:06Z",
+      "side": 1,
+      "message": "we should be consistent, so the endpoint should be\n\n/api/cnf-adapter/v1/status-notify/instance/{instanceId}/subscription/{name}",
+      "range": {
+        "startLine": 54,
+        "startChar": 26,
+        "endLine": 54,
+        "endChar": 38
+      },
+      "revId": "e4a0bee746829de12cdb5d80468769e1f9f3eb18",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4329b1bd_f98a4f47",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/CnfAdapterService.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2022-03-08T14:27:06Z",
+      "side": 1,
+      "message": "why in here?? it should in aa-update request handling. We laos need to make sure that subscription does not exist already.",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 122,
+        "endChar": 78
+      },
+      "revId": "e4a0bee746829de12cdb5d80468769e1f9f3eb18",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13aefb80_a0bd66b9",
+        "filename": "so-cnf-adapter-application/src/main/java/org/onap/so/adapters/cnf/service/CnfAdapterService.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2022-03-08T14:27:06Z",
+      "side": 1,
+      "message": "it should be in aa-delete request handling. We also need to make sure that subscription exists here.",
+      "range": {
+        "startLine": 295,
+        "startChar": 0,
+        "endLine": 303,
+        "endChar": 78
+      },
+      "revId": "e4a0bee746829de12cdb5d80468769e1f9f3eb18",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
