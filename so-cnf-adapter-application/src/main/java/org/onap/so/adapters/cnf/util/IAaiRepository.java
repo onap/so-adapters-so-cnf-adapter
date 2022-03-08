@@ -21,7 +21,7 @@
 
 package org.onap.so.adapters.cnf.util;
 
-import org.onap.so.adapters.cnf.model.instantiation.AaiRequest;
+import org.onap.so.adapters.cnf.model.aai.AaiRequest;
 import org.onap.so.adapters.cnf.service.aai.KubernetesResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
