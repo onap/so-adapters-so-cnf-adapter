@@ -128,6 +128,7 @@ public class SynchronizationService {
         subscriptionRequest.setName(name);
         subscriptionRequest.setCallbackUrl(endpoint);
         subscriptionRequest.setMinNotifyInterval(30);
+        subscriptionRequest.setMetadata(aaiRequest);
 
         return subscriptionRequest;
     }
