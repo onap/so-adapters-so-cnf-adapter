@@ -44,6 +44,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.springframework.http.HttpMethod.DELETE;
@@ -67,14 +68,19 @@ public class MulticloudClient {
 
     public List<InstanceResponse> getAllInstances() throws BadResponseException {
         String endpoint = multicloudApiUrl.apiUrl("");
-        ResponseEntity<String> result = restTemplate.exchange(endpoint, GET, getHttpEntity(), String.class);
-        checkResponseStatusCode(result);
-        log.info("getAllInstances response status: {}", result.getStatusCode());
-        String body = result.getBody();
-        log.debug("getAllInstances response body: {}", body);
-
         try {
+            ResponseEntity<String> result = restTemplate.exchange(endpoint, GET, getHttpEntity(), String.class);
+            checkResponseStatusCode(result);
+            log.info("getAllInstances response status: {}", result.getStatusCode());
+            String body = result.getBody();
+            log.debug("getAllInstances response body: {}", body);
             return Arrays.asList(objectMapper.readValue(body, InstanceResponse[].class));
+        } catch (HttpServerErrorException e) {
+            if (e.getMessage().contains("no documents") || e.getMessage().contains("Did not find any")) {
+                log.info("getAllInstances response status: {}", 500);
+                return Collections.emptyList();
+            } else
+                throw e;
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -103,7 +109,7 @@ public class MulticloudClient {
             log.info("hasSubscription response status: {}", result.getStatusCode());
             return true;
         } catch (HttpServerErrorException e) {
-            if (e.getMessage().contains("no documents")) {
+            if (e.getMessage().contains("no documents") || e.getMessage().contains("Did not find any")) {
                 log.info("hasSubscription response status: {}", 500);
                 return false;
             } else
