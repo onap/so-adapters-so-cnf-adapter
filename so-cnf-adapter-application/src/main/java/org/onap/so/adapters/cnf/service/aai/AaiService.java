@@ -21,6 +21,7 @@
 
 package org.onap.so.adapters.cnf.service.aai;
 
+import org.onap.aaiclient.client.graphinventory.exceptions.BulkProcessFailed;
 import org.onap.so.adapters.cnf.AaiConfiguration;
 import org.onap.so.adapters.cnf.client.MulticloudClient;
 import org.onap.so.adapters.cnf.model.aai.AaiRequest;
@@ -50,7 +51,7 @@ public class AaiService {
         this.configuration = configuration;
     }
 
-    public void aaiUpdate(AaiRequest aaiRequest) throws BadResponseException {
+    public void aaiUpdate(AaiRequest aaiRequest) throws BadResponseException, BulkProcessFailed {
         List<KubernetesResource> k8sResList = parseStatus(aaiRequest);
         IAaiRepository aaiRepository = IAaiRepository.instance(configuration.isEnabled());
         k8sResList.forEach(status -> aaiRepository.update(status, aaiRequest));
@@ -58,7 +59,7 @@ public class AaiService {
         aaiRepository.commit(false);
     }
 
-    public void aaiDelete(AaiRequest aaiRequest) throws BadResponseException {
+    public void aaiDelete(AaiRequest aaiRequest) throws BulkProcessFailed {
         String instanceID = aaiRequest.getInstanceId();
         boolean enabled = configuration.isEnabled();
         if (instanceID == null || instanceID.isEmpty() || instanceID.equals("null")) {

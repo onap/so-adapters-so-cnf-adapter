@@ -22,6 +22,7 @@ package org.onap.so.adapters.cnf.rest;
 
 
 import com.google.gson.Gson;
+import org.onap.aaiclient.client.graphinventory.exceptions.BulkProcessFailed;
 import org.onap.so.adapters.cnf.model.aai.AaiRequest;
 import org.onap.so.adapters.cnf.model.synchronization.NotificationRequest;
 import org.onap.so.adapters.cnf.service.aai.AaiService;
@@ -53,7 +54,7 @@ public class SubscriptionNotifyController {
 
     @PostMapping(value = "/api/cnf-adapter/v1/instance/{instanceId}/status/notify")
     public ResponseEntity subscriptionNotifyEndpoint(@PathVariable String instanceId,
-                                                     @RequestBody NotificationRequest body) throws BadResponseException {
+                                                     @RequestBody NotificationRequest body) throws BadResponseException, BulkProcessFailed {
         String subscriptionName = synchronizationService.getSubscriptionName(instanceId);
         boolean isSubscriptionActive = synchronizationService.isSubscriptionActive(subscriptionName);
         if (isSubscriptionActive) {

@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.onap.aaiclient.client.graphinventory.exceptions.BulkProcessFailed;
 import org.onap.so.adapters.cnf.AaiConfiguration;
 import org.onap.so.adapters.cnf.client.MulticloudClient;
 import org.onap.so.adapters.cnf.model.aai.AaiRequest;
@@ -36,7 +37,7 @@ public class AaiServiceTest {
     private AaiConfiguration aaiConfiguration;
 
     @Test
-    public void shouldTestAaiUpdate() throws BadResponseException {
+    public void shouldTestAaiUpdate() throws BadResponseException, BulkProcessFailed {
         // given
         String instanceId = "instanceId";
         AaiRequest aaiRequest = mock(AaiRequest.class);
@@ -62,7 +63,7 @@ public class AaiServiceTest {
 
 
     @Test
-    public void shouldTestAaiDelete() throws BadResponseException {
+    public void shouldTestAaiDelete() throws BadResponseException, BulkProcessFailed {
         // given
         String instanceId = "instanceId";
         AaiRequest aaiRequest = mock(AaiRequest.class);

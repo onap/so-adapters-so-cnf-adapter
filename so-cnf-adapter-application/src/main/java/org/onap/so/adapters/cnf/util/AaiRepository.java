@@ -32,8 +32,10 @@ import org.onap.aaiclient.client.generated.fluentbuilders.AAIFluentTypeBuilder;
 import org.onap.aaiclient.client.generated.fluentbuilders.AAIFluentTypeBuilder.Types;
 import org.onap.aaiclient.client.generated.fluentbuilders.K8sResource;
 import org.onap.aaiclient.client.graphinventory.exceptions.BulkProcessFailed;
+import org.onap.so.adapters.cnf.exceptions.ApplicationException;
 import org.onap.so.adapters.cnf.model.aai.AaiRequest;
 import org.onap.so.adapters.cnf.service.aai.KubernetesResource;
+import org.onap.so.client.exception.BadResponseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,17 +47,15 @@ import java.util.stream.Collectors;
 public class AaiRepository implements IAaiRepository {
     private final static Logger logger = LoggerFactory.getLogger(IAaiRepository.class);
 
-    private final AAIResourcesClient aaiClient;
-    private final ObjectMapper objectMapper;
     private final AAITransactionHelper aaiTransactionHelper;
+    private final ObjectMapper objectMapper;
 
     public static IAaiRepository instance() {
         return new AaiRepository();
     }
 
     private AaiRepository() {
-        aaiClient = new AAIResourcesClient(AAIVersion.LATEST);
-        aaiTransactionHelper = new AAITransactionHelper(aaiClient);
+        aaiTransactionHelper = new AAITransactionHelper();
         this.objectMapper = new ObjectMapper();
     }
 
@@ -64,7 +64,7 @@ public class AaiRepository implements IAaiRepository {
     }
 
     @Override
-    public void commit(boolean dryrun) {
+    public void commit(boolean dryrun) throws BulkProcessFailed {
         aaiTransactionHelper.execute(dryrun);
     }
 
@@ -80,6 +80,7 @@ public class AaiRepository implements IAaiRepository {
         AAIResourceUri k8sResourceUri =
                 AAIUriFactory.createResourceUri(k8sResource.build(), aaiRequest.getCloudOwner(), aaiRequest.getCloudRegion(), aaiRequest.getTenantId(), resource.getId());
 
+        AAIResourcesClient aaiClient = aaiTransactionHelper.getAaiClient();
         var k8sResourceInstance = aaiClient.get(k8sResourceUri);
         boolean updateK8sResource = true;
         if (!k8sResourceInstance.isEmpty()) {
@@ -100,7 +101,10 @@ public class AaiRepository implements IAaiRepository {
                 throw new RuntimeException(e);
             }
             logger.debug("K8s resource URI: " + k8sResourceUri + " with payload [" + payload + "]");
-            getTransaction().create(k8sResourceUri, payload);
+            if (resource.getResourceVersion() != null)
+                getTransaction().update(k8sResourceUri, payload);
+            else
+                getTransaction().create(k8sResourceUri, payload);
         }
 
         final String genericVnfId = aaiRequest.getGenericVnfId();
@@ -147,6 +151,8 @@ public class AaiRepository implements IAaiRepository {
 
         var vfModuleUri = AAIUriFactory.createResourceUri(
                 AAIFluentTypeBuilder.network().genericVnf(genericVnfId).vfModule(vfModuleId));
+
+        AAIResourcesClient aaiClient = aaiTransactionHelper.getAaiClient();
         var instance = aaiClient.get(vfModuleUri);
 
         if (instance.hasRelationshipsTo(Types.K8S_RESOURCE) && instance.getRelationships().isPresent()) {
@@ -174,13 +180,54 @@ public class AaiRepository implements IAaiRepository {
     }
 
     static class AAITransactionHelper {
-        private List<AAITransactionalClient> transactions;
         private final AAIResourcesClient aaiClient;
+        private final AAITransactionStore createStore;
+        private final AAITransactionStore updateStore;
+        private final AAITransactionStore deleteStore;
+
+        AAITransactionHelper() {
+            this.aaiClient = new AAIResourcesClient(AAIVersion.LATEST);
+            this.createStore = new AAITransactionStore(this.aaiClient, "Create");
+            this.updateStore = new AAITransactionStore(this.aaiClient, "Update");
+            this.deleteStore = new AAITransactionStore(this.aaiClient, "Delete");
+        }
+
+        AAIResourcesClient getAaiClient() {
+            return this.aaiClient;
+        }
+
+        void execute(boolean dryRun) throws BulkProcessFailed {
+            this.createStore.execute(dryRun);
+            this.updateStore.execute(dryRun);
+            this.deleteStore.execute(dryRun);
+        }
+
+        void create(AAIResourceUri uri, String payload) {
+            createStore.create(uri, payload);
+        }
+
+        void update(AAIResourceUri uri, String payload) {
+            updateStore.create(uri, payload);
+        }
+
+        void connect(AAIResourceUri uriA, AAIResourceUri uriB) {
+            createStore.connect(uriA, uriB);
+        }
+
+        void delete(AAIResourceUri uri) {
+            deleteStore.delete(uri);
+        }
+    }
+
+    static class AAITransactionStore {
+        private AAIResourcesClient aaiClient;
+        private List<AAITransactionalClient> transactions;
         private int transactionCount;
-
         private static final int TRANSACTION_LIMIT = 30;
+        private final String label;
 
-        AAITransactionHelper(AAIResourcesClient aaiClient) {
+        public AAITransactionStore(AAIResourcesClient aaiClient, String label) {
+            this.label = label;
             this.aaiClient = aaiClient;
             transactions = new ArrayList<>();
             transactionCount = TRANSACTION_LIMIT;
@@ -194,18 +241,14 @@ public class AaiRepository implements IAaiRepository {
             return transactions.get(transactions.size() - 1);
         }
 
-        void execute(boolean dryRun) {
+        void execute(boolean dryRun) throws BulkProcessFailed {
             if (transactions.size() > 0) {
-                transactions.forEach(transaction -> {
-                    try {
-                        transaction.execute(dryRun);
-                    } catch (BulkProcessFailed e) {
-                        throw new RuntimeException("Failed to execute transaction", e);
-                    }
-                });
+                for (AAITransactionalClient transaction : transactions) {
+                    transaction.execute(dryRun);
+                }
                 transactions.clear();
             } else
-                logger.info("Nothing to commit in AAI");
+                logger.info("Nothing to commit in AAI for " + label + " transactions");
         }
 
         void create(AAIResourceUri uri, String payload) {

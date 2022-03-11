@@ -21,6 +21,7 @@
 
 package org.onap.so.adapters.cnf.util;
 
+import org.onap.aaiclient.client.graphinventory.exceptions.BulkProcessFailed;
 import org.onap.so.adapters.cnf.model.aai.AaiRequest;
 import org.onap.so.adapters.cnf.service.aai.KubernetesResource;
 import org.slf4j.Logger;
@@ -42,7 +43,7 @@ public interface IAaiRepository {
 
     void delete(AaiRequest request, List<KubernetesResource> excludedList);
 
-    void commit(boolean dryRun) throws RuntimeException;
+    void commit(boolean dryRun) throws RuntimeException, BulkProcessFailed;
 
     static class AaiRepositoryDummy implements IAaiRepository {
         private static final Logger logger = LoggerFactory.getLogger(IAaiRepository.class);
