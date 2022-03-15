@@ -99,9 +99,8 @@ public class SynchronizationService {
         logger.debug("createSubscriptionIfNotExists- END");
     }
 
-    public void deleteSubscriptionIfExists(AaiRequest aaiRequest) throws BadResponseException {
+    public void deleteSubscriptionIfExists(String instanceId) throws BadResponseException {
         logger.debug("deleteSubscriptionIfExists - START");
-        String instanceId = aaiRequest.getInstanceId();
         String subscriptionName = getSubscriptionName(instanceId);
 
         if (isSubscriptionActive(subscriptionName)) {

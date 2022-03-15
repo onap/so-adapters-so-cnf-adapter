@@ -52,6 +52,7 @@ import org.onap.so.adapters.cnf.service.CnfAdapterService;
 import org.onap.so.adapters.cnf.service.aai.AaiService;
 import org.onap.so.adapters.cnf.service.healthcheck.HealthCheckService;
 import org.onap.so.adapters.cnf.service.statuscheck.SimpleStatusCheckService;
+import org.onap.so.adapters.cnf.service.synchrornization.SynchronizationService;
 import org.onap.so.adapters.cnf.service.upgrade.InstanceUpgradeService;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -67,6 +68,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.doCallRealMethod;
 
 
 @SpringBootTest
@@ -78,6 +80,9 @@ public class CnfAdapterRestTest {
 
     @Mock
     CnfAdapterService cnfAdapterService;
+
+    @Mock
+    SynchronizationService synchService;
 
     @Mock
     InstanceUpgradeService instanceUpgradeService;
@@ -149,7 +154,9 @@ public class CnfAdapterRestTest {
         String instanceId = "123";
         ResponseEntity<String> response = new ResponseEntity<String>(HttpStatus.OK);
         CnfAdapterService cnfAdapterService = Mockito.mock(CnfAdapterService.class);
+        SynchronizationService synchService = Mockito.mock(SynchronizationService.class);
         Mockito.when(cnfAdapterService.deleteInstanceByInstanceId(instanceId)).thenReturn(String.valueOf(response));
+        doCallRealMethod().when(synchService).deleteSubscriptionIfExists(instanceId);
         cnfAdapterRest.deleteInstanceByInstanceId(instanceId);
         Assert.assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
