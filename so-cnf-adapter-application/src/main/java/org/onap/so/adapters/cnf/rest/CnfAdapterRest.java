@@ -183,7 +183,7 @@ public class CnfAdapterRest {
             logger.info("Processing aai delete");
             AaiCallbackResponse callbackResponse = new AaiCallbackResponse();
             try {
-                synchronizationService.deleteSubscriptionIfExists(aaiRequest);
+                synchronizationService.deleteSubscriptionIfExists(aaiRequest.getInstanceId());
                 aaiService.aaiDelete(aaiRequest);
                 callbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.COMPLETED);
             } catch (Exception e) {
@@ -306,6 +306,7 @@ public class CnfAdapterRest {
             logger.warn("Undefined instance ID delete attempt. Skipping delete");
             return "";
         }
+        synchronizationService.deleteSubscriptionIfExists(instanceID);
         return cnfAdapterService.deleteInstanceByInstanceId(instanceID);
 
     }
