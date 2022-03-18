@@ -89,13 +89,15 @@ public class AaiResponseParser {
 
     private List<String> parseLabels(Map<String, String> labels) {
         List<String> result = new ArrayList<>();
-        labels.entrySet().stream()
-                .filter(i -> i.getKey().equals(INSTANCE_ID))
-                .findFirst()
-                .ifPresent(i -> addLabelEntry(i, result));
-        labels.entrySet().stream()
-                .filter(i -> !i.getKey().equals(INSTANCE_ID))
-                .forEach(i -> addLabelEntry(i, result));
+        if (labels != null) {
+            labels.entrySet().stream()
+                    .filter(i -> i.getKey().equals(INSTANCE_ID))
+                    .findFirst()
+                    .ifPresent(i -> addLabelEntry(i, result));
+            labels.entrySet().stream()
+                    .filter(i -> !i.getKey().equals(INSTANCE_ID))
+                    .forEach(i -> addLabelEntry(i, result));
+        }
         return result;
     }
 
