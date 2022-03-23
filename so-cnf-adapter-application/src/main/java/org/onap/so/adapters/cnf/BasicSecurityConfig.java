@@ -17,8 +17,8 @@ import java.util.List;
         prefix = "spring.security"
 )
 public class BasicSecurityConfig {
-    private List<UserCredentials> credentials = new ArrayList();
-    private final List<String> roles = new ArrayList();
+    private List<UserCredentials> credentials = new ArrayList<UserCredentials>();
+    private final List<String> roles = new ArrayList<String>();
 
     public BasicSecurityConfig() {
     }
