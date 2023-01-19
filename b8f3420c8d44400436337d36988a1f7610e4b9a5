@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "16fe7e76_5874f319",
+        "filename": "so-cnf-adapter-application/src/test/java/org/onap/so/adapters/cnf/service/synchrornization/SubscriptionsRecoveryProviderConfiguration.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 3237
+      },
+      "writtenOn": "2023-01-19T12:45:32Z",
+      "side": 1,
+      "message": "not adding new bean but changing the way to override SubscriptionsRecoveryProvider  in test",
+      "parentUuid": "74f357c8_5a881acc",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 14
+      },
+      "revId": "b8f3420c8d44400436337d36988a1f7610e4b9a5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6a621484_7822f232",
         "filename": "so-cnf-adapter-application/src/test/resources/application.properties",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2023-01-19T12:19:41Z",
       "side": 1,
       "message": "Can you please share why we are using this?",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 49
+      },
+      "revId": "b8f3420c8d44400436337d36988a1f7610e4b9a5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff198a93_0bcf575e",
+        "filename": "so-cnf-adapter-application/src/test/resources/application.properties",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 3237
+      },
+      "writtenOn": "2023-01-19T12:45:32Z",
+      "side": 1,
+      "message": "because in order to override a bean with same name, it would require this flag",
+      "parentUuid": "6a621484_7822f232",
       "range": {
         "startLine": 5,
         "startChar": 0,
