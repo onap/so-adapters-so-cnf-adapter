@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2f784055_1fc3d862",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 7735
+      },
+      "writtenOn": "2023-01-19T12:19:41Z",
+      "side": 0,
+      "message": "Can you please share why we are removing this versions?",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 57
+      },
+      "revId": "debe3ec76ad6dc7775ba34f64ed010fe9d83abe8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
