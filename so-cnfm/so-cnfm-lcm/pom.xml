@@ -13,5 +13,6 @@
     <name>SO CNFM LCM Manager</name>
     <modules>
         <module>so-cnfm-lcm-api</module>
+        <module>so-cnfm-lcm-database-service</module>
     </modules>
 </project>
