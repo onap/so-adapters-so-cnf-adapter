@@ -10,7 +10,7 @@
     <version>1.9.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <artifactId>docker</artifactId>
-    <name>SO CNF Adapter Docker Packaging</name>
+    <name>Docker Packaging</name>
 
     <properties>
         <cnf-adapter-project-version>${project.version}</cnf-adapter-project-version>
