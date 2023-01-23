@@ -34,11 +34,6 @@ hibernate:
    dialect: org.hibernate.dialect.H2Dialect
    hbm2ddl:
       auto: create
-aai:
-   version: v19
-   endpoint: http://localhost:${wiremock.server.port}
-sdc:
-   endpoint: http://localhost:${wiremock.server.port}
 logging:
    level:
       org.reflections.Reflections: ERROR
@@ -46,7 +41,3 @@ cnfm:
    kube-configs-dir: ${java.io.tmpdir}/kube-configs
    csar:
       dir: ${java.io.tmpdir}
-kubernetes:
-   client:
-      http-request:
-         timeoutSeconds: 1
