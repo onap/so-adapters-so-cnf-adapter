@@ -16,5 +16,6 @@
         <module>so-cnfm-lcm-database-service</module>
         <module>so-cnfm-lcm-bpmn-flows</module>
         <module>so-cnfm-lcm-service</module>
+        <module>so-cnfm-lcm-application</module>
     </modules>
 </project>

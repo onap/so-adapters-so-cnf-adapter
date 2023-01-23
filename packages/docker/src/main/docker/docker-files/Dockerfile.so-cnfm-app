@@ -1,0 +1,50 @@
+FROM onap/so/base-image:1.0
+
+ARG http_proxy
+ENV HTTP_PROXY=$http_proxy
+ENV http_proxy=$HTTP_PROXY
+ARG https_proxy
+ENV HTTPS_PROXY=$https_proxy
+ENV https_proxy=$HTTPS_PROXY
+ARG KUBECTL_VERSION=v1.21.1
+ARG HELM_VERSION=v3.5.2
+
+USER root
+RUN mkdir -p /app/config
+RUN mkdir -p /app/certificates
+RUN mkdir -p /app/logs
+RUN mkdir -p /app/ca-certificates
+RUN mkdir -p /app/csar
+RUN mkdir -p /app/kube-configs
+
+COPY maven/app.jar /app
+COPY configs/logging/logback-spring.xml /app
+COPY scripts/start-app.sh /app
+COPY scripts/wait-for.sh /app
+COPY ca-certificates/onap-ca.crt /app/ca-certificates/onap-ca.crt
+RUN chown -R so:so /app
+
+
+ENV TAR_FILE="helm-${HELM_VERSION}-linux-amd64.tar.gz"
+
+RUN wget https://get.helm.sh/${TAR_FILE} && \
+    tar xvf ${TAR_FILE} && \
+    chmod +x linux-amd64/helm && \
+    mv linux-amd64/helm /usr/local/bin && \
+    rm -rf linux-amd64 && \
+    rm ${TAR_FILE}
+
+RUN wget https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
+    chmod +x kubectl && \
+    mv kubectl /usr/local/bin/kubectl
+
+USER so
+
+# Springboot configuration (required)
+VOLUME /app/config
+
+#  Root certificates (optional)
+VOLUME /app/ca-certificates
+
+WORKDIR /app
+ENTRYPOINT ["/app/start-app.sh"]

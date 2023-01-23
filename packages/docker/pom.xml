@@ -99,7 +99,30 @@
                                 </assembly>
                             </build>
                         </image>
-
+                        <image>
+                            <name>${docker.image.prefix}/so-cnfm-as-lcm</name>
+                            <build>
+                                <cleanup>try</cleanup>
+                                <dockerFile>docker-files/Dockerfile.so-cnfm-app</dockerFile>
+                                <tags>
+                                    <tag>${project.version}</tag>
+                                    <tag>${project.version}-${maven.build.timestamp}</tag>
+                                    <tag>${project.docker.latesttag.version}</tag>
+                                </tags>
+                                <assembly>
+                                    <inline>
+                                        <dependencySets>
+                                            <dependencySet>
+                                                <includes>
+                                                    <include>org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-application</include>
+                                                </includes>
+                                                <outputFileNameMapping>app.jar</outputFileNameMapping>
+                                            </dependencySet>
+                                        </dependencySets>
+                                    </inline>
+                                </assembly>
+                            </build>
+                        </image>
                     </images>
                 </configuration>
 
@@ -131,7 +154,7 @@
                             <goal>push</goal>
                         </goals>
                         <configuration>
-                            <image>${docker.image.prefix}/so-cnf-adapter</image>
+                            <image>${docker.image.prefix}/so-cnf-adapter,${docker.image.prefix}/so-cnfm-as-lcm</image>
                         </configuration>
                     </execution>
                 </executions>
@@ -151,6 +174,11 @@
         <dependency>
             <groupId>org.onap.so.adapters.so-cnf-adapter</groupId>
             <artifactId>so-cnf-adapter-application</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm</groupId>
+            <artifactId>so-cnfm-lcm-application</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
