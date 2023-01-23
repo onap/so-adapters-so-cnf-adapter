@@ -17,43 +17,28 @@
  * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
-package org.onap.so.cnfm.lcm.database.beans.utils;
+package org.onap.so.cnfm.lcm.bpmn.flows;
 
-import java.util.List;
-import java.util.Objects;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import org.onap.so.cnfm.lcm.bpmn.flows.utils.LocalDateTimeTypeAdapter;
+import org.onap.so.cnfm.lcm.bpmn.flows.utils.OffsetDateTimeTypeAdapter;
+import org.springframework.stereotype.Component;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * @author Waqas Ikram (waqas.ikram@est.tech)
  *
  */
-public class Utils {
+@Component
+public class GsonProvider {
 
-    private Utils() {}
+    private final OffsetDateTimeTypeAdapter offsetDateTimeTypeAdapter = new OffsetDateTimeTypeAdapter();
 
-    public static final String toIndentedString(final Object object) {
-        return object == null ? "null" : object.toString().replace("\n", "\n    ");
-    }
-
-
-    public static boolean isEquals(final List<?> first, final List<?> second) {
-        if (first == null) {
-            return second == null;
-        }
-
-        if (second == null) {
-            return false;
-        }
-
-        if (first.size() != second.size()) {
-            return false;
-        }
-
-        for (int index = 0; index < first.size(); index++) {
-            if (!Objects.equals(first.get(index), second.get(index))) {
-                return false;
-            }
-        }
-        return true;
+    public Gson getGson() {
+        return new GsonBuilder().registerTypeAdapter(OffsetDateTime.class, offsetDateTimeTypeAdapter)
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter()).create();
     }
 
 

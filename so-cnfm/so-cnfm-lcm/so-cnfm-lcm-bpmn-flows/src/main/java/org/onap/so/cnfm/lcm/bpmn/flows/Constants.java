@@ -17,44 +17,29 @@
  * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
-package org.onap.so.cnfm.lcm.database.beans.utils;
-
-import java.util.List;
-import java.util.Objects;
+package org.onap.so.cnfm.lcm.bpmn.flows;
 
 /**
  * @author Waqas Ikram (waqas.ikram@est.tech)
  *
  */
-public class Utils {
+public class Constants {
 
-    private Utils() {}
+    public static final String TENANT_ID = "as-workflow-engine-tenant";
+    public static final String AS_WORKFLOW_ENGINE = "AS-WORKFLOW-ENGINE";
+    public static final String CREATE_AS_WORKFLOW_NAME = "CreateAs";
+    public static final String INSTANTIATE_AS_WORKFLOW_NAME = "InstantiateAs";
+    public static final String TERMINATE_AS_WORKFLOW_NAME = "TerminateAs";
+    public static final String DELETE_AS_WORKFLOW_NAME = "DeleteAs";
 
-    public static final String toIndentedString(final Object object) {
-        return object == null ? "null" : object.toString().replace("\n", "\n    ");
-    }
+    public static final String KIND_STATEFUL_SET = "StatefulSet";
+    public static final String KIND_DAEMON_SET = "DaemonSet";
+    public static final String KIND_REPLICA_SET = "ReplicaSet";
+    public static final String KIND_DEPLOYMENT = "Deployment";
+    public static final String KIND_SERVICE = "Service";
+    public static final String KIND_POD = "Pod";
+    public static final String KIND_JOB = "Job";
 
-
-    public static boolean isEquals(final List<?> first, final List<?> second) {
-        if (first == null) {
-            return second == null;
-        }
-
-        if (second == null) {
-            return false;
-        }
-
-        if (first.size() != second.size()) {
-            return false;
-        }
-
-        for (int index = 0; index < first.size(); index++) {
-            if (!Objects.equals(first.get(index), second.get(index))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
+    private Constants() {}
 
 }

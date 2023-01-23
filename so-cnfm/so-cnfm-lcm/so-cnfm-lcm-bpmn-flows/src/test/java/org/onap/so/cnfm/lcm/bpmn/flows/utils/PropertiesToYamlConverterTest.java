@@ -17,44 +17,29 @@
  * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
-package org.onap.so.cnfm.lcm.database.beans.utils;
+package org.onap.so.cnfm.lcm.bpmn.flows.utils;
 
-import java.util.List;
-import java.util.Objects;
+import static org.junit.Assert.assertEquals;
+import java.util.Map;
+import org.junit.Test;
 
 /**
+ *
  * @author Waqas Ikram (waqas.ikram@est.tech)
  *
  */
-public class Utils {
+public class PropertiesToYamlConverterTest {
 
-    private Utils() {}
+    @Test
+    public void testGetValuesYamlFileContent() {
+        final String expected = "primary:\n" + "  service:\n" + "    nodePorts:\n" + "      mysql: '1234'\n"
+                + "    ports:\n" + "      mysql: dummy\n";
+        final PropertiesToYamlConverter objUnderTest = new PropertiesToYamlConverter();
+        final Map<String, String> lifeCycleParams =
+                Map.of("primary.service.ports.mysql", "dummy", "primary.service.nodePorts.mysql", "1234");
+        final String actual = objUnderTest.getValuesYamlFileContent(lifeCycleParams);
 
-    public static final String toIndentedString(final Object object) {
-        return object == null ? "null" : object.toString().replace("\n", "\n    ");
+        assertEquals(expected, actual);
+
     }
-
-
-    public static boolean isEquals(final List<?> first, final List<?> second) {
-        if (first == null) {
-            return second == null;
-        }
-
-        if (second == null) {
-            return false;
-        }
-
-        if (first.size() != second.size()) {
-            return false;
-        }
-
-        for (int index = 0; index < first.size(); index++) {
-            if (!Objects.equals(first.get(index), second.get(index))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-
 }

@@ -55,9 +55,6 @@ public class CnfmDatabaseConfiguration {
     private static final String PERSISTENCE_UNIT = "cnfm";
     private static final String CNFM_DATA_SOURCE_QUALIFIER = "cnfmDataSource";
 
-    @Autowired(required = false)
-    private MBeanExporter mBeanExporter;
-
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource.hikari.cnfm")
     public HikariConfig cnfmDbConfig() {
@@ -68,7 +65,7 @@ public class CnfmDatabaseConfiguration {
     @Primary
     @FlywayDataSource
     @Bean(name = CNFM_DATA_SOURCE_QUALIFIER)
-    public DataSource dataSource() {
+    public DataSource dataSource(@Autowired(required = false) final MBeanExporter mBeanExporter) {
         if (mBeanExporter != null) {
             mBeanExporter.addExcludedBean(CNFM_DATA_SOURCE_QUALIFIER);
         }

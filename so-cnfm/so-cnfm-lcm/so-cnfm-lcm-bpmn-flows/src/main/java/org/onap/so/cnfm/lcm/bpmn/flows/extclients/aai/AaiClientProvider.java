@@ -17,44 +17,18 @@
  * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
-package org.onap.so.cnfm.lcm.database.beans.utils;
 
-import java.util.List;
-import java.util.Objects;
+package org.onap.so.cnfm.lcm.bpmn.flows.extclients.aai;
 
-/**
- * @author Waqas Ikram (waqas.ikram@est.tech)
- *
- */
-public class Utils {
+import org.onap.aaiclient.client.aai.AAIResourcesClient;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-    private Utils() {}
+@Configuration
+public class AaiClientProvider {
 
-    public static final String toIndentedString(final Object object) {
-        return object == null ? "null" : object.toString().replace("\n", "\n    ");
+    @Bean
+    public AAIResourcesClient getAaiClient() {
+        return new AAIResourcesClient();
     }
-
-
-    public static boolean isEquals(final List<?> first, final List<?> second) {
-        if (first == null) {
-            return second == null;
-        }
-
-        if (second == null) {
-            return false;
-        }
-
-        if (first.size() != second.size()) {
-            return false;
-        }
-
-        for (int index = 0; index < first.size(); index++) {
-            if (!Objects.equals(first.get(index), second.get(index))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-
 }

@@ -54,7 +54,7 @@ public class AsLifecycleParam {
     private String lifecycleParam;
 
     public AsLifecycleParam() {
-
+        // default constructor
     }
 
     public void setAsLifecycleParamId(final Integer asLifecycleParamId) {

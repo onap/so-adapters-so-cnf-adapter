@@ -1,0 +1,25 @@
+{
+    "deploymentItems": [
+        {
+            "deploymentItemsId": "1",
+            "lifecycleParameterKeyValues": {
+                ".Values.primary.service.ports.mysql": "dummy",
+                ".Values.primary.service.nodePorts.mysql": "dummy"
+            }
+        },
+        {
+            "deploymentItemsId": "2",
+            "lifecycleParameterKeyValues": {
+
+            }
+        }
+    ],
+    "asdExtCpdInputParams": {
+        "extCpdId": null,
+        "loadbalanceIP": null,
+        "externalIPs": [],
+        "nadNames": [],
+        "nadNamespace": null
+    },
+    "additionalParams": {}
+}

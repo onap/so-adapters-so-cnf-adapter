@@ -17,44 +17,21 @@
  * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
-package org.onap.so.cnfm.lcm.database.beans.utils;
-
-import java.util.List;
-import java.util.Objects;
+package org.onap.so.cnfm.lcm.bpmn.flows.extclients.sdc;
 
 /**
+ *
  * @author Waqas Ikram (waqas.ikram@est.tech)
  *
  */
-public class Utils {
+public class SdcCsarPropertiesConstants {
+    public static final String DEPLOYMENT_ITEMS_PARAM_NAME = "deployment_items";
+    public static final String APPLICATION_VERSION_PARAM_NAME = "application_version";
+    public static final String APPLICATION_NAME_PARAM_NAME = "application_name";
+    public static final String PROVIDER_PARAM_NAME = "provider";
+    public static final String DESCRIPTOR_INVARIANT_ID_PARAM_NAME = "descriptor_invariant_id";
+    public static final String DESCRIPTOR_ID_PARAM_NAME = "descriptor_id";
 
-    private Utils() {}
-
-    public static final String toIndentedString(final Object object) {
-        return object == null ? "null" : object.toString().replace("\n", "\n    ");
-    }
-
-
-    public static boolean isEquals(final List<?> first, final List<?> second) {
-        if (first == null) {
-            return second == null;
-        }
-
-        if (second == null) {
-            return false;
-        }
-
-        if (first.size() != second.size()) {
-            return false;
-        }
-
-        for (int index = 0; index < first.size(); index++) {
-            if (!Objects.equals(first.get(index), second.get(index))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
+    private SdcCsarPropertiesConstants() {}
 
 }

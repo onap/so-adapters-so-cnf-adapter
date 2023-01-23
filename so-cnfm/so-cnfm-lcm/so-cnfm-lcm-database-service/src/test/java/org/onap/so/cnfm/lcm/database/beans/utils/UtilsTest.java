@@ -50,6 +50,11 @@ public class UtilsTest {
     public void testNullListAndEmptyList_notEqual() {
         assertFalse(Utils.isEquals(null, Collections.emptyList()));
     }
+    
+    @Test
+    public void testEmptyListAndNullList_notEqual() {
+        assertFalse(Utils.isEquals(Collections.emptyList(), null));
+    }
 
     @Test
     public void testTwoNotEmptyListsContainSameObjects_equal() {

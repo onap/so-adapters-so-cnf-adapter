@@ -17,44 +17,26 @@
  * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
-package org.onap.so.cnfm.lcm.database.beans.utils;
+package org.onap.so.cnfm.lcm.bpmn.flows.exceptions;
 
-import java.util.List;
-import java.util.Objects;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
+ *
  * @author Waqas Ikram (waqas.ikram@est.tech)
  *
  */
-public class Utils {
+@ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
+public class SdcPackageRequestFailureException extends RuntimeException {
 
-    private Utils() {}
+    private static final long serialVersionUID = 5816306976965772635L;
 
-    public static final String toIndentedString(final Object object) {
-        return object == null ? "null" : object.toString().replace("\n", "\n    ");
+    public SdcPackageRequestFailureException(final String message) {
+        super(message);
     }
 
-
-    public static boolean isEquals(final List<?> first, final List<?> second) {
-        if (first == null) {
-            return second == null;
-        }
-
-        if (second == null) {
-            return false;
-        }
-
-        if (first.size() != second.size()) {
-            return false;
-        }
-
-        for (int index = 0; index < first.size(); index++) {
-            if (!Objects.equals(first.get(index), second.get(index))) {
-                return false;
-            }
-        }
-        return true;
+    public SdcPackageRequestFailureException(final String message, final Throwable cause) {
+        super(message, cause);
     }
-
-
 }
