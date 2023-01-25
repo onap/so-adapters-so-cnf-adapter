@@ -17,27 +17,23 @@
  * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
-package org.onap.so.cnfm.lcm.app;
+package org.onap.so.cnfm.lcm.bpmn.flows.service;
 
-import static org.slf4j.LoggerFactory.getLogger;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.AnnotationBeanNameGenerator;
-import org.springframework.util.ClassUtils;
+import java.nio.file.Path;
+import org.onap.so.cnfm.lcm.bpmn.flows.exceptions.KubeConfigFileNotFoundException;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
+ *
  * @author Waqas Ikram (waqas.ikram@est.tech)
  *
  */
-public class DefaultToShortClassNameBeanNameGenerator extends AnnotationBeanNameGenerator {
-    private static final Logger logger = getLogger(DefaultToShortClassNameBeanNameGenerator.class);
+public interface KubConfigProvider {
 
-    @Override
-    protected String buildDefaultBeanName(final BeanDefinition definition) {
-        if (definition.getBeanClassName() != null) {
-            return ClassUtils.getShortName(definition.getBeanClassName());
-        }
-        logger.warn("Bean class name is not specified...");
-        return null;
-    }
+    Path getKubeConfigFile(final String cloudOwner, final String cloudRegion, final String tenantId)
+            throws KubeConfigFileNotFoundException;
+
+    void addKubeConfigFile(final MultipartFile file, final String cloudOwner, final String cloudRegion,
+            final String tenantId);
+
 }

@@ -17,27 +17,23 @@
  * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
-package org.onap.so.cnfm.lcm.app;
-
-import static org.slf4j.LoggerFactory.getLogger;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.AnnotationBeanNameGenerator;
-import org.springframework.util.ClassUtils;
+package org.onap.so.cnfm.lcm.bpmn.flows.exceptions;
 
 /**
+ *
  * @author Waqas Ikram (waqas.ikram@est.tech)
  *
  */
-public class DefaultToShortClassNameBeanNameGenerator extends AnnotationBeanNameGenerator {
-    private static final Logger logger = getLogger(DefaultToShortClassNameBeanNameGenerator.class);
+public class KubeConfigFileNotFoundException extends Exception {
 
-    @Override
-    protected String buildDefaultBeanName(final BeanDefinition definition) {
-        if (definition.getBeanClassName() != null) {
-            return ClassUtils.getShortName(definition.getBeanClassName());
-        }
-        logger.warn("Bean class name is not specified...");
-        return null;
+    private static final long serialVersionUID = -7347276762841623563L;
+
+    public KubeConfigFileNotFoundException(final String message) {
+        super(message);
     }
+
+    public KubeConfigFileNotFoundException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
+
 }

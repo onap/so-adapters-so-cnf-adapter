@@ -39,6 +39,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.onap.so.cnfm.lcm.bpmn.flows.GsonProvider;
@@ -61,7 +62,6 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.google.common.collect.ImmutableSet;
 import com.google.gson.Gson;
 
 /**
@@ -73,8 +73,7 @@ public class JobExecutorService {
 
     private static final Logger logger = getLogger(JobExecutorService.class);
 
-    private static final ImmutableSet<JobStatusEnum> JOB_FINISHED_STATES =
-            ImmutableSet.of(FINISHED, ERROR, FINISHED_WITH_ERROR);
+    private static final Set<JobStatusEnum> JOB_FINISHED_STATES = Set.of(FINISHED, ERROR, FINISHED_WITH_ERROR);
 
     private static final int SLEEP_TIME_IN_SECONDS = 5;
 
@@ -103,7 +102,7 @@ public class JobExecutorService {
                 .status(JobStatusEnum.STARTING);
         databaseServiceProvider.addJob(newJob);
 
-        logger.info("New job created in database :\n{}", newJob);
+        logger.info("New job created in database for CreateAs:\n{}", newJob);
 
         workflowExecutorService.executeWorkflow(newJob.getJobId(), CREATE_AS_WORKFLOW_NAME,
                 getVariables(newJob.getJobId(), createAsRequest));
@@ -130,8 +129,8 @@ public class JobExecutorService {
                 throw new AsRequestProcessingException(message, errorDetails);
             }
 
-            final String message = "Received unexpected Job Status: " + finalJobStatus
-                    + " Failed to Create AS for request: \n" + createAsRequest;
+            final String message = "Create AS request failed. Received unexpected Job Status: " + finalJobStatus
+                    + " Create As request: \n" + createAsRequest;
             logger.error(message);
             throw new AsRequestProcessingException(message);
         }
@@ -151,7 +150,7 @@ public class JobExecutorService {
         final Job newJob = new Job().startTime(LocalDateTime.now()).jobType("AS").jobAction(JobAction.INSTANTIATE)
                 .resourceId(asInstanceId).status(JobStatusEnum.STARTING);
         databaseServiceProvider.addJob(newJob);
-        logger.info("New job created in database :\n{}", newJob);
+        logger.info("New job created in database for InstantiateAs :\n{}", newJob);
 
         final LocalDateTime currentDateTime = LocalDateTime.now();
         final AsLcmOpOcc newAsLcmOpOcc = new AsLcmOpOcc().id(asInstanceId).operation(AsLcmOpType.INSTANTIATE)
@@ -164,8 +163,7 @@ public class JobExecutorService {
         workflowExecutorService.executeWorkflow(newJob.getJobId(), INSTANTIATE_AS_WORKFLOW_NAME,
                 getVariables(asInstanceId, newJob.getJobId(), newAsLcmOpOcc.getId(), instantiateAsRequest));
 
-        final ImmutableSet<JobStatusEnum> jobFinishedStates =
-                ImmutableSet.of(FINISHED, ERROR, FINISHED_WITH_ERROR, IN_PROGRESS);
+        final Set<JobStatusEnum> jobFinishedStates = Set.of(FINISHED, ERROR, FINISHED_WITH_ERROR, IN_PROGRESS);
         final ImmutablePair<String, JobStatusEnum> immutablePair =
                 waitForJobToFinish(newJob.getJobId(), jobFinishedStates);
 
@@ -181,8 +179,8 @@ public class JobExecutorService {
             return newAsLcmOpOcc.getId();
         }
 
-        final String message = "Received unexpected Job Status: " + finalJobStatus
-                + " Failed to instantiate AS for request: \n" + instantiateAsRequest;
+        final String message = "Instantiate AS request failed. Received unexpected Job Status: " + finalJobStatus
+                + " Instantiate AS request: \n" + instantiateAsRequest;
         logger.error(message);
         throw new AsRequestProcessingException(message);
     }
@@ -193,7 +191,7 @@ public class JobExecutorService {
         final Job newJob = new Job().startTime(LocalDateTime.now()).jobType("AS").jobAction(JobAction.TERMINATE)
                 .resourceId(asInstanceId).status(JobStatusEnum.STARTING);
         databaseServiceProvider.addJob(newJob);
-        logger.info("New job created in database :\n{}", newJob);
+        logger.info("New job created in database for TerminateAs :\n{}", newJob);
 
         final LocalDateTime currentDateTime = LocalDateTime.now();
         final AsLcmOpOcc newAsLcmOpOcc = new AsLcmOpOcc().id(asInstanceId).operation(AsLcmOpType.TERMINATE)
@@ -206,8 +204,7 @@ public class JobExecutorService {
         workflowExecutorService.executeWorkflow(newJob.getJobId(), TERMINATE_AS_WORKFLOW_NAME,
                 getVariables(asInstanceId, newJob.getJobId(), newAsLcmOpOcc.getId(), terminateAsRequest));
 
-        final ImmutableSet<JobStatusEnum> jobFinishedStates =
-                ImmutableSet.of(FINISHED, ERROR, FINISHED_WITH_ERROR, IN_PROGRESS);
+        final Set<JobStatusEnum> jobFinishedStates = Set.of(FINISHED, ERROR, FINISHED_WITH_ERROR, IN_PROGRESS);
         final ImmutablePair<String, JobStatusEnum> immutablePair =
                 waitForJobToFinish(newJob.getJobId(), jobFinishedStates);
 
@@ -225,8 +222,8 @@ public class JobExecutorService {
             return newAsLcmOpOcc.getId();
         }
 
-        final String message = "Received unexpected Job Status: " + finalJobStatus + " Failed to Terminate AS with id: "
-                + asInstanceId + " for request: \n" + terminateAsRequest;
+        final String message = "Terminate AS request failed. Received unexpected Job Status: " + finalJobStatus
+                + " id: " + asInstanceId + " Terminate AS request: \n" + terminateAsRequest;
         logger.error(message);
         throw new AsRequestProcessingException(message);
     }
@@ -235,7 +232,7 @@ public class JobExecutorService {
         final Job newJob = new Job().startTime(LocalDateTime.now()).jobType("AS").jobAction(JobAction.DELETE)
                 .resourceId(asInstanceId).status(JobStatusEnum.STARTING);
         databaseServiceProvider.addJob(newJob);
-        logger.info("New job created in database :\n{}", newJob);
+        logger.info("New job created in database for DeleteAs :\n{}", newJob);
 
         workflowExecutorService.executeWorkflow(newJob.getJobId(), DELETE_AS_WORKFLOW_NAME,
                 getVariables(asInstanceId, newJob.getJobId()));
@@ -264,8 +261,8 @@ public class JobExecutorService {
                 throw new AsRequestProcessingException(message, errorDetails);
             }
 
-            final String message = "Received unexpected Job Status: " + finalJobStatus
-                    + " Failed to Delete AS with id: " + asInstanceId;
+            final String message = "Delete AS request failed. Received unexpected Job Status: " + finalJobStatus
+                    + " Delete AS with id: " + asInstanceId;
             logger.error(message);
             throw new AsRequestProcessingException(message);
         }
@@ -286,12 +283,12 @@ public class JobExecutorService {
     }
 
     private ImmutablePair<String, JobStatusEnum> waitForJobToFinish(final String jobId,
-            final ImmutableSet<JobStatusEnum> jobFinishedStates) {
+            final Set<JobStatusEnum> jobFinishedStates) {
         try {
             final long startTimeInMillis = System.currentTimeMillis();
             final long timeOutTime = startTimeInMillis + TimeUnit.SECONDS.toMillis(timeOutInSeconds);
 
-            logger.info("Will wait till {} for {} job to finish", Instant.ofEpochMilli(timeOutTime).toString(), jobId);
+            logger.info("Will wait till {} for {} job to finish", Instant.ofEpochMilli(timeOutTime), jobId);
             JobStatusEnum currentJobStatus = null;
             while (timeOutTime > System.currentTimeMillis()) {
 

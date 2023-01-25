@@ -79,7 +79,6 @@ public class CreateAsTask extends AbstractServiceTask {
     private final SdcPackageProvider sdcPackageProvider;
     private final SdcCsarPackageParser sdcParser;
 
-
     @Autowired
     public CreateAsTask(final DatabaseServiceProvider databaseServiceProvider,
             final AaiServiceProvider aaiServiceProvider, final SdcPackageProvider sdcPackageProvider,
@@ -154,11 +153,8 @@ public class CreateAsTask extends AbstractServiceTask {
         execution.setVariable(DOES_AS_INSTANCE_EXISTS_PARAM_NAME, exists);
 
         if (exists) {
-            final Optional<AsInst> optional =
-                    databaseServiceProvider.getAsInstByName(createAsRequest.getAsInstanceName());
-            final AsInst asInst = optional.get();
-            execution.setVariable(AS_WORKFLOW_PROCESSING_EXCEPTION_PARAM_NAME,
-                    new ErrorDetails().detail("As Instance already exists in database : " + asInst.toString()));
+            execution.setVariable(AS_WORKFLOW_PROCESSING_EXCEPTION_PARAM_NAME, new ErrorDetails()
+                    .detail("As Instance already exists in database for : " + createAsRequest.getAsInstanceName()));
         }
 
         logger.info("Finished executing doesAsInstanceExistsInDb  ...");

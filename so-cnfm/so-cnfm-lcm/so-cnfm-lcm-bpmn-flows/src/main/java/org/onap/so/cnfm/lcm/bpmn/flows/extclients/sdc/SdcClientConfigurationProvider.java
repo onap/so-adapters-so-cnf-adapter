@@ -24,8 +24,6 @@ import java.security.GeneralSecurityException;
 import org.apache.commons.codec.binary.Base64;
 import org.onap.so.cnfm.lcm.bpmn.flows.exceptions.BasicAuthConfigException;
 import org.onap.so.utils.CryptoUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
@@ -35,8 +33,6 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class SdcClientConfigurationProvider {
-
-    private static final Logger logger = LoggerFactory.getLogger(SdcClientConfigurationProvider.class);
 
     @Value("${sdc.username:mso}")
     private String sdcUsername;
@@ -52,20 +48,14 @@ public class SdcClientConfigurationProvider {
 
     private static String basicAuth = null;
 
-
-    public String getBasicAuth() {
+    public synchronized String getBasicAuth() {
         if (basicAuth == null) {
-            synchronized (this) {
-                if (basicAuth == null) {
-                    try {
-                        final String auth = sdcUsername + ":" + CryptoUtils.decrypt(sdcPassword, sdcKey);
-                        final byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(StandardCharsets.ISO_8859_1));
-                        basicAuth = "Basic " + new String(encodedAuth);
-                    } catch (final GeneralSecurityException exception) {
-                        logger.error("Unable to process basic auth information", exception);
-                        throw new BasicAuthConfigException("Unable to process basic auth information", exception);
-                    }
-                }
+            try {
+                final String auth = sdcUsername + ":" + CryptoUtils.decrypt(sdcPassword, sdcKey);
+                final byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(StandardCharsets.ISO_8859_1));
+                basicAuth = "Basic " + new String(encodedAuth);
+            } catch (final GeneralSecurityException exception) {
+                throw new BasicAuthConfigException("Unable to process basic auth information", exception);
             }
         }
         return basicAuth;

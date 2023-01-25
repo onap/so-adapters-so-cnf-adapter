@@ -43,6 +43,9 @@ public class WorkflowQueryService {
 
     private static final Logger logger = getLogger(WorkflowQueryService.class);
 
+    private static final String PROCESS_INSTANCE_ID_NOT_FOUND_ERROR_MESSAGE =
+            "Unable to find {} variable using processInstanceId: {}";
+
     private final HistoryService camundaHistoryService;
 
     @Autowired
@@ -71,11 +74,10 @@ public class WorkflowQueryService {
                         historicVariableInstance.getValue() != null ? variableValue.getClass() : null, variableValue);
             }
         } catch (final ProcessEngineException processEngineException) {
-            logger.error("Unable to find {} variable using processInstanceId: {}", CREATE_AS_RESPONSE_PARAM_NAME,
-                    processInstanceId, processEngineException);
+            logger.error(PROCESS_INSTANCE_ID_NOT_FOUND_ERROR_MESSAGE, CREATE_AS_RESPONSE_PARAM_NAME, processInstanceId,
+                    processEngineException);
         }
-        logger.error("Unable to find {} variable using processInstanceId: {}", CREATE_AS_RESPONSE_PARAM_NAME,
-                processInstanceId);
+        logger.error(PROCESS_INSTANCE_ID_NOT_FOUND_ERROR_MESSAGE, CREATE_AS_RESPONSE_PARAM_NAME, processInstanceId);
         return Optional.empty();
 
     }
@@ -96,8 +98,8 @@ public class WorkflowQueryService {
             }
             logger.error("Unable to retrieve HistoricVariableInstance value was null");
         } catch (final ProcessEngineException processEngineException) {
-            logger.error("Unable to find {} variable using processInstanceId: {}",
-                    AS_WORKFLOW_PROCESSING_EXCEPTION_PARAM_NAME, processInstanceId, processEngineException);
+            logger.error(PROCESS_INSTANCE_ID_NOT_FOUND_ERROR_MESSAGE, AS_WORKFLOW_PROCESSING_EXCEPTION_PARAM_NAME,
+                    processInstanceId, processEngineException);
         }
         return Optional.empty();
     }

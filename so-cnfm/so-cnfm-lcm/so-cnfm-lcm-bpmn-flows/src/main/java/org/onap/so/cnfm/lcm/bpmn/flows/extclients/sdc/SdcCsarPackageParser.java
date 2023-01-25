@@ -82,7 +82,7 @@ public class SdcCsarPackageParser {
                 final String type = childElement(child, "type").getAsString();
                 if ("tosca.nodes.asd".equals(type)) {
                     final JsonObject properties = child(child, "properties");
-                    logger.debug("properties: {}", properties.toString());
+                    logger.debug("properties: {}", properties);
                     final Map<String, Object> propertiesValues = new HashMap<>();
                     propertiesValues.put(DESCRIPTOR_ID_PARAM_NAME,
                             getStringValue(properties, DESCRIPTOR_ID_PARAM_NAME));
@@ -134,9 +134,9 @@ public class SdcCsarPackageParser {
     private List<String> getLifecycleParameters(final JsonObject artifactsProperties) {
         final JsonArray lcParameters = childElement(artifactsProperties, "lifecycle_parameters").getAsJsonArray();
         final List<String> lifecycleParameters = new ArrayList<>();
-        if(lcParameters != null) {
+        if (lcParameters != null) {
             final Iterator<JsonElement> it = lcParameters.iterator();
-            while(it.hasNext()){
+            while (it.hasNext()) {
                 lifecycleParameters.add(it.next().getAsString());
             }
         }

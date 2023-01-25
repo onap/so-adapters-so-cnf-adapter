@@ -49,7 +49,6 @@ public class PropertiesToYamlConverter {
                 final Map<String, Object> subMap = new TreeMap<>();
                 local.put(currentKey, subMap);
                 local = subMap;
-                continue;
             } else {
                 local = (Map<String, Object>) local.get(currentKey);
             }
