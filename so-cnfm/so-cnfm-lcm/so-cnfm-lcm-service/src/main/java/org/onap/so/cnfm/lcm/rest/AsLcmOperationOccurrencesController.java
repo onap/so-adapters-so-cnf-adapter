@@ -25,10 +25,9 @@ import java.util.Optional;
 import javax.ws.rs.core.MediaType;
 import org.onap.so.cnfm.lcm.lifecycle.AsLcmOperationOccurrenceManager;
 import org.onap.so.cnfm.lcm.model.AsLcmOpOcc;
-import org.onap.so.cnfm.lcm.model.ErrorDetails;
+import org.onap.so.cnfm.lcm.rest.exceptions.AsLcmOpOccStatusNotFoundException;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,7 +52,7 @@ public class AsLcmOperationOccurrencesController {
 
     @GetMapping(value = "/as_lcm_op_occs/{asLcmOpOccId}",
             produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public ResponseEntity<?> getOperationStatus(@PathVariable("asLcmOpOccId") final String asLcmOpOccId) {
+    public ResponseEntity<AsLcmOpOcc> getOperationStatus(@PathVariable("asLcmOpOccId") final String asLcmOpOccId) {
         logger.info("Received request to retrieve operation status for asLcmOpOccId: {}", asLcmOpOccId);
         final Optional<AsLcmOpOcc> optionalAsLcmOpOccs =
                 asLcmOperationOccurrenceManager.getAsLcmOperationOccurrence(asLcmOpOccId);
@@ -66,6 +65,6 @@ public class AsLcmOperationOccurrencesController {
 
         final String errorMessage = "Unable to retrieve operation occurrence status for asLcmOpOccId: " + asLcmOpOccId;
         logger.error(errorMessage);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorDetails().detail(errorMessage));
+        throw new AsLcmOpOccStatusNotFoundException(errorMessage);
     }
 }

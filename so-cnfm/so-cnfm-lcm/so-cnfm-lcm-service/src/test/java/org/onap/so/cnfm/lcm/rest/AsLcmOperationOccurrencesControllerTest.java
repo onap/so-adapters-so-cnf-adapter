@@ -36,6 +36,7 @@ import org.onap.so.cnfm.lcm.database.beans.OperationStateEnum;
 import org.onap.so.cnfm.lcm.database.beans.State;
 import org.onap.so.cnfm.lcm.database.service.DatabaseServiceProvider;
 import org.onap.so.cnfm.lcm.model.AsLcmOpOcc;
+import org.onap.so.cnfm.lcm.model.ErrorDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -60,6 +61,8 @@ import com.google.gson.Gson;
 @SpringBootTest(classes = TestApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 public class AsLcmOperationOccurrencesControllerTest {
+
+    private static final String RANDOM_UUID = UUID.randomUUID().toString();
 
     private static final String AS_LCM_OP_OCCS = "/as_lcm_op_occs/";
 
@@ -93,18 +96,26 @@ public class AsLcmOperationOccurrencesControllerTest {
         assertNotNull(responseEntity.getBody());
     }
 
+    @Test
+    public void testGetOperationStatus_invalidAsLcmOpOccId_returnsErrorDetails() {
+        final String baseUrl = getAsLcmBaseUrl() + AS_LCM_OP_OCCS + "123";
+        final HttpEntity<?> request = new HttpEntity<>(new HttpHeaders());
+        final ResponseEntity<ErrorDetails> responseEntity =
+                testRestTemplate.exchange(baseUrl, HttpMethod.GET, request, ErrorDetails.class);
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        assertTrue(responseEntity.hasBody());
+        assertNotNull(responseEntity.getBody());
+    }
 
     private String getAsLcmBaseUrl() {
         return "http://localhost:" + port + Constants.AS_LIFE_CYCLE_MANAGEMENT_BASE_URL;
     }
 
-
     private String addDummyAsLcmOpOccToDatabase() {
         final LocalDateTime now = LocalDateTime.now();
-        final AsInst asInst = new AsInst().name("name").asdId(UUID.randomUUID().toString())
-                .status(State.NOT_INSTANTIATED).asdInvariantId(UUID.randomUUID().toString()).statusUpdatedTime(now)
-                .asApplicationName("asApplicationName").asApplicationVersion("asApplicationVersion")
-                .asProvider("asProvider").serviceInstanceId(UUID.randomUUID().toString())
+        final AsInst asInst = new AsInst().name("name").asdId(RANDOM_UUID).status(State.NOT_INSTANTIATED)
+                .asdInvariantId(RANDOM_UUID).statusUpdatedTime(now).asApplicationName("asApplicationName")
+                .asApplicationVersion("asApplicationVersion").asProvider("asProvider").serviceInstanceId(RANDOM_UUID)
                 .serviceInstanceName("serviceInstanceName").cloudOwner("cloudOwner").cloudRegion("cloudRegion")
                 .tenantId("tenantId");
 

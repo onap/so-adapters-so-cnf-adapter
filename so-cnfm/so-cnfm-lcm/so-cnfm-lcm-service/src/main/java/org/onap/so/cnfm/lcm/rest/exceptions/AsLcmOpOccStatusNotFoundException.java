@@ -17,28 +17,28 @@
  * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
-package org.onap.so.cnfm.lcm.app;
+package org.onap.so.cnfm.lcm.rest.exceptions;
 
-import static org.slf4j.LoggerFactory.getLogger;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.AnnotationBeanNameGenerator;
-import org.springframework.util.ClassUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
+ *
  * @author Waqas Ikram (waqas.ikram@est.tech)
  *
  */
-public class DefaultToShortClassNameBeanNameGenerator extends AnnotationBeanNameGenerator {
-    private static final Logger logger = getLogger(DefaultToShortClassNameBeanNameGenerator.class);
+@ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
+public class AsLcmOpOccStatusNotFoundException extends RuntimeException {
+
+    private static final long serialVersionUID = 1706676614379799737L;
+
+    public AsLcmOpOccStatusNotFoundException(String message) {
+        super(message);
+    }
 
     @Override
-    protected String buildDefaultBeanName(final BeanDefinition definition) {
-        final String beanClassName = definition.getBeanClassName();
-        if (beanClassName != null) {
-            return ClassUtils.getShortName(beanClassName);
-        }
-        logger.warn("Bean class name is not specified...");
-        return null;
+    public synchronized Throwable fillInStackTrace() {
+        return this;
     }
+
 }
