@@ -21,7 +21,6 @@ package org.onap.so.cnfm.lcm.bpmn.flows.extclients.sdc;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.onap.so.cnfm.lcm.bpmn.flows.extclients.sdc.SdcCsarPropertiesConstants.APPLICATION_NAME_PARAM_NAME;
 import static org.onap.so.cnfm.lcm.bpmn.flows.extclients.sdc.SdcCsarPropertiesConstants.DESCRIPTOR_ID_PARAM_NAME;
 import static org.onap.so.cnfm.lcm.bpmn.flows.extclients.sdc.SdcCsarPropertiesConstants.DESCRIPTOR_INVARIANT_ID_PARAM_NAME;
@@ -61,9 +60,9 @@ public class SdcCsarPackageParserTest {
         final List<DeploymentItem> items =
                 (List<DeploymentItem>) properties.get(SdcCsarPropertiesConstants.DEPLOYMENT_ITEMS_PARAM_NAME);
         assertNotNull(items);
-        assertTrue(items.size() == 2);
+        assertEquals(2, items.size());
 
-        DeploymentItem deploymentItem = items.get(0);
+        final DeploymentItem deploymentItem = items.get(0);
         assertEquals("sampleapp-db", deploymentItem.getName());
         assertEquals("1", deploymentItem.getItemId());
         assertEquals("1", deploymentItem.getDeploymentOrder());

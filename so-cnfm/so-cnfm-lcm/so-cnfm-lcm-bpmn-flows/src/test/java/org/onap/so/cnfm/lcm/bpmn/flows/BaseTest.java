@@ -22,8 +22,6 @@ package org.onap.so.cnfm.lcm.bpmn.flows;
 
 import static org.camunda.bpm.engine.history.HistoricProcessInstance.STATE_ACTIVE;
 import static org.slf4j.LoggerFactory.getLogger;
-
-import com.github.tomakehurst.wiremock.WireMockServer;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
@@ -38,9 +36,9 @@ import org.camunda.bpm.engine.history.HistoricProcessInstance;
 import org.camunda.bpm.engine.history.HistoricVariableInstance;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.junit.runner.RunWith;
-//import org.onap.so.cnfm.lcm.bpmn.flows.service.KubConfigProvider;
-//import org.onap.so.cnfm.lcm.bpmn.flows.tasks.MockedHelmClientConfiguration;
-//import org.onap.so.cnfm.lcm.bpmn.flows.tasks.MockedKubernetesClientProviderConfiguration;
+import org.onap.so.cnfm.lcm.bpmn.flows.service.KubConfigProvider;
+import org.onap.so.cnfm.lcm.bpmn.flows.tasks.MockedHelmClientConfiguration;
+import org.onap.so.cnfm.lcm.bpmn.flows.tasks.MockedKubernetesClientProviderConfiguration;
 import org.onap.so.cnfm.lcm.database.beans.AsInst;
 import org.onap.so.cnfm.lcm.database.beans.Job;
 import org.onap.so.cnfm.lcm.database.beans.JobAction;
@@ -50,12 +48,13 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
-//import org.springframework.context.annotation.Import;
-//import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.context.annotation.Import;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.FileSystemUtils;
+import com.github.tomakehurst.wiremock.WireMockServer;
 
 /**
  * @author Waqas Ikram (waqas.ikram@est.tech)
@@ -66,12 +65,12 @@ import org.springframework.util.FileSystemUtils;
 @ActiveProfiles("test")
 @ContextConfiguration
 @AutoConfigureWireMock(port = 0)
-//@Import({MockedHelmClientConfiguration.class, MockedKubernetesClientProviderConfiguration.class})
+@Import({MockedHelmClientConfiguration.class, MockedKubernetesClientProviderConfiguration.class})
 public abstract class BaseTest {
     protected static final String SERVICE_INSTANCE_ID = UUID.randomUUID().toString();
     protected static final String SERVICE_INSTANCE_NAME = "ServiceName";
-//    private static final String KUBE_CONFIG_EMPTY_FILE_NAME = "kube-config-empty-file";
-//    private static final String EMPTY = "";
+    private static final String KUBE_CONFIG_EMPTY_FILE_NAME = "kube-config-empty-file";
+    private static final String EMPTY = "";
 
     protected static final String UUID_REGEX =
             "[0-9a-zA-Z]{8}\\-[0-9a-zA-Z]{4}\\-[0-9a-zA-Z]{4}\\-[0-9a-zA-Z]{4}\\-[0-9a-zA-Z]{12}";
@@ -87,8 +86,8 @@ public abstract class BaseTest {
     @Autowired
     private RuntimeService runtimeService;
 
-//    @Autowired
-//    private KubConfigProvider kubConfigProvider;
+    @Autowired
+    private KubConfigProvider kubConfigProvider;
 
     @Autowired
     protected DatabaseServiceProvider databaseServiceProvider;
@@ -169,9 +168,9 @@ public abstract class BaseTest {
     }
 
     public void createKubeConfigFile(final AsInst asInst) throws IOException {
-//        final MockMultipartFile file = new MockMultipartFile(KUBE_CONFIG_EMPTY_FILE_NAME, EMPTY.getBytes());
-//        kubConfigProvider.addKubeConfigFile(file, asInst.getCloudOwner(), asInst.getCloudRegion(),
-//                asInst.getTenantId());
+        final MockMultipartFile file = new MockMultipartFile(KUBE_CONFIG_EMPTY_FILE_NAME, EMPTY.getBytes());
+        kubConfigProvider.addKubeConfigFile(file, asInst.getCloudOwner(), asInst.getCloudRegion(),
+                asInst.getTenantId());
     }
 
     public void deleteFoldersAndFiles(final Path path) throws IOException {
