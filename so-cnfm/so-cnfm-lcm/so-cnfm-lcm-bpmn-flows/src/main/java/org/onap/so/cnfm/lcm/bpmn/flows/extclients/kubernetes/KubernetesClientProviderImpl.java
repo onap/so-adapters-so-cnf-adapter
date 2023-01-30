@@ -48,7 +48,7 @@ public class KubernetesClientProviderImpl implements KubernetesClientProvider {
     @Override
     public ApiClient getApiClient(final String kubeConfigPath) {
 
-        ApiClient client = INSTANCES.get(kubeConfigPath.toString());
+        ApiClient client = INSTANCES.get(kubeConfigPath);
         if (client == null) {
             synchronized (this) {
                 try (final Reader input = new FileReader(kubeConfigPath);) {
@@ -59,13 +59,11 @@ public class KubernetesClientProviderImpl implements KubernetesClientProvider {
                     logger.debug("ApiClient created successfully");
                     INSTANCES.put(kubeConfigPath, client);
                 } catch (final FileNotFoundException fileNotFoundException) {
-                    logger.error("{} KubeConfig not found", kubeConfigPath, fileNotFoundException);
                     throw new KubeConfigFileProcessingException(kubeConfigPath + " kube-config file not found",
                             fileNotFoundException);
                 } catch (final Exception exception) {
-                    final String message = "Unexpected exception while processing kube-config file";
-                    logger.error(message, exception);
-                    throw new KubeConfigFileProcessingException(message, exception);
+                    throw new KubeConfigFileProcessingException(
+                            "Unexpected exception while processing kube-config file", exception);
                 }
             }
         }

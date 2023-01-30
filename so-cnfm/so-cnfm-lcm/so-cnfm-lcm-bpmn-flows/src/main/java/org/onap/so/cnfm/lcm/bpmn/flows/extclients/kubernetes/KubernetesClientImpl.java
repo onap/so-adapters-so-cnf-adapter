@@ -395,10 +395,8 @@ public class KubernetesClientImpl implements KubernetesClient {
             logger.debug("Response from list service for all Namespaces: {}", v1ServiceList);
             return v1ServiceList.getItems().isEmpty();
         } catch (final ApiException exception) {
-            logger.debug("Return false because of exception occurred: {}", exception.getMessage());
             handleApiException(KIND_SERVICE, labelSelector, exception);
         } catch (final RuntimeException runtimeException) {
-            logger.debug("Return false because of Runtime exception occurred: {}", runtimeException.getMessage());
             handleRuntimeException(KIND_SERVICE, labelSelector, runtimeException);
         }
         logger.debug("Returning false as Service is not Deleted ...");
@@ -416,10 +414,8 @@ public class KubernetesClientImpl implements KubernetesClient {
             logger.debug("Response from list Pod for all Namespaces: {}", v1PodList);
             return v1PodList.getItems().isEmpty();
         } catch (final ApiException exception) {
-            logger.debug("Return false because of exception occurred: {}", exception.getMessage());
             handleApiException(KIND_POD, labelSelector, exception);
         } catch (final RuntimeException runtimeException) {
-            logger.debug("Return false because of Runtime exception occurred: {}", runtimeException.getMessage());
             handleRuntimeException(KIND_POD, labelSelector, runtimeException);
         }
         logger.debug("Returning false as Pod is not Deleted ...");
@@ -437,10 +433,8 @@ public class KubernetesClientImpl implements KubernetesClient {
             logger.debug("Response from list Job for all Namespaces: {}", v1JobList);
             return v1JobList.getItems().isEmpty();
         } catch (final ApiException exception) {
-            logger.debug("Return false because of exception occurred: {}", exception.getMessage());
             handleApiException(KIND_JOB, labelSelector, exception);
         } catch (final RuntimeException runtimeException) {
-            logger.debug("Return false because of Runtime exception occurred: {}", runtimeException.getMessage());
             handleRuntimeException(KIND_JOB, labelSelector, runtimeException);
         }
         logger.debug("Returning false as Job is not Deleted ...");
@@ -458,10 +452,8 @@ public class KubernetesClientImpl implements KubernetesClient {
             logger.debug("Response from list Deployment for all Namespaces: {}", v1DeploymentList);
             return v1DeploymentList.getItems().isEmpty();
         } catch (final ApiException exception) {
-            logger.debug("Return false because of exception occurred: {}", exception.getMessage());
             handleApiException(KIND_DEPLOYMENT, labelSelector, exception);
         } catch (final RuntimeException runtimeException) {
-            logger.debug("Return false because of Runtime exception occurred: {}", runtimeException.getMessage());
             handleRuntimeException(KIND_DEPLOYMENT, labelSelector, runtimeException);
         }
         logger.debug("Returning false as Deployment is not Deleted ...");
@@ -479,10 +471,8 @@ public class KubernetesClientImpl implements KubernetesClient {
             logger.debug("Response from list ReplicaSet for all Namespaces: {}", v1ReplicaSetList);
             return v1ReplicaSetList.getItems().isEmpty();
         } catch (final ApiException exception) {
-            logger.debug("Return false because of exception occurred: {}", exception.getMessage());
             handleApiException(KIND_REPLICA_SET, labelSelector, exception);
         } catch (final RuntimeException runtimeException) {
-            logger.debug("Return false because of Runtime exception occurred: {}", runtimeException.getMessage());
             handleRuntimeException(KIND_REPLICA_SET, labelSelector, runtimeException);
         }
         logger.debug("Returning false as ReplicaSet is not Deleted ...");
@@ -500,10 +490,8 @@ public class KubernetesClientImpl implements KubernetesClient {
             logger.debug("Response from list DaemonSet for all Namespaces: {}", v1DaemonSetList);
             return v1DaemonSetList.getItems().isEmpty();
         } catch (final ApiException exception) {
-            logger.debug("Return false because of exception occurred: {}", exception.getMessage());
             handleApiException(KIND_DAEMON_SET, labelSelector, exception);
         } catch (final RuntimeException runtimeException) {
-            logger.debug("Return false because of Runtime exception occurred: {}", runtimeException.getMessage());
             handleRuntimeException(KIND_DAEMON_SET, labelSelector, runtimeException);
         }
         logger.debug("Returning false as DaemonSet is not Deleted ...");
@@ -521,10 +509,8 @@ public class KubernetesClientImpl implements KubernetesClient {
             logger.debug("Response from list StatefulSet for all Namespaces: {}", v1StatefulSetList);
             return v1StatefulSetList.getItems().isEmpty();
         } catch (final ApiException exception) {
-            logger.debug("Return false because of exception occurred: {}", exception.getMessage());
             handleApiException(KIND_STATEFUL_SET, labelSelector, exception);
         } catch (final RuntimeException runtimeException) {
-            logger.debug("Return false because of Runtime exception occurred: {}", runtimeException.getMessage());
             handleRuntimeException(KIND_STATEFUL_SET, labelSelector, runtimeException);
         }
         logger.debug("Returning false as StatefulSet is not Deleted ...");

@@ -46,6 +46,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class HelmClientImpl implements HelmClient {
+    private static final String DEFAULT_NAMESPACE = "default";
     private static final String KIND_KEY = "kind: ";
     private static final String ANY_UNICODE_NEWLINE = "\\R";
     private static final Logger logger = LoggerFactory.getLogger(HelmClientImpl.class);
@@ -149,25 +150,23 @@ public class HelmClientImpl implements HelmClient {
         logger.info("uninstalling the release {} from cluster {}", releaseName, kubeConfigFilePath);
         final ProcessBuilder processBuilder = prepareUnInstallCommand(releaseName, kubeConfigFilePath);
         final String commandResponse = executeCommand(processBuilder);
-        if (!StringUtils.isEmpty(commandResponse)) {
-            if (commandResponse.contains("Release not loaded")) {
-                throw new HelmClientExecuteException(
-                        "Unable to find the installed Helm chart by using releaseName: " + releaseName);
-            }
+        if (!StringUtils.isEmpty(commandResponse) && commandResponse.contains("Release not loaded")) {
+            throw new HelmClientExecuteException(
+                    "Unable to find the installed Helm chart by using releaseName: " + releaseName);
         }
 
         logger.info("Release {} uninstalled successfully", releaseName);
     }
 
     private ProcessBuilder prepareDryRunCommand(final String releaseName, final Path kubeconfig, final Path helmChart) {
-        final List<String> helmArguments = List.of("helm", "install", releaseName, "-n", "default",
+        final List<String> helmArguments = List.of("helm", "install", releaseName, "-n", DEFAULT_NAMESPACE,
                 helmChart.toString(), "--dry-run", "--kubeconfig", kubeconfig.toString());
         return new ProcessBuilder().command(helmArguments);
     }
 
     private ProcessBuilder prepareInstallCommand(final String releaseName, final Path kubeconfig, final Path helmChart,
             final Map<String, String> lifeCycleParams) {
-        final List<String> commands = new ArrayList<String>(List.of("helm", "install", releaseName, "-n", "default",
+        final List<String> commands = new ArrayList<>(List.of("helm", "install", releaseName, "-n", DEFAULT_NAMESPACE,
                 helmChart.toString(), "--kubeconfig", kubeconfig.toString()));
 
         if (lifeCycleParams != null && !lifeCycleParams.isEmpty()) {
@@ -185,31 +184,31 @@ public class HelmClientImpl implements HelmClient {
         logger.debug("Yaml file content : {}", yamlContent);
         try {
             Files.write(Paths.get(fileName), yamlContent.getBytes());
-        } catch (final IOException e) {
-            logger.error("Failed to create the run time life cycle yaml file: {} " + e.getMessage());
+        } catch (final IOException ioException) {
             throw new HelmClientExecuteException(
-                    "Failed to create the run time life cycle yaml file: {} " + e.getMessage());
+                    "Failed to create the run time life cycle yaml file: {} " + ioException.getMessage(), ioException);
         }
     }
 
     private ProcessBuilder prepareUnInstallCommand(final String releaseName, final Path kubeConfig) {
         logger.debug("Will remove tis log after checking ubeconfig path: {}", kubeConfig.toFile().getName());
-        final List<String> helmArguments = new ArrayList<>(
-                List.of("helm", "uninstall", releaseName, "-n", "default", "--kubeconfig", kubeConfig.toString()));
+        final List<String> helmArguments = new ArrayList<>(List.of("helm", "uninstall", releaseName, "-n",
+                DEFAULT_NAMESPACE, "--kubeconfig", kubeConfig.toString()));
         return new ProcessBuilder().command(helmArguments);
     }
 
     private ProcessBuilder prepareKubeKindCommand(final String releaseName, final Path kubeconfig,
             final Path helmChart) {
-        final List<String> commands = List.of("helm", "template", releaseName, "-n", "default", helmChart.toString(),
-                "--dry-run", "--kubeconfig", kubeconfig.toString(), "--skip-tests", "| grep kind | uniq");
+        final List<String> commands =
+                List.of("helm", "template", releaseName, "-n", DEFAULT_NAMESPACE, helmChart.toString(), "--dry-run",
+                        "--kubeconfig", kubeconfig.toString(), "--skip-tests", "| grep kind | uniq");
         final List<String> helmArguments = List.of("sh", "-c", toString(commands));
         return new ProcessBuilder().command(helmArguments);
     }
 
     private ProcessBuilder prepareGetKubeKindCommand(final String releaseName, final Path kubeconfig) {
-        final List<String> commands = List.of("helm", "get", "manifest", releaseName, "-n", "default", "--kubeconfig",
-                kubeconfig.toString(), "| grep kind | uniq");
+        final List<String> commands = List.of("helm", "get", "manifest", releaseName, "-n", DEFAULT_NAMESPACE,
+                "--kubeconfig", kubeconfig.toString(), "| grep kind | uniq");
         final List<String> helmArguments = List.of("sh", "-c", toString(commands));
         return new ProcessBuilder().command(helmArguments);
     }
