@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1ln6j64" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+  <bpmn:process id="MonitorHelmUnInstallStatus" name="MonitorHelmUnInstallStatus" isExecutable="true">
+    <bpmn:endEvent id="helm_uninstall_Event_0v9a531">
+      <bpmn:incoming>helm_uninstall_Flow_1f87oz7</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:subProcess id="Activity_1exvnm9" name="${kindFromReleaseHistory}">
+      <bpmn:incoming>Flow_0f5dibe</bpmn:incoming>
+      <bpmn:outgoing>helm_uninstall_Flow_1kpnioc</bpmn:outgoing>
+      <bpmn:startEvent id="helm_uninstall_Event_1m6vi78">
+        <bpmn:outgoing>helm_uninstall_Flow_1kekeh7</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:exclusiveGateway id="helm_uninstall_Gateway_0neju2q" default="helm_uninstall_Flow_1g3xchu">
+        <bpmn:incoming>helm_uninstall_Flow_0kdhub4</bpmn:incoming>
+        <bpmn:outgoing>helm_uninstall_Flow_1g3xchu</bpmn:outgoing>
+        <bpmn:outgoing>helm_uninstall_Flow_0n6qu57</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:intermediateCatchEvent id="helm_uninstall_Event_0lx9pd7" name="Wait between checks" camunda:asyncAfter="true">
+        <bpmn:incoming>helm_uninstall_Flow_1g3xchu</bpmn:incoming>
+        <bpmn:outgoing>helm_uninstall_Flow_0tqwb9b</bpmn:outgoing>
+        <bpmn:timerEventDefinition id="TimerEventDefinition_1icke43">
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT15S</bpmn:timeDuration>
+        </bpmn:timerEventDefinition>
+      </bpmn:intermediateCatchEvent>
+      <bpmn:endEvent id="helm_uninstall_Event_1pka4w4">
+        <bpmn:incoming>helm_uninstall_Flow_0n6qu57</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:serviceTask id="helm_uninstall_Activity_0rxj50o" name="&#10;Is Resource Deleted&#10;" camunda:asyncAfter="true" camunda:expression="${MonitorHelmUnInstallStatusTask.isResourceDeleted(execution)}">
+        <bpmn:incoming>helm_uninstall_Flow_11mzqci</bpmn:incoming>
+        <bpmn:incoming>helm_uninstall_Flow_0tqwb9b</bpmn:incoming>
+        <bpmn:outgoing>helm_uninstall_Flow_0kdhub4</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:serviceTask id="helm_uninstall_Activity_1cc0pq6" name="Update Job Status" camunda:expression="${MonitorHelmUnInstallStatusTask.updateJobStatus(execution)}">
+        <bpmn:incoming>helm_uninstall_Flow_1kekeh7</bpmn:incoming>
+        <bpmn:outgoing>helm_uninstall_Flow_11mzqci</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="helm_uninstall_Flow_11mzqci" sourceRef="helm_uninstall_Activity_1cc0pq6" targetRef="helm_uninstall_Activity_0rxj50o" />
+      <bpmn:sequenceFlow id="helm_uninstall_Flow_1kekeh7" sourceRef="helm_uninstall_Event_1m6vi78" targetRef="helm_uninstall_Activity_1cc0pq6" />
+      <bpmn:sequenceFlow id="helm_uninstall_Flow_0tqwb9b" sourceRef="helm_uninstall_Event_0lx9pd7" targetRef="helm_uninstall_Activity_0rxj50o" />
+      <bpmn:sequenceFlow id="helm_uninstall_Flow_1g3xchu" sourceRef="helm_uninstall_Gateway_0neju2q" targetRef="helm_uninstall_Event_0lx9pd7" />
+      <bpmn:sequenceFlow id="helm_uninstall_Flow_0n6qu57" sourceRef="helm_uninstall_Gateway_0neju2q" targetRef="helm_uninstall_Event_1pka4w4">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{isResourceDeleted}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="helm_uninstall_Flow_0kdhub4" sourceRef="helm_uninstall_Activity_0rxj50o" targetRef="helm_uninstall_Gateway_0neju2q" />
+    </bpmn:subProcess>
+    <bpmn:endEvent id="helm_uninstall_Event_119znxi" name="Timeout Exception">
+      <bpmn:incoming>helm_uninstall_Flow_0qm63h0</bpmn:incoming>
+      <bpmn:terminateEventDefinition id="TerminateEventDefinition_14qywzg" />
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="helm_uninstall_Activity_09s0jak" name="&#10;Time Out Log Failure&#10;" camunda:asyncAfter="true" camunda:expression="${MonitorHelmUnInstallStatusTask.timeOutLogFailue(execution)}">
+      <bpmn:incoming>helm_uninstall_Flow_1719q6v</bpmn:incoming>
+      <bpmn:outgoing>helm_uninstall_Flow_0qm63h0</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="helm_uninstall_Activity_0a4jpkd" name="&#10;Check if operation was successful&#10;" camunda:asyncAfter="true" camunda:expression="${MonitorHelmUnInstallStatusTask.checkIfOperationWasSuccessful(execution)}">
+      <bpmn:incoming>helm_uninstall_Flow_1kpnioc</bpmn:incoming>
+      <bpmn:outgoing>helm_uninstall_Flow_1f87oz7</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:startEvent id="helm_uninstall_start">
+      <bpmn:outgoing>Flow_0f5dibe</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:boundaryEvent id="helm_uninstall_Event_0cfcuv3" name="Overall Wait" attachedToRef="Activity_1exvnm9">
+      <bpmn:outgoing>helm_uninstall_Flow_1719q6v</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_1258pyb">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT20M</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="helm_uninstall_Flow_1f87oz7" sourceRef="helm_uninstall_Activity_0a4jpkd" targetRef="helm_uninstall_Event_0v9a531" />
+    <bpmn:sequenceFlow id="Flow_0f5dibe" sourceRef="helm_uninstall_start" targetRef="Activity_1exvnm9" />
+    <bpmn:sequenceFlow id="helm_uninstall_Flow_1kpnioc" sourceRef="Activity_1exvnm9" targetRef="helm_uninstall_Activity_0a4jpkd" />
+    <bpmn:sequenceFlow id="helm_uninstall_Flow_0qm63h0" sourceRef="helm_uninstall_Activity_09s0jak" targetRef="helm_uninstall_Event_119znxi" />
+    <bpmn:sequenceFlow id="helm_uninstall_Flow_1719q6v" sourceRef="helm_uninstall_Event_0cfcuv3" targetRef="helm_uninstall_Activity_09s0jak" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="MonitorHelmUnInstallStatus">
+      <bpmndi:BPMNEdge id="Flow_1719q6v_di" bpmnElement="helm_uninstall_Flow_1719q6v">
+        <di:waypoint x="1012" y="372" />
+        <di:waypoint x="1093" y="372" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0qm63h0_di" bpmnElement="helm_uninstall_Flow_0qm63h0">
+        <di:waypoint x="1193" y="372" />
+        <di:waypoint x="1272" y="372" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1kpnioc_di" bpmnElement="helm_uninstall_Flow_1kpnioc">
+        <di:waypoint x="733" y="270" />
+        <di:waypoint x="733" y="150" />
+        <di:waypoint x="1093" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0f5dibe_di" bpmnElement="Flow_0f5dibe">
+        <di:waypoint x="237" y="380" />
+        <di:waypoint x="319" y="380" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1f87oz7_di" bpmnElement="helm_uninstall_Flow_1f87oz7">
+        <di:waypoint x="1193" y="150" />
+        <di:waypoint x="1272" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0v9a531_di" bpmnElement="helm_uninstall_Event_0v9a531">
+        <dc:Bounds x="1272" y="132" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1exvnm9_di" bpmnElement="Activity_1exvnm9" isExpanded="true">
+        <dc:Bounds x="319" y="270" width="675" height="220" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0kdhub4_di" bpmnElement="helm_uninstall_Flow_0kdhub4">
+        <di:waypoint x="695" y="356" />
+        <di:waypoint x="779" y="356" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0n6qu57_di" bpmnElement="helm_uninstall_Flow_0n6qu57">
+        <di:waypoint x="829" y="356" />
+        <di:waypoint x="892" y="356" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1g3xchu_di" bpmnElement="helm_uninstall_Flow_1g3xchu">
+        <di:waypoint x="804" y="381" />
+        <di:waypoint x="804" y="428" />
+        <di:waypoint x="756" y="428" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0tqwb9b_di" bpmnElement="helm_uninstall_Flow_0tqwb9b">
+        <di:waypoint x="720" y="428" />
+        <di:waypoint x="656" y="428" />
+        <di:waypoint x="656" y="399" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1kekeh7_di" bpmnElement="helm_uninstall_Flow_1kekeh7">
+        <di:waypoint x="387" y="356" />
+        <di:waypoint x="439" y="356" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11mzqci_di" bpmnElement="helm_uninstall_Flow_11mzqci">
+        <di:waypoint x="539" y="356" />
+        <di:waypoint x="595" y="356" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_1m6vi78_di" bpmnElement="helm_uninstall_Event_1m6vi78">
+        <dc:Bounds x="351" y="338" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0neju2q_di" bpmnElement="helm_uninstall_Gateway_0neju2q" isMarkerVisible="true">
+        <dc:Bounds x="779" y="331" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0lx9pd7_di" bpmnElement="helm_uninstall_Event_0lx9pd7">
+        <dc:Bounds x="720" y="410" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="707" y="453" width="67" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1pka4w4_di" bpmnElement="helm_uninstall_Event_1pka4w4">
+        <dc:Bounds x="892" y="338" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0rxj50o_di" bpmnElement="helm_uninstall_Activity_0rxj50o">
+        <dc:Bounds x="595" y="316" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1cc0pq6_di" bpmnElement="helm_uninstall_Activity_1cc0pq6">
+        <dc:Bounds x="439" y="316" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_119znxi_di" bpmnElement="helm_uninstall_Event_119znxi">
+        <dc:Bounds x="1272" y="354" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1265" y="314" width="49" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_09s0jak_di" bpmnElement="helm_uninstall_Activity_09s0jak">
+        <dc:Bounds x="1093" y="332" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0a4jpkd_di" bpmnElement="helm_uninstall_Activity_0a4jpkd">
+        <dc:Bounds x="1093" y="110" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1kp76of_di" bpmnElement="helm_uninstall_start">
+        <dc:Bounds x="201" y="362" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0cfcuv3_di" bpmnElement="helm_uninstall_Event_0cfcuv3">
+        <dc:Bounds x="976" y="354" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="965" y="393" width="60" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

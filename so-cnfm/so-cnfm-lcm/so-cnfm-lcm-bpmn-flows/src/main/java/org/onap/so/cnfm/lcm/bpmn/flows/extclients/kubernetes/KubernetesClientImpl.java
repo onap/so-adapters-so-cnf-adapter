@@ -709,20 +709,16 @@ public class KubernetesClientImpl implements KubernetesClient {
     private KubernetesResource getKubernetesResource(final String apiVersion, final String kind,
             final V1ObjectMeta metadata) {
         final GroupVersion groupVersion = GroupVersion.parse(apiVersion);
-        final KubernetesResource resource =
-                new KubernetesResource().id(metadata.getUid()).name(metadata.getName()).group(groupVersion.getGroup())
-                        .version(groupVersion.getVersion()).kind(kind).resourceVersion(metadata.getResourceVersion())
-                        .namespace(metadata.getNamespace() != null ? metadata.getNamespace() : "")
-                        .labels(getLabels(metadata.getLabels()));
-        return resource;
+        return new KubernetesResource().id(metadata.getUid()).name(metadata.getName()).group(groupVersion.getGroup())
+                .version(groupVersion.getVersion()).kind(kind).resourceVersion(metadata.getResourceVersion())
+                .namespace(metadata.getNamespace() != null ? metadata.getNamespace() : "")
+                .labels(getLabels(metadata.getLabels()));
     }
 
     private List<String> getLabels(final Map<String, String> labels) {
         if (labels != null) {
             final List<String> result = new ArrayList<>();
-            labels.entrySet().forEach(entry -> {
-                result.add(entry.getKey() + "=" + entry.getValue());
-            });
+            labels.entrySet().forEach(entry -> result.add(entry.getKey() + "=" + entry.getValue()));
             return result;
         }
         return Collections.emptyList();
