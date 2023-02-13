@@ -161,7 +161,7 @@ public class InstantiateAsTask extends AbstractServiceTask {
 
                     if (!Files.exists(path.getParent())) {
                         final File parentDir = path.getParent().toFile();
-                        logger.debug("Creating sub directories to download helm chart file {}", parentDir.toString());
+                        logger.debug("Creating sub directories to download helm chart file {}", parentDir);
                         parentDir.mkdirs();
                     }
 
@@ -381,10 +381,9 @@ public class InstantiateAsTask extends AbstractServiceTask {
         final List<AsDeploymentItem> asDeploymentItems =
                 databaseServiceProvider.getAsDeploymentItemByAsInstId(asInstId);
         if (asDeploymentItems != null) {
-            asDeploymentItems.stream().forEach(asDeploymentItem -> {
-                logger.info("Current status {} of asDeploymentItem: {}", asDeploymentItem.getStatus(),
-                        asDeploymentItem.getName());
-            });
+            asDeploymentItems.stream()
+                    .forEach(asDeploymentItem -> logger.info("Current status {} of asDeploymentItem: {}",
+                            asDeploymentItem.getStatus(), asDeploymentItem.getName()));
         }
     }
 
@@ -396,7 +395,7 @@ public class InstantiateAsTask extends AbstractServiceTask {
         final Path dirPath = Paths.get(parentDir, dirname);
         final File dir = dirPath.toFile();
         if (!dir.exists()) {
-            logger.debug("Creating directory to download helm chart file {}", dir.toString());
+            logger.debug("Creating directory to download helm chart file {}", dir);
             dir.mkdir();
         }
         return dir;
