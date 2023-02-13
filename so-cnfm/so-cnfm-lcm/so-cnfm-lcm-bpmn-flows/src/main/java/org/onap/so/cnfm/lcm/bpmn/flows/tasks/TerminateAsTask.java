@@ -59,7 +59,7 @@ public class TerminateAsTask extends AbstractServiceTask {
 
     @Autowired
     protected TerminateAsTask(final DatabaseServiceProvider databaseServiceProvider,
-                              final KubConfigProvider kubConfigProvider, final AaiServiceProvider aaiServiceProvider) {
+            final KubConfigProvider kubConfigProvider, final AaiServiceProvider aaiServiceProvider) {
         super(databaseServiceProvider);
         this.kubConfigProvider = kubConfigProvider;
         this.aaiServiceProvider = aaiServiceProvider;
@@ -97,10 +97,9 @@ public class TerminateAsTask extends AbstractServiceTask {
         final List<AsDeploymentItem> asDeploymentItems =
                 databaseServiceProvider.getAsDeploymentItemByAsInstId(asInstId);
         if (asDeploymentItems != null) {
-            asDeploymentItems.stream().forEach(asDeploymentItem -> {
-                logger.info("Current status {} of terminating asDeploymentItem: {}", asDeploymentItem.getStatus(),
-                        asDeploymentItem.getName());
-            });
+            asDeploymentItems.stream()
+                    .forEach(asDeploymentItem -> logger.info("Current status {} of terminating asDeploymentItem: {}",
+                            asDeploymentItem.getStatus(), asDeploymentItem.getName()));
         }
     }
 
@@ -196,8 +195,7 @@ public class TerminateAsTask extends AbstractServiceTask {
 
         logger.debug("Executing updateGenericVnfStatustoDeActivated");
         final String asInstId = (String) execution.getVariable(AS_INSTANCE_ID_PARAM_NAME);
-        final boolean result = aaiServiceProvider.updateGenericVnfStatus(asInstId,
-                OrchestrationStatusEnum.DEACTIVATED);
+        final boolean result = aaiServiceProvider.updateGenericVnfStatus(asInstId, OrchestrationStatusEnum.DEACTIVATED);
         if (!result) {
             abortOperation(execution, "Failed to update GenericVnf status to Deactivated as there"
                     + "is no GenericVnf Found in AAI of ID: " + asInstId);

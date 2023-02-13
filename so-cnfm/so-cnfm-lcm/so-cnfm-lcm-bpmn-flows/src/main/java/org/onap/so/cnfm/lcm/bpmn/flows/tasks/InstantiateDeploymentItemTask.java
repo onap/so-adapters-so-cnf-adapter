@@ -65,7 +65,6 @@ import org.springframework.stereotype.Component;
  * @author Waqas Ikram (waqas.ikram@est.tech)
  *
  */
-
 @Component
 public class InstantiateDeploymentItemTask extends AbstractServiceTask {
 
@@ -200,9 +199,7 @@ public class InstantiateDeploymentItemTask extends AbstractServiceTask {
             execution.setVariable(KUBE_KINDS_PARAM_NAME, kubeKinds);
 
             final Map<String, Boolean> result = new HashMap<>();
-            kubeKinds.forEach(kind -> {
-                result.put(kind, false);
-            });
+            kubeKinds.forEach(kind -> result.put(kind, false));
 
             execution.setVariable(KUBE_KINDS_RESULT_PARAM_NAME, result);
         } catch (final BpmnError bpmnError) {
@@ -303,7 +300,7 @@ public class InstantiateDeploymentItemTask extends AbstractServiceTask {
                             resources.addAll(kubernetesClient.getStatefulSetResources(apiClient, labelSelector));
                             break;
                         default:
-                            logger.warn("Unknown resource type {} setting {} skipping it", kind);
+                            logger.warn("Unknown resource type {} found skipping it ...", kind);
                             break;
                     }
                 } catch (final Exception exception) {
@@ -373,7 +370,6 @@ public class InstantiateDeploymentItemTask extends AbstractServiceTask {
             }
         });
 
-
         logger.info("Finished executing createK8sResourcesInAai  ...");
 
     }
@@ -386,20 +382,17 @@ public class InstantiateDeploymentItemTask extends AbstractServiceTask {
                 (Map<String, Boolean>) execution.getVariable(KUBE_KINDS_RESULT_PARAM_NAME);
 
         if (kubeKindResult != null) {
-            kubeKindResult.entrySet().forEach(entry -> {
-                logger.info("Current status {} of resource type: {}", entry.getValue(), entry.getKey());
-            });
+            kubeKindResult.entrySet().forEach(
+                    entry -> logger.info("Current status {} of resource type: {}", entry.getValue(), entry.getKey()));
         }
-
 
         final String asInstId = (String) execution.getVariable(AS_INSTANCE_ID_PARAM_NAME);
         final List<AsDeploymentItem> asDeploymentItems =
                 databaseServiceProvider.getAsDeploymentItemByAsInstId(asInstId);
         if (asDeploymentItems != null) {
-            asDeploymentItems.stream().forEach(asDeploymentItem -> {
-                logger.info("Current status {} of asDeploymentItem: {}", asDeploymentItem.getStatus(),
-                        asDeploymentItem.getName());
-            });
+            asDeploymentItems.stream()
+                    .forEach(asDeploymentItem -> logger.info("Current status {} of asDeploymentItem: {}",
+                            asDeploymentItem.getStatus(), asDeploymentItem.getName()));
         }
     }
 

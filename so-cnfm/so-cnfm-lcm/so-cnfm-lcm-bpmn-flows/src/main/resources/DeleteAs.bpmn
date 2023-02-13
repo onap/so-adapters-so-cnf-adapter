@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1tc9uti" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.0.0">
+  <bpmn:process id="DeleteAs" name="DeleteAs" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_09vhzc2</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="Event_0nug1lm">
+      <bpmn:incoming>Flow_0ld9hr8</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_09vhzc2" sourceRef="StartEvent_1" targetRef="Activity_0taaax6" />
+    <bpmn:serviceTask id="Activity_0taaax6" name="Set Job Status to STARTED" camunda:asyncBefore="true" camunda:expression="${DeleteAsTask.setJobStatusToStarted(execution)}">
+      <bpmn:incoming>Flow_09vhzc2</bpmn:incoming>
+      <bpmn:outgoing>Flow_1687i7q</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1687i7q" sourceRef="Activity_0taaax6" targetRef="Activity_1jfsdb2" />
+    <bpmn:serviceTask id="Activity_1jfsdb2" name="Check AS Instance exists In DB " camunda:expression="${DeleteAsTask.checkIfAsInstanceExistsInDb(execution)}">
+      <bpmn:incoming>Flow_1687i7q</bpmn:incoming>
+      <bpmn:outgoing>Flow_0qqc31o</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_1g62uqk" name="Set Job Status to FINISHED" camunda:expression="${DeleteAsTask.setJobStatusToFinished(execution)}">
+      <bpmn:incoming>Flow_172kwvj</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ld9hr8</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0ld9hr8" sourceRef="Activity_1g62uqk" targetRef="Event_0nug1lm" />
+    <bpmn:subProcess id="Activity_03dmnkf" name="Error Handling" triggeredByEvent="true">
+      <bpmn:startEvent id="Event_02rz7as" name="error">
+        <bpmn:outgoing>Flow_0ifwuxp</bpmn:outgoing>
+        <bpmn:errorEventDefinition id="ErrorEventDefinition_1r3pem1" />
+      </bpmn:startEvent>
+      <bpmn:endEvent id="Event_1gc07h6" name="end">
+        <bpmn:incoming>Flow_1kk2y0h</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:serviceTask id="Activity_0uuvi1d" name="Set Job Status to ERROR" camunda:asyncBefore="true" camunda:expression="${DeleteAsTask.setJobStatusToError(execution)}">
+        <bpmn:incoming>Flow_0ifwuxp</bpmn:incoming>
+        <bpmn:outgoing>Flow_1kk2y0h</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_1kk2y0h" sourceRef="Activity_0uuvi1d" targetRef="Event_1gc07h6" />
+      <bpmn:sequenceFlow id="Flow_0ifwuxp" sourceRef="Event_02rz7as" targetRef="Activity_0uuvi1d" />
+    </bpmn:subProcess>
+    <bpmn:subProcess id="Activity_10mnj1m" name="Java Exception Handling" triggeredByEvent="true">
+      <bpmn:startEvent id="Event_1m8nqlt" name="error">
+        <bpmn:outgoing>Flow_053knln</bpmn:outgoing>
+        <bpmn:errorEventDefinition id="ErrorEventDefinition_171hvzy" errorRef="Error_1rc8vx6" camunda:errorCodeVariable="BPMN_javaExpCode" camunda:errorMessageVariable="BPMN_javaExpMsg" />
+      </bpmn:startEvent>
+      <bpmn:endEvent id="Event_1v4252g">
+        <bpmn:incoming>Flow_1gu1dnf</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:serviceTask id="Activity_052yqhq" name="Set Job Status to ERROR" camunda:asyncBefore="true" camunda:expression="${DeleteAsTask.setJobStatusToError(execution)}">
+        <bpmn:incoming>Flow_053knln</bpmn:incoming>
+        <bpmn:outgoing>Flow_1gu1dnf</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_1gu1dnf" sourceRef="Activity_052yqhq" targetRef="Event_1v4252g" />
+      <bpmn:sequenceFlow id="Flow_053knln" sourceRef="Event_1m8nqlt" targetRef="Activity_052yqhq" />
+    </bpmn:subProcess>
+    <bpmn:serviceTask id="Activity_0uxlyqj" name="Check if AS Instance state in DB is NOT_INSTANTIATED" camunda:expression="${DeleteAsTask.checkifAsInstanceInDbIsInNotInstantiatedState(execution)}">
+      <bpmn:incoming>Flow_0zhc29v</bpmn:incoming>
+      <bpmn:outgoing>Flow_0rnc1yr</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_13t56cm" name="Does AS Instance Exist?">
+      <bpmn:incoming>Flow_0qqc31o</bpmn:incoming>
+      <bpmn:outgoing>Flow_0zhc29v</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0tb94ui</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="Gateway_0jvzfpt" name="Is AS Instance in NOT INSTANTIATED State?">
+      <bpmn:incoming>Flow_0rnc1yr</bpmn:incoming>
+      <bpmn:outgoing>Flow_0blv3cy</bpmn:outgoing>
+      <bpmn:outgoing>Flow_11ap3gp</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="Event_1xhfq2h">
+      <bpmn:incoming>Flow_0tb94ui</bpmn:incoming>
+      <bpmn:incoming>Flow_0blv3cy</bpmn:incoming>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1hclsfi" errorRef="Error_1rc8vx6" />
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0zhc29v" name="Yes" sourceRef="Gateway_13t56cm" targetRef="Activity_0uxlyqj">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{asInstanceExists}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0rnc1yr" sourceRef="Activity_0uxlyqj" targetRef="Gateway_0jvzfpt" />
+    <bpmn:sequenceFlow id="Flow_0tb94ui" name="No" sourceRef="Gateway_13t56cm" targetRef="Event_1xhfq2h">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{not nsInstanceExists}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0blv3cy" name="No" sourceRef="Gateway_0jvzfpt" targetRef="Event_1xhfq2h">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{not isInNotInstantiatedState}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0qqc31o" sourceRef="Activity_1jfsdb2" targetRef="Gateway_13t56cm" />
+    <bpmn:sequenceFlow id="Flow_11ap3gp" name="Yes" sourceRef="Gateway_0jvzfpt" targetRef="Activity_0mupxpq">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{isInNotInstantiatedState}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:serviceTask id="Activity_15dtekb" name="Delete AS Instance from DB" camunda:expression="${DeleteAsTask.deleteAsInstanceFromDb(execution)}">
+      <bpmn:incoming>Flow_1t4zqk5</bpmn:incoming>
+      <bpmn:outgoing>Flow_172kwvj</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_172kwvj" sourceRef="Activity_15dtekb" targetRef="Activity_1g62uqk" />
+    <bpmn:serviceTask id="Activity_0mupxpq" name="Delete AS (GenericVnf) Instance from AAI" camunda:expression="${DeleteAsTask.deleteGenericVnfFromAai(execution)}">
+      <bpmn:incoming>Flow_11ap3gp</bpmn:incoming>
+      <bpmn:outgoing>Flow_1t4zqk5</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1t4zqk5" sourceRef="Activity_0mupxpq" targetRef="Activity_15dtekb" />
+  </bpmn:process>
+  <bpmn:error id="Error_0fg93db" name="AsWorkflowProcessingException" errorCode="DELETE_AS_WORKFLOW_PROCESSING_EXCEPTION" />
+  <bpmn:error id="Error_1rc8vx6" name="AsWorkflowProcessingException" errorCode="CREATE_AS_WORKFLOW_PROCESSING_EXCEPTION" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="DeleteAs">
+      <bpmndi:BPMNEdge id="Flow_172kwvj_di" bpmnElement="Flow_172kwvj">
+        <di:waypoint x="1220" y="167" />
+        <di:waypoint x="1280" y="167" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11ap3gp_di" bpmnElement="Flow_11ap3gp">
+        <di:waypoint x="915" y="167" />
+        <di:waypoint x="970" y="167" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="930" y="140" width="19" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0qqc31o_di" bpmnElement="Flow_0qqc31o">
+        <di:waypoint x="530" y="167" />
+        <di:waypoint x="585" y="167" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0blv3cy_di" bpmnElement="Flow_0blv3cy">
+        <di:waypoint x="890" y="192" />
+        <di:waypoint x="890" y="270" />
+        <di:waypoint x="768" y="270" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="903" y="228" width="14" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0tb94ui_di" bpmnElement="Flow_0tb94ui">
+        <di:waypoint x="610" y="192" />
+        <di:waypoint x="610" y="270" />
+        <di:waypoint x="732" y="270" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="618" y="228" width="14" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0rnc1yr_di" bpmnElement="Flow_0rnc1yr">
+        <di:waypoint x="800" y="167" />
+        <di:waypoint x="865" y="167" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0zhc29v_di" bpmnElement="Flow_0zhc29v">
+        <di:waypoint x="635" y="167" />
+        <di:waypoint x="700" y="167" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="658" y="149" width="19" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ld9hr8_di" bpmnElement="Flow_0ld9hr8">
+        <di:waypoint x="1380" y="167" />
+        <di:waypoint x="1442" y="167" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1687i7q_di" bpmnElement="Flow_1687i7q">
+        <di:waypoint x="370" y="167" />
+        <di:waypoint x="430" y="167" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09vhzc2_di" bpmnElement="Flow_09vhzc2">
+        <di:waypoint x="215" y="167" />
+        <di:waypoint x="270" y="167" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1t4zqk5_di" bpmnElement="Flow_1t4zqk5">
+        <di:waypoint x="1070" y="167" />
+        <di:waypoint x="1120" y="167" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="149" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0taaax6_di" bpmnElement="Activity_0taaax6">
+        <dc:Bounds x="270" y="127" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1jfsdb2_di" bpmnElement="Activity_1jfsdb2">
+        <dc:Bounds x="430" y="127" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0nug1lm_di" bpmnElement="Event_0nug1lm">
+        <dc:Bounds x="1442" y="149" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_15dtekb_di" bpmnElement="Activity_15dtekb">
+        <dc:Bounds x="1120" y="127" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1g62uqk_di" bpmnElement="Activity_1g62uqk">
+        <dc:Bounds x="1280" y="127" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0mupxpq_di" bpmnElement="Activity_0mupxpq">
+        <dc:Bounds x="970" y="127" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_03dmnkf_di" bpmnElement="Activity_03dmnkf" isExpanded="true">
+        <dc:Bounds x="310" y="330" width="438" height="130" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0ifwuxp_di" bpmnElement="Flow_0ifwuxp">
+        <di:waypoint x="368" y="393" />
+        <di:waypoint x="460" y="393" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1kk2y0h_di" bpmnElement="Flow_1kk2y0h">
+        <di:waypoint x="560" y="393" />
+        <di:waypoint x="692" y="393" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_02rz7as_di" bpmnElement="Event_02rz7as">
+        <dc:Bounds x="332" y="375" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="338" y="418" width="24" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1gc07h6_di" bpmnElement="Event_1gc07h6">
+        <dc:Bounds x="692" y="375" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="702" y="417" width="19" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0uuvi1d_di" bpmnElement="Activity_0uuvi1d">
+        <dc:Bounds x="460" y="353" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_10mnj1m_di" bpmnElement="Activity_10mnj1m" isExpanded="true">
+        <dc:Bounds x="310" y="490" width="438" height="130" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_053knln_di" bpmnElement="Flow_053knln">
+        <di:waypoint x="401" y="553" />
+        <di:waypoint x="459" y="553" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1gu1dnf_di" bpmnElement="Flow_1gu1dnf">
+        <di:waypoint x="559" y="553" />
+        <di:waypoint x="651" y="553" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_1m8nqlt_di" bpmnElement="Event_1m8nqlt">
+        <dc:Bounds x="365" y="535" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="372" y="578" width="24" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1v4252g_di" bpmnElement="Event_1v4252g">
+        <dc:Bounds x="651" y="535" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_052yqhq_di" bpmnElement="Activity_052yqhq">
+        <dc:Bounds x="459" y="513" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0uxlyqj_di" bpmnElement="Activity_0uxlyqj">
+        <dc:Bounds x="700" y="127" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_13t56cm_di" bpmnElement="Gateway_13t56cm" isMarkerVisible="true">
+        <dc:Bounds x="585" y="142" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="566" y="106" width="88" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0jvzfpt_di" bpmnElement="Gateway_0jvzfpt" isMarkerVisible="true">
+        <dc:Bounds x="865" y="142" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="851" y="83" width="79" height="53" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1xhfq2h_di" bpmnElement="Event_1xhfq2h">
+        <dc:Bounds x="732" y="252" width="36" height="36" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
