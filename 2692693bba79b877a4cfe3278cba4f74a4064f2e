@@ -1,0 +1,9 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+1: Nadeeshani Jayathilake <nadeeshani.jayathilake@est.tech>
+Code-Review+2: Byung-Woo Jun <byung-woo.jun@est.tech>
+Code-Review+1: RAVITEJA KARUMURI <raviteja.karumuri@est.tech>
+Submitted-by: Byung-Woo Jun <byung-woo.jun@est.tech>
+Submitted-at: Mon, 13 Feb 2023 17:05:45 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/so/adapters/so-cnf-adapter/+/133234
+Project: so/adapters/so-cnf-adapter
+Branch: refs/heads/master
