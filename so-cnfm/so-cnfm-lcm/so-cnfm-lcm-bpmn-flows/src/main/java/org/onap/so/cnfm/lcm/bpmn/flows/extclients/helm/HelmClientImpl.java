@@ -161,7 +161,7 @@ public class HelmClientImpl implements HelmClient {
     private ProcessBuilder prepareDryRunCommand(final String releaseName, final Path kubeconfig, final Path helmChart) {
         final List<String> helmArguments = List.of("helm", "install", releaseName, "-n", DEFAULT_NAMESPACE,
                 helmChart.toString(), "--dry-run", "--kubeconfig", kubeconfig.toString());
-        return new ProcessBuilder().command(helmArguments);
+        return getProcessBuilder().command(helmArguments);
     }
 
     private ProcessBuilder prepareInstallCommand(final String releaseName, final Path kubeconfig, final Path helmChart,
@@ -175,7 +175,7 @@ public class HelmClientImpl implements HelmClient {
             commands.add("-f ".concat(fileName));
         }
         final List<String> helmArguments = List.of("sh", "-c", toString(commands));
-        return new ProcessBuilder().command(helmArguments);
+        return getProcessBuilder().command(helmArguments);
     }
 
     private void createYamlFile(final String fileName, final Map<String, String> lifeCycleParams) {
@@ -194,7 +194,7 @@ public class HelmClientImpl implements HelmClient {
         logger.debug("Will remove tis log after checking ubeconfig path: {}", kubeConfig.toFile().getName());
         final List<String> helmArguments = new ArrayList<>(List.of("helm", "uninstall", releaseName, "-n",
                 DEFAULT_NAMESPACE, "--kubeconfig", kubeConfig.toString()));
-        return new ProcessBuilder().command(helmArguments);
+        return getProcessBuilder().command(helmArguments);
     }
 
     private ProcessBuilder prepareKubeKindCommand(final String releaseName, final Path kubeconfig,
@@ -203,14 +203,14 @@ public class HelmClientImpl implements HelmClient {
                 List.of("helm", "template", releaseName, "-n", DEFAULT_NAMESPACE, helmChart.toString(), "--dry-run",
                         "--kubeconfig", kubeconfig.toString(), "--skip-tests", "| grep kind | uniq");
         final List<String> helmArguments = List.of("sh", "-c", toString(commands));
-        return new ProcessBuilder().command(helmArguments);
+        return getProcessBuilder().command(helmArguments);
     }
 
     private ProcessBuilder prepareGetKubeKindCommand(final String releaseName, final Path kubeconfig) {
         final List<String> commands = List.of("helm", "get", "manifest", releaseName, "-n", DEFAULT_NAMESPACE,
                 "--kubeconfig", kubeconfig.toString(), "| grep kind | uniq");
         final List<String> helmArguments = List.of("sh", "-c", toString(commands));
-        return new ProcessBuilder().command(helmArguments);
+        return getProcessBuilder().command(helmArguments);
     }
 
     private String executeCommand(final ProcessBuilder processBuilder) throws HelmClientExecuteException {
@@ -284,4 +284,9 @@ public class HelmClientImpl implements HelmClient {
     private String toString(final List<String> commands) {
         return String.join(" ", commands);
     }
+
+    ProcessBuilder getProcessBuilder() {
+        return new ProcessBuilder();
+    }
+
 }
