@@ -45,5 +45,11 @@
             <version>${so-core-version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.openpojo</groupId>
+            <artifactId>openpojo</artifactId>
+            <version>${openpojo-version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

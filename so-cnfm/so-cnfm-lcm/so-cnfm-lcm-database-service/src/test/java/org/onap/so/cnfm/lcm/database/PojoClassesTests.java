@@ -28,6 +28,12 @@ import org.onap.so.cnfm.lcm.database.beans.AsLcmOpOcc;
 import org.onap.so.cnfm.lcm.database.beans.AsLifecycleParam;
 import org.onap.so.cnfm.lcm.database.beans.Job;
 import org.onap.so.cnfm.lcm.database.beans.JobStatus;
+import org.onap.so.openpojo.rules.ToStringTester;
+import com.openpojo.reflection.impl.PojoClassFactory;
+import com.openpojo.validation.Validator;
+import com.openpojo.validation.ValidatorBuilder;
+import com.openpojo.validation.test.impl.GetterTester;
+import com.openpojo.validation.test.impl.SetterTester;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
@@ -36,12 +42,20 @@ import nl.jqno.equalsverifier.Warning;
  */
 public class PojoClassesTests {
 
+    private static final Validator VALIDATOR = ValidatorBuilder.create().with(new SetterTester())
+            .with(new GetterTester()).with(new ToStringTester()).build();
+
     @Test
     public void test_database_job_equalAndHashMethod() throws ClassNotFoundException {
         EqualsVerifier.forClass(Job.class)
                 .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS, Warning.INHERITED_DIRECTLY_FROM_OBJECT)
                 .withPrefabValues(JobStatus.class, new JobStatus().job(new Job()), new JobStatus().job(new Job()))
                 .withIgnoredAnnotations(Entity.class, Id.class).verify();
+    }
+
+    @Test
+    public void test_database_job_getterSetterMethod() {
+        VALIDATOR.validate(PojoClassFactory.getPojoClass(Job.class));
     }
 
     @Test
@@ -53,11 +67,21 @@ public class PojoClassesTests {
     }
 
     @Test
+    public void test_database_jobStatus_getterSetterMethod() {
+        VALIDATOR.validate(PojoClassFactory.getPojoClass(JobStatus.class));
+    }
+
+    @Test
     public void test_database_asInst_equalAndHashMethod() throws ClassNotFoundException {
         EqualsVerifier.forClass(AsInst.class)
                 .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS, Warning.INHERITED_DIRECTLY_FROM_OBJECT)
                 .withPrefabValues(AsDeploymentItem.class, new AsDeploymentItem(), new AsDeploymentItem())
                 .withIgnoredAnnotations(Entity.class, Id.class).verify();
+    }
+
+    @Test
+    public void test_database_asInst_getterSetterMethod() {
+        VALIDATOR.validate(PojoClassFactory.getPojoClass(AsInst.class));
     }
 
     @Test
@@ -70,6 +94,12 @@ public class PojoClassesTests {
     }
 
     @Test
+    public void test_database_asdeploymentItem_getterSetterMethod() {
+        VALIDATOR.validate(PojoClassFactory.getPojoClass(AsDeploymentItem.class));
+    }
+
+
+    @Test
     public void test_database_asLcmOpOcc_equalAndHashMethod() throws ClassNotFoundException {
         EqualsVerifier.forClass(AsLcmOpOcc.class)
                 .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS, Warning.INHERITED_DIRECTLY_FROM_OBJECT)
@@ -78,11 +108,21 @@ public class PojoClassesTests {
     }
 
     @Test
+    public void test_database_asLcmOpOcc_getterSetterMethod() {
+        VALIDATOR.validate(PojoClassFactory.getPojoClass(AsLcmOpOcc.class));
+    }
+
+    @Test
     public void test_database_asLifecycleParam_equalAndHashMethod() throws ClassNotFoundException {
         EqualsVerifier.forClass(AsLifecycleParam.class)
                 .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS, Warning.INHERITED_DIRECTLY_FROM_OBJECT)
                 .withPrefabValues(AsDeploymentItem.class, new AsDeploymentItem(), new AsDeploymentItem())
                 .withIgnoredAnnotations(Entity.class, Id.class).verify();
+    }
+
+    @Test
+    public void test_database_asLifecycleParam_getterSetterMethod() {
+        VALIDATOR.validate(PojoClassFactory.getPojoClass(AsLifecycleParam.class));
     }
 
 }
