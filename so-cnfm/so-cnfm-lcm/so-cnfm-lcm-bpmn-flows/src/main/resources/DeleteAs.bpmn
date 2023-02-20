@@ -76,7 +76,7 @@
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0rnc1yr" sourceRef="Activity_0uxlyqj" targetRef="Gateway_0jvzfpt" />
     <bpmn:sequenceFlow id="Flow_0tb94ui" name="No" sourceRef="Gateway_13t56cm" targetRef="Event_1xhfq2h">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{not nsInstanceExists}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{not asInstanceExists}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0blv3cy" name="No" sourceRef="Gateway_0jvzfpt" targetRef="Event_1xhfq2h">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{not isInNotInstantiatedState}</bpmn:conditionExpression>

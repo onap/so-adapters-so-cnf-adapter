@@ -25,6 +25,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.ok;
 import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.onap.aaiclient.client.aai.AAIVersion.V19;
@@ -32,14 +33,18 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 import org.camunda.bpm.engine.history.HistoricProcessInstance;
+import org.camunda.bpm.engine.history.HistoricVariableInstance;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.onap.so.cnfm.lcm.bpmn.flows.BaseTest;
+import org.onap.so.cnfm.lcm.bpmn.flows.exceptions.AsRequestProcessingException;
 import org.onap.so.cnfm.lcm.bpmn.flows.service.JobExecutorService;
+import org.onap.so.cnfm.lcm.bpmn.flows.service.WorkflowQueryService;
 import org.onap.so.cnfm.lcm.database.beans.AsInst;
 import org.onap.so.cnfm.lcm.database.beans.Job;
 import org.onap.so.cnfm.lcm.database.beans.State;
+import org.onap.so.cnfm.lcm.model.ErrorDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -51,6 +56,9 @@ public class DeleteAsTaskTest extends BaseTest {
 
     @Autowired
     private JobExecutorService objUnderTest;
+
+    @Autowired
+    private WorkflowQueryService workflowQueryService;
 
     @Before
     public void before() {
@@ -65,7 +73,7 @@ public class DeleteAsTaskTest extends BaseTest {
     @Test
     public void testRunDeleteNsJob_SuccessfulCase() throws InterruptedException {
         final String asInstanceId = UUID.randomUUID().toString();
-        addDummyAsToDatabase(asInstanceId);
+        addDummyAsToDatabase(asInstanceId, State.NOT_INSTANTIATED);
         mockAaiEndpoints(asInstanceId);
 
         objUnderTest.runDeleteAsJob(asInstanceId);
@@ -85,6 +93,83 @@ public class DeleteAsTaskTest extends BaseTest {
 
     }
 
+    @Test
+    public void testRunDeleteNsJob_AsInstanceDoesNotExistsInDb() throws InterruptedException {
+        final String asInstanceId = UUID.randomUUID().toString();
+
+        try {
+            objUnderTest.runDeleteAsJob(asInstanceId);
+        } catch (final Exception exception) {
+            assertEquals(AsRequestProcessingException.class, exception.getClass());
+        }
+
+        final Optional<Job> optional = getJobByResourceId(asInstanceId);
+        assertTrue(optional.isPresent());
+        final Job job = optional.get();
+
+        assertTrue(waitForProcessInstanceToFinish(job.getProcessInstanceId()));
+
+        final HistoricProcessInstance historicProcessInstance = getHistoricProcessInstance(job.getProcessInstanceId());
+        assertNotNull(historicProcessInstance);
+        assertEquals(HistoricProcessInstance.STATE_COMPLETED, historicProcessInstance.getState());
+
+        final Optional<AsInst> optionalAsInst = databaseServiceProvider.getAsInst(asInstanceId);
+        assertTrue(optionalAsInst.isEmpty());
+
+        final Optional<ErrorDetails> errorDetailsOptional =
+                workflowQueryService.getErrorDetails(job.getProcessInstanceId());
+        assertTrue(errorDetailsOptional.isPresent());
+
+        final ErrorDetails errorDetails = errorDetailsOptional.get();
+        assertNotNull(errorDetails);
+        assertNotNull(errorDetails.getDetail());
+
+        final HistoricVariableInstance doesAsInstanceExistsVar =
+                getVariable(job.getProcessInstanceId(), "asInstanceExists");
+        assertNotNull(doesAsInstanceExistsVar);
+        assertFalse((boolean) doesAsInstanceExistsVar.getValue());
+    }
+
+
+    @Test
+    public void testRunDeleteNsJob_AsInstanceDoesExistsInDbWithInstantiatedState() throws InterruptedException {
+        final String asInstanceId = UUID.randomUUID().toString();
+
+        addDummyAsToDatabase(asInstanceId, State.INSTANTIATED);
+
+        try {
+            objUnderTest.runDeleteAsJob(asInstanceId);
+        } catch (final Exception exception) {
+            assertEquals(AsRequestProcessingException.class, exception.getClass());
+        }
+
+        final Optional<Job> optional = getJobByResourceId(asInstanceId);
+        assertTrue(optional.isPresent());
+        final Job job = optional.get();
+
+        assertTrue(waitForProcessInstanceToFinish(job.getProcessInstanceId()));
+
+        final HistoricProcessInstance historicProcessInstance = getHistoricProcessInstance(job.getProcessInstanceId());
+        assertNotNull(historicProcessInstance);
+        assertEquals(HistoricProcessInstance.STATE_COMPLETED, historicProcessInstance.getState());
+
+        final Optional<AsInst> optionalAsInst = databaseServiceProvider.getAsInst(asInstanceId);
+        assertFalse(optionalAsInst.isEmpty());
+
+        final Optional<ErrorDetails> errorDetailsOptional =
+                workflowQueryService.getErrorDetails(job.getProcessInstanceId());
+        assertTrue(errorDetailsOptional.isPresent());
+
+        final ErrorDetails errorDetails = errorDetailsOptional.get();
+        assertNotNull(errorDetails);
+        assertNotNull(errorDetails.getDetail());
+
+        final HistoricVariableInstance isInNotInstantiatedStateVar =
+                getVariable(job.getProcessInstanceId(), "isInNotInstantiatedState");
+        assertNotNull(isInNotInstantiatedStateVar);
+        assertFalse((boolean) isInNotInstantiatedStateVar.getValue());
+    }
+
     private void mockAaiEndpoints(final String asInstanceId) {
         final String modelEndpoint = "/aai/" + V19 + "/network/generic-vnfs/generic-vnf/" + asInstanceId;
         final String resourceVersion = UUID.randomUUID().toString();
@@ -96,15 +181,15 @@ public class DeleteAsTaskTest extends BaseTest {
                 delete(urlMatching(modelEndpoint + "\\?resource-version=" + resourceVersion)).willReturn(ok()));
     }
 
-    private void addDummyAsToDatabase(final String asInstanceId) {
+    private void addDummyAsToDatabase(final String asInstanceId, final State state) {
         final String asdId = UUID.randomUUID().toString();
 
-        final AsInst asInst = new AsInst().asInstId(asInstanceId).name("asName").asdId(asdId)
-                .asdInvariantId(asInstanceId).status(State.NOT_INSTANTIATED).statusUpdatedTime(LocalDateTime.now())
-                .asApplicationName("asApplicationName").asApplicationVersion("asApplicationVersion")
-                .asProvider("asProvider").serviceInstanceId(SERVICE_INSTANCE_ID)
-                .serviceInstanceName("serviceInstanceName").cloudOwner("cloudOwner").cloudRegion("cloudRegion")
-                .tenantId("tenantId");
+        final AsInst asInst =
+                new AsInst().asInstId(asInstanceId).name("asName").asdId(asdId).asdInvariantId(asInstanceId)
+                        .status(state).statusUpdatedTime(LocalDateTime.now()).asApplicationName("asApplicationName")
+                        .asApplicationVersion("asApplicationVersion").asProvider("asProvider")
+                        .serviceInstanceId(SERVICE_INSTANCE_ID).serviceInstanceName("serviceInstanceName")
+                        .cloudOwner("cloudOwner").cloudRegion("cloudRegion").tenantId("tenantId");
         databaseServiceProvider.saveAsInst(asInst);
     }
 

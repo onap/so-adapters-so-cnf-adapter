@@ -25,7 +25,6 @@ import static org.slf4j.LoggerFactory.getLogger;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -122,10 +121,6 @@ public abstract class BaseTest {
     public HistoricVariableInstance getVariable(final String processInstanceId, final String name) {
         return historyService.createHistoricVariableInstanceQuery().processInstanceId(processInstanceId)
                 .variableName(name).singleResult();
-    }
-
-    public List<HistoricVariableInstance> getVariables(final String processInstanceId) {
-        return historyService.createHistoricVariableInstanceQuery().processInstanceId(processInstanceId).list();
     }
 
     public boolean waitForProcessInstanceToFinish(final String processInstanceId) throws InterruptedException {
