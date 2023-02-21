@@ -104,6 +104,12 @@ import io.kubernetes.client.util.Watch;
  * @author Waqas Ikram (waqas.ikram@est.tech)
  */
 public class InstantiateAsTaskTest extends BaseTest {
+    private static final String BATCH_V1 = "batch/v1";
+    private static final String V1 = "v1";
+    private static final String APPS_V1 = "apps/v1";
+    private static final String RESPONSE_TYPE_ADDED = "ADDED";
+    private static final String DEPLOYMENT_ITEM_1_RELEASE_NAME = "testOne";
+    private static final String DEPLOYMENT_ITEM_2_RELEASE_NAME = "testTwo";
     private static final String DEPLOYMENT_ITEM_1_LIFECYCLE_PARAM_1 = ".Values.primary.service.ports.mysql";
     private static final String DEPLOYMENT_ITEM_1_LIFECYCLE_PARAM_2 = ".Values.primary.service.nodePorts.mysql";
 
@@ -123,7 +129,6 @@ public class InstantiateAsTaskTest extends BaseTest {
     private static final String ASD_ID = AS_INST_ID;
     private static final String SRC_TEST_DIR = "src/test/resources";
 
-    private static final String SDC_GET_RESOURCE_URL = "/sdc/v1/catalog/resources/" + ASD_ID + "/toscaModel";
     private static final String RESOURCE_ASD_PACKAGE_CSAR_PATH =
             SRC_TEST_DIR + "/resource-Generatedasdpackage-csar.csar";
 
@@ -164,6 +169,7 @@ public class InstantiateAsTaskTest extends BaseTest {
         kubernetesClientProvider.setWireMockServer(wireMockServer);
 
         gson = gsonProvider.getGson();
+        mockedHelmClient.clear();
     }
 
     @After
@@ -185,9 +191,7 @@ public class InstantiateAsTaskTest extends BaseTest {
 
         mockAAIEndpoints();
 
-        wireMockServer.stubFor(get(SDC_GET_RESOURCE_URL)
-                .willReturn(aResponse().withBody(getFileContent(getAbsolutePath(RESOURCE_ASD_PACKAGE_CSAR_PATH)))
-                        .withHeader(ACCEPT, APPLICATION_OCTET_STREAM_VALUE)));
+        mockSdcPackageDownloadEndpoint();
 
         final AsInst asInst = createAsInst(AS_INST_ID, AS_DEPLOYMENT_ITEM_1_INST_ID, AS_DEPLOYMENT_ITEM_2_INST_ID);
 
@@ -232,12 +236,61 @@ public class InstantiateAsTaskTest extends BaseTest {
 
     }
 
+    @Test
+    public void testInstantiateAsWorkflow_JobResourceFailedToStartUp() throws InterruptedException, IOException {
+
+        final String asInstId = UUID.randomUUID().toString();
+        final String asDeploymentItem1InstId = UUID.randomUUID().toString();
+        final String asDeploymentItem2InstId = UUID.randomUUID().toString();
+        final String release_name_3 = "testThree";
+        final String release_name_4 = "testFour";
+
+        final String jobResourceResponse = gson.toJson(new Watch.Response<V1Job>(RESPONSE_TYPE_ADDED,
+                new V1Job().apiVersion(BATCH_V1).metadata(getV1ObjectMeta())
+                        .status(new V1JobStatus().addConditionsItem(new V1JobCondition().type("Failed")
+                                .status(Boolean.TRUE.toString()).reason("Image not found")))));
+
+        final AsInst asInst = createAsInst(asInstId, asDeploymentItem1InstId, asDeploymentItem2InstId, release_name_3,
+                release_name_4, asInstId);
+        databaseServiceProvider.saveAsInst(asInst);
+
+        wireMockServer.stubFor(get(urlMatching("/apis/batch/v1/jobs\\?labelSelector.*(" + release_name_3 + "|"
+                + release_name_4 + ")&timeoutSeconds=1&watch=true")).willReturn(
+                        aResponse().withBody(jobResourceResponse).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
+
+        mockAAIEndpoints(asInstId, asDeploymentItem1InstId, asDeploymentItem2InstId);
+        mockSdcPackageDownloadEndpoint(asInstId);
+
+        createKubeConfigFile(asInst);
+
+        try {
+            objUnderTest.runInstantiateAsJob(asInst.getAsInstId(), getInstantiateAsRequest());
+        } catch (final Exception exception) {
+            assertEquals(AsRequestProcessingException.class, exception.getClass());
+        }
+
+        final Optional<Job> optional = getJobByResourceId(asInst.getAsInstId());
+        assertTrue(optional.isPresent());
+        final Job job = optional.get();
+
+
+        assertTrue(waitForProcessInstanceToFinish(job.getProcessInstanceId()));
+
+        final HistoricProcessInstance historicProcessInstance = getHistoricProcessInstance(job.getProcessInstanceId());
+        assertNotNull(historicProcessInstance);
+        assertEquals(HistoricProcessInstance.STATE_COMPLETED, historicProcessInstance.getState());
+
+        final Optional<AsInst> asInstOptional = databaseServiceProvider.getAsInst(asInst.getAsInstId());
+        final AsInst actualAsInst = asInstOptional.get();
+        assertEquals(State.FAILED, actualAsInst.getStatus());
+
+
+    }
+
     @Test(expected = AsRequestProcessingException.class)
     public void testInstantiateAsWorkflow_LifecycleParametersMissing_Fail() throws InterruptedException, IOException {
 
-        wireMockServer.stubFor(get(SDC_GET_RESOURCE_URL)
-                .willReturn(aResponse().withBody(getFileContent(getAbsolutePath(RESOURCE_ASD_PACKAGE_CSAR_PATH)))
-                        .withHeader(ACCEPT, APPLICATION_OCTET_STREAM_VALUE)));
+        mockSdcPackageDownloadEndpoint();
 
         final AsLifecycleParam lcp3 = new AsLifecycleParam().asLifecycleParam(".Values.extra.missing");
         final AsInst asInst1 = createAsInst(AS_INST_ID2, AS_DEPLOYMENT_ITEM_1_INST_ID2, AS_DEPLOYMENT_ITEM_2_INST_ID2);
@@ -275,46 +328,70 @@ public class InstantiateAsTaskTest extends BaseTest {
         assertEquals(State.FAILED, asInstOptional.get().getStatus());
     }
 
+    private void mockSdcPackageDownloadEndpoint() throws IOException {
+        mockSdcPackageDownloadEndpoint(ASD_ID);
+    }
+
+    private void mockSdcPackageDownloadEndpoint(final String asdId) throws IOException {
+        wireMockServer.stubFor(get("/sdc/v1/catalog/resources/" + asdId + "/toscaModel")
+                .willReturn(aResponse().withBody(getFileContent(getAbsolutePath(RESOURCE_ASD_PACKAGE_CSAR_PATH)))
+                        .withHeader(ACCEPT, APPLICATION_OCTET_STREAM_VALUE)));
+    }
 
     private void mockKubernetesClientEndpoint() {
-        wireMockServer.stubFor(get(urlMatching("/apis/batch/v1/jobs\\?labelSelector.*&watch=true"))
-                .willReturn(aResponse().withBody(getJobResponse()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
+        wireMockServer.stubFor(get(urlMatching("/apis/batch/v1/jobs\\?labelSelector.*(" + DEPLOYMENT_ITEM_1_RELEASE_NAME
+                + "|" + DEPLOYMENT_ITEM_2_RELEASE_NAME + ")&timeoutSeconds=1&watch=true"))
+                        .willReturn(aResponse().withBody(getJobResponse()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
         wireMockServer.stubFor(get(urlMatching("/apis/batch/v1/jobs\\?labelSelector.*&watch=false"))
                 .willReturn(aResponse().withBody(getJobList()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
 
-        wireMockServer.stubFor(get(urlMatching("/api/v1/pods\\?labelSelector.*&watch=true"))
-                .willReturn(aResponse().withBody(getPodResponse()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
+        wireMockServer.stubFor(get(urlMatching("/api/v1/pods\\?labelSelector.*(" + DEPLOYMENT_ITEM_1_RELEASE_NAME + "|"
+                + DEPLOYMENT_ITEM_2_RELEASE_NAME + ")&timeoutSeconds=1&watch=true"))
+                        .willReturn(aResponse().withBody(getPodResponse()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
         wireMockServer.stubFor(get(urlMatching("/api/v1/pods\\?labelSelector.*&watch=false"))
                 .willReturn(aResponse().withBody(getPodList()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
 
-        wireMockServer.stubFor(get(urlMatching("/api/v1/services\\?labelSelector.*&watch=true"))
-                .willReturn(aResponse().withBody(getServiceResponse()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
+        wireMockServer.stubFor(get(urlMatching("/api/v1/services\\?labelSelector.*(" + DEPLOYMENT_ITEM_1_RELEASE_NAME
+                + "|" + DEPLOYMENT_ITEM_2_RELEASE_NAME + ")&timeoutSeconds=1&watch=true")).willReturn(
+                        aResponse().withBody(getServiceResponse()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
         wireMockServer.stubFor(get(urlMatching("/api/v1/services\\?labelSelector.*&watch=false"))
                 .willReturn(aResponse().withBody(getServiceList()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
 
-        wireMockServer.stubFor(get(urlMatching("/apis/apps/v1/deployments\\?labelSelector.*&watch=true"))
-                .willReturn(aResponse().withBody(getDeploymentResponse()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
+        wireMockServer
+                .stubFor(get(urlMatching("/apis/apps/v1/deployments\\?labelSelector.*(" + DEPLOYMENT_ITEM_1_RELEASE_NAME
+                        + "|" + DEPLOYMENT_ITEM_2_RELEASE_NAME + ")&timeoutSeconds=1&watch=true"))
+                                .willReturn(aResponse().withBody(getDeploymentResponse()).withHeader(ACCEPT,
+                                        APPLICATION_JSON_VALUE)));
         wireMockServer.stubFor(get(urlMatching("/apis/apps/v1/deployments\\?labelSelector.*&watch=false"))
                 .willReturn(aResponse().withBody(getDeploymentList()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
 
-        wireMockServer.stubFor(get(urlMatching("/apis/apps/v1/replicasets\\?labelSelector.*&watch=true"))
-                .willReturn(aResponse().withBody(getReplicaSetResponse()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
+        wireMockServer
+                .stubFor(get(urlMatching("/apis/apps/v1/replicasets\\?labelSelector.*(" + DEPLOYMENT_ITEM_1_RELEASE_NAME
+                        + "|" + DEPLOYMENT_ITEM_2_RELEASE_NAME + ")&timeoutSeconds=1&watch=true"))
+                                .willReturn(aResponse().withBody(getReplicaSetResponse()).withHeader(ACCEPT,
+                                        APPLICATION_JSON_VALUE)));
         wireMockServer.stubFor(get(urlMatching("/apis/apps/v1/replicasets\\?labelSelector.*&watch=false"))
                 .willReturn(aResponse().withBody(getReplicaSetList()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
 
-        wireMockServer.stubFor(get(urlMatching("/apis/apps/v1/daemonsets\\?labelSelector.*&watch=true"))
-                .willReturn(aResponse().withBody(getDaemonSetResponse()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
+        wireMockServer
+                .stubFor(get(urlMatching("/apis/apps/v1/daemonsets\\?labelSelector.*(" + DEPLOYMENT_ITEM_1_RELEASE_NAME
+                        + "|" + DEPLOYMENT_ITEM_2_RELEASE_NAME + ")&timeoutSeconds=1&watch=true"))
+                                .willReturn(aResponse().withBody(getDaemonSetResponse()).withHeader(ACCEPT,
+                                        APPLICATION_JSON_VALUE)));
         wireMockServer.stubFor(get(urlMatching("/apis/apps/v1/daemonsets\\?labelSelector.*&watch=false"))
                 .willReturn(aResponse().withBody(getDaemonSetList()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
 
-        wireMockServer.stubFor(get(urlMatching("/apis/apps/v1/statefulsets\\?labelSelector.*&watch=true"))
-                .willReturn(aResponse().withBody(getStatefulSetResponse()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
+        wireMockServer.stubFor(
+                get(urlMatching("/apis/apps/v1/statefulsets\\?labelSelector.*(" + DEPLOYMENT_ITEM_1_RELEASE_NAME + "|"
+                        + DEPLOYMENT_ITEM_2_RELEASE_NAME + ")&timeoutSeconds=1&watch=true"))
+                                .willReturn(aResponse().withBody(getStatefulSetResponse()).withHeader(ACCEPT,
+                                        APPLICATION_JSON_VALUE)));
         wireMockServer.stubFor(get(urlMatching("/apis/apps/v1/statefulsets\\?labelSelector.*&watch=false"))
                 .willReturn(aResponse().withBody(getStatefulSetList()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
     }
 
     private String getStatefulSetResponse() {
-        return gson.toJson(new Watch.Response<V1StatefulSet>("ADDED", getStatefulSet()));
+        return gson.toJson(new Watch.Response<V1StatefulSet>(RESPONSE_TYPE_ADDED, getStatefulSet()));
     }
 
     private String getStatefulSetList() {
@@ -326,7 +403,7 @@ public class InstantiateAsTaskTest extends BaseTest {
     private V1StatefulSet getStatefulSet() {
         return new V1StatefulSet()
                 .apiVersion(
-                        "apps/v1")
+                        APPS_V1)
                 .metadata(getV1ObjectMeta())
                 .spec(new V1StatefulSetSpec()
                         .updateStrategy(new V1StatefulSetUpdateStrategy().type("RollingUpdate")
@@ -337,7 +414,7 @@ public class InstantiateAsTaskTest extends BaseTest {
     }
 
     private String getDaemonSetResponse() {
-        return gson.toJson(new Watch.Response<V1DaemonSet>("ADDED", getDaemonSet()));
+        return gson.toJson(new Watch.Response<V1DaemonSet>(RESPONSE_TYPE_ADDED, getDaemonSet()));
     }
 
     private String getDaemonSetList() {
@@ -347,7 +424,7 @@ public class InstantiateAsTaskTest extends BaseTest {
     }
 
     private V1DaemonSet getDaemonSet() {
-        return new V1DaemonSet().apiVersion("apps/v1").metadata(getV1ObjectMeta())
+        return new V1DaemonSet().apiVersion(APPS_V1).metadata(getV1ObjectMeta())
                 .spec(new V1DaemonSetSpec().updateStrategy(new V1DaemonSetUpdateStrategy().type("RollingUpdate")
                         .rollingUpdate(new V1RollingUpdateDaemonSet().maxUnavailable(new IntOrString("50%")))))
                 .status(new V1DaemonSetStatus().desiredNumberScheduled(Integer.valueOf(2))
@@ -355,7 +432,7 @@ public class InstantiateAsTaskTest extends BaseTest {
     }
 
     private String getReplicaSetResponse() {
-        return gson.toJson(new Watch.Response<V1ReplicaSet>("ADDED", getReplicaSet()));
+        return gson.toJson(new Watch.Response<V1ReplicaSet>(RESPONSE_TYPE_ADDED, getReplicaSet()));
     }
 
     private String getReplicaSetList() {
@@ -365,7 +442,7 @@ public class InstantiateAsTaskTest extends BaseTest {
     }
 
     private V1ReplicaSet getReplicaSet() {
-        return new V1ReplicaSet().apiVersion("apps/v1").metadata(getV1ObjectMeta())
+        return new V1ReplicaSet().apiVersion(APPS_V1).metadata(getV1ObjectMeta())
                 .status(new V1ReplicaSetStatus().readyReplicas(Integer.valueOf(1)))
                 .spec(new V1ReplicaSetSpec().replicas(Integer.valueOf(1)));
     }
@@ -376,7 +453,7 @@ public class InstantiateAsTaskTest extends BaseTest {
     }
 
     private String getDeploymentResponse() {
-        return gson.toJson(new Watch.Response<V1Deployment>("ADDED", getDeployment()));
+        return gson.toJson(new Watch.Response<V1Deployment>(RESPONSE_TYPE_ADDED, getDeployment()));
     }
 
     private String getDeploymentList() {
@@ -386,13 +463,13 @@ public class InstantiateAsTaskTest extends BaseTest {
     }
 
     private V1Deployment getDeployment() {
-        return new V1Deployment().apiVersion("apps/v1").metadata(getV1ObjectMeta())
+        return new V1Deployment().apiVersion(APPS_V1).metadata(getV1ObjectMeta())
                 .status(new V1DeploymentStatus().replicas(Integer.valueOf(1)).availableReplicas(Integer.valueOf(1)))
                 .spec(new V1DeploymentSpec().replicas(Integer.valueOf(1)));
     }
 
     private String getServiceResponse() {
-        return gson.toJson(new Watch.Response<V1Service>("ADDED", getService()));
+        return gson.toJson(new Watch.Response<V1Service>(RESPONSE_TYPE_ADDED, getService()));
 
     }
 
@@ -403,7 +480,7 @@ public class InstantiateAsTaskTest extends BaseTest {
     }
 
     private V1Service getService() {
-        return new V1Service().apiVersion("v1").metadata(getV1ObjectMeta());
+        return new V1Service().apiVersion(V1).metadata(getV1ObjectMeta());
     }
 
     private String getPodList() {
@@ -413,16 +490,16 @@ public class InstantiateAsTaskTest extends BaseTest {
     }
 
     private String getPodResponse() {
-        return gson.toJson(new Watch.Response<V1Pod>("ADDED", getPod()));
+        return gson.toJson(new Watch.Response<V1Pod>(RESPONSE_TYPE_ADDED, getPod()));
     }
 
     private V1Pod getPod() {
-        return new V1Pod().apiVersion("v1").metadata(getV1ObjectMeta()).status(new V1PodStatus()
+        return new V1Pod().apiVersion(V1).metadata(getV1ObjectMeta()).status(new V1PodStatus()
                 .addConditionsItem(new V1PodCondition().type("Ready").status(Boolean.TRUE.toString())));
     }
 
     private String getJobResponse() {
-        return gson.toJson(new Watch.Response<V1Job>("ADDED", getJob()));
+        return gson.toJson(new Watch.Response<V1Job>(RESPONSE_TYPE_ADDED, getJob()));
     }
 
     private String getJobList() {
@@ -432,19 +509,24 @@ public class InstantiateAsTaskTest extends BaseTest {
     }
 
     private V1Job getJob() {
-        return new V1Job().apiVersion("batch/v1").metadata(getV1ObjectMeta()).status(new V1JobStatus()
+        return new V1Job().apiVersion(BATCH_V1).metadata(getV1ObjectMeta()).status(new V1JobStatus()
                 .addConditionsItem(new V1JobCondition().type("Complete").status(Boolean.TRUE.toString())));
     }
 
     private void mockAAIEndpoints() throws JsonProcessingException {
-        final String vfModule1EndPoint = "/aai/" + V19 + "/network/generic-vnfs/generic-vnf/" + AS_INST_ID
-                + "/vf-modules/vf-module/" + AS_DEPLOYMENT_ITEM_1_INST_ID;
+        mockAAIEndpoints(AS_INST_ID, AS_DEPLOYMENT_ITEM_1_INST_ID, AS_DEPLOYMENT_ITEM_2_INST_ID);
+    }
+
+    private void mockAAIEndpoints(final String as_inst_id, final String as_deployment_item_1_id,
+            final String as_deployment_item_2_id) throws JsonProcessingException {
+        final String vfModule1EndPoint = "/aai/" + V19 + "/network/generic-vnfs/generic-vnf/" + as_inst_id
+                + "/vf-modules/vf-module/" + as_deployment_item_1_id;
 
         wireMockServer.stubFor(get(urlMatching(vfModule1EndPoint + "\\?resultIndex=0&resultSize=1&format=count"))
                 .willReturn(notFound()));
 
-        final String vfModule2EndPoint = "/aai/" + V19 + "/network/generic-vnfs/generic-vnf/" + AS_INST_ID
-                + "/vf-modules/vf-module/" + AS_DEPLOYMENT_ITEM_2_INST_ID;
+        final String vfModule2EndPoint = "/aai/" + V19 + "/network/generic-vnfs/generic-vnf/" + as_inst_id
+                + "/vf-modules/vf-module/" + as_deployment_item_2_id;
 
         wireMockServer.stubFor(get(urlMatching(vfModule2EndPoint + "\\?resultIndex=0&resultSize=1&format=count"))
                 .willReturn(notFound()));
@@ -465,7 +547,14 @@ public class InstantiateAsTaskTest extends BaseTest {
 
     private AsInst createAsInst(final String as_inst_id, final String as_deployment_item_1_id,
             final String as_deployment_item_2_id) {
-        final AsInst asInst = new AsInst().asInstId(as_inst_id).name(AS_INST_NAME).asdId(ASD_ID)
+        return createAsInst(as_inst_id, as_deployment_item_1_id, as_deployment_item_2_id,
+                DEPLOYMENT_ITEM_1_RELEASE_NAME, DEPLOYMENT_ITEM_2_RELEASE_NAME, ASD_ID);
+    }
+
+    private AsInst createAsInst(final String as_inst_id, final String as_deployment_item_1_id,
+            final String as_deployment_item_2_id, final String as_deployment_item_1_release_name,
+            final String as_deployment_item_2_release_name, final String asdId) {
+        final AsInst asInst = new AsInst().asInstId(as_inst_id).name(AS_INST_NAME).asdId(asdId)
                 .asdInvariantId(as_inst_id).status(State.NOT_INSTANTIATED).statusUpdatedTime(LocalDateTime.now())
                 .asApplicationName("asApplicationName").asApplicationVersion("asApplicationVersion")
                 .asProvider("asProvider").serviceInstanceId(as_inst_id).serviceInstanceName("serviceInstanceName")
@@ -478,7 +567,7 @@ public class InstantiateAsTaskTest extends BaseTest {
         final AsDeploymentItem item1 = new AsDeploymentItem().asDeploymentItemInstId(as_deployment_item_1_id)
                 .asInst(asInst).status(State.NOT_INSTANTIATED).name("sampleapp-db").itemId("1").deploymentOrder(1)
                 .artifactFilePath(helmFile1).createTime(LocalDateTime.now()).lastUpdateTime(LocalDateTime.now())
-                .releaseName("testOne").asLifecycleParams(lcp1).asLifecycleParams(lcp2);
+                .releaseName(as_deployment_item_1_release_name).asLifecycleParams(lcp1).asLifecycleParams(lcp2);
 
         final String helmFile2 = "Artifacts/Deployment/HELM/sampleapp-services-helm.tgz";
         final AsLifecycleParam lcpitem2_1 =
@@ -491,8 +580,8 @@ public class InstantiateAsTaskTest extends BaseTest {
         final AsDeploymentItem item2 = new AsDeploymentItem().asDeploymentItemInstId(as_deployment_item_2_id)
                 .asInst(asInst).status(State.NOT_INSTANTIATED).name("sampleapp-services").itemId("2").deploymentOrder(2)
                 .artifactFilePath(helmFile2).createTime(LocalDateTime.now()).lastUpdateTime(LocalDateTime.now())
-                .releaseName("testTwo").asLifecycleParams(lcpitem2_1).asLifecycleParams(lcpitem2_2)
-                .asLifecycleParams(lcpitem2_3);
+                .releaseName(as_deployment_item_2_release_name).asLifecycleParams(lcpitem2_1)
+                .asLifecycleParams(lcpitem2_2).asLifecycleParams(lcpitem2_3);
 
         asInst.asdeploymentItems(item1);
         asInst.asdeploymentItems(item2);

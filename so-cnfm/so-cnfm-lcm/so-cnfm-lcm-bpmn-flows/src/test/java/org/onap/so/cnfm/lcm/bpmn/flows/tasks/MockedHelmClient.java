@@ -47,7 +47,6 @@ public class MockedHelmClient implements HelmClient {
     @Override
     public void runHelmChartInstallWithDryRunFlag(final String releaseName, final Path kubeconfig,
             final Path helmChart) {
-
         Integer count = counter.get(releaseName);
         if (count == null) {
             count = 0;
@@ -104,5 +103,9 @@ public class MockedHelmClient implements HelmClient {
         return unInstallCounter;
     }
 
+    public void clear() {
+        counter.clear();
+        unInstallCounter.clear();
+    }
 
 }
