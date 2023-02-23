@@ -22,7 +22,6 @@ package org.onap.so.cnfm.lcm.rest;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import java.util.List;
@@ -103,7 +102,7 @@ public class AsLifecycleManagementControllerTest {
 
         final CreateAsRequest createAsRequest = getCreateAsRequest();
 
-        when(mockedJobExecutorService.runCreateAsJob(eq(createAsRequest)))
+        when(mockedJobExecutorService.runCreateAsJob(createAsRequest))
                 .thenReturn(new AsInstance().asInstanceid(AS_INSTANCE_ID));
 
         final String baseUrl = getAsLcmBaseUrl() + "/as_instances";
@@ -127,7 +126,7 @@ public class AsLifecycleManagementControllerTest {
         final CreateAsRequest createAsRequest = getCreateAsRequest();
 
         final String message = "Unable to process request";
-        when(mockedJobExecutorService.runCreateAsJob(eq(createAsRequest)))
+        when(mockedJobExecutorService.runCreateAsJob(createAsRequest))
                 .thenThrow(new AsRequestProcessingException(message, new ErrorDetails().detail(message)));
 
         final String baseUrl = getAsLcmBaseUrl() + "/as_instances";
@@ -149,7 +148,7 @@ public class AsLifecycleManagementControllerTest {
         final CreateAsRequest createAsRequest = getCreateAsRequest();
 
         final String message = "Unable to process request";
-        when(mockedJobExecutorService.runCreateAsJob(eq(createAsRequest))).thenThrow(new RuntimeException(message));
+        when(mockedJobExecutorService.runCreateAsJob(createAsRequest)).thenThrow(new RuntimeException(message));
 
         final String baseUrl = getAsLcmBaseUrl() + "/as_instances";
         final ResponseEntity<ErrorDetails> responseEntity = testRestTemplate.exchange(baseUrl, HttpMethod.POST,
@@ -168,7 +167,7 @@ public class AsLifecycleManagementControllerTest {
 
         final InstantiateAsRequest instantiateAsRequest = getInstantiateAsRequest();
 
-        when(mockedJobExecutorService.runInstantiateAsJob(eq(AS_INSTANCE_ID), eq(instantiateAsRequest)))
+        when(mockedJobExecutorService.runInstantiateAsJob(AS_INSTANCE_ID, instantiateAsRequest))
                 .thenReturn(AS_LCM_OPOCC_ID);
 
         final String baseUrl = getAsLcmBaseUrl() + "/as_instances/" + AS_INSTANCE_ID + "/instantiate";
@@ -188,7 +187,7 @@ public class AsLifecycleManagementControllerTest {
 
         final InstantiateAsRequest instantiateAsRequest = getInstantiateAsRequest();
 
-        when(mockedJobExecutorService.runInstantiateAsJob(eq(AS_INSTANCE_ID), eq(instantiateAsRequest)))
+        when(mockedJobExecutorService.runInstantiateAsJob(AS_INSTANCE_ID, instantiateAsRequest))
                 .thenThrow(new AsRequestProcessingException("failed"));
 
         final String baseUrl = getAsLcmBaseUrl() + "/as_instances/" + AS_INSTANCE_ID + "/instantiate";
@@ -205,7 +204,7 @@ public class AsLifecycleManagementControllerTest {
         final TerminateAsRequest terminateAsRequest =
                 new TerminateAsRequest().terminationType(TerminationTypeEnum.GRACEFUL);
 
-        when(mockedJobExecutorService.runTerminateAsJob(eq(AS_INSTANCE_ID), eq(terminateAsRequest)))
+        when(mockedJobExecutorService.runTerminateAsJob(AS_INSTANCE_ID, terminateAsRequest))
                 .thenReturn(AS_LCM_OPOCC_ID);
 
         final String baseUrl = getAsLcmBaseUrl() + "/as_instances/" + AS_INSTANCE_ID + "/terminate";
@@ -224,7 +223,7 @@ public class AsLifecycleManagementControllerTest {
     @Test
     public void testDeleteAs_ValidRequest_Success() {
 
-        doNothing().when(mockedJobExecutorService).runDeleteAsJob(eq(AS_INSTANCE_ID));
+        doNothing().when(mockedJobExecutorService).runDeleteAsJob(AS_INSTANCE_ID);
         final String baseUrl = getAsLcmBaseUrl() + "/as_instances/" + AS_INSTANCE_ID;
         final ResponseEntity<Void> responseEntity =
                 testRestTemplate.exchange(baseUrl, HttpMethod.DELETE, null, Void.class);

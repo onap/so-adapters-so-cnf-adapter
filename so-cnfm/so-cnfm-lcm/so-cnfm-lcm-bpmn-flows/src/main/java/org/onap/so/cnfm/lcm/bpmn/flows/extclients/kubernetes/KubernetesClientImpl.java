@@ -752,19 +752,13 @@ public class KubernetesClientImpl implements KubernetesClient {
         final Optional<V1PodCondition> optional = getPodReadyCondition(pod);
         if (optional.isPresent()) {
             final V1PodCondition condition = optional.get();
-            if (TRUE_STRING.equalsIgnoreCase(condition.getStatus())) {
-                logger.debug("Pod is Ready...");
-                return true;
-            }
-
+            return TRUE_STRING.equalsIgnoreCase(condition.getStatus());
         }
 
-        logger.debug("Pod is not ready ...");
         return false;
     }
 
     private boolean isServiceReady(final V1Service service) {
-        logger.debug("V1Service is Ready ...");
         return true;
     }
 
@@ -772,32 +766,35 @@ public class KubernetesClientImpl implements KubernetesClient {
         final V1DeploymentSpec spec = deployment.getSpec();
         final V1DeploymentStatus status = deployment.getStatus();
 
-        if (status != null && status.getReplicas() != null && status.getAvailableReplicas() != null && spec != null
-                && spec.getReplicas() != null) {
-            if (spec.getReplicas().intValue() == status.getReplicas().intValue()
-                    && status.getAvailableReplicas().intValue() <= spec.getReplicas().intValue()) {
-                logger.debug("Deployment is Ready...");
-                return true;
-            }
+        if (status == null || status.getReplicas() == null || status.getAvailableReplicas() == null) {
+            logger.debug("AvailableReplicas is null in status");
+            return false;
         }
 
-        logger.debug("Deployment is not ready ...");
-        return false;
+        if (spec == null || spec.getReplicas() == null) {
+            logger.debug("Replicas is null in spec");
+            return false;
+        }
+
+        return spec.getReplicas().intValue() == status.getReplicas().intValue()
+                && status.getAvailableReplicas().intValue() <= spec.getReplicas().intValue();
     }
 
     private boolean isReplicaSetReady(final V1ReplicaSet replicaSet) {
         final V1ReplicaSetSpec spec = replicaSet.getSpec();
         final V1ReplicaSetStatus status = replicaSet.getStatus();
 
-        if (status != null && status.getReadyReplicas() != null && spec != null && spec.getReplicas() != null) {
-            if (spec.getReplicas().intValue() == status.getReadyReplicas().intValue()) {
-                logger.debug("ReplicaSet is Ready...");
-                return true;
-            }
+        if (status == null || status.getReadyReplicas() == null) {
+            logger.debug("ReadyReplicas is null in status");
+            return false;
         }
 
-        logger.debug("ReplicaSet is not ready ...");
-        return false;
+        if (spec == null || spec.getReplicas() == null) {
+            logger.debug("Replicas is null in spec");
+            return false;
+        }
+
+        return spec.getReplicas().intValue() == status.getReadyReplicas().intValue();
     }
 
     private boolean isDaemonSetReady(final V1DaemonSet daemonSet) {
@@ -839,13 +836,11 @@ public class KubernetesClientImpl implements KubernetesClient {
                     return false;
                 }
                 logger.debug("DaemonSet is ready {} out of {} expected pods are ready", numberReady, expectedReady);
-                logger.debug("DaemonSet is Ready...");
                 return true;
             }
 
         }
 
-        logger.debug("DaemonSet is not ready ...");
         return false;
     }
 
@@ -1030,7 +1025,10 @@ public class KubernetesClientImpl implements KubernetesClient {
         switch (eventType) {
             case EVENT_TYPE_ADDED:
             case EVENT_TYPE_MODIFIED:
-                return predicate.test(object);
+                final boolean isReady = predicate.test(object);
+                logger.debug("{} is {} ...", object != null ? object.getClass().getSimpleName() : object,
+                        isReady ? "ready" : " not ready");
+                return isReady;
             case EVENT_TYPE_DELETED:
                 logger.debug("{} event received marking it as successfully", EVENT_TYPE_DELETED);
                 return true;
