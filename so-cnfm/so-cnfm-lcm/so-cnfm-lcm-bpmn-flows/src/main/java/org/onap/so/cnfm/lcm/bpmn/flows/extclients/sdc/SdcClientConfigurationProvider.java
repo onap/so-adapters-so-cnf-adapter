@@ -19,6 +19,7 @@
  */
 package org.onap.so.cnfm.lcm.bpmn.flows.extclients.sdc;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import org.apache.commons.codec.binary.Base64;
@@ -26,6 +27,7 @@ import org.onap.so.cnfm.lcm.bpmn.flows.exceptions.BasicAuthConfigException;
 import org.onap.so.utils.CryptoUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 
 /**
  * @author Waqas Ikram (waqas.ikram@est.tech)
@@ -34,13 +36,15 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SdcClientConfigurationProvider {
 
-    @Value("${sdc.username:mso}")
+    private static final String SERVICE_NAME = "SO-CNFM";
+
+    @Value("${sdc.username:#{null}}")
     private String sdcUsername;
 
-    @Value("${sdc.password:76966BDD3C7414A03F7037264FF2E6C8EEC6C28F2B67F2840A1ED857C0260FEE731D73F47F828E5527125D29FD25D3E0DE39EE44C058906BF1657DE77BF897EECA93BDC07FA64F}")
+    @Value("${sdc.password:#{null}}")
     private String sdcPassword;
 
-    @Value("${sdc.key:566B754875657232314F5548556D3665}")
+    @Value("${sdc.key:#{null}}")
     private String sdcKey;
 
     @Value("${sdc.endpoint:https://sdc-be.onap:8443}")
@@ -48,7 +52,7 @@ public class SdcClientConfigurationProvider {
 
     private static String basicAuth = null;
 
-    public synchronized String getBasicAuth() {
+    private synchronized String getBasicAuth() {
         if (basicAuth == null) {
             try {
                 final String auth = sdcUsername + ":" + CryptoUtils.decrypt(sdcPassword, sdcKey);
@@ -59,6 +63,16 @@ public class SdcClientConfigurationProvider {
             }
         }
         return basicAuth;
+    }
+
+    public HttpHeaders getSdcDefaultHttpHeaders() {
+        final HttpHeaders headers = new HttpHeaders();
+        if (isNotBlank(sdcUsername) && isNotBlank(sdcPassword) && isNotBlank(sdcKey)) {
+            headers.add(HttpHeaders.AUTHORIZATION, getBasicAuth());
+        }
+        headers.add("X-ECOMP-InstanceID", SERVICE_NAME);
+        headers.add("X-FromAppId", SERVICE_NAME);
+        return headers;
     }
 
     public String getSdcPackageUrl(final String packageId) {

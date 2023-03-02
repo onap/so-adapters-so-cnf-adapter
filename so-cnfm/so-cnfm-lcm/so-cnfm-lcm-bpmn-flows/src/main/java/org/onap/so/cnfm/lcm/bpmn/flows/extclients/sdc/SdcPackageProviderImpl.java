@@ -42,7 +42,6 @@ public class SdcPackageProviderImpl implements SdcPackageProvider {
     private static final Logger logger = LoggerFactory.getLogger(SdcPackageProviderImpl.class);
     private final SdcClientConfigurationProvider sdcClientConfigurationProvider;
     private final HttpRestServiceProvider httpServiceProvider;
-    private static final String SERVICE_NAME = "SO-CNFM";
 
     @Autowired
     public SdcPackageProviderImpl(final SdcClientConfigurationProvider sdcClientConfigurationProvider,
@@ -54,11 +53,8 @@ public class SdcPackageProviderImpl implements SdcPackageProvider {
     @Override
     public Optional<byte[]> getSdcResourcePackage(final String packageId) {
         try {
-            final HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.AUTHORIZATION, sdcClientConfigurationProvider.getBasicAuth());
+            final HttpHeaders headers = sdcClientConfigurationProvider.getSdcDefaultHttpHeaders();
             headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_OCTET_STREAM_VALUE);
-            headers.add("X-ECOMP-InstanceID", SERVICE_NAME);
-            headers.add("X-FromAppId", SERVICE_NAME);
 
             logger.info("Will retrieve resource package with id: {} from SDC", packageId);
             final String url = sdcClientConfigurationProvider.getSdcPackageUrl(packageId);
