@@ -104,6 +104,7 @@ import io.kubernetes.client.util.Watch;
  * @author Waqas Ikram (waqas.ikram@est.tech)
  */
 public class InstantiateAsTaskTest extends BaseTest {
+    private static final String NAMESPACE_VALUE = "default";
     private static final String BATCH_V1 = "batch/v1";
     private static final String V1 = "v1";
     private static final String APPS_V1 = "apps/v1";
@@ -312,7 +313,7 @@ public class InstantiateAsTaskTest extends BaseTest {
                 .asApplicationName("asApplicationName").asApplicationVersion("asApplicationVersion")
                 .asProvider("asProvider").serviceInstanceId(SERVICE_INSTANCE_ID)
                 .serviceInstanceName("serviceInstanceName").cloudOwner("cloudOwner").cloudRegion("cloudRegion")
-                .tenantId("tenantId");
+                .tenantId("tenantId").namespace(NAMESPACE_VALUE);
 
         databaseServiceProvider.saveAsInst(asInst);
 
@@ -339,55 +340,65 @@ public class InstantiateAsTaskTest extends BaseTest {
     }
 
     private void mockKubernetesClientEndpoint() {
-        wireMockServer.stubFor(get(urlMatching("/apis/batch/v1/jobs\\?labelSelector.*(" + DEPLOYMENT_ITEM_1_RELEASE_NAME
-                + "|" + DEPLOYMENT_ITEM_2_RELEASE_NAME + ")&timeoutSeconds=1&watch=true"))
+        wireMockServer.stubFor(get(urlMatching("/apis/batch/v1/namespaces/" + NAMESPACE_VALUE
+                + "/jobs\\?labelSelector.*(" + DEPLOYMENT_ITEM_1_RELEASE_NAME + "|" + DEPLOYMENT_ITEM_2_RELEASE_NAME
+                + ")&timeoutSeconds=1&watch=true"))
                         .willReturn(aResponse().withBody(getJobResponse()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
-        wireMockServer.stubFor(get(urlMatching("/apis/batch/v1/jobs\\?labelSelector.*&watch=false"))
-                .willReturn(aResponse().withBody(getJobList()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
-
-        wireMockServer.stubFor(get(urlMatching("/api/v1/pods\\?labelSelector.*(" + DEPLOYMENT_ITEM_1_RELEASE_NAME + "|"
-                + DEPLOYMENT_ITEM_2_RELEASE_NAME + ")&timeoutSeconds=1&watch=true"))
-                        .willReturn(aResponse().withBody(getPodResponse()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
-        wireMockServer.stubFor(get(urlMatching("/api/v1/pods\\?labelSelector.*&watch=false"))
-                .willReturn(aResponse().withBody(getPodList()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
-
-        wireMockServer.stubFor(get(urlMatching("/api/v1/services\\?labelSelector.*(" + DEPLOYMENT_ITEM_1_RELEASE_NAME
-                + "|" + DEPLOYMENT_ITEM_2_RELEASE_NAME + ")&timeoutSeconds=1&watch=true")).willReturn(
-                        aResponse().withBody(getServiceResponse()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
-        wireMockServer.stubFor(get(urlMatching("/api/v1/services\\?labelSelector.*&watch=false"))
-                .willReturn(aResponse().withBody(getServiceList()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
-
-        wireMockServer
-                .stubFor(get(urlMatching("/apis/apps/v1/deployments\\?labelSelector.*(" + DEPLOYMENT_ITEM_1_RELEASE_NAME
-                        + "|" + DEPLOYMENT_ITEM_2_RELEASE_NAME + ")&timeoutSeconds=1&watch=true"))
-                                .willReturn(aResponse().withBody(getDeploymentResponse()).withHeader(ACCEPT,
-                                        APPLICATION_JSON_VALUE)));
-        wireMockServer.stubFor(get(urlMatching("/apis/apps/v1/deployments\\?labelSelector.*&watch=false"))
-                .willReturn(aResponse().withBody(getDeploymentList()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
-
-        wireMockServer
-                .stubFor(get(urlMatching("/apis/apps/v1/replicasets\\?labelSelector.*(" + DEPLOYMENT_ITEM_1_RELEASE_NAME
-                        + "|" + DEPLOYMENT_ITEM_2_RELEASE_NAME + ")&timeoutSeconds=1&watch=true"))
-                                .willReturn(aResponse().withBody(getReplicaSetResponse()).withHeader(ACCEPT,
-                                        APPLICATION_JSON_VALUE)));
-        wireMockServer.stubFor(get(urlMatching("/apis/apps/v1/replicasets\\?labelSelector.*&watch=false"))
-                .willReturn(aResponse().withBody(getReplicaSetList()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
-
-        wireMockServer
-                .stubFor(get(urlMatching("/apis/apps/v1/daemonsets\\?labelSelector.*(" + DEPLOYMENT_ITEM_1_RELEASE_NAME
-                        + "|" + DEPLOYMENT_ITEM_2_RELEASE_NAME + ")&timeoutSeconds=1&watch=true"))
-                                .willReturn(aResponse().withBody(getDaemonSetResponse()).withHeader(ACCEPT,
-                                        APPLICATION_JSON_VALUE)));
-        wireMockServer.stubFor(get(urlMatching("/apis/apps/v1/daemonsets\\?labelSelector.*&watch=false"))
-                .willReturn(aResponse().withBody(getDaemonSetList()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
-
         wireMockServer.stubFor(
-                get(urlMatching("/apis/apps/v1/statefulsets\\?labelSelector.*(" + DEPLOYMENT_ITEM_1_RELEASE_NAME + "|"
-                        + DEPLOYMENT_ITEM_2_RELEASE_NAME + ")&timeoutSeconds=1&watch=true"))
-                                .willReturn(aResponse().withBody(getStatefulSetResponse()).withHeader(ACCEPT,
-                                        APPLICATION_JSON_VALUE)));
-        wireMockServer.stubFor(get(urlMatching("/apis/apps/v1/statefulsets\\?labelSelector.*&watch=false"))
-                .willReturn(aResponse().withBody(getStatefulSetList()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
+                get(urlMatching("/apis/batch/v1/namespaces/" + NAMESPACE_VALUE + "/jobs\\?labelSelector.*&watch=false"))
+                        .willReturn(aResponse().withBody(getJobList()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
+
+        wireMockServer.stubFor(get(urlMatching(
+                "/api/v1/namespaces/" + NAMESPACE_VALUE + "/pods\\?labelSelector.*(" + DEPLOYMENT_ITEM_1_RELEASE_NAME
+                        + "|" + DEPLOYMENT_ITEM_2_RELEASE_NAME + ")&timeoutSeconds=1&watch=true")).willReturn(
+                                aResponse().withBody(getPodResponse()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
+        wireMockServer.stubFor(
+                get(urlMatching("/api/v1/namespaces/" + NAMESPACE_VALUE + "/pods\\?labelSelector.*&watch=false"))
+                        .willReturn(aResponse().withBody(getPodList()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
+
+        wireMockServer.stubFor(get(urlMatching("/api/v1/namespaces/" + NAMESPACE_VALUE + "/services\\?labelSelector.*("
+                + DEPLOYMENT_ITEM_1_RELEASE_NAME + "|" + DEPLOYMENT_ITEM_2_RELEASE_NAME
+                + ")&timeoutSeconds=1&watch=true")).willReturn(
+                        aResponse().withBody(getServiceResponse()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
+        wireMockServer.stubFor(
+                get(urlMatching("/api/v1/namespaces/" + NAMESPACE_VALUE + "/services\\?labelSelector.*&watch=false"))
+                        .willReturn(aResponse().withBody(getServiceList()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
+
+        wireMockServer.stubFor(get(urlMatching("/apis/apps/v1/namespaces/" + NAMESPACE_VALUE
+                + "/deployments\\?labelSelector.*(" + DEPLOYMENT_ITEM_1_RELEASE_NAME + "|"
+                + DEPLOYMENT_ITEM_2_RELEASE_NAME + ")&timeoutSeconds=1&watch=true")).willReturn(
+                        aResponse().withBody(getDeploymentResponse()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
+        wireMockServer.stubFor(get(urlMatching(
+                "/apis/apps/v1/namespaces/" + NAMESPACE_VALUE + "/deployments\\?labelSelector.*&watch=false"))
+                        .willReturn(
+                                aResponse().withBody(getDeploymentList()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
+
+        wireMockServer.stubFor(get(urlMatching("/apis/apps/v1/namespaces/" + NAMESPACE_VALUE
+                + "/replicasets\\?labelSelector.*(" + DEPLOYMENT_ITEM_1_RELEASE_NAME + "|"
+                + DEPLOYMENT_ITEM_2_RELEASE_NAME + ")&timeoutSeconds=1&watch=true")).willReturn(
+                        aResponse().withBody(getReplicaSetResponse()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
+        wireMockServer.stubFor(get(urlMatching(
+                "/apis/apps/v1/namespaces/" + NAMESPACE_VALUE + "/replicasets\\?labelSelector.*&watch=false"))
+                        .willReturn(
+                                aResponse().withBody(getReplicaSetList()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
+
+        wireMockServer.stubFor(get(urlMatching("/apis/apps/v1/namespaces/" + NAMESPACE_VALUE
+                + "/daemonsets\\?labelSelector.*(" + DEPLOYMENT_ITEM_1_RELEASE_NAME + "|"
+                + DEPLOYMENT_ITEM_2_RELEASE_NAME + ")&timeoutSeconds=1&watch=true")).willReturn(
+                        aResponse().withBody(getDaemonSetResponse()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
+        wireMockServer.stubFor(get(urlMatching(
+                "/apis/apps/v1/namespaces/" + NAMESPACE_VALUE + "/daemonsets\\?labelSelector.*&watch=false"))
+                        .willReturn(
+                                aResponse().withBody(getDaemonSetList()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
+
+        wireMockServer.stubFor(get(urlMatching("/apis/apps/v1/namespaces/" + NAMESPACE_VALUE
+                + "/statefulsets\\?labelSelector.*(" + DEPLOYMENT_ITEM_1_RELEASE_NAME + "|"
+                + DEPLOYMENT_ITEM_2_RELEASE_NAME + ")&timeoutSeconds=1&watch=true")).willReturn(
+                        aResponse().withBody(getStatefulSetResponse()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
+        wireMockServer.stubFor(get(urlMatching(
+                "/apis/apps/v1/namespaces/" + NAMESPACE_VALUE + "/statefulsets\\?labelSelector.*&watch=false"))
+                        .willReturn(
+                                aResponse().withBody(getStatefulSetList()).withHeader(ACCEPT, APPLICATION_JSON_VALUE)));
     }
 
     private String getStatefulSetResponse() {
@@ -558,7 +569,7 @@ public class InstantiateAsTaskTest extends BaseTest {
                 .asdInvariantId(as_inst_id).status(State.NOT_INSTANTIATED).statusUpdatedTime(LocalDateTime.now())
                 .asApplicationName("asApplicationName").asApplicationVersion("asApplicationVersion")
                 .asProvider("asProvider").serviceInstanceId(as_inst_id).serviceInstanceName("serviceInstanceName")
-                .cloudOwner("cloudOwner").cloudRegion("cloudRegion").tenantId("tenantId");
+                .cloudOwner("cloudOwner").cloudRegion("cloudRegion").tenantId("tenantId").namespace(NAMESPACE_VALUE);
 
         final String helmFile1 = "Artifacts/Deployment/HELM/sampleapp-db-operator-helm.tgz";
         final AsLifecycleParam lcp1 = new AsLifecycleParam().asLifecycleParam(DEPLOYMENT_ITEM_1_LIFECYCLE_PARAM_1);

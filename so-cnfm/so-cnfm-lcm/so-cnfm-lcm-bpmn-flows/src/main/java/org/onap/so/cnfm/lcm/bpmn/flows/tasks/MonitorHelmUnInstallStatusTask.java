@@ -24,8 +24,8 @@ import static org.onap.so.cnfm.lcm.bpmn.flows.CamundaVariableNameConstants.AS_DE
 import static org.onap.so.cnfm.lcm.bpmn.flows.CamundaVariableNameConstants.KIND_PARAM_NAME;
 import static org.onap.so.cnfm.lcm.bpmn.flows.CamundaVariableNameConstants.KUBE_CONFIG_FILE_PATH_PARAM_NAME;
 import static org.onap.so.cnfm.lcm.bpmn.flows.CamundaVariableNameConstants.KUBE_KINDS_RESULT_PARAM_NAME;
+import static org.onap.so.cnfm.lcm.bpmn.flows.CamundaVariableNameConstants.NAMESPACE_NAME_PARAM_NAME;
 import static org.onap.so.cnfm.lcm.bpmn.flows.CamundaVariableNameConstants.RELEASE_NAME_PARAM_NAME;
-
 import static org.onap.so.cnfm.lcm.bpmn.flows.Constants.KIND_DAEMON_SET;
 import static org.onap.so.cnfm.lcm.bpmn.flows.Constants.KIND_DEPLOYMENT;
 import static org.onap.so.cnfm.lcm.bpmn.flows.Constants.KIND_JOB;
@@ -33,8 +33,6 @@ import static org.onap.so.cnfm.lcm.bpmn.flows.Constants.KIND_POD;
 import static org.onap.so.cnfm.lcm.bpmn.flows.Constants.KIND_REPLICA_SET;
 import static org.onap.so.cnfm.lcm.bpmn.flows.Constants.KIND_SERVICE;
 import static org.onap.so.cnfm.lcm.bpmn.flows.Constants.KIND_STATEFUL_SET;
-
-import io.kubernetes.client.openapi.ApiClient;
 import java.util.Map;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.onap.so.cnfm.lcm.bpmn.flows.exceptions.KubernetesRequestTimeOut;
@@ -46,6 +44,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import io.kubernetes.client.openapi.ApiClient;
 
 /**
  * @author Raviteja Karumuri (raviteja.karumuri@est.tech)
@@ -84,6 +83,7 @@ public class MonitorHelmUnInstallStatusTask extends AbstractServiceTask {
     public void isResourceDeleted(final DelegateExecution execution) {
         logger.info("Executing isResourceDeleted ");
         final String kind = (String) execution.getVariable(KIND_PARAM_NAME);
+        final String namespace = (String) execution.getVariable(NAMESPACE_NAME_PARAM_NAME);
         final String releaseName = (String) execution.getVariable(RELEASE_NAME_PARAM_NAME);
         final String kubeConfigFile = (String) execution.getVariable(KUBE_CONFIG_FILE_PATH_PARAM_NAME);
         final String labelSelector = "app.kubernetes.io/instance=" + releaseName;
@@ -93,25 +93,25 @@ public class MonitorHelmUnInstallStatusTask extends AbstractServiceTask {
             logger.debug("Will check if resource type: {} is Deleted using labelSelector: {}", kind, labelSelector);
             switch (kind) {
                 case KIND_JOB:
-                    isDeleted = kubernetesClient.isJobDeleted(apiClient, labelSelector);
+                    isDeleted = kubernetesClient.isJobDeleted(apiClient, namespace, labelSelector);
                     break;
                 case KIND_POD:
-                    isDeleted = kubernetesClient.isPodDeleted(apiClient, labelSelector);
+                    isDeleted = kubernetesClient.isPodDeleted(apiClient, namespace, labelSelector);
                     break;
                 case KIND_SERVICE:
-                    isDeleted = kubernetesClient.isServiceDeleted(apiClient, labelSelector);
+                    isDeleted = kubernetesClient.isServiceDeleted(apiClient, namespace, labelSelector);
                     break;
                 case KIND_DEPLOYMENT:
-                    isDeleted = kubernetesClient.isDeploymentDeleted(apiClient, labelSelector);
+                    isDeleted = kubernetesClient.isDeploymentDeleted(apiClient, namespace, labelSelector);
                     break;
                 case KIND_REPLICA_SET:
-                    isDeleted = kubernetesClient.isReplicaSetDeleted(apiClient, labelSelector);
+                    isDeleted = kubernetesClient.isReplicaSetDeleted(apiClient, namespace, labelSelector);
                     break;
                 case KIND_DAEMON_SET:
-                    isDeleted = kubernetesClient.isDaemonSetDeleted(apiClient, labelSelector);
+                    isDeleted = kubernetesClient.isDaemonSetDeleted(apiClient, namespace, labelSelector);
                     break;
                 case KIND_STATEFUL_SET:
-                    isDeleted = kubernetesClient.isStatefulSetDeleted(apiClient, labelSelector);
+                    isDeleted = kubernetesClient.isStatefulSetDeleted(apiClient, namespace, labelSelector);
                     break;
 
                 default:

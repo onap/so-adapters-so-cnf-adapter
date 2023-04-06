@@ -86,6 +86,9 @@ public class AsInst {
     @Column(name = "TENANT_ID", nullable = false)
     private String tenantId;
 
+    @Column(name = "NAME_SPACE", nullable = false)
+    private String namespace;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "STATUS", nullable = false)
     private State status;
@@ -282,6 +285,19 @@ public class AsInst {
         return this;
     }
 
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public void setNamespace(final String namespace) {
+        this.namespace = namespace;
+    }
+
+    public AsInst namespace(final String namespace) {
+        this.namespace = namespace;
+        return this;
+    }
+
     public State getStatus() {
         return status;
     }
@@ -326,7 +342,7 @@ public class AsInst {
     public int hashCode() {
         return Objects.hash(asInstId, name, description, asPackageId, asdId, asdInvariantId, asProvider,
                 asApplicationName, asApplicationVersion, serviceInstanceId, serviceInstanceName, cloudOwner,
-                cloudRegion, tenantId, status, statusUpdatedTime, asdeploymentItems);
+                cloudRegion, tenantId, namespace, status, statusUpdatedTime, asdeploymentItems);
     }
 
     @Override
@@ -346,7 +362,8 @@ public class AsInst {
                     && Objects.equals(serviceInstanceId, other.serviceInstanceId)
                     && Objects.equals(serviceInstanceName, other.serviceInstanceName)
                     && Objects.equals(cloudOwner, other.cloudOwner) && Objects.equals(cloudRegion, other.cloudRegion)
-                    && Objects.equals(tenantId, other.tenantId) && Objects.equals(status, other.status)
+                    && Objects.equals(tenantId, other.tenantId) && Objects.equals(namespace, other.namespace)
+                    && Objects.equals(status, other.status)
                     && Objects.equals(statusUpdatedTime, other.statusUpdatedTime)
                     && Objects.equals(asdeploymentItems, other.asdeploymentItems);
         }
@@ -370,6 +387,7 @@ public class AsInst {
         sb.append("    cloudOwner: ").append(toIndentedString(cloudOwner)).append("\n");
         sb.append("    cloudRegion: ").append(toIndentedString(cloudRegion)).append("\n");
         sb.append("    tenantId: ").append(toIndentedString(tenantId)).append("\n");
+        sb.append("    namespace: ").append(toIndentedString(namespace)).append("\n");
         sb.append("    status: ").append(toIndentedString(status)).append("\n");
         sb.append("    statusUpdatedTime: ").append(toIndentedString(statusUpdatedTime)).append("\n");
         sb.append("    asdeploymentItems: ").append(toIndentedString(asdeploymentItems)).append("\n");

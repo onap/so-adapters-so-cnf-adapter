@@ -22,6 +22,7 @@ package org.onap.so.cnfm.lcm.bpmn.flows.extclients.kubernetes;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -74,6 +75,7 @@ import okio.BufferedSource;
  */
 public class KubernetesClientTest {
 
+    private static final String DUMMY_NAME_SPACE = "default";
     private static final String DUMMY_LABEL_SELECTOR = "app.kubernetes.io/instance=test";
     private static final String BATCH_V1 = "batch/v1";
     private static final String V1 = "v1";
@@ -90,7 +92,7 @@ public class KubernetesClientTest {
     public void testIsJobReady_jobStatusComplete_true() throws ApiException, IOException {
 
         final ApiClient mockedApiClient = mockApiClientResponse(getJobResponse("Complete", "Running"));
-        assertTrue(objUnderTest.isJobReady(mockedApiClient, DUMMY_LABEL_SELECTOR));
+        assertTrue(objUnderTest.isJobReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR));
 
     }
 
@@ -98,7 +100,7 @@ public class KubernetesClientTest {
     public void testIsJobReady_jobStatusFailed_throwException() throws ApiException, IOException {
 
         final ApiClient mockedApiClient = mockApiClientResponse(getJobResponse("Failed", "Not Running"));
-        objUnderTest.isJobReady(mockedApiClient, DUMMY_LABEL_SELECTOR);
+        objUnderTest.isJobReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR);
 
     }
 
@@ -106,7 +108,7 @@ public class KubernetesClientTest {
     public void testIsJobReady_apiExceptionThrown_throwsException() throws ApiException, IOException {
 
         final ApiClient mockedApiClient = mockApiClientResponse(ApiException.class);
-        objUnderTest.isJobReady(mockedApiClient, DUMMY_LABEL_SELECTOR);
+        objUnderTest.isJobReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR);
 
     }
 
@@ -114,7 +116,7 @@ public class KubernetesClientTest {
     public void testIsJobReady_RuntimeExceptionThrown_throwsException() throws ApiException, IOException {
 
         final ApiClient mockedApiClient = mockApiClientResponse(RuntimeException.class);
-        objUnderTest.isJobReady(mockedApiClient, DUMMY_LABEL_SELECTOR);
+        objUnderTest.isJobReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR);
 
     }
 
@@ -122,7 +124,7 @@ public class KubernetesClientTest {
     public void testIsJobReady_jobStatusPending_false() throws ApiException, IOException {
 
         final ApiClient mockedApiClient = mockApiClientResponse(getJobResponse("pending", "pending"));
-        assertFalse(objUnderTest.isJobReady(mockedApiClient, DUMMY_LABEL_SELECTOR));
+        assertFalse(objUnderTest.isJobReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR));
 
     }
 
@@ -131,7 +133,7 @@ public class KubernetesClientTest {
 
         final V1PodCondition condition = new V1PodCondition().type("Ready").status(Boolean.TRUE.toString());
         final ApiClient mockedApiClient = mockApiClientResponse(getPodResponse(condition));
-        assertTrue(objUnderTest.isPodReady(mockedApiClient, DUMMY_LABEL_SELECTOR));
+        assertTrue(objUnderTest.isPodReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR));
 
     }
 
@@ -140,7 +142,7 @@ public class KubernetesClientTest {
 
         final V1PodCondition condition = new V1PodCondition().type("Ready").status(Boolean.FALSE.toString());
         final ApiClient mockedApiClient = mockApiClientResponse(getPodResponse(condition));
-        assertFalse(objUnderTest.isPodReady(mockedApiClient, DUMMY_LABEL_SELECTOR));
+        assertFalse(objUnderTest.isPodReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR));
 
     }
 
@@ -148,7 +150,7 @@ public class KubernetesClientTest {
     public void testIsPodReady_missingCondition_false() throws ApiException, IOException {
 
         final ApiClient mockedApiClient = mockApiClientResponse(getPodResponse(null));
-        assertFalse(objUnderTest.isPodReady(mockedApiClient, DUMMY_LABEL_SELECTOR));
+        assertFalse(objUnderTest.isPodReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR));
 
     }
 
@@ -156,7 +158,7 @@ public class KubernetesClientTest {
     public void testIsPodReady_apiExceptionThrown_throwsException() throws ApiException, IOException {
 
         final ApiClient mockedApiClient = mockApiClientResponse(ApiException.class);
-        objUnderTest.isPodReady(mockedApiClient, DUMMY_LABEL_SELECTOR);
+        objUnderTest.isPodReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR);
 
     }
 
@@ -164,14 +166,14 @@ public class KubernetesClientTest {
     public void testIsPodReady_RuntimeExceptionThrown_throwsException() throws ApiException, IOException {
 
         final ApiClient mockedApiClient = mockApiClientResponse(RuntimeException.class);
-        objUnderTest.isPodReady(mockedApiClient, DUMMY_LABEL_SELECTOR);
+        objUnderTest.isPodReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR);
 
     }
 
     @Test
     public void testIsServiceReady_exists_true() throws ApiException, IOException {
         final ApiClient mockedApiClient = mockApiClientResponse(getServiceResponse());
-        assertTrue(objUnderTest.isServiceReady(mockedApiClient, DUMMY_LABEL_SELECTOR));
+        assertTrue(objUnderTest.isServiceReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR));
 
     }
 
@@ -179,7 +181,7 @@ public class KubernetesClientTest {
     public void testIsServiceReady_apiExceptionThrown_throwsException() throws ApiException, IOException {
 
         final ApiClient mockedApiClient = mockApiClientResponse(ApiException.class);
-        objUnderTest.isServiceReady(mockedApiClient, DUMMY_LABEL_SELECTOR);
+        objUnderTest.isServiceReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR);
 
     }
 
@@ -187,7 +189,7 @@ public class KubernetesClientTest {
     public void testIsServiceReady_RuntimeExceptionThrown_throwsException() throws ApiException, IOException {
 
         final ApiClient mockedApiClient = mockApiClientResponse(RuntimeException.class);
-        objUnderTest.isServiceReady(mockedApiClient, DUMMY_LABEL_SELECTOR);
+        objUnderTest.isServiceReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR);
 
     }
 
@@ -199,7 +201,7 @@ public class KubernetesClientTest {
         final V1DeploymentSpec spec = new V1DeploymentSpec().replicas(Integer.valueOf(2));
 
         final ApiClient mockedApiClient = mockApiClientResponse(getDeploymentResponse(status, spec));
-        assertTrue(objUnderTest.isDeploymentReady(mockedApiClient, DUMMY_LABEL_SELECTOR));
+        assertTrue(objUnderTest.isDeploymentReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR));
 
     }
 
@@ -211,7 +213,7 @@ public class KubernetesClientTest {
         final V1DeploymentSpec spec = new V1DeploymentSpec().replicas(Integer.valueOf(2));
 
         final ApiClient mockedApiClient = mockApiClientResponse(getDeploymentResponse(status, spec));
-        assertFalse(objUnderTest.isDeploymentReady(mockedApiClient, DUMMY_LABEL_SELECTOR));
+        assertFalse(objUnderTest.isDeploymentReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR));
 
     }
 
@@ -221,7 +223,7 @@ public class KubernetesClientTest {
         final V1DeploymentSpec spec = new V1DeploymentSpec().replicas(Integer.valueOf(2));
 
         final ApiClient mockedApiClient = mockApiClientResponse(getDeploymentResponse(null, spec));
-        assertFalse(objUnderTest.isDeploymentReady(mockedApiClient, DUMMY_LABEL_SELECTOR));
+        assertFalse(objUnderTest.isDeploymentReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR));
 
     }
 
@@ -229,7 +231,7 @@ public class KubernetesClientTest {
     public void testIsDeploymentReady_apiExceptionThrown_throwsException() throws ApiException, IOException {
 
         final ApiClient mockedApiClient = mockApiClientResponse(ApiException.class);
-        objUnderTest.isDeploymentReady(mockedApiClient, DUMMY_LABEL_SELECTOR);
+        objUnderTest.isDeploymentReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR);
 
     }
 
@@ -237,7 +239,7 @@ public class KubernetesClientTest {
     public void testIsDeploymentReady_RuntimeExceptionThrown_throwsException() throws ApiException, IOException {
 
         final ApiClient mockedApiClient = mockApiClientResponse(RuntimeException.class);
-        objUnderTest.isDeploymentReady(mockedApiClient, DUMMY_LABEL_SELECTOR);
+        objUnderTest.isDeploymentReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR);
 
     }
 
@@ -249,7 +251,7 @@ public class KubernetesClientTest {
         final V1ReplicaSetSpec spec = new V1ReplicaSetSpec().replicas(Integer.valueOf(1));
 
         final ApiClient mockedApiClient = mockApiClientResponse(getReplicaSetResponse(status, spec));
-        assertTrue(objUnderTest.isReplicaSetReady(mockedApiClient, DUMMY_LABEL_SELECTOR));
+        assertTrue(objUnderTest.isReplicaSetReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR));
 
     }
 
@@ -260,7 +262,7 @@ public class KubernetesClientTest {
         final V1ReplicaSetSpec spec = new V1ReplicaSetSpec().replicas(Integer.valueOf(2));
 
         final ApiClient mockedApiClient = mockApiClientResponse(getReplicaSetResponse(status, spec));
-        assertFalse(objUnderTest.isReplicaSetReady(mockedApiClient, DUMMY_LABEL_SELECTOR));
+        assertFalse(objUnderTest.isReplicaSetReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR));
 
     }
 
@@ -270,7 +272,7 @@ public class KubernetesClientTest {
         final V1ReplicaSetStatus status = new V1ReplicaSetStatus().readyReplicas(Integer.valueOf(1));
 
         final ApiClient mockedApiClient = mockApiClientResponse(getReplicaSetResponse(status, null));
-        assertFalse(objUnderTest.isReplicaSetReady(mockedApiClient, DUMMY_LABEL_SELECTOR));
+        assertFalse(objUnderTest.isReplicaSetReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR));
 
     }
 
@@ -278,7 +280,7 @@ public class KubernetesClientTest {
     public void testIsReplicaSetReady_apiExceptionThrown_throwsException() throws ApiException, IOException {
 
         final ApiClient mockedApiClient = mockApiClientResponse(ApiException.class);
-        objUnderTest.isReplicaSetReady(mockedApiClient, DUMMY_LABEL_SELECTOR);
+        objUnderTest.isReplicaSetReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR);
 
     }
 
@@ -286,7 +288,7 @@ public class KubernetesClientTest {
     public void testIsReplicaSetReady_RuntimeExceptionThrown_throwsException() throws ApiException, IOException {
 
         final ApiClient mockedApiClient = mockApiClientResponse(RuntimeException.class);
-        objUnderTest.isReplicaSetReady(mockedApiClient, DUMMY_LABEL_SELECTOR);
+        objUnderTest.isReplicaSetReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR);
 
     }
 
@@ -301,7 +303,7 @@ public class KubernetesClientTest {
                 .numberReady(Integer.valueOf(2)).updatedNumberScheduled(Integer.valueOf(2));
 
         final ApiClient mockedApiClient = mockApiClientResponse(getDaemonSetResponse(status, spec));
-        assertTrue(objUnderTest.isDaemonSetReady(mockedApiClient, DUMMY_LABEL_SELECTOR));
+        assertTrue(objUnderTest.isDaemonSetReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR));
 
 
     }
@@ -314,7 +316,7 @@ public class KubernetesClientTest {
         final V1DaemonSetStatus status = new V1DaemonSetStatus();
 
         final ApiClient mockedApiClient = mockApiClientResponse(getDaemonSetResponse(status, spec));
-        assertTrue(objUnderTest.isDaemonSetReady(mockedApiClient, DUMMY_LABEL_SELECTOR));
+        assertTrue(objUnderTest.isDaemonSetReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR));
 
     }
 
@@ -328,7 +330,7 @@ public class KubernetesClientTest {
 
 
         final ApiClient mockedApiClient = mockApiClientResponse(getDaemonSetResponse(status, spec));
-        assertFalse(objUnderTest.isDaemonSetReady(mockedApiClient, DUMMY_LABEL_SELECTOR));
+        assertFalse(objUnderTest.isDaemonSetReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR));
 
     }
 
@@ -344,7 +346,7 @@ public class KubernetesClientTest {
                 .numberReady(Integer.valueOf(2)).updatedNumberScheduled(Integer.valueOf(6));
 
         final ApiClient mockedApiClient = mockApiClientResponse(getDaemonSetResponse(status, spec));
-        assertTrue(objUnderTest.isDaemonSetReady(mockedApiClient, DUMMY_LABEL_SELECTOR));
+        assertTrue(objUnderTest.isDaemonSetReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR));
 
 
     }
@@ -361,7 +363,7 @@ public class KubernetesClientTest {
                 .numberReady(Integer.valueOf(1)).updatedNumberScheduled(Integer.valueOf(6));
 
         final ApiClient mockedApiClient = mockApiClientResponse(getDaemonSetResponse(status, spec));
-        assertFalse(objUnderTest.isDaemonSetReady(mockedApiClient, DUMMY_LABEL_SELECTOR));
+        assertFalse(objUnderTest.isDaemonSetReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR));
 
     }
 
@@ -369,7 +371,7 @@ public class KubernetesClientTest {
     public void testIsDaemonSetReady_apiExceptionThrown_throwsException() throws ApiException, IOException {
 
         final ApiClient mockedApiClient = mockApiClientResponse(ApiException.class);
-        objUnderTest.isDaemonSetReady(mockedApiClient, DUMMY_LABEL_SELECTOR);
+        objUnderTest.isDaemonSetReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR);
 
     }
 
@@ -377,7 +379,7 @@ public class KubernetesClientTest {
     public void testIsDaemonSetReady_RuntimeExceptionThrown_throwsException() throws ApiException, IOException {
 
         final ApiClient mockedApiClient = mockApiClientResponse(RuntimeException.class);
-        objUnderTest.isDaemonSetReady(mockedApiClient, DUMMY_LABEL_SELECTOR);
+        objUnderTest.isDaemonSetReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR);
 
     }
 
@@ -393,7 +395,7 @@ public class KubernetesClientTest {
                 new V1StatefulSetStatus().updatedReplicas(Integer.valueOf(2)).readyReplicas(Integer.valueOf(2));
 
         final ApiClient mockedApiClient = mockApiClientResponse(getStatefulSetResponse(status, spec));
-        assertTrue(objUnderTest.isStatefulSetReady(mockedApiClient, DUMMY_LABEL_SELECTOR));
+        assertTrue(objUnderTest.isStatefulSetReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR));
 
 
     }
@@ -406,7 +408,7 @@ public class KubernetesClientTest {
         final V1StatefulSetStatus status = new V1StatefulSetStatus();
 
         final ApiClient mockedApiClient = mockApiClientResponse(getStatefulSetResponse(status, spec));
-        assertTrue(objUnderTest.isStatefulSetReady(mockedApiClient, DUMMY_LABEL_SELECTOR));
+        assertTrue(objUnderTest.isStatefulSetReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR));
 
     }
 
@@ -420,14 +422,14 @@ public class KubernetesClientTest {
         final V1StatefulSetStatus status = new V1StatefulSetStatus().updatedReplicas(Integer.valueOf(2));
 
         final ApiClient mockedApiClient = mockApiClientResponse(getStatefulSetResponse(status, spec));
-        assertFalse(objUnderTest.isStatefulSetReady(mockedApiClient, DUMMY_LABEL_SELECTOR));
+        assertFalse(objUnderTest.isStatefulSetReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR));
     }
 
     @Test(expected = KubernetesRequestProcessingException.class)
     public void testIsStatefulSetReady_apiExceptionThrown_throwsException() throws ApiException, IOException {
 
         final ApiClient mockedApiClient = mockApiClientResponse(ApiException.class);
-        objUnderTest.isStatefulSetReady(mockedApiClient, DUMMY_LABEL_SELECTOR);
+        objUnderTest.isStatefulSetReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR);
 
     }
 
@@ -435,7 +437,7 @@ public class KubernetesClientTest {
     public void testIsStatefulSetReady_RuntimeExceptionThrown_throwsException() throws ApiException, IOException {
 
         final ApiClient mockedApiClient = mockApiClientResponse(RuntimeException.class);
-        objUnderTest.isStatefulSetReady(mockedApiClient, DUMMY_LABEL_SELECTOR);
+        objUnderTest.isStatefulSetReady(mockedApiClient, DUMMY_NAME_SPACE, DUMMY_LABEL_SELECTOR);
 
     }
 
@@ -512,6 +514,7 @@ public class KubernetesClientTest {
         final BufferedSource mockedBufferedSource = mock(BufferedSource.class);
         final Call mockedCall = mock(Call.class);
 
+        when(mockedApiClient.escapeString(anyString())).thenCallRealMethod();
         when(mockedApiClient.getJSON()).thenReturn(json);
         doNothing().when(mockedResponse).close();
         when(mockedResponse.body()).thenReturn(mockedResponseBody);

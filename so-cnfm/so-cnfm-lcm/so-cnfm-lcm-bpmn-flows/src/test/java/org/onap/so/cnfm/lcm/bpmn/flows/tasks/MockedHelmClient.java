@@ -45,8 +45,8 @@ public class MockedHelmClient implements HelmClient {
     }
 
     @Override
-    public void runHelmChartInstallWithDryRunFlag(final String releaseName, final Path kubeconfig,
-            final Path helmChart) {
+    public void runHelmChartInstallWithDryRunFlag(final String namespace, final String releaseName,
+            final Path kubeconfig, final Path helmChart) {
         Integer count = counter.get(releaseName);
         if (count == null) {
             count = 0;
@@ -56,7 +56,8 @@ public class MockedHelmClient implements HelmClient {
     }
 
     @Override
-    public List<String> getKubeKinds(final String releaseName, final Path kubeconfig, final Path helmChart) {
+    public List<String> getKubeKinds(final String namespace, final String releaseName, final Path kubeconfig,
+            final Path helmChart) {
         Integer count = counter.get(releaseName);
         if (count == null) {
             count = 0;
@@ -66,7 +67,8 @@ public class MockedHelmClient implements HelmClient {
     }
 
     @Override
-    public List<String> getKubeKindsUsingManifestCommand(final String releaseName, final Path kubeconfig) {
+    public List<String> getKubeKindsUsingManifestCommand(final String namespace, final String releaseName,
+            final Path kubeconfig) {
         Integer count = unInstallCounter.get(releaseName);
         if (count == null) {
             count = 0;
@@ -76,8 +78,8 @@ public class MockedHelmClient implements HelmClient {
     }
 
     @Override
-    public void installHelmChart(final String releaseName, final Path kubeconfig, final Path helmChart,
-            final Map<String, String> lifeCycleParams) {
+    public void installHelmChart(final String namespace, final String releaseName, final Path kubeconfig,
+            final Path helmChart, final Map<String, String> lifeCycleParams) {
         Integer count = counter.get(releaseName);
         if (count == null) {
             count = 0;
@@ -86,7 +88,7 @@ public class MockedHelmClient implements HelmClient {
     }
 
     @Override
-    public void unInstallHelmChart(final String releaseName, final Path kubeConfigFilePath)
+    public void unInstallHelmChart(final String namespace, final String releaseName, final Path kubeConfigFilePath)
             throws HelmClientExecuteException {
         Integer count = unInstallCounter.get(releaseName);
         if (count == null) {

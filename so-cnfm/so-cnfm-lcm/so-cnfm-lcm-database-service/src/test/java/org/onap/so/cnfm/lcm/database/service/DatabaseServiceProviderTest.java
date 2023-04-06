@@ -102,7 +102,7 @@ public class DatabaseServiceProviderTest {
                 .asdInvariantId(RANDOM_ID).statusUpdatedTime(CURRENT_DATE_TIME).asApplicationName("asApplicationName")
                 .asApplicationVersion("asApplicationVersion").asProvider("asProvider").serviceInstanceId(RANDOM_ID)
                 .serviceInstanceName("serviceInstanceName").cloudOwner("cloudOwner").cloudRegion("cloudRegion")
-                .tenantId("tenantId");
+                .tenantId("tenantId").namespace("namespace");
 
         databaseServiceProvider.saveAsInst(asInst);
 
@@ -135,7 +135,7 @@ public class DatabaseServiceProviderTest {
                 .asdInvariantId(RANDOM_ID).statusUpdatedTime(CURRENT_DATE_TIME).asApplicationName("asApplicationName")
                 .asApplicationVersion("asApplicationVersion").asProvider("asProvider").serviceInstanceId(RANDOM_ID)
                 .serviceInstanceName("serviceInstanceName").cloudOwner("cloudOwner").cloudRegion("cloudRegion")
-                .tenantId("tenantId");
+                .tenantId("tenantId").namespace("namespace");
 
         databaseServiceProvider.saveAsInst(asInst);
 
@@ -177,13 +177,15 @@ public class DatabaseServiceProviderTest {
                 databaseServiceProvider.getAsLifecycleParam(aslifecycleparam.getAsLifecycleParamId());
         final AsLifecycleParam actualLifecycleParam = actualLP.get();
         assertEquals(aslifecycleparam.getLifecycleParam(), actualLifecycleParam.getLifecycleParam());
-        assertEquals(asdeploymentItem.getAsDeploymentItemInstId(), actualLifecycleParam.getAsDeploymentItemInst().getAsDeploymentItemInstId());
+        assertEquals(asdeploymentItem.getAsDeploymentItemInstId(),
+                actualLifecycleParam.getAsDeploymentItemInst().getAsDeploymentItemInstId());
         assertEquals(aslifecycleparam.getAsLifecycleParamId(), actualLifecycleParam.getAsLifecycleParamId());
 
-        List<AsLifecycleParam> aslifecycleParamsList =
-                databaseServiceProvider.getAsLifecycleParamByAsDeploymentItemId(asdeploymentItem.getAsDeploymentItemInstId());
+        List<AsLifecycleParam> aslifecycleParamsList = databaseServiceProvider
+                .getAsLifecycleParamByAsDeploymentItemId(asdeploymentItem.getAsDeploymentItemInstId());
         assertFalse(aslifecycleParamsList.isEmpty());
-        assertEquals(asdeploymentItem.getAsDeploymentItemInstId(), aslifecycleParamsList.get(0).getAsDeploymentItemInst().getAsDeploymentItemInstId());
+        assertEquals(asdeploymentItem.getAsDeploymentItemInstId(),
+                aslifecycleParamsList.get(0).getAsDeploymentItemInst().getAsDeploymentItemInstId());
     }
 
     @Test
@@ -193,7 +195,7 @@ public class DatabaseServiceProviderTest {
                 .asdInvariantId(RANDOM_ID).statusUpdatedTime(CURRENT_DATE_TIME).asApplicationName("asApplicationName")
                 .asApplicationVersion("asApplicationVersion").asProvider("asProvider").serviceInstanceId(RANDOM_ID)
                 .serviceInstanceName("serviceInstanceName").cloudOwner("cloudOwner").cloudRegion("cloudRegion")
-                .tenantId("tenantId");
+                .tenantId("tenantId").namespace("namespace");
 
         databaseServiceProvider.saveAsInst(asInst);
 

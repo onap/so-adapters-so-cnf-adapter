@@ -31,6 +31,7 @@ public class CamundaVariableNameConstants {
     public static final String KUBE_KINDS_PARAM_NAME = "kubeKinds";
     public static final String KIND_PARAM_NAME = "kind";
     public static final String RELEASE_NAME_PARAM_NAME = "releaseName";
+    public static final String NAMESPACE_NAME_PARAM_NAME = "namespace";
     public static final String JOB_ID_PARAM_NAME = "jobId";
     public static final String JOB_BUSINESS_KEY_PARAM_NAME = "jobBusinessKey";
     public static final String CREATE_AS_REQUEST_PARAM_NAME = "createAsRequest";

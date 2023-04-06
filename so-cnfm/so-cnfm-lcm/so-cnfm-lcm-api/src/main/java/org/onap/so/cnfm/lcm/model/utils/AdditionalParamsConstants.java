@@ -33,6 +33,8 @@ public class AdditionalParamsConstants {
     public static final String TENANT_ID_PARAM_KEY = "tenantId";
 
     public static final String RESOURCE_ID_KEY = "resourceId";
+    public static final String NAMESPACE_KEY = "namespace";
+
 
     private AdditionalParamsConstants() {}
 

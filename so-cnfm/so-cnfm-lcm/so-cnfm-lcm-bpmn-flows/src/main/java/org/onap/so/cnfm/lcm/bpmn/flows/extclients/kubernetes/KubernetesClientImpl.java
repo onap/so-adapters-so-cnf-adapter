@@ -114,13 +114,14 @@ public class KubernetesClientImpl implements KubernetesClient {
     private Integer timeoutSeconds;
 
     @Override
-    public boolean isJobReady(final ApiClient apiClient, final String labelSelector)
+    public boolean isJobReady(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException {
-        logger.debug("Will check if Job is ready using labelSelector: {}", labelSelector);
+
+        logger.debug("Will check if Job is ready using namespace: {}, labelSelector: {}", namespace, labelSelector);
         try {
             final BatchV1Api batchV1Api = new BatchV1Api(apiClient);
-            final Call call = batchV1Api.listJobForAllNamespacesCall(null, null, null, labelSelector, null, null, null,
-                    null, timeoutSeconds, ENABLE_WATCH, null);
+            final Call call = batchV1Api.listNamespacedJobCall(namespace, null, null, null, null, labelSelector, null,
+                    null, null, timeoutSeconds, ENABLE_WATCH, null);
 
             final Map<V1Job, String> readyResources =
                     getReadyResources(apiClient, call, new TypeToken<Response<V1Job>>() {}.getType());
@@ -134,9 +135,9 @@ public class KubernetesClientImpl implements KubernetesClient {
                     logger.debug("JobList is ready ...");
                     return true;
                 }
+
                 logger.debug("JobList is not yet Ready: {}", jobNotReadyList);
                 return false;
-
             }
 
             logger.warn("No items found in jobList : {}", readyResources);
@@ -147,18 +148,20 @@ public class KubernetesClientImpl implements KubernetesClient {
         } catch (final RuntimeException runtimeException) {
             handleRuntimeException(KIND_JOB, labelSelector, runtimeException);
         }
+
         logger.debug("Returning false as Job is not ready ...");
         return false;
     }
 
     @Override
-    public boolean isPodReady(final ApiClient apiClient, final String labelSelector)
+    public boolean isPodReady(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException {
-        logger.debug("Will check if Pod is ready using labelSelector: {}", labelSelector);
+
+        logger.debug("Will check if Pod is ready using namespace: {}, labelSelector: {}", namespace, labelSelector);
         try {
             final CoreV1Api coreV1Api = new CoreV1Api(apiClient);
-            final Call call = coreV1Api.listPodForAllNamespacesCall(null, null, null, labelSelector, null, null, null,
-                    null, timeoutSeconds, ENABLE_WATCH, null);
+            final Call call = coreV1Api.listNamespacedPodCall(namespace, null, null, null, null, labelSelector, null,
+                    null, null, timeoutSeconds, ENABLE_WATCH, null);
 
             final Map<V1Pod, String> readyResources =
                     getReadyResources(apiClient, call, new TypeToken<Response<V1Pod>>() {}.getType());
@@ -172,9 +175,9 @@ public class KubernetesClientImpl implements KubernetesClient {
                     logger.debug("PodList is ready ...");
                     return true;
                 }
+
                 logger.debug("PodList is not yet Ready: {}", podNotReadyList);
                 return false;
-
             }
 
             logger.warn("No items found in podList : {}", readyResources);
@@ -187,18 +190,18 @@ public class KubernetesClientImpl implements KubernetesClient {
         }
 
         logger.debug("Returning false as Pod is not ready ...");
-
         return false;
     }
 
     @Override
-    public boolean isServiceReady(final ApiClient apiClient, final String labelSelector)
+    public boolean isServiceReady(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException {
-        logger.debug("Will check if Service is ready using labelSelector: {}", labelSelector);
+
+        logger.debug("Will check if Service is ready using namespace: {}, labelSelector: {}", namespace, labelSelector);
         try {
             final CoreV1Api api = new CoreV1Api(apiClient);
-            final Call call = api.listServiceForAllNamespacesCall(null, null, null, labelSelector, null, null, null,
-                    null, timeoutSeconds, ENABLE_WATCH, null);
+            final Call call = api.listNamespacedServiceCall(namespace, null, null, null, null, labelSelector, null,
+                    null, null, timeoutSeconds, ENABLE_WATCH, null);
 
             final Map<V1Service, String> readyResources =
                     getReadyResources(apiClient, call, new TypeToken<Response<V1Service>>() {}.getType());
@@ -212,9 +215,9 @@ public class KubernetesClientImpl implements KubernetesClient {
                     logger.debug("ServiceList is ready ...");
                     return true;
                 }
+
                 logger.debug("ServiceList is not yet Ready: {}", serviceNotReadyList);
                 return false;
-
             }
 
             logger.warn("No items found in serviceList : {}", readyResources);
@@ -231,14 +234,15 @@ public class KubernetesClientImpl implements KubernetesClient {
     }
 
     @Override
-    public boolean isDeploymentReady(final ApiClient apiClient, final String labelSelector)
+    public boolean isDeploymentReady(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException {
-        logger.debug("Will check if Deployment is ready using labelSelector: {}", labelSelector);
 
+        logger.debug("Will check if Deployment is ready using namespace: {}, labelSelector: {}", namespace,
+                labelSelector);
         try {
             final AppsV1Api appsV1Api = new AppsV1Api(apiClient);
-            final Call call = appsV1Api.listDeploymentForAllNamespacesCall(null, null, null, labelSelector, null, null,
-                    null, null, timeoutSeconds, ENABLE_WATCH, null);
+            final Call call = appsV1Api.listNamespacedDeploymentCall(namespace, null, null, null, null, labelSelector,
+                    null, null, null, timeoutSeconds, ENABLE_WATCH, null);
 
             final Map<V1Deployment, String> readyResources =
                     getReadyResources(apiClient, call, new TypeToken<Response<V1Deployment>>() {}.getType());
@@ -252,9 +256,9 @@ public class KubernetesClientImpl implements KubernetesClient {
                     logger.debug("DeploymentList is ready ...");
                     return true;
                 }
+
                 logger.debug("DeploymentList is not yet Ready: {}", deploymentNotReadyList);
                 return false;
-
             }
 
             logger.warn("No items found in deploymentList : {}", readyResources);
@@ -271,13 +275,15 @@ public class KubernetesClientImpl implements KubernetesClient {
     }
 
     @Override
-    public boolean isReplicaSetReady(final ApiClient apiClient, final String labelSelector)
+    public boolean isReplicaSetReady(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException {
-        logger.debug("Will check if ReplicaSet is ready using labelSelector: {}", labelSelector);
+
+        logger.debug("Will check if ReplicaSet is ready using namespace: {}, labelSelector: {}", namespace,
+                labelSelector);
         try {
             final AppsV1Api appsV1Api = new AppsV1Api(apiClient);
-            final Call call = appsV1Api.listReplicaSetForAllNamespacesCall(null, null, null, labelSelector, null, null,
-                    null, null, timeoutSeconds, ENABLE_WATCH, null);
+            final Call call = appsV1Api.listNamespacedReplicaSetCall(namespace, null, null, null, null, labelSelector,
+                    null, null, null, timeoutSeconds, ENABLE_WATCH, null);
 
             final Map<V1ReplicaSet, String> readyResources =
                     getReadyResources(apiClient, call, new TypeToken<Response<V1ReplicaSet>>() {}.getType());
@@ -291,9 +297,9 @@ public class KubernetesClientImpl implements KubernetesClient {
                     logger.debug("ReplicaSetList is ready ...");
                     return true;
                 }
+
                 logger.debug("ReplicaSetList is not yet Ready: {}", replicaSet);
                 return false;
-
             }
 
             logger.warn("No items found in replicaSetList : {}", readyResources);
@@ -304,18 +310,21 @@ public class KubernetesClientImpl implements KubernetesClient {
         } catch (final RuntimeException runtimeException) {
             handleRuntimeException(KIND_REPLICA_SET, labelSelector, runtimeException);
         }
+
         logger.debug("Returning false as ReplicaSet is not ready ...");
         return false;
     }
 
     @Override
-    public boolean isDaemonSetReady(final ApiClient apiClient, final String labelSelector)
+    public boolean isDaemonSetReady(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException {
-        logger.debug("Will check if DaemonSet is ready using labelSelector: {}", labelSelector);
+
+        logger.debug("Will check if DaemonSet is ready using namespace: {}, labelSelector: {}", namespace,
+                labelSelector);
         try {
             final AppsV1Api appsV1Api = new AppsV1Api(apiClient);
-            final Call call = appsV1Api.listDaemonSetForAllNamespacesCall(null, null, null, labelSelector, null, null,
-                    null, null, timeoutSeconds, ENABLE_WATCH, null);
+            final Call call = appsV1Api.listNamespacedDaemonSetCall(namespace, null, null, null, null, labelSelector,
+                    null, null, null, timeoutSeconds, ENABLE_WATCH, null);
 
             final Map<V1DaemonSet, String> readyResources =
                     getReadyResources(apiClient, call, new TypeToken<Response<V1DaemonSet>>() {}.getType());
@@ -329,9 +338,9 @@ public class KubernetesClientImpl implements KubernetesClient {
                     logger.debug("DaemonSetList is ready ...");
                     return true;
                 }
+
                 logger.debug("DaemonSetList is not yet Ready: {}", daemonSetNotReadyList);
                 return false;
-
             }
 
             logger.warn("No items found in daemonSetList : {}", readyResources);
@@ -342,18 +351,21 @@ public class KubernetesClientImpl implements KubernetesClient {
         } catch (final RuntimeException runtimeException) {
             handleRuntimeException(KIND_DAEMON_SET, labelSelector, runtimeException);
         }
+
         logger.debug("Returning false as DaemonSet is not ready ...");
         return false;
     }
 
     @Override
-    public boolean isStatefulSetReady(final ApiClient apiClient, final String labelSelector)
+    public boolean isStatefulSetReady(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException {
-        logger.debug("Will check if StatefulSet is ready using labelSelector: {}", labelSelector);
+
+        logger.debug("Will check if StatefulSet is ready using namespace: {}, labelSelector: {}", namespace,
+                labelSelector);
         try {
             final AppsV1Api appsV1Api = new AppsV1Api(apiClient);
-            final Call call = appsV1Api.listStatefulSetForAllNamespacesCall(null, null, null, labelSelector, null, null,
-                    null, null, timeoutSeconds, ENABLE_WATCH, null);
+            final Call call = appsV1Api.listNamespacedStatefulSetCall(namespace, null, null, null, null, labelSelector,
+                    null, null, null, timeoutSeconds, ENABLE_WATCH, null);
 
             final Map<V1StatefulSet, String> readyResources =
                     getReadyResources(apiClient, call, new TypeToken<Response<V1StatefulSet>>() {}.getType());
@@ -385,13 +397,14 @@ public class KubernetesClientImpl implements KubernetesClient {
     }
 
     @Override
-    public boolean isServiceDeleted(final ApiClient apiClient, final String labelSelector)
+    public boolean isServiceDeleted(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException {
-        logger.debug("Check is Service deleted by using labelSelector: {}", labelSelector);
+
+        logger.debug("Check is Service deleted by using namespace: {}, labelSelector: {}", namespace, labelSelector);
         try {
             final CoreV1Api coreV1Api = new CoreV1Api(apiClient);
-            final V1ServiceList v1ServiceList = coreV1Api.listServiceForAllNamespaces(null, null, null, labelSelector,
-                    null, null, null, null, timeoutSeconds, DISABLE_WATCH);
+            final V1ServiceList v1ServiceList = coreV1Api.listNamespacedService(namespace, null, null, null, null,
+                    labelSelector, null, null, null, timeoutSeconds, DISABLE_WATCH);
             logger.debug("Response from list service for all Namespaces: {}", v1ServiceList);
             return v1ServiceList.getItems().isEmpty();
         } catch (final ApiException exception) {
@@ -404,13 +417,14 @@ public class KubernetesClientImpl implements KubernetesClient {
     }
 
     @Override
-    public boolean isPodDeleted(final ApiClient apiClient, final String labelSelector)
+    public boolean isPodDeleted(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException {
-        logger.debug("Check is Pod deleted by using labelSelector: {}", labelSelector);
+
+        logger.debug("Check is Pod deleted by using namespace: {}, labelSelector: {}", namespace, labelSelector);
         try {
             final CoreV1Api coreV1Api = new CoreV1Api(apiClient);
-            final V1PodList v1PodList = coreV1Api.listPodForAllNamespaces(null, null, null, labelSelector, null, null,
-                    null, null, timeoutSeconds, DISABLE_WATCH);
+            final V1PodList v1PodList = coreV1Api.listNamespacedPod(namespace, null, null, null, null, labelSelector,
+                    null, null, null, timeoutSeconds, DISABLE_WATCH);
             logger.debug("Response from list Pod for all Namespaces: {}", v1PodList);
             return v1PodList.getItems().isEmpty();
         } catch (final ApiException exception) {
@@ -423,13 +437,13 @@ public class KubernetesClientImpl implements KubernetesClient {
     }
 
     @Override
-    public boolean isJobDeleted(final ApiClient apiClient, final String labelSelector)
+    public boolean isJobDeleted(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException {
-        logger.debug("Check is Job deleted by using labelSelector: {}", labelSelector);
+        logger.debug("Check is Job deleted by using namespace: {}, labelSelector: {}", namespace, labelSelector);
         try {
             final BatchV1Api batchV1Api = new BatchV1Api(apiClient);
-            final V1JobList v1JobList = batchV1Api.listJobForAllNamespaces(null, null, null, labelSelector, null, null,
-                    null, null, timeoutSeconds, DISABLE_WATCH);
+            final V1JobList v1JobList = batchV1Api.listNamespacedJob(namespace, null, null, null, null, labelSelector,
+                    null, null, null, timeoutSeconds, DISABLE_WATCH);
             logger.debug("Response from list Job for all Namespaces: {}", v1JobList);
             return v1JobList.getItems().isEmpty();
         } catch (final ApiException exception) {
@@ -442,13 +456,13 @@ public class KubernetesClientImpl implements KubernetesClient {
     }
 
     @Override
-    public boolean isDeploymentDeleted(final ApiClient apiClient, final String labelSelector)
+    public boolean isDeploymentDeleted(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException {
-        logger.debug("Check is Deployment deleted by using labelSelector: {}", labelSelector);
+        logger.debug("Check is Deployment deleted by using namespace: {}, labelSelector: {}", namespace, labelSelector);
         try {
             final AppsV1Api batchV1Api = new AppsV1Api(apiClient);
-            final V1DeploymentList v1DeploymentList = batchV1Api.listDeploymentForAllNamespaces(null, null, null,
-                    labelSelector, null, null, null, null, timeoutSeconds, DISABLE_WATCH);
+            final V1DeploymentList v1DeploymentList = batchV1Api.listNamespacedDeployment(namespace, null, null, null,
+                    null, labelSelector, null, null, null, timeoutSeconds, DISABLE_WATCH);
             logger.debug("Response from list Deployment for all Namespaces: {}", v1DeploymentList);
             return v1DeploymentList.getItems().isEmpty();
         } catch (final ApiException exception) {
@@ -461,13 +475,13 @@ public class KubernetesClientImpl implements KubernetesClient {
     }
 
     @Override
-    public boolean isReplicaSetDeleted(final ApiClient apiClient, final String labelSelector)
+    public boolean isReplicaSetDeleted(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException {
-        logger.debug("Check is ReplicaSet deleted by using labelSelector: {}", labelSelector);
+        logger.debug("Check is ReplicaSet deleted by using namespace: {}, labelSelector: {}", namespace, labelSelector);
         try {
             final AppsV1Api batchV1Api = new AppsV1Api(apiClient);
-            final V1ReplicaSetList v1ReplicaSetList = batchV1Api.listReplicaSetForAllNamespaces(null, null, null,
-                    labelSelector, null, null, null, null, timeoutSeconds, DISABLE_WATCH);
+            final V1ReplicaSetList v1ReplicaSetList = batchV1Api.listNamespacedReplicaSet(namespace, null, null, null,
+                    null, labelSelector, null, null, null, timeoutSeconds, DISABLE_WATCH);
             logger.debug("Response from list ReplicaSet for all Namespaces: {}", v1ReplicaSetList);
             return v1ReplicaSetList.getItems().isEmpty();
         } catch (final ApiException exception) {
@@ -480,13 +494,13 @@ public class KubernetesClientImpl implements KubernetesClient {
     }
 
     @Override
-    public boolean isDaemonSetDeleted(final ApiClient apiClient, final String labelSelector)
+    public boolean isDaemonSetDeleted(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException {
-        logger.debug("Check is DaemonSet deleted by using labelSelector: {}", labelSelector);
+        logger.debug("Check is DaemonSet deleted by using namespace: {}, labelSelector: {}", namespace, labelSelector);
         try {
             final AppsV1Api batchV1Api = new AppsV1Api(apiClient);
-            final V1DaemonSetList v1DaemonSetList = batchV1Api.listDaemonSetForAllNamespaces(null, null, null,
-                    labelSelector, null, null, null, null, timeoutSeconds, DISABLE_WATCH);
+            final V1DaemonSetList v1DaemonSetList = batchV1Api.listNamespacedDaemonSet(namespace, null, null, null,
+                    null, labelSelector, null, null, null, timeoutSeconds, DISABLE_WATCH);
             logger.debug("Response from list DaemonSet for all Namespaces: {}", v1DaemonSetList);
             return v1DaemonSetList.getItems().isEmpty();
         } catch (final ApiException exception) {
@@ -499,13 +513,14 @@ public class KubernetesClientImpl implements KubernetesClient {
     }
 
     @Override
-    public boolean isStatefulSetDeleted(final ApiClient apiClient, final String labelSelector)
+    public boolean isStatefulSetDeleted(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException {
-        logger.debug("Check is StatefulSet deleted by using labelSelector: {}", labelSelector);
+        logger.debug("Check is StatefulSet deleted by using namespace: {}, labelSelector: {}", namespace,
+                labelSelector);
         try {
             final AppsV1Api batchV1Api = new AppsV1Api(apiClient);
-            final V1StatefulSetList v1StatefulSetList = batchV1Api.listStatefulSetForAllNamespaces(null, null, null,
-                    labelSelector, null, null, null, null, timeoutSeconds, DISABLE_WATCH);
+            final V1StatefulSetList v1StatefulSetList = batchV1Api.listNamespacedStatefulSet(namespace, null, null,
+                    null, null, labelSelector, null, null, null, timeoutSeconds, DISABLE_WATCH);
             logger.debug("Response from list StatefulSet for all Namespaces: {}", v1StatefulSetList);
             return v1StatefulSetList.getItems().isEmpty();
         } catch (final ApiException exception) {
@@ -519,13 +534,13 @@ public class KubernetesClientImpl implements KubernetesClient {
 
 
     @Override
-    public List<KubernetesResource> getJobResources(final ApiClient apiClient, final String labelSelector)
-            throws KubernetesRequestProcessingException {
-        logger.debug("Retrieving Jobs using labelSelector: {}", labelSelector);
+    public List<KubernetesResource> getJobResources(final ApiClient apiClient, final String namespace,
+            final String labelSelector) throws KubernetesRequestProcessingException {
+        logger.debug("Retrieving Jobs using namespace: {}, labelSelector: {}", namespace, labelSelector);
         try {
             final BatchV1Api batchV1Api = new BatchV1Api(apiClient);
-            final V1JobList jobList = batchV1Api.listJobForAllNamespaces(null, null, null, labelSelector, null, null,
-                    null, null, timeoutSeconds, DISABLE_WATCH);
+            final V1JobList jobList = batchV1Api.listNamespacedJob(namespace, null, null, null, null, labelSelector,
+                    null, null, null, timeoutSeconds, DISABLE_WATCH);
 
             logger.debug("Received Jobs: {}", jobList);
             return getKubernetesResource(jobList);
@@ -543,13 +558,13 @@ public class KubernetesClientImpl implements KubernetesClient {
     }
 
     @Override
-    public List<KubernetesResource> getDeploymentResources(final ApiClient apiClient, final String labelSelector)
-            throws KubernetesRequestProcessingException {
-        logger.debug("Retrieving Deployment using labelSelector: {}", labelSelector);
+    public List<KubernetesResource> getDeploymentResources(final ApiClient apiClient, final String namespace,
+            final String labelSelector) throws KubernetesRequestProcessingException {
+        logger.debug("Retrieving Deployment using namespace: {}, labelSelector: {}", namespace, labelSelector);
         try {
             final AppsV1Api appsV1Api = new AppsV1Api(apiClient);
-            final V1DeploymentList deploymentList = appsV1Api.listDeploymentForAllNamespaces(null, null, null,
-                    labelSelector, null, null, null, null, timeoutSeconds, DISABLE_WATCH);
+            final V1DeploymentList deploymentList = appsV1Api.listNamespacedDeployment(namespace, null, null, null,
+                    null, labelSelector, null, null, null, timeoutSeconds, DISABLE_WATCH);
 
             logger.debug("Received Deployments: {}", deploymentList);
             return getKubernetesResource(deploymentList);
@@ -567,13 +582,13 @@ public class KubernetesClientImpl implements KubernetesClient {
     }
 
     @Override
-    public List<KubernetesResource> getPodResources(final ApiClient apiClient, final String labelSelector)
-            throws KubernetesRequestProcessingException {
-        logger.debug("Retrieving Pod using labelSelector: {}", labelSelector);
+    public List<KubernetesResource> getPodResources(final ApiClient apiClient, final String namespace,
+            final String labelSelector) throws KubernetesRequestProcessingException {
+        logger.debug("Retrieving Pod using namespace: {}, labelSelector: {}", namespace, labelSelector);
         try {
             final CoreV1Api coreV1Api = new CoreV1Api(apiClient);
-            final V1PodList podList = coreV1Api.listPodForAllNamespaces(null, null, null, labelSelector, null, null,
-                    null, null, timeoutSeconds, DISABLE_WATCH);
+            final V1PodList podList = coreV1Api.listNamespacedPod(namespace, null, null, null, null, labelSelector,
+                    null, null, null, timeoutSeconds, DISABLE_WATCH);
 
             logger.debug("Received Pods: {}", podList);
             return getKubernetesResource(podList);
@@ -591,13 +606,13 @@ public class KubernetesClientImpl implements KubernetesClient {
     }
 
     @Override
-    public List<KubernetesResource> getServiceResources(final ApiClient apiClient, final String labelSelector)
-            throws KubernetesRequestProcessingException {
-        logger.debug("Retrieving Service using labelSelector: {}", labelSelector);
+    public List<KubernetesResource> getServiceResources(final ApiClient apiClient, final String namespace,
+            final String labelSelector) throws KubernetesRequestProcessingException {
+        logger.debug("Retrieving Service using namespace: {}, labelSelector: {}", namespace, labelSelector);
         try {
             final CoreV1Api coreV1Api = new CoreV1Api(apiClient);
-            final V1ServiceList serviceList = coreV1Api.listServiceForAllNamespaces(null, null, null, labelSelector,
-                    null, null, null, null, timeoutSeconds, DISABLE_WATCH);
+            final V1ServiceList serviceList = coreV1Api.listNamespacedService(namespace, null, null, null, null,
+                    labelSelector, null, null, null, timeoutSeconds, DISABLE_WATCH);
 
             logger.debug("Received Services: {}", serviceList);
             return getKubernetesResource(serviceList);
@@ -615,13 +630,13 @@ public class KubernetesClientImpl implements KubernetesClient {
     }
 
     @Override
-    public List<KubernetesResource> getReplicaSetResources(final ApiClient apiClient, final String labelSelector)
-            throws KubernetesRequestProcessingException {
-        logger.debug("Retrieving ReplicaSet using labelSelector: {}", labelSelector);
+    public List<KubernetesResource> getReplicaSetResources(final ApiClient apiClient, final String namespace,
+            final String labelSelector) throws KubernetesRequestProcessingException {
+        logger.debug("Retrieving ReplicaSet using namespace: {}, labelSelector: {}", namespace, labelSelector);
         try {
             final AppsV1Api appsV1Api = new AppsV1Api(apiClient);
-            final V1ReplicaSetList replicaSetList = appsV1Api.listReplicaSetForAllNamespaces(null, null, null,
-                    labelSelector, null, null, null, null, timeoutSeconds, DISABLE_WATCH);
+            final V1ReplicaSetList replicaSetList = appsV1Api.listNamespacedReplicaSet(namespace, null, null, null,
+                    null, labelSelector, null, null, null, timeoutSeconds, DISABLE_WATCH);
 
             logger.debug("Received ReplicaSets: {}", replicaSetList);
             return getKubernetesResource(replicaSetList);
@@ -639,14 +654,14 @@ public class KubernetesClientImpl implements KubernetesClient {
     }
 
     @Override
-    public List<KubernetesResource> getDaemonSetResources(final ApiClient apiClient, final String labelSelector)
-            throws KubernetesRequestProcessingException {
-        logger.debug("Retrieving DaemonSet using labelSelector: {}", labelSelector);
+    public List<KubernetesResource> getDaemonSetResources(final ApiClient apiClient, final String namespace,
+            final String labelSelector) throws KubernetesRequestProcessingException {
+        logger.debug("Retrieving DaemonSet using namespace: {}, labelSelector: {}", namespace, labelSelector);
         try {
             final AppsV1Api appsV1Api = new AppsV1Api(apiClient);
 
-            final V1DaemonSetList daemonSetList = appsV1Api.listDaemonSetForAllNamespaces(null, null, null,
-                    labelSelector, null, null, null, null, timeoutSeconds, DISABLE_WATCH);
+            final V1DaemonSetList daemonSetList = appsV1Api.listNamespacedDaemonSet(namespace, null, null, null, null,
+                    labelSelector, null, null, null, timeoutSeconds, DISABLE_WATCH);
 
             logger.debug("Received DaemonSets: {}", daemonSetList);
             return getKubernetesResource(daemonSetList);
@@ -664,14 +679,14 @@ public class KubernetesClientImpl implements KubernetesClient {
     }
 
     @Override
-    public List<KubernetesResource> getStatefulSetResources(final ApiClient apiClient, final String labelSelector)
-            throws KubernetesRequestProcessingException {
-        logger.debug("Retrieving StatefulSet using labelSelector: {}", labelSelector);
+    public List<KubernetesResource> getStatefulSetResources(final ApiClient apiClient, final String namespace,
+            final String labelSelector) throws KubernetesRequestProcessingException {
+        logger.debug("Retrieving StatefulSet using namespace: {}, labelSelector: {}", namespace, labelSelector);
         try {
             final AppsV1Api appsV1Api = new AppsV1Api(apiClient);
 
-            final V1StatefulSetList statefulSetList = appsV1Api.listStatefulSetForAllNamespaces(null, null, null,
-                    labelSelector, null, null, null, null, timeoutSeconds, DISABLE_WATCH);
+            final V1StatefulSetList statefulSetList = appsV1Api.listNamespacedStatefulSet(namespace, null, null, null,
+                    null, labelSelector, null, null, null, timeoutSeconds, DISABLE_WATCH);
 
             logger.debug("Received StatefulSets: {}", statefulSetList);
             return getKubernetesResource(statefulSetList);

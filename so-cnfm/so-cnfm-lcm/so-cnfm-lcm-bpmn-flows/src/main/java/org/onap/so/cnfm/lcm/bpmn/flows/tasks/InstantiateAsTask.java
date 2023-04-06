@@ -215,6 +215,8 @@ public class InstantiateAsTask extends AbstractServiceTask {
         setJobStatus(execution, IN_PROGRESS, "Preparing InstantiateDeploymentItemRequest requests");
 
         final String asInstId = (String) execution.getVariable(AS_INSTANCE_ID_PARAM_NAME);
+        final AsInst asInst = getAsInst(execution, asInstId);
+
         final InstantiateAsRequest instantiateAsRequest =
                 (InstantiateAsRequest) execution.getVariable(INSTANTIATE_AS_REQUEST_PARAM_NAME);
 
@@ -254,7 +256,8 @@ public class InstantiateAsTask extends AbstractServiceTask {
             requests.add(new InstantiateDeploymentItemRequest().asInstId(asInstId)
                     .asDeploymentItemInstId(asDeploymentItemInstId).asDeploymentItemName(asDeploymentItem.getName())
                     .helmArtifactFilePath(artifactFilePath).deploymentOrder(asDeploymentItem.getDeploymentOrder())
-                    .kubeConfigFile(kubeConfigFile).lifeCycleParameters(lifeCycleParams).releaseName((releaseName)));
+                    .kubeConfigFile(kubeConfigFile).lifeCycleParameters(lifeCycleParams).releaseName((releaseName))
+                    .namespace(asInst.getNamespace()));
 
         });
 

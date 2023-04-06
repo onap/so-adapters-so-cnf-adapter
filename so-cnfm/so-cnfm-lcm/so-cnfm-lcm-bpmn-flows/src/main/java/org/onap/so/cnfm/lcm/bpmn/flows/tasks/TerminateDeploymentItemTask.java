@@ -24,6 +24,7 @@ import static org.onap.so.cnfm.lcm.bpmn.flows.CamundaVariableNameConstants.AS_DE
 import static org.onap.so.cnfm.lcm.bpmn.flows.CamundaVariableNameConstants.KUBE_CONFIG_FILE_PATH_PARAM_NAME;
 import static org.onap.so.cnfm.lcm.bpmn.flows.CamundaVariableNameConstants.KUBE_KINDS_PARAM_NAME;
 import static org.onap.so.cnfm.lcm.bpmn.flows.CamundaVariableNameConstants.KUBE_KINDS_RESULT_PARAM_NAME;
+import static org.onap.so.cnfm.lcm.bpmn.flows.CamundaVariableNameConstants.NAMESPACE_NAME_PARAM_NAME;
 import static org.onap.so.cnfm.lcm.bpmn.flows.CamundaVariableNameConstants.RELEASE_NAME_PARAM_NAME;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -99,10 +100,11 @@ public class TerminateDeploymentItemTask extends AbstractServiceTask {
         final TerminateDeploymentItemRequest request =
                 (TerminateDeploymentItemRequest) execution.getVariable(TERMINATE_REQUEST_PARAM_NAME);
         final String releaseName = request.getReleaseName();
+        final String namespace = request.getNamespace();
 
         try {
             final Path kubeConfigFilePath = Paths.get(request.getKubeConfigFile());
-            helmClient.unInstallHelmChart(releaseName, kubeConfigFilePath);
+            helmClient.unInstallHelmChart(namespace, releaseName, kubeConfigFilePath);
         } catch (final Exception exception) {
             final String message = "Failed to uninstall helm chart: " + " using kube-config file: "
                     + request.getKubeConfigFile() + "for reason: " + exception.getMessage();
@@ -135,9 +137,11 @@ public class TerminateDeploymentItemTask extends AbstractServiceTask {
         final TerminateDeploymentItemRequest request =
                 (TerminateDeploymentItemRequest) execution.getVariable(TERMINATE_REQUEST_PARAM_NAME);
         final String releaseName = request.getReleaseName();
+        final String namespace = request.getNamespace();
         final Path kubeConfigFilePath = Paths.get(request.getKubeConfigFile());
         final Map<String, Boolean> kubeKindsMap = new HashMap<>();
-        final List<String> kinds = helmClient.getKubeKindsUsingManifestCommand(releaseName, kubeConfigFilePath);
+        final List<String> kinds =
+                helmClient.getKubeKindsUsingManifestCommand(namespace, releaseName, kubeConfigFilePath);
         if (kinds.isEmpty()) {
             abortOperation(execution,
                     "Unable to retrieve kinds from helm release history for releaseName: " + releaseName);
@@ -145,6 +149,7 @@ public class TerminateDeploymentItemTask extends AbstractServiceTask {
         kinds.forEach(kind -> kubeKindsMap.put(kind, false));
 
         execution.setVariable(RELEASE_NAME_PARAM_NAME, releaseName);
+        execution.setVariable(NAMESPACE_NAME_PARAM_NAME, namespace);
         execution.setVariable(KUBE_KINDS_RESULT_PARAM_NAME, kubeKindsMap);
         execution.setVariable(KUBE_KINDS_PARAM_NAME, kinds);
     }

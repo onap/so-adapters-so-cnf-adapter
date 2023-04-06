@@ -184,12 +184,12 @@ public class DeleteAsTaskTest extends BaseTest {
     private void addDummyAsToDatabase(final String asInstanceId, final State state) {
         final String asdId = UUID.randomUUID().toString();
 
-        final AsInst asInst =
-                new AsInst().asInstId(asInstanceId).name("asName").asdId(asdId).asdInvariantId(asInstanceId)
-                        .status(state).statusUpdatedTime(LocalDateTime.now()).asApplicationName("asApplicationName")
-                        .asApplicationVersion("asApplicationVersion").asProvider("asProvider")
-                        .serviceInstanceId(SERVICE_INSTANCE_ID).serviceInstanceName("serviceInstanceName")
-                        .cloudOwner("cloudOwner").cloudRegion("cloudRegion").tenantId("tenantId");
+        final AsInst asInst = new AsInst().asInstId(asInstanceId).name("asName").asdId(asdId)
+                .asdInvariantId(asInstanceId).status(state).statusUpdatedTime(LocalDateTime.now())
+                .asApplicationName("asApplicationName").asApplicationVersion("asApplicationVersion")
+                .asProvider("asProvider").serviceInstanceId(SERVICE_INSTANCE_ID)
+                .serviceInstanceName("serviceInstanceName").cloudOwner("cloudOwner").cloudRegion("cloudRegion")
+                .tenantId("tenantId").namespace("namespace");
         databaseServiceProvider.saveAsInst(asInst);
     }
 
