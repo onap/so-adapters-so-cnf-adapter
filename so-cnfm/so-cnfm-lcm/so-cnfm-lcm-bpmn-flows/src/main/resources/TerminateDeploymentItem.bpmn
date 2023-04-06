@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1va0vwc" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1va0vwc" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.0.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
   <bpmn:process id="TerminateDeploymentItem" isExecutable="true">
     <bpmn:startEvent id="Terminate_deployment_start_event">
       <bpmn:outgoing>Flow_11nr4yl</bpmn:outgoing>
@@ -31,6 +31,7 @@
         <camunda:out source="kubeKindsResult" target="kubeKindsResult" />
         <camunda:in source="releaseName" target="releaseName" />
         <camunda:in source="kubeConfigFilePath" target="kubeConfigFilePath" />
+        <camunda:in source="namespace" target="namespace" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0hqyoqt</bpmn:incoming>
       <bpmn:outgoing>Flow_0tc7pv4</bpmn:outgoing>
@@ -90,6 +91,10 @@
   <bpmn:error id="Error_04z28em" name="AsWorkflowProcessingException" errorCode="INSTANTIATE_AS_WORKFLOW_PROCESSING_EXCEPTION" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="TerminateDeploymentItem">
+      <bpmndi:BPMNEdge id="Flow_1ey2cql_di" bpmnElement="Flow_1ey2cql">
+        <di:waypoint x="500" y="120" />
+        <di:waypoint x="570" y="120" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_044y6ke_di" bpmnElement="Flow_044y6ke">
         <di:waypoint x="1510" y="120" />
         <di:waypoint x="1590" y="120" />
@@ -145,21 +150,14 @@
         <di:waypoint x="188" y="120" />
         <di:waypoint x="240" y="120" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1ey2cql_di" bpmnElement="Flow_1ey2cql">
-        <di:waypoint x="500" y="120" />
-        <di:waypoint x="570" y="120" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_0fwtu82_di" bpmnElement="Terminate_deployment_start_event">
         <dc:Bounds x="152" y="102" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0ij2kxo_di" bpmnElement="Activity_08pudch">
-        <dc:Bounds x="240" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0sj1npl_di" bpmnElement="Activity_0sj1npl">
         <dc:Bounds x="570" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1d6qam7_di" bpmnElement="Activity_1d6qam7">
-        <dc:Bounds x="400" y="80" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_0ij2kxo_di" bpmnElement="Activity_08pudch">
+        <dc:Bounds x="240" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_11evvnx_di" bpmnElement="Event_11evvnx">
         <dc:Bounds x="1762" y="102" width="36" height="36" />
@@ -187,6 +185,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1jdaz83_di" bpmnElement="Activity_1jdaz83">
         <dc:Bounds x="1410" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1d6qam7_di" bpmnElement="Activity_1d6qam7">
+        <dc:Bounds x="400" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_04fi7zc_di" bpmnElement="Event_04fi7zc">
         <dc:Bounds x="802" y="142" width="36" height="36" />

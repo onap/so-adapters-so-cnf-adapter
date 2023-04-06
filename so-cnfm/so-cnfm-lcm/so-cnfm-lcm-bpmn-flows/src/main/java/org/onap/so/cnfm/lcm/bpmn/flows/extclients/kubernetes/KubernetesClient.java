@@ -30,26 +30,25 @@ import io.kubernetes.client.openapi.ApiClient;
  */
 public interface KubernetesClient extends KubernetesResourceStatusCheck {
 
-    List<KubernetesResource> getJobResources(final ApiClient apiClient, final String labelSelector)
-            throws KubernetesRequestProcessingException;
+    List<KubernetesResource> getJobResources(final ApiClient apiClient, final String namespace,
+            final String labelSelector) throws KubernetesRequestProcessingException;
 
-    List<KubernetesResource> getDeploymentResources(final ApiClient apiClient, final String labelSelector)
-            throws KubernetesRequestProcessingException;
+    List<KubernetesResource> getDeploymentResources(final ApiClient apiClient, final String namespace,
+            final String labelSelector) throws KubernetesRequestProcessingException;
 
-    List<KubernetesResource> getPodResources(final ApiClient apiClient, final String labelSelector)
-            throws KubernetesRequestProcessingException;
+    List<KubernetesResource> getPodResources(final ApiClient apiClient, final String namespace,
+            final String labelSelector) throws KubernetesRequestProcessingException;
 
-    List<KubernetesResource> getServiceResources(final ApiClient apiClient, final String labelSelector)
-            throws KubernetesRequestProcessingException;
+    List<KubernetesResource> getServiceResources(final ApiClient apiClient, final String namespace,
+            final String labelSelector) throws KubernetesRequestProcessingException;
 
-    List<KubernetesResource> getReplicaSetResources(final ApiClient apiClient, final String labelSelector)
-            throws KubernetesRequestProcessingException;
+    List<KubernetesResource> getReplicaSetResources(final ApiClient apiClient, final String namespace,
+            final String labelSelector) throws KubernetesRequestProcessingException;
 
-    List<KubernetesResource> getDaemonSetResources(final ApiClient apiClient, final String labelSelector)
-            throws KubernetesRequestProcessingException;
+    List<KubernetesResource> getDaemonSetResources(final ApiClient apiClient, final String namespace,
+            final String labelSelector) throws KubernetesRequestProcessingException;
 
-    List<KubernetesResource> getStatefulSetResources(final ApiClient apiClient, final String labelSelector)
-            throws KubernetesRequestProcessingException;
-
+    List<KubernetesResource> getStatefulSetResources(final ApiClient apiClient, final String namespace,
+            final String labelSelector) throws KubernetesRequestProcessingException;
 
 }

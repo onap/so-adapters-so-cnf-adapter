@@ -206,7 +206,7 @@ public class CreateAsTaskTest extends BaseTest {
                 .asPackageId(UUID.randomUUID().toString()).asdInvariantId(asdId).asProvider(DUMMY_VALUE)
                 .asApplicationName(DUMMY_VALUE).asApplicationVersion(DUMMY_VALUE).serviceInstanceId(DUMMY_VALUE)
                 .serviceInstanceName(DUMMY_VALUE).cloudOwner(DUMMY_VALUE).cloudRegion(DUMMY_VALUE).tenantId(DUMMY_VALUE)
-                .status(State.INSTANTIATED).statusUpdatedTime(LocalDateTime.now()));
+                .namespace(DUMMY_VALUE).status(State.INSTANTIATED).statusUpdatedTime(LocalDateTime.now()));
 
         try {
             objUnderTest.runCreateAsJob(createAsRequest);

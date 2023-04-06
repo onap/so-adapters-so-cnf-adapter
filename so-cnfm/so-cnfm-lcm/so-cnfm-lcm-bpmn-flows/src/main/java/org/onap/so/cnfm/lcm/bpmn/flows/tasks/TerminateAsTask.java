@@ -132,6 +132,8 @@ public class TerminateAsTask extends AbstractServiceTask {
         final String asInstId = (String) execution.getVariable(AS_INSTANCE_ID_PARAM_NAME);
         final String kubeConfigFile = (String) execution.getVariable(KUBE_CONFIG_FILE_PARAM_NAME);
 
+        final AsInst asInst = getAsInst(execution, asInstId);
+
         final List<AsDeploymentItem> asDeploymentItems =
                 databaseServiceProvider.getAsDeploymentItemByAsInstId(asInstId);
 
@@ -147,6 +149,7 @@ public class TerminateAsTask extends AbstractServiceTask {
             terminatedeploymentitemrequest.setDeploymentOrder(asDeploymentItem.getDeploymentOrder());
             terminatedeploymentitemrequest.setKubeConfigFile(kubeConfigFile);
             terminatedeploymentitemrequest.setReleaseName(asDeploymentItem.getReleaseName());
+            terminatedeploymentitemrequest.setNamespace(asInst.getNamespace());
 
             requests.add(terminatedeploymentitemrequest);
 

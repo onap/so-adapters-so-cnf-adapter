@@ -31,18 +31,18 @@ import static org.onap.so.cnfm.lcm.bpmn.flows.extclients.sdc.SdcCsarPropertiesCo
 import static org.onap.so.cnfm.lcm.bpmn.flows.extclients.sdc.SdcCsarPropertiesConstants.PROVIDER_PARAM_NAME;
 import static org.onap.so.cnfm.lcm.model.utils.AdditionalParamsConstants.CLOUD_OWNER_PARAM_KEY;
 import static org.onap.so.cnfm.lcm.model.utils.AdditionalParamsConstants.CLOUD_REGION_PARAM_KEY;
+import static org.onap.so.cnfm.lcm.model.utils.AdditionalParamsConstants.NAMESPACE_KEY;
 import static org.onap.so.cnfm.lcm.model.utils.AdditionalParamsConstants.RESOURCE_ID_KEY;
 import static org.onap.so.cnfm.lcm.model.utils.AdditionalParamsConstants.SERVICE_INSTANCE_ID_PARAM_KEY;
 import static org.onap.so.cnfm.lcm.model.utils.AdditionalParamsConstants.SERVICE_INSTANCE_NAME_PARAM_KEY;
 import static org.onap.so.cnfm.lcm.model.utils.AdditionalParamsConstants.TENANT_ID_PARAM_KEY;
-import java.util.Arrays;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.time.LocalDateTime;
-
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.onap.aai.domain.yang.GenericVnf;
 import org.onap.so.cnfm.lcm.bpmn.flows.extclients.aai.AaiServiceProvider;
@@ -51,9 +51,9 @@ import org.onap.so.cnfm.lcm.bpmn.flows.extclients.sdc.SdcCsarPackageParser;
 import org.onap.so.cnfm.lcm.bpmn.flows.extclients.sdc.SdcPackageProvider;
 import org.onap.so.cnfm.lcm.database.beans.AsDeploymentItem;
 import org.onap.so.cnfm.lcm.database.beans.AsInst;
+import org.onap.so.cnfm.lcm.database.beans.AsLifecycleParam;
 import org.onap.so.cnfm.lcm.database.beans.JobStatusEnum;
 import org.onap.so.cnfm.lcm.database.beans.State;
-import org.onap.so.cnfm.lcm.database.beans.AsLifecycleParam;
 import org.onap.so.cnfm.lcm.database.service.DatabaseServiceProvider;
 import org.onap.so.cnfm.lcm.model.AsInstance;
 import org.onap.so.cnfm.lcm.model.AsInstance.InstantiationStateEnum;
@@ -73,6 +73,7 @@ public class CreateAsTask extends AbstractServiceTask {
     private static final String ASD_PROPERTIES_PARAM_NAME = "asdProperties";
     private static final String DOES_AS_PACKAGE_EXISTS_PARAM_NAME = "doesAsPackageExists";
     private static final String DOES_AS_INSTANCE_EXISTS_PARAM_NAME = "doesAsInstanceExists";
+    private static final String DEFAULT_NAMESPACE = "default";
     private static final Logger logger = LoggerFactory.getLogger(CreateAsTask.class);
 
     private final AaiServiceProvider aaiServiceProvider;
@@ -180,6 +181,7 @@ public class CreateAsTask extends AbstractServiceTask {
             final String cloudRegion = getMandatoryValue(additionalParams, CLOUD_REGION_PARAM_KEY, execution);
             final String tenantId = getMandatoryValue(additionalParams, TENANT_ID_PARAM_KEY, execution);
             final String resourceId = (String) additionalParams.get(RESOURCE_ID_KEY);
+            final String namespace = getNamespace((String) additionalParams.get(NAMESPACE_KEY));
 
             final String serviceInstanceName =
                     getMandatoryValue(additionalParams, SERVICE_INSTANCE_NAME_PARAM_KEY, execution);
@@ -202,7 +204,8 @@ public class CreateAsTask extends AbstractServiceTask {
                     .asApplicationVersion(getParamValue(asdProperties, APPLICATION_VERSION_PARAM_NAME))
                     .description(createAsRequest.getAsInstanceDescription()).serviceInstanceId(serviceInstanceId)
                     .serviceInstanceName(serviceInstanceName).cloudOwner(cloudOwner).cloudRegion(cloudRegion)
-                    .tenantId(tenantId).status(State.NOT_INSTANTIATED).statusUpdatedTime(LocalDateTime.now());
+                    .tenantId(tenantId).namespace(namespace).status(State.NOT_INSTANTIATED)
+                    .statusUpdatedTime(LocalDateTime.now());
 
             @SuppressWarnings("unchecked")
             final List<DeploymentItem> deploymentItems =
@@ -325,6 +328,15 @@ public class CreateAsTask extends AbstractServiceTask {
         final String asInstId = UUID.randomUUID().toString();
         logger.debug("Creating random UUID for asInstId: {}", asInstId);
         return asInstId;
+    }
+
+    private String getNamespace(final String namespace) {
+        if (namespace != null && !namespace.isBlank()) {
+            logger.debug("Namespace found in additionalParams namespace: {}", namespace);
+            return namespace;
+        }
+        logger.debug("No namespace found in additionalParams, will use namespace: {}", DEFAULT_NAMESPACE);
+        return DEFAULT_NAMESPACE;
     }
 
     private String getParamValue(final Map<String, Object> properties, final String key) {

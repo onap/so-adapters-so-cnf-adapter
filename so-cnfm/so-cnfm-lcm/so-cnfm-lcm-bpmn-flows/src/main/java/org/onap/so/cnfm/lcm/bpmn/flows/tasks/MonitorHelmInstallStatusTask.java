@@ -24,8 +24,8 @@ import static org.onap.so.cnfm.lcm.bpmn.flows.CamundaVariableNameConstants.AS_DE
 import static org.onap.so.cnfm.lcm.bpmn.flows.CamundaVariableNameConstants.KIND_PARAM_NAME;
 import static org.onap.so.cnfm.lcm.bpmn.flows.CamundaVariableNameConstants.KUBE_CONFIG_FILE_PATH_PARAM_NAME;
 import static org.onap.so.cnfm.lcm.bpmn.flows.CamundaVariableNameConstants.KUBE_KINDS_RESULT_PARAM_NAME;
+import static org.onap.so.cnfm.lcm.bpmn.flows.CamundaVariableNameConstants.NAMESPACE_PARAM_NAME;
 import static org.onap.so.cnfm.lcm.bpmn.flows.CamundaVariableNameConstants.RELEASE_NAME_PARAM_NAME;
-
 import static org.onap.so.cnfm.lcm.bpmn.flows.Constants.KIND_DAEMON_SET;
 import static org.onap.so.cnfm.lcm.bpmn.flows.Constants.KIND_DEPLOYMENT;
 import static org.onap.so.cnfm.lcm.bpmn.flows.Constants.KIND_JOB;
@@ -33,8 +33,6 @@ import static org.onap.so.cnfm.lcm.bpmn.flows.Constants.KIND_POD;
 import static org.onap.so.cnfm.lcm.bpmn.flows.Constants.KIND_REPLICA_SET;
 import static org.onap.so.cnfm.lcm.bpmn.flows.Constants.KIND_SERVICE;
 import static org.onap.so.cnfm.lcm.bpmn.flows.Constants.KIND_STATEFUL_SET;
-
-import io.kubernetes.client.openapi.ApiClient;
 import java.util.Map;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.onap.so.cnfm.lcm.bpmn.flows.exceptions.KubernetesRequestTimeOut;
@@ -46,6 +44,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import io.kubernetes.client.openapi.ApiClient;
 
 
 /**
@@ -89,33 +88,35 @@ public class MonitorHelmInstallStatusTask extends AbstractServiceTask {
         logger.info("Executing isResourceReady ");
         final String kind = (String) execution.getVariable(KIND_PARAM_NAME);
         final String releaseName = (String) execution.getVariable(RELEASE_NAME_PARAM_NAME);
+        final String namespace = (String) execution.getVariable(NAMESPACE_PARAM_NAME);
         final String kubeConfigFile = (String) execution.getVariable(KUBE_CONFIG_FILE_PATH_PARAM_NAME);
         final String labelSelector = "app.kubernetes.io/instance=" + releaseName;
         try {
             final ApiClient apiClient = kubernetesClientProvider.getApiClient(kubeConfigFile);
             boolean isReady = false;
-            logger.debug("Will check if resource type: {} is ready using labelSelector: {}", kind, labelSelector);
+            logger.debug("Will check if resource type: {} is ready using namespace: {}, labelSelector: {}", kind,
+                    namespace, labelSelector);
             switch (kind) {
                 case KIND_JOB:
-                    isReady = kubernetesClient.isJobReady(apiClient, labelSelector);
+                    isReady = kubernetesClient.isJobReady(apiClient, namespace, labelSelector);
                     break;
                 case KIND_POD:
-                    isReady = kubernetesClient.isPodReady(apiClient, labelSelector);
+                    isReady = kubernetesClient.isPodReady(apiClient, namespace, labelSelector);
                     break;
                 case KIND_SERVICE:
-                    isReady = kubernetesClient.isServiceReady(apiClient, labelSelector);
+                    isReady = kubernetesClient.isServiceReady(apiClient, namespace, labelSelector);
                     break;
                 case KIND_DEPLOYMENT:
-                    isReady = kubernetesClient.isDeploymentReady(apiClient, labelSelector);
+                    isReady = kubernetesClient.isDeploymentReady(apiClient, namespace, labelSelector);
                     break;
                 case KIND_REPLICA_SET:
-                    isReady = kubernetesClient.isReplicaSetReady(apiClient, labelSelector);
+                    isReady = kubernetesClient.isReplicaSetReady(apiClient, namespace, labelSelector);
                     break;
                 case KIND_DAEMON_SET:
-                    isReady = kubernetesClient.isDaemonSetReady(apiClient, labelSelector);
+                    isReady = kubernetesClient.isDaemonSetReady(apiClient, namespace, labelSelector);
                     break;
                 case KIND_STATEFUL_SET:
-                    isReady = kubernetesClient.isStatefulSetReady(apiClient, labelSelector);
+                    isReady = kubernetesClient.isStatefulSetReady(apiClient, namespace, labelSelector);
                     break;
 
                 default:

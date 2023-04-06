@@ -40,6 +40,7 @@ public class TerminateDeploymentItemRequest implements Serializable, Comparable<
     private String kubeConfigFile;
     private Integer deploymentOrder;
     private String releaseName;
+    private String namespace;
 
     private static final Comparator<Integer> COMPARATOR = Comparator.nullsFirst(Integer::compare).reversed();
 
@@ -83,6 +84,14 @@ public class TerminateDeploymentItemRequest implements Serializable, Comparable<
         this.releaseName = releaseName;
     }
 
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public void setNamespace(final String namespace) {
+        this.namespace = namespace;
+    }
+
     @Override
     public boolean equals(final Object obj) {
         if (obj instanceof TerminateDeploymentItemRequest) {
@@ -91,15 +100,14 @@ public class TerminateDeploymentItemRequest implements Serializable, Comparable<
                     && Objects.equals(asDeploymentItemInstId, that.asDeploymentItemInstId)
                     && Objects.equals(kubeConfigFile, that.kubeConfigFile)
                     && Objects.equals(deploymentOrder, that.deploymentOrder)
-                    && Objects.equals(releaseName, that.releaseName);
+                    && Objects.equals(releaseName, that.releaseName) && Objects.equals(namespace, that.namespace);
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(asInstId, asDeploymentItemInstId, kubeConfigFile, deploymentOrder,
-                releaseName);
+        return Objects.hash(asInstId, asDeploymentItemInstId, kubeConfigFile, deploymentOrder, releaseName, namespace);
     }
 
     @Override
@@ -116,6 +124,7 @@ public class TerminateDeploymentItemRequest implements Serializable, Comparable<
         sb.append("    deploymentOrder: ").append(toIndentedString(deploymentOrder)).append("\n");
         sb.append("    kubeConfigFile: ").append(toIndentedString(kubeConfigFile)).append("\n");
         sb.append("    releaseName: ").append(toIndentedString(releaseName)).append("\n");
+        sb.append("    namespace: ").append(toIndentedString(namespace)).append("\n");
         sb.append("}");
         return sb.toString();
     }

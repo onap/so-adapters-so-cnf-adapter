@@ -32,17 +32,64 @@ import org.onap.so.cnfm.lcm.bpmn.flows.exceptions.HelmClientExecuteException;
  */
 public interface HelmClient {
 
-    void runHelmChartInstallWithDryRunFlag(final String releaseName, final Path kubeconfig, final Path helmChart)
-            throws HelmClientExecuteException;
+    /**
+     * Execute <a href="https://helm.sh/docs/helm/helm_install/">helm install</a> with dry run flag
+     *
+     * @param namespace Namespace scope for this request
+     * @param releaseName Name of the release given to helm install
+     * @param kubeconfig kubernetes configuration file path
+     * @param helmChart path of the helm chart to install
+     *
+     * @throws HelmClientExecuteException when exception occurs while executing command
+     */
+    void runHelmChartInstallWithDryRunFlag(final String namespace, final String releaseName, final Path kubeconfig,
+            final Path helmChart) throws HelmClientExecuteException;
 
-    List<String> getKubeKinds(final String releaseName, final Path kubeconfig, final Path helmChart)
-            throws HelmClientExecuteException;
+    /**
+     * Retrieve kube kinds using <a href="https://helm.sh/docs/helm/helm_template/">helm template</a> with dry run and
+     * skip-tests flag
+     * 
+     * 
+     * @param namespace Namespace scope for this request
+     * @param releaseName Name of the release given to helm install
+     * @param kubeconfig kubernetes configuration file path
+     * @param helmChart path of the helm chart to install
+     *
+     * @return Resources for helmChart as a List of strings
+     */
+    List<String> getKubeKinds(final String namespace, final String releaseName, final Path kubeconfig,
+            final Path helmChart) throws HelmClientExecuteException;
 
-    List<String> getKubeKindsUsingManifestCommand(final String releaseName, final Path kubeconfig)
-            throws HelmClientExecuteException;
+    /**
+     * Retrieve kube kinds using <a href="https://helm.sh/docs/helm/helm_get_manifest/">helm get manifest</a>
+     * 
+     * @param namespace Namespace scope for this request
+     * @param releaseName Name of the release given to helm install
+     * @param kubeconfig kubernetes configuration file path
+     * @return
+     * @throws HelmClientExecuteException
+     */
+    List<String> getKubeKindsUsingManifestCommand(final String namespace, final String releaseName,
+            final Path kubeconfig) throws HelmClientExecuteException;
 
-    void installHelmChart(final String releaseName, final Path kubeconfig, final Path helmChart,
+    /**
+     * @param namespace Namespace scope for this request
+     * @param releaseName Name of the release given to helm install
+     * @param kubeconfig kubernetes configuration file path
+     * @param helmChart path of the helm chart to install
+     * @param lifeCycleParams override values in a chart
+     * @throws HelmClientExecuteException
+     */
+    void installHelmChart(final String namespace, final String releaseName, final Path kubeconfig, final Path helmChart,
             final Map<String, String> lifeCycleParams) throws HelmClientExecuteException;
 
-    void unInstallHelmChart(final String releaseName, final Path kubeConfigFilePath) throws HelmClientExecuteException;
+    /**
+     * 
+     * @param namespace Namespace scope for this request
+     * @param releaseName Name of the release given to helm install
+     * @param kubeConfigFilePath kubernetes configuration file path
+     * @throws HelmClientExecuteException
+     */
+    void unInstallHelmChart(final String namespace, final String releaseName, final Path kubeConfigFilePath)
+            throws HelmClientExecuteException;
 }

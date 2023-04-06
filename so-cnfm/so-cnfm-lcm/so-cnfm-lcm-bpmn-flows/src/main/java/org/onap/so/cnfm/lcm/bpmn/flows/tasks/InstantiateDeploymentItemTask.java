@@ -25,6 +25,7 @@ import static org.onap.so.cnfm.lcm.bpmn.flows.CamundaVariableNameConstants.AS_IN
 import static org.onap.so.cnfm.lcm.bpmn.flows.CamundaVariableNameConstants.KUBE_CONFIG_FILE_PATH_PARAM_NAME;
 import static org.onap.so.cnfm.lcm.bpmn.flows.CamundaVariableNameConstants.KUBE_KINDS_PARAM_NAME;
 import static org.onap.so.cnfm.lcm.bpmn.flows.CamundaVariableNameConstants.KUBE_KINDS_RESULT_PARAM_NAME;
+import static org.onap.so.cnfm.lcm.bpmn.flows.CamundaVariableNameConstants.NAMESPACE_PARAM_NAME;
 import static org.onap.so.cnfm.lcm.bpmn.flows.CamundaVariableNameConstants.RELEASE_NAME_PARAM_NAME;
 import static org.onap.so.cnfm.lcm.bpmn.flows.Constants.KIND_DAEMON_SET;
 import static org.onap.so.cnfm.lcm.bpmn.flows.Constants.KIND_DEPLOYMENT;
@@ -33,8 +34,6 @@ import static org.onap.so.cnfm.lcm.bpmn.flows.Constants.KIND_POD;
 import static org.onap.so.cnfm.lcm.bpmn.flows.Constants.KIND_REPLICA_SET;
 import static org.onap.so.cnfm.lcm.bpmn.flows.Constants.KIND_SERVICE;
 import static org.onap.so.cnfm.lcm.bpmn.flows.Constants.KIND_STATEFUL_SET;
-
-import io.kubernetes.client.openapi.ApiClient;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -59,6 +58,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import io.kubernetes.client.openapi.ApiClient;
 
 /**
  *
@@ -161,13 +161,14 @@ public class InstantiateDeploymentItemTask extends AbstractServiceTask {
                 (InstantiateDeploymentItemRequest) execution.getVariable(INSTANTIATE_REQUEST_PARAM_NAME);
 
         final String releaseName = request.getReleaseName();
+        final String namespace = request.getNamespace();
 
         try {
             final Path kubeConfigFilePath = Paths.get(request.getKubeConfigFile());
             final Path helmChartPath = Paths.get(request.getHelmArtifactFilePath());
 
             logger.debug("Running helm install with dry run flag");
-            helmClient.runHelmChartInstallWithDryRunFlag(releaseName, kubeConfigFilePath, helmChartPath);
+            helmClient.runHelmChartInstallWithDryRunFlag(namespace, releaseName, kubeConfigFilePath, helmChartPath);
         } catch (final Exception exception) {
             final String message = "Unable to run helm install with dry run flag";
             logger.error(message, exception);
@@ -187,7 +188,10 @@ public class InstantiateDeploymentItemTask extends AbstractServiceTask {
             final Path kubeConfigFilePath = Paths.get(request.getKubeConfigFile());
             final Path helmChartPath = Paths.get(request.getHelmArtifactFilePath());
             final String releaseName = request.getReleaseName();
-            final List<String> kubeKinds = helmClient.getKubeKinds(releaseName, kubeConfigFilePath, helmChartPath);
+            final String namespace = request.getNamespace();
+
+            final List<String> kubeKinds =
+                    helmClient.getKubeKinds(namespace, releaseName, kubeConfigFilePath, helmChartPath);
 
             if (kubeKinds.isEmpty()) {
                 abortOperation(execution,
@@ -218,14 +222,18 @@ public class InstantiateDeploymentItemTask extends AbstractServiceTask {
 
         final InstantiateDeploymentItemRequest request =
                 (InstantiateDeploymentItemRequest) execution.getVariable(INSTANTIATE_REQUEST_PARAM_NAME);
+
+        final String namespace = request.getNamespace();
         final String releaseName = request.getReleaseName();
+
         execution.setVariable(RELEASE_NAME_PARAM_NAME, releaseName);
+        execution.setVariable(NAMESPACE_PARAM_NAME, namespace);
         try {
             final Path kubeConfigFilePath = Paths.get(request.getKubeConfigFile());
             final Path helmChartPath = Paths.get(request.getHelmArtifactFilePath());
             final Map<String, String> lifeCycleParams = request.getLifeCycleParameters();
 
-            helmClient.installHelmChart(releaseName, kubeConfigFilePath, helmChartPath, lifeCycleParams);
+            helmClient.installHelmChart(namespace, releaseName, kubeConfigFilePath, helmChartPath, lifeCycleParams);
         } catch (final Exception exception) {
             final String message = "Unable to install helm chart: " + request.getHelmArtifactFilePath()
                     + " using kube-config file: " + request.getKubeConfigFile();
@@ -263,6 +271,7 @@ public class InstantiateDeploymentItemTask extends AbstractServiceTask {
 
     public void retrieveKubernetesResources(final DelegateExecution execution) {
         logger.info("Executing retrieveKubernetesResources");
+        final String namespace = (String) execution.getVariable(NAMESPACE_PARAM_NAME);
         final String releaseName = (String) execution.getVariable(RELEASE_NAME_PARAM_NAME);
         final String kubeConfigFile = (String) execution.getVariable(KUBE_CONFIG_FILE_PATH_PARAM_NAME);
         @SuppressWarnings("unchecked")
@@ -279,25 +288,29 @@ public class InstantiateDeploymentItemTask extends AbstractServiceTask {
                             labelSelector);
                     switch (kind) {
                         case KIND_JOB:
-                            resources.addAll(kubernetesClient.getJobResources(apiClient, labelSelector));
+                            resources.addAll(kubernetesClient.getJobResources(apiClient, namespace, labelSelector));
                             break;
                         case KIND_POD:
-                            resources.addAll(kubernetesClient.getPodResources(apiClient, labelSelector));
+                            resources.addAll(kubernetesClient.getPodResources(apiClient, namespace, labelSelector));
                             break;
                         case KIND_SERVICE:
-                            resources.addAll(kubernetesClient.getServiceResources(apiClient, labelSelector));
+                            resources.addAll(kubernetesClient.getServiceResources(apiClient, namespace, labelSelector));
                             break;
                         case KIND_DEPLOYMENT:
-                            resources.addAll(kubernetesClient.getDeploymentResources(apiClient, labelSelector));
+                            resources.addAll(
+                                    kubernetesClient.getDeploymentResources(apiClient, namespace, labelSelector));
                             break;
                         case KIND_REPLICA_SET:
-                            resources.addAll(kubernetesClient.getReplicaSetResources(apiClient, labelSelector));
+                            resources.addAll(
+                                    kubernetesClient.getReplicaSetResources(apiClient, namespace, labelSelector));
                             break;
                         case KIND_DAEMON_SET:
-                            resources.addAll(kubernetesClient.getDaemonSetResources(apiClient, labelSelector));
+                            resources.addAll(
+                                    kubernetesClient.getDaemonSetResources(apiClient, namespace, labelSelector));
                             break;
                         case KIND_STATEFUL_SET:
-                            resources.addAll(kubernetesClient.getStatefulSetResources(apiClient, labelSelector));
+                            resources.addAll(
+                                    kubernetesClient.getStatefulSetResources(apiClient, namespace, labelSelector));
                             break;
                         default:
                             logger.warn("Unknown resource type {} found skipping it ...", kind);

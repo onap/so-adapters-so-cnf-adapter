@@ -73,6 +73,7 @@ import org.springframework.beans.factory.annotation.Value;
  */
 public class TerminateAsTaskTest extends BaseTest {
 
+    private static final String NAMESPACE_VALUE = "default";
     private static final String AS_INST_ID = UUID.randomUUID().toString();
     private static final String AS_DEPLOYMENT_ITEM_ONE_INST_ID = UUID.randomUUID().toString();
     private static final String AS_DEPLOYMENT_ITEM_TWO_INST_ID = UUID.randomUUID().toString();
@@ -154,7 +155,7 @@ public class TerminateAsTaskTest extends BaseTest {
                 .asApplicationName("asApplicationName").asApplicationVersion("asApplicationVersion")
                 .asProvider("asProvider").serviceInstanceId(SERVICE_INSTANCE_ID)
                 .serviceInstanceName(SERVICE_INSTANCE_NAME).cloudOwner("cloudOwner").cloudRegion("cloudRegion")
-                .tenantId("tenantId");
+                .tenantId("tenantId").namespace(NAMESPACE_VALUE);
 
         final String helmFile1 = "Artifacts/Deployment/HELM/sampleapp-db-operator-helm.tgz";
         final AsDeploymentItem dItemOne = new AsDeploymentItem().asDeploymentItemInstId(AS_DEPLOYMENT_ITEM_ONE_INST_ID)
@@ -176,26 +177,40 @@ public class TerminateAsTaskTest extends BaseTest {
 
     private void mockKubernetesClientEndpoint() {
 
-        wireMockServer.stubFor(get(urlMatching("/apis/batch/v1/jobs\\?labelSelector.*&watch=false"))
-                .willReturn(aResponse().withBody(getJobList()).withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
+        wireMockServer.stubFor(
+                get(urlMatching("/apis/batch/v1/namespaces/" + NAMESPACE_VALUE + "/jobs\\?labelSelector.*&watch=false"))
+                        .willReturn(
+                                aResponse().withBody(getJobList()).withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
 
-        wireMockServer.stubFor(get(urlMatching("/api/v1/pods\\?labelSelector.*&watch=false"))
-                .willReturn(aResponse().withBody(getPodList()).withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
+        wireMockServer.stubFor(
+                get(urlMatching("/api/v1/namespaces/" + NAMESPACE_VALUE + "/pods\\?labelSelector.*&watch=false"))
+                        .willReturn(
+                                aResponse().withBody(getPodList()).withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
 
-        wireMockServer.stubFor(get(urlMatching("/api/v1/services\\?labelSelector.*&watch=false"))
-                .willReturn(aResponse().withBody(getServiceList()).withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
+        wireMockServer.stubFor(
+                get(urlMatching("/api/v1/namespaces/" + NAMESPACE_VALUE + "/services\\?labelSelector.*&watch=false"))
+                        .willReturn(aResponse().withBody(getServiceList()).withHeader(CONTENT_TYPE,
+                                APPLICATION_JSON_VALUE)));
 
-        wireMockServer.stubFor(get(urlMatching("/apis/apps/v1/deployments\\?labelSelector.*&watch=false")).willReturn(
-                aResponse().withBody(getDeploymentList()).withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
+        wireMockServer.stubFor(get(urlMatching(
+                "/apis/apps/v1/namespaces/" + NAMESPACE_VALUE + "/deployments\\?labelSelector.*&watch=false"))
+                        .willReturn(aResponse().withBody(getDeploymentList()).withHeader(CONTENT_TYPE,
+                                APPLICATION_JSON_VALUE)));
 
-        wireMockServer.stubFor(get(urlMatching("/apis/apps/v1/daemonsets\\?labelSelector.*&watch=false"))
-                .willReturn(aResponse().withBody(getDaemonList()).withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
+        wireMockServer.stubFor(get(urlMatching(
+                "/apis/apps/v1/namespaces/" + NAMESPACE_VALUE + "/daemonsets\\?labelSelector.*&watch=false"))
+                        .willReturn(aResponse().withBody(getDaemonList()).withHeader(CONTENT_TYPE,
+                                APPLICATION_JSON_VALUE)));
 
-        wireMockServer.stubFor(get(urlMatching("/apis/apps/v1/replicasets\\?labelSelector.*&watch=false")).willReturn(
-                aResponse().withBody(getReplicaSetList()).withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
+        wireMockServer.stubFor(get(urlMatching(
+                "/apis/apps/v1/namespaces/" + NAMESPACE_VALUE + "/replicasets\\?labelSelector.*&watch=false"))
+                        .willReturn(aResponse().withBody(getReplicaSetList()).withHeader(CONTENT_TYPE,
+                                APPLICATION_JSON_VALUE)));
 
-        wireMockServer.stubFor(get(urlMatching("/apis/apps/v1/statefulsets\\?labelSelector.*&watch=false")).willReturn(
-                aResponse().withBody(getStatefulSetList()).withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
+        wireMockServer.stubFor(get(urlMatching(
+                "/apis/apps/v1/namespaces/" + NAMESPACE_VALUE + "/statefulsets\\?labelSelector.*&watch=false"))
+                        .willReturn(aResponse().withBody(getStatefulSetList()).withHeader(CONTENT_TYPE,
+                                APPLICATION_JSON_VALUE)));
     }
 
     private void mockAAIEndPoints() {

@@ -29,45 +29,45 @@ import org.onap.so.cnfm.lcm.bpmn.flows.exceptions.KubernetesRequestProcessingExc
  *
  */
 public interface KubernetesResourceStatusCheck {
-    boolean isJobReady(final ApiClient apiClient, final String labelSelector)
+    boolean isJobReady(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException;
 
-    boolean isPodReady(final ApiClient apiClient, final String labelSelector)
+    boolean isPodReady(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException;
 
-    boolean isServiceReady(final ApiClient apiClient, final String labelSelector)
+    boolean isServiceReady(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException;
 
-    boolean isDeploymentReady(final ApiClient apiClient, final String labelSelector)
+    boolean isDeploymentReady(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException;
 
-    boolean isReplicaSetReady(final ApiClient apiClient, final String labelSelector)
+    boolean isReplicaSetReady(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException;
 
-    boolean isDaemonSetReady(final ApiClient apiClient, final String labelSelector)
+    boolean isDaemonSetReady(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException;
 
-    boolean isStatefulSetReady(final ApiClient apiClient, final String labelSelector)
+    boolean isStatefulSetReady(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException;
 
-    boolean isServiceDeleted(final ApiClient apiClient, final String labelSelector)
+    boolean isServiceDeleted(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException;
 
-    boolean isPodDeleted(final ApiClient apiClient, final String labelSelector)
+    boolean isPodDeleted(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException;
 
-    boolean isJobDeleted(final ApiClient apiClient, final String labelSelector)
+    boolean isJobDeleted(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException;
 
-    boolean isDeploymentDeleted(final ApiClient apiClient, final String labelSelector)
+    boolean isDeploymentDeleted(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException;
 
-    boolean isReplicaSetDeleted(final ApiClient apiClient, final String labelSelector)
+    boolean isReplicaSetDeleted(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException;
 
-    boolean isDaemonSetDeleted(final ApiClient apiClient, final String labelSelector)
+    boolean isDaemonSetDeleted(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException;
 
-    boolean isStatefulSetDeleted(final ApiClient apiClient, final String labelSelector)
+    boolean isStatefulSetDeleted(final ApiClient apiClient, final String namespace, final String labelSelector)
             throws KubernetesRequestProcessingException;
 }

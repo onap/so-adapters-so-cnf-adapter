@@ -117,7 +117,7 @@ public class AsLcmOperationOccurrencesControllerTest {
                 .asdInvariantId(RANDOM_UUID).statusUpdatedTime(now).asApplicationName("asApplicationName")
                 .asApplicationVersion("asApplicationVersion").asProvider("asProvider").serviceInstanceId(RANDOM_UUID)
                 .serviceInstanceName("serviceInstanceName").cloudOwner("cloudOwner").cloudRegion("cloudRegion")
-                .tenantId("tenantId");
+                .tenantId("tenantId").namespace("namespace");
 
         databaseServiceProvider.saveAsInst(asInst);
 

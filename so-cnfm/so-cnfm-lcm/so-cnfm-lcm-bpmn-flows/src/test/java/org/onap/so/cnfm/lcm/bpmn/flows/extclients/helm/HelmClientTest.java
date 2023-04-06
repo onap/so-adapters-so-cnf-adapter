@@ -54,6 +54,7 @@ public class HelmClientTest {
     private static final Path DUMMY_HELM_CHART = Paths.get("/some/dir/dummy/dummy-chart.tgz");
     private static final Path DUMMY_KUBE_CONFIG = Paths.get("/some/dir/dummy/kube-config");
     private static final String DUMMY_RELEASE_NAME = "RELEASE_NAME";
+    private static final String DUMMY_NAME_SPACE = "default";
     private static final PropertiesToYamlConverter PROPERTIES_TO_YAML_CONVERTER = new PropertiesToYamlConverter();
     private static final List<String> EXPECTED_COMMANDS = Arrays.asList("helm", "install", DUMMY_RELEASE_NAME, "-n",
             "default", DUMMY_HELM_CHART.toString(), "--dry-run", "--kubeconfig", DUMMY_KUBE_CONFIG.toString());
@@ -87,7 +88,8 @@ public class HelmClientTest {
             final HelmClient objUnderTest =
                     new StubbedHelmClientImpl(PROPERTIES_TO_YAML_CONVERTER, mockedProcessBuilder);
 
-            objUnderTest.runHelmChartInstallWithDryRunFlag(DUMMY_RELEASE_NAME, DUMMY_KUBE_CONFIG, DUMMY_HELM_CHART);
+            objUnderTest.runHelmChartInstallWithDryRunFlag(DUMMY_NAME_SPACE, DUMMY_RELEASE_NAME, DUMMY_KUBE_CONFIG,
+                    DUMMY_HELM_CHART);
         }
 
     }
@@ -101,13 +103,14 @@ public class HelmClientTest {
             final ProcessBuilder mockedProcessBuilder = mock(ProcessBuilder.class);
 
             final ListMatcher expectedCommandsMatcher = new ListMatcher(EXPECTED_COMMANDS);
-            mockProcessBuilder(mockedProcessBuilder, expectedCommandsMatcher, errorStream, inputStream, FAILED_EXIT_CODE,
-                    EXPECTED_COMMANDS);
+            mockProcessBuilder(mockedProcessBuilder, expectedCommandsMatcher, errorStream, inputStream,
+                    FAILED_EXIT_CODE, EXPECTED_COMMANDS);
 
             final HelmClient objUnderTest =
                     new StubbedHelmClientImpl(PROPERTIES_TO_YAML_CONVERTER, mockedProcessBuilder);
 
-            objUnderTest.runHelmChartInstallWithDryRunFlag(DUMMY_RELEASE_NAME, DUMMY_KUBE_CONFIG, DUMMY_HELM_CHART);
+            objUnderTest.runHelmChartInstallWithDryRunFlag(DUMMY_NAME_SPACE, DUMMY_RELEASE_NAME, DUMMY_KUBE_CONFIG,
+                    DUMMY_HELM_CHART);
         }
     }
 
@@ -121,13 +124,13 @@ public class HelmClientTest {
             final ProcessBuilder mockedProcessBuilder = mock(ProcessBuilder.class);
 
             final ListMatcher expectedCommandsMatcher = new ListMatcher(EXPECTED_GET_KUBE_KINDS_COMMANDS);
-            mockProcessBuilder(mockedProcessBuilder, expectedCommandsMatcher, errorStream, inputStream, SUCCESSFUL_EXIT_CODE,
-                    EXPECTED_GET_KUBE_KINDS_COMMANDS);
+            mockProcessBuilder(mockedProcessBuilder, expectedCommandsMatcher, errorStream, inputStream,
+                    SUCCESSFUL_EXIT_CODE, EXPECTED_GET_KUBE_KINDS_COMMANDS);
 
             final HelmClient objUnderTest =
                     new StubbedHelmClientImpl(PROPERTIES_TO_YAML_CONVERTER, mockedProcessBuilder);
-            final List<String> actualKubeKinds =
-                    objUnderTest.getKubeKinds(DUMMY_RELEASE_NAME, DUMMY_KUBE_CONFIG, DUMMY_HELM_CHART);
+            final List<String> actualKubeKinds = objUnderTest.getKubeKinds(DUMMY_NAME_SPACE, DUMMY_RELEASE_NAME,
+                    DUMMY_KUBE_CONFIG, DUMMY_HELM_CHART);
 
             assertEquals(Arrays.asList(Constants.KIND_REPLICA_SET), actualKubeKinds);
 
@@ -144,14 +147,14 @@ public class HelmClientTest {
             final ProcessBuilder mockedProcessBuilder = mock(ProcessBuilder.class);
 
             final ListMatcher expectedCommandsMatcher = new ListMatcher(EXPECTED_GET_KUBE_KINDS_MANIFEST_COMMANDS);
-            mockProcessBuilder(mockedProcessBuilder, expectedCommandsMatcher, errorStream, inputStream, SUCCESSFUL_EXIT_CODE,
-                    EXPECTED_GET_KUBE_KINDS_COMMANDS);
+            mockProcessBuilder(mockedProcessBuilder, expectedCommandsMatcher, errorStream, inputStream,
+                    SUCCESSFUL_EXIT_CODE, EXPECTED_GET_KUBE_KINDS_COMMANDS);
 
             final HelmClient objUnderTest =
                     new StubbedHelmClientImpl(PROPERTIES_TO_YAML_CONVERTER, mockedProcessBuilder);
 
-            final List<String> actualKubeKinds =
-                    objUnderTest.getKubeKindsUsingManifestCommand(DUMMY_RELEASE_NAME, DUMMY_KUBE_CONFIG);
+            final List<String> actualKubeKinds = objUnderTest.getKubeKindsUsingManifestCommand(DUMMY_NAME_SPACE,
+                    DUMMY_RELEASE_NAME, DUMMY_KUBE_CONFIG);
             assertEquals(Arrays.asList(Constants.KIND_DAEMON_SET), actualKubeKinds);
         }
     }
@@ -165,13 +168,13 @@ public class HelmClientTest {
             final ProcessBuilder mockedProcessBuilder = mock(ProcessBuilder.class);
 
             final ListMatcher expectedCommandsMatcher = new ListMatcher(EXPECTED_HELM_INSTALL_COMMANDS);
-            mockProcessBuilder(mockedProcessBuilder, expectedCommandsMatcher, errorStream, inputStream, SUCCESSFUL_EXIT_CODE,
-                    EXPECTED_HELM_INSTALL_COMMANDS);
+            mockProcessBuilder(mockedProcessBuilder, expectedCommandsMatcher, errorStream, inputStream,
+                    SUCCESSFUL_EXIT_CODE, EXPECTED_HELM_INSTALL_COMMANDS);
 
             final HelmClient objUnderTest =
                     new StubbedHelmClientImpl(PROPERTIES_TO_YAML_CONVERTER, mockedProcessBuilder);
 
-            objUnderTest.installHelmChart(DUMMY_RELEASE_NAME, DUMMY_KUBE_CONFIG, DUMMY_HELM_CHART,
+            objUnderTest.installHelmChart(DUMMY_NAME_SPACE, DUMMY_RELEASE_NAME, DUMMY_KUBE_CONFIG, DUMMY_HELM_CHART,
                     Collections.emptyMap());
         }
     }
@@ -185,13 +188,13 @@ public class HelmClientTest {
             final ProcessBuilder mockedProcessBuilder = mock(ProcessBuilder.class);
 
             final ListMatcher expectedCommandsMatcher = new ListMatcher(EXPECTED_HELM_UNINSTALL_COMMANDS);
-            mockProcessBuilder(mockedProcessBuilder, expectedCommandsMatcher, errorStream, inputStream, SUCCESSFUL_EXIT_CODE,
-                    EXPECTED_HELM_UNINSTALL_COMMANDS);
+            mockProcessBuilder(mockedProcessBuilder, expectedCommandsMatcher, errorStream, inputStream,
+                    SUCCESSFUL_EXIT_CODE, EXPECTED_HELM_UNINSTALL_COMMANDS);
 
             final HelmClient objUnderTest =
                     new StubbedHelmClientImpl(PROPERTIES_TO_YAML_CONVERTER, mockedProcessBuilder);
 
-            objUnderTest.unInstallHelmChart(DUMMY_RELEASE_NAME, DUMMY_KUBE_CONFIG);
+            objUnderTest.unInstallHelmChart(DUMMY_NAME_SPACE, DUMMY_RELEASE_NAME, DUMMY_KUBE_CONFIG);
         }
     }
 
