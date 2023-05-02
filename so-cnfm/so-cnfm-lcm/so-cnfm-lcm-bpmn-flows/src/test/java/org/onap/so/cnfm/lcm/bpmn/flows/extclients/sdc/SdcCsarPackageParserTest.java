@@ -29,25 +29,41 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 /**
  *
  * @author Waqas Ikram (waqas.ikram@est.tech)
  *
  */
+@RunWith(Parameterized.class)
 public class SdcCsarPackageParserTest {
 
     private static final String RESOURCE_ASD_PACKAGE_CSAR_PATH =
             "src/test/resources/resource-Generatedasdpackage-csar.csar";
 
+    private static final String RESOURCE_ASD_ALPHABETICAL_PACKAGE_CSAR_PATH =
+            "src/test/resources/resource-Generatedasdpackage-csar-alphabetical.csar";
+
+
+    @Parameterized.Parameter
+    public String resourceCsarPath;
+
+    @Parameterized.Parameters
+    public static Iterable<String> data() {
+        return Arrays.asList(RESOURCE_ASD_PACKAGE_CSAR_PATH, RESOURCE_ASD_ALPHABETICAL_PACKAGE_CSAR_PATH);
+    }
+
     @Test
     public void testResourceAsdCsar() throws IOException {
         final SdcCsarPackageParser objUnderTest = new SdcCsarPackageParser();
 
-        final byte[] content = getFileContent(Paths.get(getAbsolutePath(RESOURCE_ASD_PACKAGE_CSAR_PATH)));
+        final byte[] content = getFileContent(Paths.get(getAbsolutePath(resourceCsarPath)));
 
         final Map<String, Object> properties = objUnderTest.getAsdProperties(content);
         assertEquals("123e4567-e89b-12d3-a456-426614174000", properties.get(DESCRIPTOR_ID_PARAM_NAME));

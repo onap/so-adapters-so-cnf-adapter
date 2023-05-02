@@ -70,9 +70,11 @@ public class SdcCsarPackageParser {
     public Map<String, Object> getAsdProperties(final byte[] onapPackage) {
 
         try (final ByteArrayInputStream stream = new ByteArrayInputStream(onapPackage);
-                final ZipInputStream zipInputStream = new ZipInputStream(stream);) {
-            final String asdLocation = getAsdLocation(zipInputStream);
-            final String onapAsdContent = getFileInZip(zipInputStream, asdLocation).toString();
+                final ZipInputStream zipInputStreamAsdLocation = new ZipInputStream(stream);
+             final ZipInputStream zipInputStreamAsdContent = new ZipInputStream(stream);) {
+            final String asdLocation = getAsdLocation(zipInputStreamAsdLocation);
+            stream.reset();
+            final String onapAsdContent = getFileInZip(zipInputStreamAsdContent, asdLocation).toString();
             logger.debug("ASD CONTENTS: {}", onapAsdContent);
             final JsonObject root = new Gson().toJsonTree(new Yaml().load(onapAsdContent)).getAsJsonObject();
 
