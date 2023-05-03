@@ -1,0 +1,8 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+1: John  Keeney <john.keeney@est.tech>
+Code-Review+2: Waqas Ikram <waqas.ikram@est.tech>
+Submitted-by: Waqas Ikram <waqas.ikram@est.tech>
+Submitted-at: Wed, 03 May 2023 07:16:28 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/so/adapters/so-cnf-adapter/+/134420
+Project: so/adapters/so-cnf-adapter
+Branch: refs/heads/master
