@@ -46,6 +46,30 @@
       "revId": "d06f19333fda2865ed7a5beffa278daaba0f6aa3",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c283a8a_064c1eb7",
+        "filename": "so-cnfm/so-cnfm-lcm/so-cnfm-lcm-bpmn-flows/src/main/java/org/onap/so/cnfm/lcm/bpmn/flows/extclients/sdc/SdcCsarPackageParser.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 3237
+      },
+      "writtenOn": "2023-05-03T07:15:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ff3b5d3f_7a1e01d0",
+      "range": {
+        "startLine": 76,
+        "startChar": 12,
+        "endLine": 76,
+        "endChar": 26
+      },
+      "revId": "d06f19333fda2865ed7a5beffa278daaba0f6aa3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
