@@ -27,11 +27,25 @@ aai:
   enabled: false
 
 spring:
+  application:
+    name: so-cnf-adapter
+  main:
+    allow-bean-definition-overriding: true
   security:
     usercredentials:
       - username: ${ACTUATOR_USERNAME}
         password: ${ACTUATOR_PASSWORD}
         role: ACTUATOR
+  sleuth:
+    enabled: ${TRACING_ENABLED:false}
+    trace-id128: true
+    sampler:
+      probability: ${TRACING_SAMPLING_PROBABILITY:1.0}
+    supports-join: false
+    propagation:
+      type: w3c,bc
+    web:
+      skip-pattern: ${TRACING_SKIP_PATTERN}
 
  # jpa:
  #   show-sql: false

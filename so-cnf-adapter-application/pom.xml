@@ -48,65 +48,80 @@
           </execution>
         </executions>
       </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>original</id>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <systemPropertyVariables>
-                        <so.log.level>DEBUG</so.log.level>
-                    </systemPropertyVariables>
-                    <rerunFailingTestsCount>2</rerunFailingTestsCount>
-                    <parallel>suites</parallel>
-                    <useUnlimitedThreads>false</useUnlimitedThreads>
-                    <threadCount>1</threadCount>
-                </configuration>
-            </plugin>
-        </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-                <excludes>
-                    <exclude>**/*.p12</exclude>
-                    <exclude>**/*.jks</exclude>
-                </excludes>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>false</filtering>
-                <includes>
-                    <include>**/*.p12</include>
-                    <include>**/*.jks</include>
-                </includes>
-            </resource>
-        </resources>
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <executions>
+              <execution>
+                  <id>original</id>
+              </execution>
+          </executions>
+      </plugin>
+      <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <configuration>
+              <systemPropertyVariables>
+                  <so.log.level>DEBUG</so.log.level>
+              </systemPropertyVariables>
+              <rerunFailingTestsCount>2</rerunFailingTestsCount>
+              <parallel>suites</parallel>
+              <useUnlimitedThreads>false</useUnlimitedThreads>
+              <threadCount>1</threadCount>
+          </configuration>
+      </plugin>
+    </plugins>
+    <resources>
+      <resource>
+          <directory>src/main/resources</directory>
+          <filtering>true</filtering>
+          <excludes>
+              <exclude>**/*.p12</exclude>
+              <exclude>**/*.jks</exclude>
+          </excludes>
+      </resource>
+      <resource>
+          <directory>src/main/resources</directory>
+          <filtering>false</filtering>
+          <includes>
+              <include>**/*.p12</include>
+              <include>**/*.jks</include>
+          </includes>
+      </resource>
+    </resources>
   </build>
   <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.onap.aai.schema-service</groupId>
-                <artifactId>aai-schema</artifactId>
-                <version>1.9.2</version>
-            </dependency>
-        </dependencies>
+    <dependencies>
+      <dependency>
+        <groupId>org.onap.aai.schema-service</groupId>
+        <artifactId>aai-schema</artifactId>
+        <version>1.9.2</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <version>Hoxton.SR12</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
   </dependencyManagement>
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-sleuth</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-sleuth-zipkin</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -159,6 +174,7 @@
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-contract-wiremock</artifactId>
+      <version>2.2.8.RELEASE</version>
       <scope>test</scope>
     </dependency>
     <dependency>
