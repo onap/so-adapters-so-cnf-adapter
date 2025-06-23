@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.onap.so</groupId>
         <artifactId>so</artifactId>
-        <version>1.12.1-SNAPSHOT</version>
+        <version>1.15.0-SNAPSHOT</version>
     </parent>
     <groupId>org.onap.so.adapters.so-cnf-adapter</groupId>
     <artifactId>so-cnf-adapter</artifactId>
@@ -91,6 +91,20 @@
             </plugin>
         </plugins>
     </build>
+
+    <!-- The 1.13.0-SNAPSHOT so common pom updated the
+     h2 dependency to 2.X without also updating flyway.
+     TODO: remove this once this service is updated to
+     the 1.15.6 common pom -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>1.4.200</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <modules>
         <module>so-cnf-adapter-application</module>
