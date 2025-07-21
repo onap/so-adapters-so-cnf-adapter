@@ -1,0 +1,66 @@
+{
+  "vf-module-id": "someVfModuleId",
+  "vf-module-name": "exampleVfModuleName",
+  "heat-stack-id": "heat-stack-id-456",
+  "orchestration-status": "active",
+  "is-base-vf-module": false,
+  "automated-assignment": true,
+  "model-invariant-id": "model-invariant-id-789",
+  "model-version-id": "model-version-id-101",
+  "persona-model-version": "persona-model-version-202",
+  "model-customization-id": "model-customization-id-303",
+  "widget-model-id": "widget-model-id-404",
+  "widget-model-version": "widget-model-version-505",
+  "contrail-service-instance-fqdn": "service-instance-contrail-id-606",
+  "module-index": 0,
+  "selflink": "http://example.com/selflink/vfModule",
+  "operational-status": "in-service-path",
+    "relationship-list": {
+    "relationship": [
+      {
+        "related-to": "pnf",
+        "relationship-label": "org.onap.relationships.inventory.ComposedOf",
+        "related-link": "/aai/v24/network/pnfs/pnf/731534264",
+        "relationship-data": [
+          {
+            "relationship-key": "pnf.pnf-name",
+            "relationship-value": "731534264"
+          }
+        ]
+      },
+      {
+        "related-to": "pserver",
+        "relationship-label": "org.onap.relationships.inventory.ComposedOf",
+        "related-link": "/aai/v24/cloud-infrastructure/pservers/pserver/45673245",
+        "relationship-data": [
+          {
+            "relationship-key": "pserver.hostname",
+            "relationship-value": "45673245"
+          }
+        ]
+      },
+      {
+        "related-to": "k8s-resource",
+        "relationship-label": "org.onap.relationships.inventory.ComposedOf",
+        "related-link": "/aai/v24/cloud-infrastructure/cloud-regions/cloud-region/someCloudOwner/someCloudRegionId/tenants/tenant/someTenantId/k8s-resources/k8s-resource/doesNotExist",
+        "relationship-data": [
+          {
+            "relationship-key": "k8s-resource.id",
+            "relationship-value": "doesNotExist"
+          }
+        ]
+      },
+      {
+        "related-to": "k8s-resource",
+        "relationship-label": "org.onap.relationships.inventory.ComposedOf",
+        "related-link": "/aai/v24/cloud-infrastructure/cloud-regions/cloud-region/someCloudOwner/someCloudRegionId/tenants/tenant/someTenantId/k8s-resources/k8s-resource/someK8sResource",
+        "relationship-data": [
+          {
+            "relationship-key": "k8s-resource.id",
+            "relationship-value": "someK8sResource"
+          }
+        ]
+      }
+    ]
+  }
+}

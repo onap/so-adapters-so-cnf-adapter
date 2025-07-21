@@ -1,0 +1,16 @@
+{
+  "transactions": [
+    {
+      "put": [
+        {
+          "uri": "/cloud-infrastructure/cloud-regions/cloud-region/someOwner/someRegion/tenants/tenant/someTenant/k8s-resources/k8s-resource/someId",
+          "body": {
+            "id": "someId",
+            "name": "someName",
+            "resource-version": "3.0"
+          }
+        }
+      ]
+    }
+  ]
+}

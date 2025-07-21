@@ -1,0 +1,18 @@
+{
+  "id": "12345",
+  "name": "someName",
+  "group": "someGroup",
+  "version": "1.0",
+  "kind": "someKind",
+  "namespace": "someNamespace",
+  "labels": [
+    "label1",
+    "label2",
+    "label3"
+  ],
+  "selflink": "http://example.com/selflink",
+  "data-owner": "someOwner",
+  "data-source": "someSource",
+  "data-source-version": "2.0",
+  "resource-version": "3.0"
+}

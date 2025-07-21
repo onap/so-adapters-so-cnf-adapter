@@ -161,7 +161,7 @@ public class CnfAdapterRest {
                 synchronizationService.createSubscriptionIfNotExists(aaiRequest);
                 callbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.COMPLETED);
             } catch (Exception e) {
-                logger.warn("Failed to create resource in AAI", e);
+                logger.warn("Failed to create resource in AAI {}", e);
                 callbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.FAILED);
                 callbackResponse.setMessage(e.getMessage());
             }
@@ -187,7 +187,7 @@ public class CnfAdapterRest {
                 aaiService.aaiDelete(aaiRequest);
                 callbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.COMPLETED);
             } catch (Exception e) {
-                logger.warn("Failed to delete resource from AAI", e);
+                logger.warn("Failed to delete resource from AAI {}", e);
                 callbackResponse.setCompletionStatus(AaiCallbackResponse.CompletionStatus.FAILED);
                 callbackResponse.setMessage(e.getMessage());
             }
@@ -211,7 +211,7 @@ public class CnfAdapterRest {
             try {
                 statusCheckResponse = simpleStatusCheckService.statusCheck(statusCheckRequest);
             } catch (Exception e) {
-                logger.error("END - Status check process failed", e);
+                logger.error("END - Status check process failed {}", e);
                 statusCheckResponse = simpleStatusCheckService.statusCheckError(statusCheckRequest, e);
             }
             callbackClient.sendPostCallback(statusCheckRequest.getCallbackUrl(), statusCheckResponse);
@@ -329,7 +329,7 @@ public class CnfAdapterRest {
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
              CloseableHttpResponse response = httpClient.execute(post)) {
-            logger.info("response:" + response.getEntity());
+            logger.info("response: " + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
     }
@@ -364,7 +364,7 @@ public class CnfAdapterRest {
         HttpDelete req = new HttpDelete(uri + "/v1/rb/definition/" + rbName + "/" + rbVersion);
 
         try (CloseableHttpResponse response = httpClient.execute(req)) {
-            logger.info("response:" + response.getEntity());
+            logger.info("response: " + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
 
@@ -382,7 +382,7 @@ public class CnfAdapterRest {
         HttpGet req = new HttpGet(uri + "/v1/rb/definition/" + rbName);
 
         try (CloseableHttpResponse response = httpClient.execute(req)) {
-            logger.info("response:" + response.getEntity());
+            logger.info("response: " + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
 
@@ -475,7 +475,7 @@ public class CnfAdapterRest {
                 uri + "/v1/rb/definition/" + rbName + "/" + rbVersion + "/profile/" + prName);
 
         try (CloseableHttpResponse response = httpClient.execute(req)) {
-            logger.info("response:" + response.getEntity());
+            logger.info("response: " + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
     }
@@ -494,7 +494,7 @@ public class CnfAdapterRest {
                 new HttpGet(uri + "/v1/rb/definition/" + rbName + "/" + rbVersion + "/profile");
 
         try (CloseableHttpResponse response = httpClient.execute(req)) {
-            logger.info("response:" + response.getEntity());
+            logger.info("response: " + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
     }
@@ -513,7 +513,7 @@ public class CnfAdapterRest {
                 uri + "/v1/rb/definition/" + rbName + "/" + rbVersion + "/profile/" + prName);
 
         try (CloseableHttpResponse response = httpClient.execute(req)) {
-            logger.info("response:" + response.getEntity());
+            logger.info("response: " + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
 
@@ -547,7 +547,7 @@ public class CnfAdapterRest {
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
              CloseableHttpResponse response = httpClient.execute(post)) {
-            logger.info("response:" + response.getEntity());
+            logger.info("response: " + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
     }
@@ -572,7 +572,7 @@ public class CnfAdapterRest {
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
              CloseableHttpResponse response = httpClient.execute(post)) {
-            logger.info("response:" + response.getEntity());
+            logger.info("response: " + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
     }
@@ -592,7 +592,7 @@ public class CnfAdapterRest {
                 + prName + "/config/" + cfgName);
 
         try (CloseableHttpResponse response = httpClient.execute(req)) {
-            logger.info("response:" + response.getEntity());
+            logger.info("response: " + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
     }
@@ -613,7 +613,7 @@ public class CnfAdapterRest {
                 + "/profile/" + prName + "/config/" + cfgName);
 
         try (CloseableHttpResponse response = httpClient.execute(req)) {
-            logger.info("response:" + response.getEntity());
+            logger.info("response: " + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
 
@@ -640,7 +640,7 @@ public class CnfAdapterRest {
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
              CloseableHttpResponse response = httpClient.execute(post)) {
-            logger.info("response:" + response.getEntity());
+            logger.info("response: " + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
     }
@@ -664,7 +664,7 @@ public class CnfAdapterRest {
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
              CloseableHttpResponse response = httpClient.execute(post)) {
-            logger.info("response:" + response.getEntity());
+            logger.info("response: " + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
     }
@@ -686,7 +686,7 @@ public class CnfAdapterRest {
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
              CloseableHttpResponse response = httpClient.execute(post)) {
-            logger.info("response:" + response.getEntity());
+            logger.info("response: " + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
     }
@@ -703,7 +703,7 @@ public class CnfAdapterRest {
         HttpGet req = new HttpGet(uri + "/v1/connectivity-info/" + connName);
 
         try (CloseableHttpResponse response = httpClient.execute(req)) {
-            logger.info("response:" + response.getEntity());
+            logger.info("response: " + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
     }
@@ -720,7 +720,7 @@ public class CnfAdapterRest {
         HttpDelete req = new HttpDelete(uri + "/v1/connectivity-info/" + connName);
 
         try (CloseableHttpResponse response = httpClient.execute(req)) {
-            logger.info("response:" + response.getEntity());
+            logger.info("response: " + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
 
@@ -745,7 +745,7 @@ public class CnfAdapterRest {
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
              CloseableHttpResponse response = httpClient.execute(post)) {
-            logger.info("response:" + response.getEntity());
+            logger.info("response: " + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
     }
@@ -764,7 +764,7 @@ public class CnfAdapterRest {
                 + "/config-template/" + tName);
 
         try (CloseableHttpResponse response = httpClient.execute(req)) {
-            logger.info("response:" + response.getEntity());
+            logger.info("response: " + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
     }
@@ -783,7 +783,7 @@ public class CnfAdapterRest {
                 + "/config-template/" + tName);
 
         try (CloseableHttpResponse response = httpClient.execute(req)) {
-            logger.info("response:" + response.getEntity());
+            logger.info("response: " + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
 
@@ -818,7 +818,7 @@ public class CnfAdapterRest {
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
              CloseableHttpResponse response = httpClient.execute(post)) {
-            logger.info("response:" + response.getEntity());
+            logger.info("response: " + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
     }
@@ -843,7 +843,7 @@ public class CnfAdapterRest {
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
              CloseableHttpResponse response = httpClient.execute(post)) {
-            logger.info("response:" + response.getEntity());
+            logger.info("response: " + response.getEntity());
             return EntityUtils.toString(response.getEntity());
         }
     }

@@ -24,3 +24,4 @@ target
 **/.sts4-cache
 **/.java-version
 .vscode
+*.http

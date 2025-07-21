@@ -1,0 +1,14 @@
+{
+  "requestError": {
+    "serviceException": {
+      "messageId": "SVC3001",
+      "text": "Resource not found for %1 using id %2 (msg=%3) (ec=%4)",
+      "variables": [
+        "GET",
+        "cloud-infrastructure/cloud-regions/cloud-region/someCloudOwner/someCloudRegionId/tenants/tenant/someTenantId/k8s-resources/k8s-resource/doesNotExist",
+        "Node Not Found:No Node of type k8s-resource found at: cloud-infrastructure/cloud-regions/cloud-region/someCloudOwner/someCloudRegionId/tenants/tenant/someTenantId/k8s-resources/k8s-resource/doesNotExist",
+        "ERR.5.4.6114"
+      ]
+    }
+  }
+}

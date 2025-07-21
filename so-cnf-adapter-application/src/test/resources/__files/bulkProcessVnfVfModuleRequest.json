@@ -1,0 +1,20 @@
+{
+  "transactions": [
+    {
+      "put": [
+        {
+          "uri": "/cloud-infrastructure/cloud-regions/cloud-region/someOwner/someRegion/tenants/tenant/someTenant/k8s-resources/k8s-resource/someId/relationship-list/relationship",
+          "body": {
+            "related-link": "/network/generic-vnfs/generic-vnf/someGenericVnfId/vf-modules/vf-module/someVfModuleId"
+          }
+        },
+        {
+          "uri": "/cloud-infrastructure/cloud-regions/cloud-region/someOwner/someRegion/tenants/tenant/someTenant/k8s-resources/k8s-resource/someId/relationship-list/relationship",
+          "body": {
+            "related-link": "/network/generic-vnfs/generic-vnf/someGenericVnfId"
+          }
+        }
+      ]
+    }
+  ]
+}

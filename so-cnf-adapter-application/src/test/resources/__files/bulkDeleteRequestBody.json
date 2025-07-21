@@ -1,0 +1,11 @@
+{
+  "transactions": [
+    {
+      "delete": [
+        {
+          "uri": "/cloud-infrastructure/cloud-regions/cloud-region/someOwner/someRegion/tenants/tenant/someTenant/k8s-resources/k8s-resource/12345?resource-version=3.0"
+        }
+      ]
+    }
+  ]
+}
