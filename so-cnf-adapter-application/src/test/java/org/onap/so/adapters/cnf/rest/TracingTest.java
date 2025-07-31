@@ -24,8 +24,8 @@ import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.cloud.sleuth.autoconfig.TraceAutoConfiguration;
-import org.springframework.cloud.sleuth.zipkin2.ZipkinAutoConfiguration;
+import org.springframework.cloud.sleuth.autoconfig.instrument.web.TraceWebAutoConfiguration;
+import org.springframework.cloud.sleuth.autoconfig.zipkin2.ZipkinAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -43,7 +43,7 @@ import lombok.SneakyThrows;
 
 @Ignore
 @EnableAutoConfiguration
-@ImportAutoConfiguration(classes = { TraceAutoConfiguration.class, ZipkinAutoConfiguration.class })
+@ImportAutoConfiguration(classes = { TraceWebAutoConfiguration.class, ZipkinAutoConfiguration.class })
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = {
     "spring.sleuth.enabled=true",
     "spring.sleuth.sampler.probability=1.0"
