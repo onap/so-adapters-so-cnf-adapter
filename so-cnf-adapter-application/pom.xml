@@ -112,7 +112,7 @@
       <dependency>
         <groupId>org.onap.aai.schema-service</groupId>
         <artifactId>aai-schema</artifactId>
-        <version>1.9.2</version>
+        <version>1.12.10</version>
       </dependency>
       <dependency>
         <groupId>org.springframework.cloud</groupId>
@@ -193,7 +193,7 @@
     <dependency>
       <groupId>org.onap.so</groupId>
       <artifactId>aai-client</artifactId>
-      <version>1.12.1-SNAPSHOT</version>
+      <version>${so-core-version}</version>
     </dependency>
     <dependency>
       <groupId>com.sun.xml.ws</groupId>
