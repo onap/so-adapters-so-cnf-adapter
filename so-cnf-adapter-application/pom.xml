@@ -193,7 +193,7 @@
     <dependency>
       <groupId>org.onap.so</groupId>
       <artifactId>aai-client</artifactId>
-      <version>1.12.1-SNAPSHOT</version>
+      <version>${so-core-version}</version>
     </dependency>
     <dependency>
       <groupId>com.sun.xml.ws</groupId>
