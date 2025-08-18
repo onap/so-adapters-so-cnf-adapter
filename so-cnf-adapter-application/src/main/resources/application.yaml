@@ -43,7 +43,9 @@ spring:
       probability: ${TRACING_SAMPLING_PROBABILITY:1.0}
     supports-join: false
     propagation:
-      type: w3c,bc
+      type:
+      - w3c
+      - b3
     web:
       skip-pattern: ${TRACING_SKIP_PATTERN}
 
