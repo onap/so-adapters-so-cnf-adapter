@@ -26,12 +26,14 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.onap.so.cnfm.lcm.bpmn.flows.exceptions.HelmClientExecuteException;
 import org.onap.so.cnfm.lcm.bpmn.flows.extclients.helm.HelmClient;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author Waqas Ikram (waqas.ikram@est.tech)
  *
  */
+@Service
 public class MockedHelmClient implements HelmClient {
 
     private final Map<String, Integer> counter = new ConcurrentHashMap<>();
