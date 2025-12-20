@@ -4,11 +4,11 @@
     <parent>
         <groupId>org.onap.so</groupId>
         <artifactId>so</artifactId>
-        <version>1.15.0-SNAPSHOT</version>
+        <version>1.15.6-SNAPSHOT</version>
     </parent>
     <groupId>org.onap.so.adapters.so-cnf-adapter</groupId>
     <artifactId>so-cnf-adapter</artifactId>
-    <version>1.13.2-SNAPSHOT</version>
+    <version>1.13.3-SNAPSHOT</version>
     <name>SO CNF Adapter</name>
     <packaging>pom</packaging>
 
@@ -103,7 +103,7 @@
 
     <!-- H2 2.X has breaking changes incompatible with existing Flyway migrations.
      Keep H2 at 1.4.200 with Flyway 6.4.4 (compatible with Spring Boot 2.3.7).
-     Spring Cloud version aligned with Spring Boot 2.3.7. -->
+     Spring Cloud version aligned with Spring Boot 2.4.13. -->
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -119,7 +119,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>Hoxton.SR12</version>
+                <version>2020.0.6</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
