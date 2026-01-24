@@ -25,3 +25,4 @@ target
 **/.java-version
 .vscode
 *.http
+.github/copilot-instructions.md

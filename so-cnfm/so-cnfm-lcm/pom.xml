@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.onap.so.adapters.so-cnf-adapter</groupId>
         <artifactId>so-cnfm</artifactId>
-        <version>1.13.3-SNAPSHOT</version>
+        <version>1.13.2-SNAPSHOT</version>
     </parent>
 
     <groupId>org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm</groupId>
