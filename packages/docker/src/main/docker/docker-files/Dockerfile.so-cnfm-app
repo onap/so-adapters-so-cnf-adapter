@@ -17,6 +17,11 @@ RUN mkdir -p /app/ca-certificates
 RUN mkdir -p /app/csar
 RUN mkdir -p /app/kube-configs
 
+# This can basically always be the latest version
+ARG OTEL_AGENT_VERSION=2.25.0
+RUN wget -O /app/opentelemetry-javaagent.jar \
+    https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v${OTEL_AGENT_VERSION}/opentelemetry-javaagent.jar
+
 COPY maven/app.jar /app
 COPY configs/logging/logback-spring.xml /app
 COPY scripts/start-app.sh /app

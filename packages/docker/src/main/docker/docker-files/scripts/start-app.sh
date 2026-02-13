@@ -60,7 +60,27 @@ if [ -z "${ACTIVE_PROFILE}" ]; then
     export ACTIVE_PROFILE="basic"
 fi
 
-jvmargs="${JVM_ARGS} -Dspring.profiles.active=${ACTIVE_PROFILE} -Djava.security.egd=file:/dev/./urandom -Dlogs_dir=${LOG_PATH} -Dlogging.config=/app/logback-spring.xml $jksargs -Dspring.config.additional-location=$CONFIG_PATH ${SSL_DEBUG} ${DISABLE_SNI}"
+# Configure OpenTelemetry Java Agent
+otel_agent_args=""
+if [ "${OTEL_ENABLED}" = "true" ] && [ -f "/app/opentelemetry-javaagent.jar" ]; then
+    otel_agent_args="-javaagent:/app/opentelemetry-javaagent.jar"
+    echo "OpenTelemetry agent enabled"
+
+    # Set default OTEL service name if not provided
+    if [ -z "${OTEL_SERVICE_NAME}" ]; then
+        export OTEL_SERVICE_NAME="${APP:-so-cnf-adapter}"
+    fi
+
+    # Set default OTEL resource attributes
+    if [ -z "${OTEL_RESOURCE_ATTRIBUTES}" ]; then
+        export OTEL_RESOURCE_ATTRIBUTES="service.name=${OTEL_SERVICE_NAME},service.namespace=onap"
+    fi
+
+    echo "OpenTelemetry Service Name: ${OTEL_SERVICE_NAME}"
+    echo "OpenTelemetry Exporter Endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT:-not set}"
+fi
+
+jvmargs="${otel_agent_args} ${JVM_ARGS} -Dspring.profiles.active=${ACTIVE_PROFILE} -Djava.security.egd=file:/dev/./urandom -Dlogs_dir=${LOG_PATH} -Dlogging.config=/app/logback-spring.xml $jksargs -Dspring.config.additional-location=$CONFIG_PATH ${SSL_DEBUG} ${DISABLE_SNI}"
 
 
 read_properties(){
