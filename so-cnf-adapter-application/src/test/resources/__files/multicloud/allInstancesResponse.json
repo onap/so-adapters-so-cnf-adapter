@@ -1,0 +1,12 @@
+[
+  {
+    "id": "inst-1",
+    "namespace": "default",
+    "release-name": "rel-1"
+  },
+  {
+    "id": "inst-2",
+    "namespace": "test",
+    "release-name": "rel-2"
+  }
+]
