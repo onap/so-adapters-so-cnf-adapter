@@ -1,0 +1,10 @@
+[
+  {
+    "Name": "test-pod",
+    "GVK": {
+      "Group": "",
+      "Version": "v1",
+      "Kind": "Pod"
+    }
+  }
+]

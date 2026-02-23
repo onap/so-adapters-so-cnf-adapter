@@ -1,0 +1,5 @@
+{
+  "instance-id": "test-inst",
+  "healthcheck-id": "hc-1",
+  "status": "STOPPED"
+}
