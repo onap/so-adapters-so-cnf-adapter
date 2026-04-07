@@ -23,12 +23,15 @@
 package org.onap.so.adapters.cnf.service;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.apache.http.HttpStatus;
 import org.json.JSONObject;
 import org.onap.so.adapters.cnf.MulticloudConfiguration;
 import org.onap.so.adapters.cnf.model.BpmnInstanceRequest;
+import org.onap.so.adapters.cnf.model.InstanceResponse;
 import org.onap.so.adapters.cnf.model.MulticloudInstanceRequest;
 import org.onap.so.adapters.cnf.model.aai.AaiRequest;
 import org.onap.so.adapters.cnf.service.synchrornization.SynchronizationService;
@@ -51,6 +54,7 @@ import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CnfAdapterService {
@@ -98,6 +102,16 @@ public class CnfAdapterService {
                 logger.error("k8sProfileName should not be null");
                 // return instanceResponse;
             }
+
+            // Idempotency check: if an instance with the same release name already exists,
+            // return it instead of attempting to create a duplicate (which would fail with
+            // "already exists" from K8sPlugin). This handles Camunda retry scenarios where
+            // the first create succeeded but the DB transaction failed.
+            String existingInstance = findExistingInstance(multicloudInstanceRequest);
+            if (existingInstance != null) {
+                return existingInstance;
+            }
+
             // String uri = env.getRequiredProperty("multicloud.endpoint"); //TODO:
             // This needs to be added as well
             // for configuration
@@ -117,6 +131,45 @@ public class CnfAdapterService {
             logger.error("Error in Multicloud", e);
             throw e;
         }
+    }
+
+    /**
+     * Check if an instance with the same release name already exists in K8sPlugin.
+     * This provides idempotency for createInstance in the face of Camunda retries
+     * caused by transient DB failures (e.g., MariaDB Galera optimistic lock conflicts).
+     *
+     * @return the existing instance body as JSON string, or null if no match found
+     */
+    String findExistingInstance(MulticloudInstanceRequest request) {
+        if (request.getRbName() == null || request.getRbVersion() == null
+                || request.getProfileName() == null || request.getReleaseName() == null) {
+            return null;
+        }
+        try {
+            String listBody = getInstanceByRBNameOrRBVersionOrProfileName(
+                    request.getRbName(), request.getRbVersion(), request.getProfileName());
+            if (listBody == null || listBody.isBlank()) {
+                return null;
+            }
+            ObjectMapper mapper = new ObjectMapper();
+            List<Map<String, Object>> instances = mapper.readValue(listBody,
+                    new TypeReference<List<Map<String, Object>>>() {});
+            for (Map<String, Object> instance : instances) {
+                Object releaseName = instance.get("release-name");
+                Object instanceId = instance.get("id");
+                if (request.getReleaseName().equals(releaseName) && instanceId != null) {
+                    logger.warn("Instance with release-name '{}' already exists (id={}). "
+                            + "Returning existing instance for idempotent create.",
+                            releaseName, instanceId);
+                    return getInstanceByInstanceId(instanceId.toString());
+                }
+            }
+        } catch (Exception e) {
+            // If the lookup fails for any reason, proceed with the normal create.
+            // The worst case is the original "already exists" error from K8sPlugin.
+            logger.debug("Could not check for existing instance, proceeding with create", e);
+        }
+        return null;
     }
 
     public String getInstanceByInstanceId(String instanceId)
