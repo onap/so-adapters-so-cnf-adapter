@@ -27,12 +27,14 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.onap.so.adapters.cnf.MulticloudConfiguration;
 import org.onap.so.adapters.cnf.model.BpmnInstanceRequest;
+import org.onap.so.adapters.cnf.model.MulticloudInstanceRequest;
 import org.onap.so.adapters.cnf.service.healthcheck.HealthCheckService;
 import org.onap.so.adapters.cnf.service.statuscheck.SimpleStatusCheckService;
 import org.onap.so.adapters.cnf.service.synchrornization.SynchronizationService;
 import org.onap.so.client.exception.BadResponseException;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
@@ -44,6 +46,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -254,6 +258,120 @@ public class CnfAdapterServiceTest {
         cnfAdapterService.queryResources(INSTANCE_ID, "", "", "", "", "");
     }
 
+    @Test
+    public void createInstanceReturnsExistingWhenReleaseAlreadyExists() throws Exception {
+        // Simulate K8sPlugin already having an instance with the same release name
+        String existingInstanceList = "[{\"id\":\"existing-inst\",\"release-name\":\"my-release\",\"namespace\":\"default\"}]";
+        String existingInstanceDetail = "{\"id\":\"existing-inst\",\"release-name\":\"my-release\",\"namespace\":\"default\"}";
+
+        BpmnInstanceRequest request = getBpmnInstanceRequest();
+        request.setK8sRBInstanceReleaseName("my-release");
+
+        // First call: listing instances by rb-name/rb-version/profile-name returns match
+        // Second call: getting instance detail for the matched id
+        doReturn(new ResponseEntity<>(existingInstanceList, HttpStatus.OK))
+                .doReturn(new ResponseEntity<>(existingInstanceDetail, HttpStatus.OK))
+                .when(restTemplate).exchange(
+                        ArgumentMatchers.anyString(),
+                        ArgumentMatchers.any(HttpMethod.class),
+                        ArgumentMatchers.any(),
+                        ArgumentMatchers.<Class<String>>any());
+
+        String result = cnfAdapterService.createInstance(request);
+
+        assertEquals(existingInstanceDetail, result);
+    }
+
+    @Test
+    public void createInstanceProceedsWhenNoMatchingReleaseExists() throws Exception {
+        // List returns instances but none match the release name
+        String instanceList = "[{\"id\":\"other-inst\",\"release-name\":\"some-other-release\",\"namespace\":\"default\"}]";
+        String createResponse = "{\"id\":\"new-inst\",\"release-name\":\"my-release\",\"namespace\":\"default\"}";
+
+        BpmnInstanceRequest request = getBpmnInstanceRequest();
+        request.setK8sRBInstanceReleaseName("my-release");
+
+        // First call: list returns non-matching instances (GET)
+        // Second call: POST creates new instance
+        doReturn(new ResponseEntity<>(instanceList, HttpStatus.OK))
+                .doReturn(new ResponseEntity<>(createResponse, HttpStatus.OK))
+                .when(restTemplate).exchange(
+                        ArgumentMatchers.anyString(),
+                        ArgumentMatchers.any(HttpMethod.class),
+                        ArgumentMatchers.any(),
+                        ArgumentMatchers.<Class<String>>any());
+
+        String result = cnfAdapterService.createInstance(request);
+
+        assertEquals(createResponse, result);
+    }
+
+    @Test
+    public void createInstanceProceedsWhenLookupFails() throws Exception {
+        String createResponse = "{\"id\":\"new-inst\",\"release-name\":\"my-release\",\"namespace\":\"default\"}";
+
+        BpmnInstanceRequest request = getBpmnInstanceRequest();
+        request.setK8sRBInstanceReleaseName("my-release");
+
+        // First call: list fails with 500 (GET)
+        // Second call: POST creates new instance
+        doThrow(new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR))
+                .doReturn(new ResponseEntity<>(createResponse, HttpStatus.OK))
+                .when(restTemplate).exchange(
+                        ArgumentMatchers.anyString(),
+                        ArgumentMatchers.any(HttpMethod.class),
+                        ArgumentMatchers.any(),
+                        ArgumentMatchers.<Class<String>>any());
+
+        String result = cnfAdapterService.createInstance(request);
+
+        assertEquals(createResponse, result);
+    }
+
+    @Test
+    public void createInstanceProceedsWhenListIsEmpty() throws Exception {
+        String createResponse = "{\"id\":\"new-inst\",\"release-name\":\"my-release\",\"namespace\":\"default\"}";
+
+        BpmnInstanceRequest request = getBpmnInstanceRequest();
+        request.setK8sRBInstanceReleaseName("my-release");
+
+        // First call: list returns empty array (GET)
+        // Second call: POST creates new instance
+        doReturn(new ResponseEntity<>("[]", HttpStatus.OK))
+                .doReturn(new ResponseEntity<>(createResponse, HttpStatus.OK))
+                .when(restTemplate).exchange(
+                        ArgumentMatchers.anyString(),
+                        ArgumentMatchers.any(HttpMethod.class),
+                        ArgumentMatchers.any(),
+                        ArgumentMatchers.<Class<String>>any());
+
+        String result = cnfAdapterService.createInstance(request);
+
+        assertEquals(createResponse, result);
+    }
+
+    @Test
+    public void findExistingInstanceReturnsNullWhenReleaseNameIsNull() {
+        MulticloudInstanceRequest request = new MulticloudInstanceRequest();
+        request.setRbName("rb-1");
+        request.setRbVersion("v-1");
+        request.setProfileName("profile-1");
+        request.setReleaseName(null);
+
+        assertNull(cnfAdapterService.findExistingInstance(request));
+    }
+
+    @Test
+    public void findExistingInstanceReturnsNullWhenRbNameIsNull() {
+        MulticloudInstanceRequest request = new MulticloudInstanceRequest();
+        request.setRbName(null);
+        request.setRbVersion("v-1");
+        request.setProfileName("profile-1");
+        request.setReleaseName("rel-1");
+
+        assertNull(cnfAdapterService.findExistingInstance(request));
+    }
+
     private BpmnInstanceRequest getBpmnInstanceRequest() {
         Map<String, String> labels = new HashMap<>();
         labels.put("custom-label-1", "label1");
@@ -280,5 +398,3 @@ public class CnfAdapterServiceTest {
         String profileName = "p1";
     }
 }
-
-

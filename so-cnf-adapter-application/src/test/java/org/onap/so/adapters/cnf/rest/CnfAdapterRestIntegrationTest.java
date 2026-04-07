@@ -82,6 +82,14 @@ public class CnfAdapterRestIntegrationTest {
 
     @Test
     public void thatInstanceCanBeCreated() {
+        // Stub: idempotency check returns empty list (no existing instance)
+        WireMock.stubFor(WireMock.get(WireMock.urlPathEqualTo("/v1/instance"))
+                .withQueryParam("rb-name", WireMock.equalTo("rb-name-1"))
+                .willReturn(WireMock.aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody("[]")));
+
         WireMock.stubFor(WireMock.post(WireMock.urlEqualTo("/v1/instance"))
                 .willReturn(WireMock.aResponse()
                         .withStatus(200)
@@ -243,6 +251,14 @@ public class CnfAdapterRestIntegrationTest {
 
     @Test
     public void thatCreateInstanceReturns500OnMulticloud404() {
+        // Stub: idempotency check returns empty list
+        WireMock.stubFor(WireMock.get(WireMock.urlPathEqualTo("/v1/instance"))
+                .withQueryParam("rb-name", WireMock.equalTo("rb-name-1"))
+                .willReturn(WireMock.aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody("[]")));
+
         WireMock.stubFor(WireMock.post(WireMock.urlEqualTo("/v1/instance"))
                 .willReturn(WireMock.aResponse()
                         .withStatus(404)
@@ -258,6 +274,77 @@ public class CnfAdapterRestIntegrationTest {
                 "/api/cnf-adapter/v1/instance", request, String.class);
 
         assertEquals(500, response.getStatusCodeValue());
+    }
+
+    @Test
+    public void thatCreateInstanceReturnsExistingWhenReleaseAlreadyExists() {
+        // Stub: list instances by rb-name/rb-version/profile-name returns a match
+        WireMock.stubFor(WireMock.get(WireMock.urlPathEqualTo("/v1/instance"))
+                .withQueryParam("rb-name", WireMock.equalTo("rb-name-1"))
+                .withQueryParam("rb-version", WireMock.equalTo("rb-version-1"))
+                .withQueryParam("profile-name", WireMock.equalTo("profile-1"))
+                .willReturn(WireMock.aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBodyFile("multicloud/existingInstanceListResponse.json")));
+
+        // Stub: get instance detail for the matched id
+        WireMock.stubFor(WireMock.get(WireMock.urlEqualTo("/v1/instance/existing-inst"))
+                .willReturn(WireMock.aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody("{\"id\":\"existing-inst\",\"namespace\":\"default\",\"release-name\":\"test-release\"}")));
+
+        BpmnInstanceRequest request = new BpmnInstanceRequest();
+        request.setModelInvariantId("rb-name-1");
+        request.setModelCustomizationId("rb-version-1");
+        request.setK8sRBProfileName("profile-1");
+        request.setCloudRegionId("region-1");
+        request.setK8sRBInstanceReleaseName("test-release");
+
+        ResponseEntity<String> response = restTemplate.postForEntity(
+                "/api/cnf-adapter/v1/instance", request, String.class);
+
+        // Should return the existing instance without calling POST
+        assertEquals(200, response.getStatusCodeValue());
+        assertTrue(response.getBody().contains("existing-inst"));
+        // Verify POST was never called
+        WireMock.verify(0, WireMock.postRequestedFor(WireMock.urlEqualTo("/v1/instance")));
+        // Verify GET for detail was called
+        WireMock.verify(WireMock.getRequestedFor(WireMock.urlEqualTo("/v1/instance/existing-inst")));
+    }
+
+    @Test
+    public void thatCreateInstanceProceedsWhenNoMatchingRelease() {
+        // Stub: list instances returns empty array
+        WireMock.stubFor(WireMock.get(WireMock.urlPathEqualTo("/v1/instance"))
+                .withQueryParam("rb-name", WireMock.equalTo("rb-name-1"))
+                .willReturn(WireMock.aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody("[]")));
+
+        // Stub: POST creates new instance
+        WireMock.stubFor(WireMock.post(WireMock.urlEqualTo("/v1/instance"))
+                .willReturn(WireMock.aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBodyFile("multicloud/createInstanceResponse.json")));
+
+        BpmnInstanceRequest request = new BpmnInstanceRequest();
+        request.setModelInvariantId("rb-name-1");
+        request.setModelCustomizationId("rb-version-1");
+        request.setK8sRBProfileName("profile-1");
+        request.setCloudRegionId("region-1");
+        request.setK8sRBInstanceReleaseName("test-release");
+
+        ResponseEntity<String> response = restTemplate.postForEntity(
+                "/api/cnf-adapter/v1/instance", request, String.class);
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertTrue(response.getBody().contains("new-inst"));
+        // Verify POST was called
+        WireMock.verify(WireMock.postRequestedFor(WireMock.urlEqualTo("/v1/instance")));
     }
 
     /**
