@@ -27,7 +27,7 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.HttpClients;
 import org.onap.logging.filter.spring.SpringClientPayloadFilter;
 import org.onap.so.cnfm.lcm.bpmn.flows.GsonProvider;
-import org.onap.so.configuration.rest.HttpComponentsClientConfiguration;
+import org.onap.so.configuration.HttpComponentsClientConfiguration;
 import org.onap.so.logging.jaxrs.filter.SOSpringClientFilter;
 import org.onap.so.rest.service.HttpRestServiceProvider;
 import org.onap.so.rest.service.HttpRestServiceProviderImpl;

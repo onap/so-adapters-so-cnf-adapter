@@ -118,7 +118,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.onap.so</groupId>
+            <groupId>org.onap.so.common</groupId>
             <artifactId>common</artifactId>
             <version>${so-core-version}</version>
             <exclusions>
@@ -135,6 +135,11 @@
                     <artifactId>spring-cloud-starter-sleuth</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.onap.so</groupId>
+            <artifactId>clients-base</artifactId>
+            <version>${so-core-version}</version>
         </dependency>
         <dependency>
             <groupId>io.kubernetes</groupId>
