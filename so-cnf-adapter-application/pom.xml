@@ -26,10 +26,10 @@
     <parent>
         <groupId>org.onap.so.adapters.so-cnf-adapter</groupId>
         <artifactId>so-cnf-adapter</artifactId>
-        <version>1.13.2-SNAPSHOT</version>
+        <version>1.14.0-SNAPSHOT</version>
     </parent>
   <artifactId>so-cnf-adapter-application</artifactId>
-  <version>1.13.2-SNAPSHOT</version>
+  <version>1.14.0-SNAPSHOT</version>
   <name>SO CNF Application Jar</name>
   <build>
     <finalName>${project.artifactId}-${project.version}</finalName>
@@ -117,7 +117,7 @@
       <dependency>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-dependencies</artifactId>
-        <version>2020.0.6</version>
+        <version>2021.0.9</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
