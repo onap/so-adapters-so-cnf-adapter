@@ -153,7 +153,7 @@ public class KubernetesResource {
                 Objects.equal(namespace, reference.namespace) &&
                 Objects.equal(dataOwner, reference.dataOwner) &&
                 Objects.equal(dataSource, reference.dataSource) &&
-                Objects.equal(dataSourceVersion, reference.dataSourceVersion);
+                Objects.equal(dataSourceVersion, reference.dataSourceVersion) &&
                 Objects.equal(labels, reference.labels);
         return result;
     }
