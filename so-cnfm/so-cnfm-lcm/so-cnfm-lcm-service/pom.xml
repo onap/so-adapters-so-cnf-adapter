@@ -67,7 +67,7 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.onap.so</groupId>
+            <groupId>org.onap.so.common</groupId>
             <artifactId>common</artifactId>
             <version>${so-core-version}</version>
         </dependency>

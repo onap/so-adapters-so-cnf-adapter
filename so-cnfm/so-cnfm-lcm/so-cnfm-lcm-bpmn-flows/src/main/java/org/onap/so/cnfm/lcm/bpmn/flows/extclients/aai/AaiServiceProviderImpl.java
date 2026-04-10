@@ -1,6 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2023 Nordix Foundation.
+ *  Copyright (C) 2026 Deutsche Telekom AG
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +29,7 @@ import org.onap.aai.domain.yang.GenericVnf;
 import org.onap.aai.domain.yang.K8SResource;
 import org.onap.aai.domain.yang.VfModule;
 import org.onap.aaiclient.client.aai.entities.AAIResultWrapper;
+import org.onap.aaiclient.client.aai.entities.uri.AAIClientUriFactory;
 import org.onap.aaiclient.client.aai.entities.uri.AAIResourceUri;
 import org.onap.aaiclient.client.aai.entities.uri.AAIUriFactory;
 import org.onap.aaiclient.client.generated.fluentbuilders.AAIFluentTypeBuilder;
@@ -63,7 +65,7 @@ public class AaiServiceProviderImpl implements AaiServiceProvider {
         final AAIResourceUri genericVnfURI =
                 AAIUriFactory.createResourceUri(AAIFluentTypeBuilder.network().genericVnf(vnfId));
         final AAIResourceUri serviceInstanceURI =
-                AAIUriFactory.createResourceUri(Types.SERVICE_INSTANCE.getFragment(serviceInstanceId));
+                AAIClientUriFactory.createResourceUri(Types.SERVICE_INSTANCE.getFragment(serviceInstanceId));
         aaiClientProvider.getAaiClient().createIfNotExists(genericVnfURI, Optional.of(genericVnf))
                 .connect(genericVnfURI, serviceInstanceURI);
 
