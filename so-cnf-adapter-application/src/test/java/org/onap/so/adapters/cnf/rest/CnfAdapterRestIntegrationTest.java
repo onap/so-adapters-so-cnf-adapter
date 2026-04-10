@@ -51,9 +51,9 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
 /**
- * Integration tests for {@link CnfAdapterRest} that start from HTTP requests
- * to the controller endpoints and verify that the correct outbound requests
- * are made to the Multicloud K8s Plugin (stubbed by WireMock).
+ * Integration tests for the CNF adapter REST controllers that start from HTTP
+ * requests to the controller endpoints and verify that the correct outbound
+ * requests are made to the Multicloud K8s Plugin (stubbed by WireMock).
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)

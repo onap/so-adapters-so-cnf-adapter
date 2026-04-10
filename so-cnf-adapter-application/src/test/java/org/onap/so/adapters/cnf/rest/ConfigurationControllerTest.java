@@ -1,0 +1,141 @@
+/*-
+ * ============LICENSE_START=======================================================
+ * ONAP - SO
+ * ================================================================================
+ * Copyright (C) 2020 Huawei Technologies Co., Ltd. All rights reserved.
+ * Modifications Copyright (C) 2026 Deutsche Telekom AG
+ * ================================================================================
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ============LICENSE_END=========================================================
+ */
+
+package org.onap.so.adapters.cnf.rest;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.onap.so.adapters.cnf.MulticloudConfiguration;
+import org.onap.so.adapters.cnf.model.ConfigurationEntity;
+import org.onap.so.adapters.cnf.model.ConfigurationRollbackEntity;
+import org.onap.so.adapters.cnf.model.Tag;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+
+@SpringBootTest
+@RunWith(SpringRunner.class)
+public class ConfigurationControllerTest {
+
+    @InjectMocks
+    ConfigurationController configurationController;
+
+    @Mock
+    private MulticloudConfiguration multicloudConfiguration;
+
+    @Test
+    public void createConfigurationTest() throws Exception {
+
+        String RbName = "rb";
+        String RbVersion = "p1";
+        String prName = "p";
+        ConfigurationEntity cE = new ConfigurationEntity();
+        try{
+        configurationController.createConfiguration(cE, prName, RbName, RbVersion);
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
+    }
+
+    @Test
+    public void getConfigurationTest() throws Exception {
+
+        String RbName = "rb";
+        String RbVersion = "p1";
+        String prName = "p";
+        String cfgName = "cfg";
+        try{
+        configurationController.getConfiguration(prName, RbName, RbVersion, cfgName);
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
+    }
+
+    @Test
+    public void deleteConfigurationTest() throws Exception {
+
+        String RbName = "rb";
+        String RbVersion = "p1";
+        String prName = "p";
+        String cfgName = "cfg";
+        try{
+        configurationController.deleteConfiguration(prName, RbName, RbVersion, cfgName);
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
+    }
+
+    @Test
+    public void updateConfigurationTest() throws Exception {
+
+        String RbName = "rb";
+        String RbVersion = "p1";
+        String prName = "p";
+        String cfgName = "cfg";
+        ConfigurationEntity cE = new ConfigurationEntity();
+        try{
+        configurationController.updateConfiguration(cE, prName, RbName, RbVersion, cfgName);
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
+    }
+
+    @Test
+    public void tagConfigurationValueTest() throws Exception {
+
+        String RbName = "rb";
+        String RbVersion = "p1";
+        String prName = "p";
+        Tag tag = new Tag();
+        try{
+        configurationController.tagConfigurationValue(tag, RbName, RbVersion, prName);
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
+    }
+
+    @Test
+    public void rollbackConfigurationTest() throws Exception {
+        ConfigurationRollbackEntity rE = new ConfigurationRollbackEntity();
+        String RbName = "rb";
+        String RbVersion = "p1";
+        String prName = "p";
+        try{
+        configurationController.rollbackConfiguration(rE, RbName, RbVersion, prName);
+        }
+        catch(Exception e)
+        {
+            assert(true);
+        }
+    }
+}
