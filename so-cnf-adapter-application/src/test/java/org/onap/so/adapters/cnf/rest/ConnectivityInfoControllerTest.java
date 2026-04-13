@@ -25,7 +25,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.onap.so.adapters.cnf.MulticloudConfiguration;
+import org.onap.so.adapters.cnf.client.MulticloudHttpClient;
 import org.onap.so.adapters.cnf.model.ConnectivityInfo;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -39,7 +39,7 @@ public class ConnectivityInfoControllerTest {
     ConnectivityInfoController connectivityInfoController;
 
     @Mock
-    private MulticloudConfiguration multicloudConfiguration;
+    private MulticloudHttpClient httpClient;
 
     @Test
     public void createConnectivityInfoTest() throws Exception {

@@ -20,21 +20,7 @@
  */
 package org.onap.so.adapters.cnf.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
-import org.onap.so.adapters.cnf.MulticloudConfiguration;
+import org.onap.so.adapters.cnf.client.MulticloudHttpClient;
 import org.onap.so.adapters.cnf.model.ConfigTemplateEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,18 +34,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-
 @RestController
 public class ConfigTemplateController {
 
     private static final Logger logger = LoggerFactory.getLogger(ConfigTemplateController.class);
-    private final CloseableHttpClient httpClient = HttpClients.createDefault();
-    private final String uri;
+    private final MulticloudHttpClient httpClient;
 
     @Autowired
-    public ConfigTemplateController(MulticloudConfiguration multicloudConfiguration) {
-        this.uri = multicloudConfiguration.getMulticloudUrl();
+    public ConfigTemplateController(MulticloudHttpClient httpClient) {
+        this.httpClient = httpClient;
     }
 
     @ResponseBody
@@ -68,19 +51,7 @@ public class ConfigTemplateController {
     public String createConfigTemplate(@RequestBody ConfigTemplateEntity tE, @PathVariable("rb-name") String rbName,
                                        @PathVariable("rb-version") String rbVersion) throws Exception {
         logger.info("createConfigTemplate called.");
-
-        HttpPost post = new HttpPost(
-                uri + "/v1/rb/definition/" + rbName + "/" + rbVersion + "/config-template");
-        ObjectMapper objectMapper = new ObjectMapper();
-        String requestBody = objectMapper.writeValueAsString(tE);
-        StringEntity requestEntity = new StringEntity(requestBody, ContentType.APPLICATION_JSON);
-        post.setEntity(requestEntity);
-
-        try (CloseableHttpClient httpClient = HttpClients.createDefault();
-             CloseableHttpResponse response = httpClient.execute(post)) {
-            logger.info("response: " + response.getEntity());
-            return EntityUtils.toString(response.getEntity());
-        }
+        return httpClient.post("/v1/rb/definition/" + rbName + "/" + rbVersion + "/config-template", tE);
     }
 
     @ResponseBody
@@ -89,13 +60,7 @@ public class ConfigTemplateController {
     public String getConfigTemplate(@PathVariable("rb-name") String rbName,
                                     @PathVariable("rb-version") String rbVersion, @PathVariable("tname") String tName) throws Exception {
         logger.info("getConfigTemplate called.");
-
-        HttpGet req = new HttpGet(uri + "/v1/rb/definition/" + rbName + "/" + rbVersion
-                + "/config-template/" + tName);
-        try (CloseableHttpResponse response = httpClient.execute(req)) {
-            logger.info("response: " + response.getEntity());
-            return EntityUtils.toString(response.getEntity());
-        }
+        return httpClient.get("/v1/rb/definition/" + rbName + "/" + rbVersion + "/config-template/" + tName);
     }
 
     @ResponseBody
@@ -104,13 +69,7 @@ public class ConfigTemplateController {
     public String deleteTemplate(@PathVariable("rb-name") String rbName, @PathVariable("rb-version") String rbVersion,
                                  @PathVariable("tname") String tName) throws Exception {
         logger.info("deleteTemplate called.");
-
-        HttpDelete req = new HttpDelete(uri + "/v1/rb/definition/" + rbName + "/" + rbVersion
-                + "/config-template/" + tName);
-        try (CloseableHttpResponse response = httpClient.execute(req)) {
-            logger.info("response: " + response.getEntity());
-            return EntityUtils.toString(response.getEntity());
-        }
+        return httpClient.delete("/v1/rb/definition/" + rbName + "/" + rbVersion + "/config-template/" + tName);
     }
 
     @ResponseBody
@@ -121,26 +80,7 @@ public class ConfigTemplateController {
                                            @PathVariable("rb-name") String rbName, @PathVariable("rb-version") String rbVersion,
                                            @PathVariable("tname") String tName) throws Exception {
         logger.info("uploadTarFileForTemplate called.");
-
-        File convFile = new File(file.getOriginalFilename());
-        file.transferTo(convFile);
-        FileBody fileBody = new FileBody(convFile, ContentType.DEFAULT_BINARY);
-        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-        builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-        builder.addPart("file", fileBody);
-        HttpEntity entity = builder.build();
-
-        HttpPost post = new HttpPost(uri + "/v1/rb/definition/" + rbName + "/" + rbVersion
-                + "/config-template/" + tName + "/content");
-        post.setHeader("Content-Type", "multipart/form-data");
-
-        logger.info(String.valueOf(post));
-        post.setEntity(entity);
-
-        try (CloseableHttpClient httpClient = HttpClients.createDefault();
-             CloseableHttpResponse response = httpClient.execute(post)) {
-            logger.info("response: " + response.getEntity());
-            return EntityUtils.toString(response.getEntity());
-        }
+        return httpClient.uploadMultipartFile(
+                "/v1/rb/definition/" + rbName + "/" + rbVersion + "/config-template/" + tName + "/content", file);
     }
 }

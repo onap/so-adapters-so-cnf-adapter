@@ -20,18 +20,7 @@
  */
 package org.onap.so.adapters.cnf.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
-import org.onap.so.adapters.cnf.MulticloudConfiguration;
+import org.onap.so.adapters.cnf.client.MulticloudHttpClient;
 import org.onap.so.adapters.cnf.model.ConfigurationEntity;
 import org.onap.so.adapters.cnf.model.ConfigurationRollbackEntity;
 import org.onap.so.adapters.cnf.model.Tag;
@@ -49,12 +38,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ConfigurationController {
 
     private static final Logger logger = LoggerFactory.getLogger(ConfigurationController.class);
-    private final CloseableHttpClient httpClient = HttpClients.createDefault();
-    private final String uri;
+    private final MulticloudHttpClient httpClient;
 
     @Autowired
-    public ConfigurationController(MulticloudConfiguration multicloudConfiguration) {
-        this.uri = multicloudConfiguration.getMulticloudUrl();
+    public ConfigurationController(MulticloudHttpClient httpClient) {
+        this.httpClient = httpClient;
     }
 
     @ResponseBody
@@ -64,19 +52,7 @@ public class ConfigurationController {
                                       @PathVariable("rb-version") String rbVersion, @PathVariable("profile-name") String prName)
             throws Exception {
         logger.info("create Configuration called.");
-
-        HttpPost post = new HttpPost(uri + "/v1/definition/" + rbName + "/" + rbVersion
-                + "/profile/" + prName + "/config");
-        ObjectMapper objectMapper = new ObjectMapper();
-        String requestBody = objectMapper.writeValueAsString(cE);
-        StringEntity requestEntity = new StringEntity(requestBody, ContentType.APPLICATION_JSON);
-        post.setEntity(requestEntity);
-
-        try (CloseableHttpClient httpClient = HttpClients.createDefault();
-             CloseableHttpResponse response = httpClient.execute(post)) {
-            logger.info("response: " + response.getEntity());
-            return EntityUtils.toString(response.getEntity());
-        }
+        return httpClient.post("/v1/definition/" + rbName + "/" + rbVersion + "/profile/" + prName + "/config", cE);
     }
 
     @ResponseBody
@@ -86,13 +62,7 @@ public class ConfigurationController {
     public String getConfiguration(@PathVariable("rb-name") String rbName, @PathVariable("rb-version") String rbVersion,
                                    @PathVariable("profile-name") String prName, @PathVariable("cfg-name") String cfgName) throws Exception {
         logger.info("get Configuration called.");
-
-        HttpGet req = new HttpGet(uri + "/v1/definition/" + rbName + "/" + rbVersion + "/profile/"
-                + prName + "/config/" + cfgName);
-        try (CloseableHttpResponse response = httpClient.execute(req)) {
-            logger.info("response: " + response.getEntity());
-            return EntityUtils.toString(response.getEntity());
-        }
+        return httpClient.get("/v1/definition/" + rbName + "/" + rbVersion + "/profile/" + prName + "/config/" + cfgName);
     }
 
     @ResponseBody
@@ -103,13 +73,7 @@ public class ConfigurationController {
                                       @PathVariable("rb-version") String rbVersion, @PathVariable("profile-name") String prName,
                                       @PathVariable("cfg-name") String cfgName) throws Exception {
         logger.info("delete Configuration called.");
-
-        HttpDelete req = new HttpDelete(uri + "/v1/definition/" + rbName + "/" + rbVersion
-                + "/profile/" + prName + "/config/" + cfgName);
-        try (CloseableHttpResponse response = httpClient.execute(req)) {
-            logger.info("response: " + response.getEntity());
-            return EntityUtils.toString(response.getEntity());
-        }
+        return httpClient.delete("/v1/definition/" + rbName + "/" + rbVersion + "/profile/" + prName + "/config/" + cfgName);
     }
 
     @ResponseBody
@@ -120,19 +84,7 @@ public class ConfigurationController {
                                       @PathVariable("rb-version") String rbVersion, @PathVariable("profile-name") String prName,
                                       @PathVariable("cfg-name") String cfgName) throws Exception {
         logger.info("update Configuration called.");
-
-        HttpPut post = new HttpPut(uri + "/v1/definition/" + rbName + "/" + rbVersion + "/profile/"
-                + prName + "/config/" + cfgName);
-        ObjectMapper objectMapper = new ObjectMapper();
-        String requestBody = objectMapper.writeValueAsString(cE);
-        StringEntity requestEntity = new StringEntity(requestBody, ContentType.APPLICATION_JSON);
-        post.setEntity(requestEntity);
-
-        try (CloseableHttpClient httpClient = HttpClients.createDefault();
-             CloseableHttpResponse response = httpClient.execute(post)) {
-            logger.info("response: " + response.getEntity());
-            return EntityUtils.toString(response.getEntity());
-        }
+        return httpClient.put("/v1/definition/" + rbName + "/" + rbVersion + "/profile/" + prName + "/config/" + cfgName, cE);
     }
 
     @ResponseBody
@@ -141,20 +93,7 @@ public class ConfigurationController {
     public String tagConfigurationValue(@RequestBody Tag tag, @PathVariable("rb-name") String rbName,
                                         @PathVariable("rb-version") String rbVersion, @PathVariable("pr-name") String prName) throws Exception {
         logger.info("Tag Configuration called.");
-
-        HttpPost post = new HttpPost(uri + "/v1/definition/" + rbName + "/" + rbVersion
-                + "/profile/" + prName + "/config/tagit");
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        String requestBody = objectMapper.writeValueAsString(tag);
-        StringEntity requestEntity = new StringEntity(requestBody, ContentType.APPLICATION_JSON);
-        post.setEntity(requestEntity);
-
-        try (CloseableHttpClient httpClient = HttpClients.createDefault();
-             CloseableHttpResponse response = httpClient.execute(post)) {
-            logger.info("response: " + response.getEntity());
-            return EntityUtils.toString(response.getEntity());
-        }
+        return httpClient.post("/v1/definition/" + rbName + "/" + rbVersion + "/profile/" + prName + "/config/tagit", tag);
     }
 
     @ResponseBody
@@ -164,19 +103,6 @@ public class ConfigurationController {
                                         @PathVariable("rbName") String rbName, @PathVariable("rbVersion") String rbVersion,
                                         @PathVariable("prName") String prName) throws Exception {
         logger.info("rollbackConfiguration called.");
-
-        HttpPost post = new HttpPost(uri + "/v1/definition/" + rbName + "/" + rbVersion
-                + "/profile/" + prName + "/config/rollback");
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        String requestBody = objectMapper.writeValueAsString(rE);
-        StringEntity requestEntity = new StringEntity(requestBody, ContentType.APPLICATION_JSON);
-        post.setEntity(requestEntity);
-
-        try (CloseableHttpClient httpClient = HttpClients.createDefault();
-             CloseableHttpResponse response = httpClient.execute(post)) {
-            logger.info("response: " + response.getEntity());
-            return EntityUtils.toString(response.getEntity());
-        }
+        return httpClient.post("/v1/definition/" + rbName + "/" + rbVersion + "/profile/" + prName + "/config/rollback", rE);
     }
 }

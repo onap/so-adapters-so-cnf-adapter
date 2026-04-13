@@ -20,17 +20,7 @@
  */
 package org.onap.so.adapters.cnf.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
-import org.onap.so.adapters.cnf.MulticloudConfiguration;
+import org.onap.so.adapters.cnf.client.MulticloudHttpClient;
 import org.onap.so.adapters.cnf.model.ConnectivityInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,12 +36,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ConnectivityInfoController {
 
     private static final Logger logger = LoggerFactory.getLogger(ConnectivityInfoController.class);
-    private final CloseableHttpClient httpClient = HttpClients.createDefault();
-    private final String uri;
+    private final MulticloudHttpClient httpClient;
 
     @Autowired
-    public ConnectivityInfoController(MulticloudConfiguration multicloudConfiguration) {
-        this.uri = multicloudConfiguration.getMulticloudUrl();
+    public ConnectivityInfoController(MulticloudHttpClient httpClient) {
+        this.httpClient = httpClient;
     }
 
     @ResponseBody
@@ -59,18 +48,7 @@ public class ConnectivityInfoController {
             produces = "application/json")
     public String createConnectivityInfo(@RequestBody ConnectivityInfo cIE) throws Exception {
         logger.info("create ConnectivityInfo called.");
-
-        HttpPost post = new HttpPost(uri + "/v1/connectivity-info");
-        ObjectMapper objectMapper = new ObjectMapper();
-        String requestBody = objectMapper.writeValueAsString(cIE);
-        StringEntity requestEntity = new StringEntity(requestBody, ContentType.APPLICATION_JSON);
-        post.setEntity(requestEntity);
-
-        try (CloseableHttpClient httpClient = HttpClients.createDefault();
-             CloseableHttpResponse response = httpClient.execute(post)) {
-            logger.info("response: " + response.getEntity());
-            return EntityUtils.toString(response.getEntity());
-        }
+        return httpClient.post("/v1/connectivity-info", cIE);
     }
 
     @ResponseBody
@@ -78,12 +56,7 @@ public class ConnectivityInfoController {
             produces = "application/json")
     public String getConnectivityInfo(@PathVariable("connname") String connName) throws Exception {
         logger.info("get Connectivity Info called.");
-
-        HttpGet req = new HttpGet(uri + "/v1/connectivity-info/" + connName);
-        try (CloseableHttpResponse response = httpClient.execute(req)) {
-            logger.info("response: " + response.getEntity());
-            return EntityUtils.toString(response.getEntity());
-        }
+        return httpClient.get("/v1/connectivity-info/" + connName);
     }
 
     @ResponseBody
@@ -91,11 +64,6 @@ public class ConnectivityInfoController {
             produces = "application/json")
     public String deleteConnectivityInfo(@PathVariable("connname") String connName) throws Exception {
         logger.info("delete Connectivity Info called.");
-
-        HttpDelete req = new HttpDelete(uri + "/v1/connectivity-info/" + connName);
-        try (CloseableHttpResponse response = httpClient.execute(req)) {
-            logger.info("response: " + response.getEntity());
-            return EntityUtils.toString(response.getEntity());
-        }
+        return httpClient.delete("/v1/connectivity-info/" + connName);
     }
 }

@@ -26,7 +26,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.onap.so.adapters.cnf.MulticloudConfiguration;
+import org.onap.so.adapters.cnf.client.MulticloudHttpClient;
 import org.onap.so.adapters.cnf.model.ProfileEntity;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -41,7 +41,7 @@ public class ProfileControllerTest {
     ProfileController profileController;
 
     @Mock
-    private MulticloudConfiguration multicloudConfiguration;
+    private MulticloudHttpClient httpClient;
 
     @Test
     public void createProfileTest() throws Exception {

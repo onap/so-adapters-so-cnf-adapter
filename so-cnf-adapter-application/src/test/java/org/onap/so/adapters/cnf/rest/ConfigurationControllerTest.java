@@ -25,7 +25,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.onap.so.adapters.cnf.MulticloudConfiguration;
+import org.onap.so.adapters.cnf.client.MulticloudHttpClient;
 import org.onap.so.adapters.cnf.model.ConfigurationEntity;
 import org.onap.so.adapters.cnf.model.ConfigurationRollbackEntity;
 import org.onap.so.adapters.cnf.model.Tag;
@@ -41,7 +41,7 @@ public class ConfigurationControllerTest {
     ConfigurationController configurationController;
 
     @Mock
-    private MulticloudConfiguration multicloudConfiguration;
+    private MulticloudHttpClient httpClient;
 
     @Test
     public void createConfigurationTest() throws Exception {

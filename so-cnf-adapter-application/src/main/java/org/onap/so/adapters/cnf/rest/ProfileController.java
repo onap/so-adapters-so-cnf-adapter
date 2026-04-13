@@ -20,21 +20,7 @@
  */
 package org.onap.so.adapters.cnf.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
-import org.onap.so.adapters.cnf.MulticloudConfiguration;
+import org.onap.so.adapters.cnf.client.MulticloudHttpClient;
 import org.onap.so.adapters.cnf.model.ProfileEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,18 +34,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-
 @RestController
 public class ProfileController {
 
     private static final Logger logger = LoggerFactory.getLogger(ProfileController.class);
-    private final CloseableHttpClient httpClient = HttpClients.createDefault();
-    private final String uri;
+    private final MulticloudHttpClient httpClient;
 
     @Autowired
-    public ProfileController(MulticloudConfiguration multicloudConfiguration) {
-        this.uri = multicloudConfiguration.getMulticloudUrl();
+    public ProfileController(MulticloudHttpClient httpClient) {
+        this.httpClient = httpClient;
     }
 
     @ResponseBody
@@ -68,19 +51,7 @@ public class ProfileController {
     public String createProfile(@RequestBody ProfileEntity fE, @PathVariable("rb-name") String rbName,
                                 @PathVariable("rb-version") String rbVersion) throws Exception {
         logger.info("create Profile called.");
-
-        HttpPost post =
-                new HttpPost(uri + "/v1/rb/definition/" + rbName + "/" + rbVersion + "/profile");
-        ObjectMapper objectMapper = new ObjectMapper();
-        String requestBody = objectMapper.writeValueAsString(fE);
-        StringEntity requestEntity = new StringEntity(requestBody, ContentType.APPLICATION_JSON);
-        post.setEntity(requestEntity);
-
-        try (CloseableHttpClient httpClient = HttpClients.createDefault();
-             CloseableHttpResponse response = httpClient.execute(post)) {
-            logger.info("response:" + response.getEntity());
-            return EntityUtils.toString(response.getEntity());
-        }
+        return httpClient.post("/v1/rb/definition/" + rbName + "/" + rbVersion + "/profile", fE);
     }
 
     @ResponseBody
@@ -89,13 +60,7 @@ public class ProfileController {
     public String getProfile(@PathVariable("rb-name") String rbName, @PathVariable("rb-version") String rbVersion,
                              @PathVariable("pr-name") String prName) throws Exception {
         logger.info("get Profile called.");
-
-        HttpGet req = new HttpGet(
-                uri + "/v1/rb/definition/" + rbName + "/" + rbVersion + "/profile/" + prName);
-        try (CloseableHttpResponse response = httpClient.execute(req)) {
-            logger.info("response: " + response.getEntity());
-            return EntityUtils.toString(response.getEntity());
-        }
+        return httpClient.get("/v1/rb/definition/" + rbName + "/" + rbVersion + "/profile/" + prName);
     }
 
     @ResponseBody
@@ -104,13 +69,7 @@ public class ProfileController {
     public String getListOfProfile(@PathVariable("rb-name") String rbName, @PathVariable("rb-version") String rbVersion)
             throws Exception {
         logger.info("getListOfProfile called.");
-
-        HttpGet req =
-                new HttpGet(uri + "/v1/rb/definition/" + rbName + "/" + rbVersion + "/profile");
-        try (CloseableHttpResponse response = httpClient.execute(req)) {
-            logger.info("response: " + response.getEntity());
-            return EntityUtils.toString(response.getEntity());
-        }
+        return httpClient.get("/v1/rb/definition/" + rbName + "/" + rbVersion + "/profile");
     }
 
     @ResponseBody
@@ -119,13 +78,7 @@ public class ProfileController {
     public String deleteProfile(@PathVariable("rb-name") String rbName, @PathVariable("rb-version") String rbVersion,
                                 @PathVariable("pr-name") String prName) throws Exception {
         logger.info("delete Profile called.");
-
-        HttpDelete req = new HttpDelete(
-                uri + "/v1/rb/definition/" + rbName + "/" + rbVersion + "/profile/" + prName);
-        try (CloseableHttpResponse response = httpClient.execute(req)) {
-            logger.info("response: " + response.getEntity());
-            return EntityUtils.toString(response.getEntity());
-        }
+        return httpClient.delete("/v1/rb/definition/" + rbName + "/" + rbVersion + "/profile/" + prName);
     }
 
     @ResponseBody
@@ -135,26 +88,7 @@ public class ProfileController {
                                            @PathVariable("rb-name") String rbName, @PathVariable("rb-version") String rbVersion,
                                            @PathVariable("pr-name") String prName) throws Exception {
         logger.info("Upload  Artifact For Profile called.");
-
-        File convFile = new File(file.getOriginalFilename());
-        file.transferTo(convFile);
-        FileBody fileBody = new FileBody(convFile, ContentType.DEFAULT_BINARY);
-        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-        builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-        builder.addPart("file", fileBody);
-        HttpEntity entity = builder.build();
-
-        HttpPost post = new HttpPost(uri + "/v1/rb/definition/" + rbName + "/" + rbVersion
-                + "/profile/" + prName + "/content");
-        post.setHeader("Content-Type", "multipart/form-data");
-
-        logger.info(String.valueOf(post));
-        post.setEntity(entity);
-
-        try (CloseableHttpClient httpClient = HttpClients.createDefault();
-             CloseableHttpResponse response = httpClient.execute(post)) {
-            logger.info("response: " + response.getEntity());
-            return EntityUtils.toString(response.getEntity());
-        }
+        return httpClient.uploadMultipartFile(
+                "/v1/rb/definition/" + rbName + "/" + rbVersion + "/profile/" + prName + "/content", file);
     }
 }
