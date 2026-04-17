@@ -10,12 +10,7 @@ ARG KUBECTL_VERSION=v1.21.1
 ARG HELM_VERSION=v3.5.2
 
 USER root
-RUN mkdir -p /app/config
-RUN mkdir -p /app/certificates
-RUN mkdir -p /app/logs
-RUN mkdir -p /app/ca-certificates
-RUN mkdir -p /app/csar
-RUN mkdir -p /app/kube-configs
+RUN mkdir -p /app/config /app/certificates /app/logs /app/ca-certificates /app/csar /app/kube-configs
 
 # This can basically always be the latest version
 ARG OTEL_AGENT_VERSION=2.25.0
@@ -29,19 +24,16 @@ COPY scripts/wait-for.sh /app
 COPY ca-certificates/onap-ca.crt /app/ca-certificates/onap-ca.crt
 RUN chown -R so:so /app
 
-
 ENV TAR_FILE="helm-${HELM_VERSION}-linux-amd64.tar.gz"
 
-RUN wget https://get.helm.sh/${TAR_FILE} && \
-    tar xvf ${TAR_FILE} && \
+RUN wget -q https://get.helm.sh/${TAR_FILE} && \
+    tar xf ${TAR_FILE} && \
     chmod +x linux-amd64/helm && \
     mv linux-amd64/helm /usr/local/bin && \
-    rm -rf linux-amd64 && \
-    rm ${TAR_FILE}
-
-RUN wget https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
-    chmod +x kubectl && \
-    mv kubectl /usr/local/bin/kubectl
+    rm -rf linux-amd64 ${TAR_FILE} && \
+    wget -q -O /usr/local/bin/kubectl \
+      https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
+    chmod +x /usr/local/bin/kubectl
 
 USER so
 

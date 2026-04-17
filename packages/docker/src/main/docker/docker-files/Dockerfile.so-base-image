@@ -1,4 +1,4 @@
-FROM eclipse-temurin:11.0.27_6-jre-alpine
+FROM eclipse-temurin:11-jre-alpine
 
 ARG http_proxy
 ARG https_proxy
@@ -14,6 +14,8 @@ RUN apk --no-cache add curl netcat-openbsd nss apache2-utils java-cacerts
 RUN set -eux; \
     rm -rf "$JAVA_HOME/lib/security/cacerts"; \
     ln -sT /etc/ssl/certs/java/cacerts "$JAVA_HOME/lib/security/cacerts"
+
+ENV MAX_RAM_PERCENTAGE=75
 
 # Create 'so' user
 RUN addgroup -g 1000 so && adduser -S -u 1000 -G so -s /bin/sh so

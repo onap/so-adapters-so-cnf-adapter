@@ -80,7 +80,7 @@ if [ "${OTEL_ENABLED}" = "true" ] && [ -f "/app/opentelemetry-javaagent.jar" ]; 
     echo "OpenTelemetry Exporter Endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT:-not set}"
 fi
 
-jvmargs="${otel_agent_args} ${JVM_ARGS} -Dspring.profiles.active=${ACTIVE_PROFILE} -Djava.security.egd=file:/dev/./urandom -Dlogs_dir=${LOG_PATH} -Dlogging.config=/app/logback-spring.xml $jksargs -Dspring.config.additional-location=$CONFIG_PATH ${SSL_DEBUG} ${DISABLE_SNI}"
+jvmargs="-XX:MaxRAMPercentage=${MAX_RAM_PERCENTAGE:-75} ${otel_agent_args} ${JVM_ARGS} -Dspring.profiles.active=${ACTIVE_PROFILE} -Djava.security.egd=file:/dev/./urandom -Dlogs_dir=${LOG_PATH} -Dlogging.config=/app/logback-spring.xml $jksargs -Dspring.config.additional-location=$CONFIG_PATH ${SSL_DEBUG} ${DISABLE_SNI}"
 
 
 read_properties(){

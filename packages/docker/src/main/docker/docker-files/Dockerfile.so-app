@@ -8,10 +8,7 @@ ENV HTTPS_PROXY=$https_proxy
 ENV https_proxy=$HTTPS_PROXY
 
 USER root
-RUN mkdir -p /app/config
-RUN mkdir -p /app/certificates
-RUN mkdir -p /app/logs
-RUN mkdir -p /app/ca-certificates
+RUN mkdir -p /app/config /app/certificates /app/logs /app/ca-certificates
 
 # This can basically always be the latest version
 ARG OTEL_AGENT_VERSION=2.25.0
