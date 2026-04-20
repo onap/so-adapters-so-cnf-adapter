@@ -4,6 +4,7 @@
  * ================================================================================
  * Copyright (C) 2021 Samsung Electronics Co. Ltd. All rights reserved.
  * Modifications Copyright (C) 2021 Orange.
+ * Modifications Copyright (C) 2026 Deutsche Telekom AG.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@ package org.onap.so.adapters.cnf.util;
 import org.onap.aaiclient.client.graphinventory.exceptions.BulkProcessFailed;
 import org.onap.so.adapters.cnf.model.aai.AaiRequest;
 import org.onap.so.adapters.cnf.service.aai.KubernetesResource;
+import org.onap.so.client.ClientBuilderCustomizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,8 +35,12 @@ import static java.lang.Thread.sleep;
 
 public interface IAaiRepository {
     static IAaiRepository instance(boolean enabled) {
+        return instance(enabled, null);
+    }
+
+    static IAaiRepository instance(boolean enabled, ClientBuilderCustomizer clientBuilderCustomizer) {
         if (enabled)
-            return AaiRepository.instance();
+            return AaiRepository.instance(clientBuilderCustomizer);
         else
             return AaiRepositoryDummy.instance();
     }

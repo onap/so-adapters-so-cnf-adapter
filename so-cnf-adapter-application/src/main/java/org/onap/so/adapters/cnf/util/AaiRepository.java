@@ -4,6 +4,7 @@
  * ================================================================================
  * Copyright (C) 2021 Samsung Electronics Co. Ltd. All rights reserved.
  * Modifications Copyright (C) 2021 Orange.
+ * Modifications Copyright (C) 2026 Deutsche Telekom AG.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@ package org.onap.so.adapters.cnf.util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.onap.aaiclient.client.aai.AAIResourcesClient;
+import org.onap.so.client.ClientBuilderCustomizer;
 import org.onap.aaiclient.client.aai.AAITransactionalClient;
 import org.onap.aaiclient.client.aai.AAIVersion;
 import org.onap.aaiclient.client.aai.entities.uri.AAIResourceUri;
@@ -51,11 +53,15 @@ public class AaiRepository implements IAaiRepository {
     private final ObjectMapper objectMapper;
 
     public static IAaiRepository instance() {
-        return new AaiRepository();
+        return new AaiRepository(null);
     }
 
-    private AaiRepository() {
-        aaiTransactionHelper = new AAITransactionHelper();
+    public static IAaiRepository instance(ClientBuilderCustomizer clientBuilderCustomizer) {
+        return new AaiRepository(clientBuilderCustomizer);
+    }
+
+    private AaiRepository(ClientBuilderCustomizer clientBuilderCustomizer) {
+        aaiTransactionHelper = new AAITransactionHelper(clientBuilderCustomizer);
         this.objectMapper = new ObjectMapper();
     }
 
@@ -185,8 +191,10 @@ public class AaiRepository implements IAaiRepository {
         private final AAITransactionStore updateStore;
         private final AAITransactionStore deleteStore;
 
-        AAITransactionHelper() {
-            this.aaiClient = new AAIResourcesClient(AAIVersion.LATEST);
+        AAITransactionHelper(ClientBuilderCustomizer clientBuilderCustomizer) {
+            this.aaiClient = clientBuilderCustomizer != null
+                    ? new AAIResourcesClient(AAIVersion.LATEST, clientBuilderCustomizer)
+                    : new AAIResourcesClient(AAIVersion.LATEST);
             this.createStore = new AAITransactionStore(this.aaiClient, "Create");
             this.updateStore = new AAITransactionStore(this.aaiClient, "Update");
             this.deleteStore = new AAITransactionStore(this.aaiClient, "Delete");

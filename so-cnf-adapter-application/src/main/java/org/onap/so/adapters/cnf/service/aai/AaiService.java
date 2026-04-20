@@ -4,6 +4,7 @@
  * ================================================================================
  * Copyright (C) 2021 Samsung Electronics Co. Ltd. All rights reserved.
  * Modifications Copyright (C) 2021 Orange.
+ * Modifications Copyright (C) 2026 Deutsche Telekom AG.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,9 +29,11 @@ import org.onap.so.adapters.cnf.model.aai.AaiRequest;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceResourceStatus;
 import org.onap.so.adapters.cnf.model.statuscheck.K8sRbInstanceStatus;
 import org.onap.so.adapters.cnf.util.IAaiRepository;
+import org.onap.so.client.ClientBuilderCustomizer;
 import org.onap.so.client.exception.BadResponseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,16 +47,19 @@ public class AaiService {
     private final MulticloudClient multicloudClient;
     private final AaiResponseParser responseParser;
     private final AaiConfiguration configuration;
+    private final ClientBuilderCustomizer clientBuilderCustomizer;
 
-    public AaiService(MulticloudClient multicloudClient, AaiResponseParser responseParser, AaiConfiguration configuration) {
+    public AaiService(MulticloudClient multicloudClient, AaiResponseParser responseParser, AaiConfiguration configuration,
+            @Nullable ClientBuilderCustomizer clientBuilderCustomizer) {
         this.multicloudClient = multicloudClient;
         this.responseParser = responseParser;
         this.configuration = configuration;
+        this.clientBuilderCustomizer = clientBuilderCustomizer;
     }
 
     public void aaiUpdate(AaiRequest aaiRequest) throws BadResponseException, BulkProcessFailed {
         List<KubernetesResource> k8sResList = parseStatus(aaiRequest);
-        IAaiRepository aaiRepository = IAaiRepository.instance(configuration.isEnabled());
+        IAaiRepository aaiRepository = IAaiRepository.instance(configuration.isEnabled(), clientBuilderCustomizer);
         k8sResList.forEach(status -> aaiRepository.update(status, aaiRequest));
         aaiRepository.delete(aaiRequest, k8sResList);
         aaiRepository.commit(false);
@@ -67,7 +73,7 @@ public class AaiService {
             log.warn("Undefined instance ID aai-delete attempt. Skipping aai-delete");
             enabled = false;
         }
-        IAaiRepository aaiRepository = IAaiRepository.instance(enabled);
+        IAaiRepository aaiRepository = IAaiRepository.instance(enabled, clientBuilderCustomizer);
         aaiRepository.delete(aaiRequest, List.of());
         aaiRepository.commit(false);
     }
