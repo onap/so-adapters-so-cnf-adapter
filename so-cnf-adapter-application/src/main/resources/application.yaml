@@ -48,6 +48,9 @@ spring:
       - b3
     web:
       skip-pattern: ${TRACING_SKIP_PATTERN}
+  zipkin:
+    base-url: ${COLLECTOR_URL:http://jaeger-collector.istio-system:9411}
+
 
  # jpa:
  #   show-sql: false

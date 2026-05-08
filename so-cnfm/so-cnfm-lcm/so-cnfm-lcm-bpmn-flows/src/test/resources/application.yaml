@@ -12,43 +12,57 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 spring:
-   main:
-      allow-bean-definition-overriding: true
-   datasource:
-      hikari:
-         camunda:
-            jdbcUrl: jdbc:h2:mem:example-simple;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-            driver-class-name: org.h2.Driver
-            pool-name: cnfm-lcm-bpmn-pool
-            registerMbeans: true
-         cnfm:
-            jdbcUrl: jdbc:h2:mem:nfvo;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;INIT=CREATE SCHEMA IF NOT EXISTS cnfm;MODE=MYSQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE
-            driver-class-name: org.h2.Driver
-            pool-name: cnfm-lcm-bpmn-pool
-            registerMbeans: true
-   jpa:
-      generate-ddl: true
-      hibernate:
-         ddl-auto: create
-   sleuth:
-    enabled: false
+  application:
+    name: so-cnfm-lcm
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    hikari:
+      camunda:
+        jdbcUrl: jdbc:h2:mem:example-simple;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+        driver-class-name: org.h2.Driver
+        pool-name: cnfm-lcm-bpmn-pool
+        registerMbeans: true
+      cnfm:
+        jdbcUrl: jdbc:h2:mem:nfvo;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;INIT=CREATE SCHEMA IF NOT EXISTS cnfm;MODE=MYSQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE
+        driver-class-name: org.h2.Driver
+        pool-name: cnfm-lcm-bpmn-pool
+        registerMbeans: true
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+  sleuth:
+    enabled: ${TRACING_ENABLED:false}
+    trace-id128: true
+    sampler:
+      probability: ${TRACING_SAMPLING_PROBABILITY:1.0}
+    supports-join: false
+    propagation:
+      type:
+      - w3c
+      - b3
+    web:
+      skip-pattern: ${TRACING_SKIP_PATTERN}
+  zipkin:
+    base-url: ${COLLECTOR_URL:http://jaeger-collector.istio-system:9411}
 hibernate:
-   dialect: org.hibernate.dialect.H2Dialect
-   hbm2ddl:
-      auto: create
+  dialect: org.hibernate.dialect.H2Dialect
+  hbm2ddl:
+    auto: create
 aai:
-   version: v19
-   endpoint: http://localhost:${wiremock.server.port}
+  version: v19
+  endpoint: http://localhost:${wiremock.server.port}
 sdc:
-   endpoint: http://localhost:${wiremock.server.port}
+  endpoint: http://localhost:${wiremock.server.port}
 logging:
-   level:
-      org.reflections.Reflections: ERROR
+  level:
+    org.reflections.Reflections: ERROR
 cnfm:
-   kube-configs-dir: ${java.io.tmpdir}/kube-configs
-   csar:
-      dir: ${java.io.tmpdir}
+  kube-configs-dir: ${java.io.tmpdir}/kube-configs
+  csar:
+    dir: ${java.io.tmpdir}
 kubernetes:
-   client:
-      http-request:
-         timeoutSeconds: 1
+  client:
+    http-request:
+      timeoutSeconds: 1
