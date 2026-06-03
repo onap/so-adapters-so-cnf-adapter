@@ -1,0 +1,1624 @@
+[[1;34mINFO[m] Scanning for projects...
+Downloading from camunda-bpm: https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/so/1.18.0-SNAPSHOT/maven-metadata.xml
+[[1;33mWARNING[m] Could not transfer metadata org.onap.so:so:1.18.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/so/1.18.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1mReactor Build Order:[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] SO CNF Adapter                                                     [pom]
+[[1;34mINFO[m] SO CNF Application Jar                                             [jar]
+[[1;34mINFO[m] SO CNFM (Cloud-Native Network Function Manager)                    [pom]
+[[1;34mINFO[m] SO CNFM LCM Manager                                                [pom]
+[[1;34mINFO[m] SO CNFM LCM Manager Api                                            [jar]
+[[1;34mINFO[m] SO CNFM LCM Database Service                                       [jar]
+[[1;34mINFO[m] SO CNFM LCM BPMN Flows                                             [jar]
+[[1;34mINFO[m] SO CNFM LCM Service                                                [jar]
+[[1;34mINFO[m] SO CNFM LCM Application                                            [jar]
+[[1;34mINFO[m] Packages                                                           [pom]
+[[1;33mWARNING[m] The artifact org.codehaus.mojo:sonar-maven-plugin:jar:4.0.0.4121 has been relocated to org.sonarsource.scanner.maven:sonar-maven-plugin:jar:4.0.0.4121: SonarQube plugin was moved to SonarSource organisation
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m---------< [0;36morg.onap.so.adapters.so-cnf-adapter:so-cnf-adapter[0;1m >---------[m
+[[1;34mINFO[m] [1mBuilding SO CNF Adapter 1.15.0-SNAPSHOT                           [1/10][m
+[[1;34mINFO[m] [1m--------------------------------[ pom ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-dependency-plugin:2.8:tree[m [1m(default-cli)[m @ [36mso-cnf-adapter[0;1m ---[m
+[[1;34mINFO[m] org.onap.so.adapters.so-cnf-adapter:so-cnf-adapter:pom:1.15.0-SNAPSHOT
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-slf4j:jar:1.6.9:compile
+[[1;34mINFO[m] |  \- org.slf4j:slf4j-api:jar:1.7.36:compile
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-filter-base:jar:1.6.9:compile
+[[1;34mINFO[m] |  \- org.aspectj:aspectjrt:jar:1.9.7:compile
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-filter-spring:jar:1.6.9:compile
+[[1;34mINFO[m] |  \- org.springframework:spring-webmvc:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-aop:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-beans:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-context:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-core:jar:5.3.31:compile
+[[1;34mINFO[m] |     |  \- org.springframework:spring-jcl:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-expression:jar:5.3.31:compile
+[[1;34mINFO[m] |     \- org.springframework:spring-web:jar:5.3.31:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-core:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:2.14.3:compile
+[[1;34mINFO[m] |  +- jakarta.xml.bind:jakarta.xml.bind-api:jar:2.3.3:compile
+[[1;34mINFO[m] |  \- jakarta.activation:jakarta.activation-api:jar:1.2.2:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-databind:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-annotations:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:jar:2.14.3:compile
+[[1;34mINFO[m] +- javax.ws.rs:javax.ws.rs-api:jar:2.1:compile
+[[1;34mINFO[m] +- javax.annotation:javax.annotation-api:jar:1.3.2:compile
+[[1;34mINFO[m] +- javax.inject:javax.inject:jar:1:compile
+[[1;34mINFO[m] +- org.mockito:mockito-core:jar:4.5.1:test
+[[1;34mINFO[m] |  +- net.bytebuddy:byte-buddy:jar:1.12.23:test
+[[1;34mINFO[m] |  +- net.bytebuddy:byte-buddy-agent:jar:1.12.23:test
+[[1;34mINFO[m] |  \- org.objenesis:objenesis:jar:3.2:test
+[[1;34mINFO[m] +- org.hamcrest:hamcrest-core:jar:2.2:compile
+[[1;34mINFO[m] |  \- org.hamcrest:hamcrest:jar:2.2:compile
+[[1;34mINFO[m] +- org.hamcrest:hamcrest-library:jar:2.2:compile
+[[1;34mINFO[m] +- junit:junit:jar:4.13.2:test
+[[1;34mINFO[m] +- xmlunit:xmlunit:jar:1.6:test
+[[1;34mINFO[m] +- com.github.tomakehurst:wiremock-jre8-standalone:jar:2.35.0:test
+[[1;34mINFO[m] +- com.openpojo:openpojo:jar:0.8.13:compile
+[[1;34mINFO[m] +- org.assertj:assertj-core:jar:3.16.0:test
+[[1;34mINFO[m] +- com.googlecode.junit-toolbox:junit-toolbox:jar:2.4:test
+[[1;34mINFO[m] |  \- commons-io:commons-io:jar:2.19.0:compile
+[[1;34mINFO[m] \- org.projectlombok:lombok:jar:1.18.38:compile
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m---< [0;36morg.onap.so.adapters.so-cnf-adapter:so-cnf-adapter-application[0;1m >---[m
+[[1;34mINFO[m] [1mBuilding SO CNF Application Jar 1.15.0-SNAPSHOT                   [2/10][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+Downloading from camunda-bpm: https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/aai-client/1.18.0-SNAPSHOT/maven-metadata.xml
+[[1;33mWARNING[m] Could not transfer metadata org.onap.so:aai-client:1.18.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/aai-client/1.18.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;33mWARNING[m] org.onap.so:aai-client:1.18.0-SNAPSHOT/maven-metadata.xmlfailed to transfer from https://artifacts.camunda.com/artifactory/camunda-bpm/ during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of camunda-bpm has elapsed or updates are forced. Original error: Could not transfer metadata org.onap.so:aai-client:1.18.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/aai-client/1.18.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+Downloading from camunda-bpm: https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/graph-inventory/1.18.0-SNAPSHOT/maven-metadata.xml
+[[1;33mWARNING[m] Could not transfer metadata org.onap.so:graph-inventory:1.18.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/graph-inventory/1.18.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;33mWARNING[m] org.onap.so:so:1.18.0-SNAPSHOT/maven-metadata.xmlfailed to transfer from https://artifacts.camunda.com/artifactory/camunda-bpm/ during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of camunda-bpm has elapsed or updates are forced. Original error: Could not transfer metadata org.onap.so:so:1.18.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/so/1.18.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+Downloading from camunda-bpm: https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/aai-fluent-uri-builder/1.18.0-SNAPSHOT/maven-metadata.xml
+[[1;33mWARNING[m] Could not transfer metadata org.onap.so:aai-fluent-uri-builder:1.18.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/aai-fluent-uri-builder/1.18.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;33mWARNING[m] org.onap.so:aai-fluent-uri-builder:1.18.0-SNAPSHOT/maven-metadata.xmlfailed to transfer from https://artifacts.camunda.com/artifactory/camunda-bpm/ during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of camunda-bpm has elapsed or updates are forced. Original error: Could not transfer metadata org.onap.so:aai-fluent-uri-builder:1.18.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/aai-fluent-uri-builder/1.18.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+Downloading from camunda-bpm: https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/common/common/1.18.0-SNAPSHOT/maven-metadata.xml
+[[1;33mWARNING[m] Could not transfer metadata org.onap.so.common:common:1.18.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/common/common/1.18.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;33mWARNING[m] org.onap.so.common:common:1.18.0-SNAPSHOT/maven-metadata.xmlfailed to transfer from https://artifacts.camunda.com/artifactory/camunda-bpm/ during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of camunda-bpm has elapsed or updates are forced. Original error: Could not transfer metadata org.onap.so.common:common:1.18.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/common/common/1.18.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+Downloading from camunda-bpm: https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/common/1.18.0-SNAPSHOT/maven-metadata.xml
+[[1;33mWARNING[m] Could not transfer metadata org.onap.so:common:1.18.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/common/1.18.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+Downloading from camunda-bpm: https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/utils/1.18.0-SNAPSHOT/maven-metadata.xml
+[[1;33mWARNING[m] Could not transfer metadata org.onap.so:utils:1.18.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/utils/1.18.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;33mWARNING[m] org.onap.so:utils:1.18.0-SNAPSHOT/maven-metadata.xmlfailed to transfer from https://artifacts.camunda.com/artifactory/camunda-bpm/ during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of camunda-bpm has elapsed or updates are forced. Original error: Could not transfer metadata org.onap.so:utils:1.18.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/utils/1.18.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+Downloading from camunda-bpm: https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/logger/1.18.0-SNAPSHOT/maven-metadata.xml
+[[1;33mWARNING[m] Could not transfer metadata org.onap.so:logger:1.18.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/logger/1.18.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;33mWARNING[m] org.onap.so:logger:1.18.0-SNAPSHOT/maven-metadata.xmlfailed to transfer from https://artifacts.camunda.com/artifactory/camunda-bpm/ during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of camunda-bpm has elapsed or updates are forced. Original error: Could not transfer metadata org.onap.so:logger:1.18.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/logger/1.18.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+Downloading from camunda-bpm: https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/common/clients/clients/1.18.0-SNAPSHOT/maven-metadata.xml
+[[1;33mWARNING[m] Could not transfer metadata org.onap.so.common.clients:clients:1.18.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/common/clients/clients/1.18.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;33mWARNING[m] org.onap.so.common.clients:clients:1.18.0-SNAPSHOT/maven-metadata.xmlfailed to transfer from https://artifacts.camunda.com/artifactory/camunda-bpm/ during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of camunda-bpm has elapsed or updates are forced. Original error: Could not transfer metadata org.onap.so.common.clients:clients:1.18.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/common/clients/clients/1.18.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+Downloading from camunda-bpm: https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/clients-base/1.18.0-SNAPSHOT/maven-metadata.xml
+[[1;33mWARNING[m] Could not transfer metadata org.onap.so:clients-base:1.18.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/clients-base/1.18.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;33mWARNING[m] org.onap.so:clients-base:1.18.0-SNAPSHOT/maven-metadata.xmlfailed to transfer from https://artifacts.camunda.com/artifactory/camunda-bpm/ during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of camunda-bpm has elapsed or updates are forced. Original error: Could not transfer metadata org.onap.so:clients-base:1.18.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/clients-base/1.18.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-dependency-plugin:2.8:tree[m [1m(default-cli)[m @ [36mso-cnf-adapter-application[0;1m ---[m
+[[1;34mINFO[m] org.onap.so.adapters.so-cnf-adapter:so-cnf-adapter-application:jar:1.15.0-SNAPSHOT
+[[1;34mINFO[m] +- org.springframework.boot:spring-boot-starter-actuator:jar:2.7.18:compile
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-starter:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- org.springframework.boot:spring-boot:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- org.springframework.boot:spring-boot-autoconfigure:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- org.springframework.boot:spring-boot-starter-logging:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  |  +- ch.qos.logback:logback-classic:jar:1.2.11:compile
+[[1;34mINFO[m] |  |  |  +- org.apache.logging.log4j:log4j-to-slf4j:jar:2.17.2:compile
+[[1;34mINFO[m] |  |  |  |  \- org.apache.logging.log4j:log4j-api:jar:2.17.2:compile
+[[1;34mINFO[m] |  |  |  \- org.slf4j:jul-to-slf4j:jar:1.7.36:compile
+[[1;34mINFO[m] |  |  \- org.yaml:snakeyaml:jar:1.31:compile
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-actuator-autoconfigure:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- org.springframework.boot:spring-boot-actuator:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  \- com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:2.13.5:compile
+[[1;34mINFO[m] |  \- io.micrometer:micrometer-core:jar:1.9.17:compile
+[[1;34mINFO[m] |     +- org.hdrhistogram:HdrHistogram:jar:2.1.12:compile
+[[1;34mINFO[m] |     \- org.latencyutils:LatencyUtils:jar:2.0.3:runtime
+[[1;34mINFO[m] +- org.springframework.cloud:spring-cloud-starter-sleuth:jar:3.1.10:compile
+[[1;34mINFO[m] |  +- org.springframework.cloud:spring-cloud-starter:jar:3.1.8:compile
+[[1;34mINFO[m] |  |  +- org.springframework.cloud:spring-cloud-context:jar:3.1.8:compile
+[[1;34mINFO[m] |  |  \- org.springframework.security:spring-security-rsa:jar:1.0.12.RELEASE:compile
+[[1;34mINFO[m] |  |     \- org.bouncycastle:bcpkix-jdk18on:jar:1.73:compile
+[[1;34mINFO[m] |  |        +- org.bouncycastle:bcprov-jdk18on:jar:1.73:compile
+[[1;34mINFO[m] |  |        \- org.bouncycastle:bcutil-jdk18on:jar:1.73:compile
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-starter-aop:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- org.springframework:spring-aop:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  \- org.aspectj:aspectjweaver:jar:1.9.7:compile
+[[1;34mINFO[m] |  +- org.springframework.cloud:spring-cloud-sleuth-autoconfigure:jar:3.1.10:compile
+[[1;34mINFO[m] |  |  \- org.springframework:spring-context:jar:5.3.31:compile
+[[1;34mINFO[m] |  \- org.springframework.cloud:spring-cloud-sleuth-brave:jar:3.1.10:compile
+[[1;34mINFO[m] |     +- io.zipkin.brave:brave-context-slf4j:jar:5.13.11:compile
+[[1;34mINFO[m] |     +- io.zipkin.brave:brave-instrumentation-messaging:jar:5.13.11:compile
+[[1;34mINFO[m] |     +- io.zipkin.brave:brave-instrumentation-rpc:jar:5.13.11:compile
+[[1;34mINFO[m] |     +- io.zipkin.brave:brave-instrumentation-spring-rabbit:jar:5.13.11:compile
+[[1;34mINFO[m] |     +- io.zipkin.brave:brave-instrumentation-kafka-clients:jar:5.13.11:compile
+[[1;34mINFO[m] |     +- io.zipkin.brave:brave-instrumentation-kafka-streams:jar:5.13.11:compile
+[[1;34mINFO[m] |     +- io.zipkin.brave:brave-instrumentation-httpclient:jar:5.13.11:compile
+[[1;34mINFO[m] |     +- io.zipkin.brave:brave-instrumentation-httpasyncclient:jar:5.13.11:compile
+[[1;34mINFO[m] |     +- io.zipkin.brave:brave-instrumentation-jms:jar:5.13.11:compile
+[[1;34mINFO[m] |     +- io.zipkin.brave:brave-instrumentation-mongodb:jar:5.13.11:compile
+[[1;34mINFO[m] |     +- io.zipkin.aws:brave-propagation-aws:jar:0.21.3:compile
+[[1;34mINFO[m] |     \- io.zipkin.reporter2:zipkin-reporter-metrics-micrometer:jar:2.16.3:compile
+[[1;34mINFO[m] +- org.springframework.cloud:spring-cloud-sleuth-zipkin:jar:3.1.10:compile
+[[1;34mINFO[m] |  +- org.springframework.cloud:spring-cloud-sleuth-instrumentation:jar:3.1.10:compile
+[[1;34mINFO[m] |  |  \- org.springframework.cloud:spring-cloud-sleuth-api:jar:3.1.10:compile
+[[1;34mINFO[m] |  +- org.springframework:spring-web:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  \- org.springframework:spring-beans:jar:5.3.31:compile
+[[1;34mINFO[m] |  +- org.springframework.cloud:spring-cloud-commons:jar:3.1.8:compile
+[[1;34mINFO[m] |  |  \- org.springframework.security:spring-security-crypto:jar:5.7.11:compile
+[[1;34mINFO[m] |  +- io.zipkin.zipkin2:zipkin:jar:2.23.2:compile
+[[1;34mINFO[m] |  +- io.zipkin.reporter2:zipkin-reporter:jar:2.16.3:compile
+[[1;34mINFO[m] |  +- io.zipkin.reporter2:zipkin-reporter-brave:jar:2.16.3:compile
+[[1;34mINFO[m] |  +- io.zipkin.reporter2:zipkin-sender-kafka:jar:2.16.3:compile
+[[1;34mINFO[m] |  +- io.zipkin.reporter2:zipkin-sender-activemq-client:jar:2.16.3:compile
+[[1;34mINFO[m] |  \- io.zipkin.reporter2:zipkin-sender-amqp-client:jar:2.16.3:compile
+[[1;34mINFO[m] +- io.zipkin.brave:brave-instrumentation-jaxrs2:jar:5.13.11:compile
+[[1;34mINFO[m] |  +- io.zipkin.brave:brave-instrumentation-http:jar:5.13.11:compile
+[[1;34mINFO[m] |  \- io.zipkin.brave:brave:jar:5.13.11:compile
+[[1;34mINFO[m] +- org.springframework.boot:spring-boot-starter-web:jar:2.7.18:compile
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-starter-json:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- com.fasterxml.jackson.datatype:jackson-datatype-jdk8:jar:2.13.5:compile
+[[1;34mINFO[m] |  |  \- com.fasterxml.jackson.module:jackson-module-parameter-names:jar:2.13.5:compile
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-starter-tomcat:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- org.apache.tomcat.embed:tomcat-embed-core:jar:9.0.83:compile
+[[1;34mINFO[m] |  |  +- org.apache.tomcat.embed:tomcat-embed-el:jar:9.0.83:compile
+[[1;34mINFO[m] |  |  \- org.apache.tomcat.embed:tomcat-embed-websocket:jar:9.0.83:compile
+[[1;34mINFO[m] |  \- org.springframework:spring-webmvc:jar:5.3.31:compile
+[[1;34mINFO[m] |     \- org.springframework:spring-expression:jar:5.3.31:compile
+[[1;34mINFO[m] +- org.springframework.boot:spring-boot-starter-jdbc:jar:2.7.18:compile
+[[1;34mINFO[m] |  +- com.zaxxer:HikariCP:jar:4.0.3:compile
+[[1;34mINFO[m] |  \- org.springframework:spring-jdbc:jar:5.3.31:compile
+[[1;34mINFO[m] |     \- org.springframework:spring-tx:jar:5.3.31:compile
+[[1;34mINFO[m] +- org.apache.cxf:cxf-spring-boot-starter-jaxws:jar:3.4.10:compile
+[[1;34mINFO[m] |  +- org.apache.cxf:cxf-spring-boot-autoconfigure:jar:3.4.10:compile
+[[1;34mINFO[m] |  +- org.apache.cxf:cxf-rt-transports-http:jar:3.4.10:compile
+[[1;34mINFO[m] |  |  \- org.apache.cxf:cxf-core:jar:3.4.10:compile
+[[1;34mINFO[m] |  |     +- com.fasterxml.woodstox:woodstox-core:jar:6.4.0:compile
+[[1;34mINFO[m] |  |     \- org.apache.ws.xmlschema:xmlschema-core:jar:2.2.5:compile
+[[1;34mINFO[m] |  +- org.apache.cxf:cxf-rt-frontend-jaxws:jar:3.4.10:compile
+[[1;34mINFO[m] |  |  +- xml-resolver:xml-resolver:jar:1.2:compile
+[[1;34mINFO[m] |  |  +- org.ow2.asm:asm:jar:9.4:compile
+[[1;34mINFO[m] |  |  +- org.apache.cxf:cxf-rt-bindings-soap:jar:3.4.10:compile
+[[1;34mINFO[m] |  |  |  +- org.apache.cxf:cxf-rt-wsdl:jar:3.4.10:compile
+[[1;34mINFO[m] |  |  |  |  \- wsdl4j:wsdl4j:jar:1.6.3:compile
+[[1;34mINFO[m] |  |  |  \- org.apache.cxf:cxf-rt-databinding-jaxb:jar:3.4.10:compile
+[[1;34mINFO[m] |  |  +- org.apache.cxf:cxf-rt-bindings-xml:jar:3.4.10:compile
+[[1;34mINFO[m] |  |  +- org.apache.cxf:cxf-rt-frontend-simple:jar:3.4.10:compile
+[[1;34mINFO[m] |  |  \- org.apache.cxf:cxf-rt-ws-addr:jar:3.4.10:compile
+[[1;34mINFO[m] |  |     \- org.apache.cxf:cxf-rt-ws-policy:jar:3.4.10:compile
+[[1;34mINFO[m] |  |        \- org.apache.neethi:neethi:jar:3.1.1:compile
+[[1;34mINFO[m] |  +- org.apache.cxf:cxf-rt-features-metrics:jar:3.4.10:compile
+[[1;34mINFO[m] |  +- jakarta.validation:jakarta.validation-api:jar:2.0.2:compile
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-starter-validation:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  \- org.hibernate.validator:hibernate-validator:jar:6.2.5.Final:compile
+[[1;34mINFO[m] |  +- jakarta.annotation:jakarta.annotation-api:jar:1.3.5:compile
+[[1;34mINFO[m] |  +- jakarta.xml.ws:jakarta.xml.ws-api:jar:2.3.3:compile
+[[1;34mINFO[m] |  +- jakarta.jws:jakarta.jws-api:jar:2.1.0:compile
+[[1;34mINFO[m] |  +- jakarta.xml.soap:jakarta.xml.soap-api:jar:1.4.2:compile
+[[1;34mINFO[m] |  +- com.sun.activation:jakarta.activation:jar:1.2.2:compile
+[[1;34mINFO[m] |  +- com.sun.xml.messaging.saaj:saaj-impl:jar:1.5.3:compile
+[[1;34mINFO[m] |  |  \- org.jvnet.staxex:stax-ex:jar:1.8.3:compile
+[[1;34mINFO[m] |  \- org.apache.geronimo.specs:geronimo-jta_1.1_spec:jar:1.1.1:compile
+[[1;34mINFO[m] +- org.apache.cxf:cxf-spring-boot-starter-jaxrs:jar:3.4.10:compile
+[[1;34mINFO[m] |  +- org.apache.cxf:cxf-rt-frontend-jaxrs:jar:3.4.10:compile
+[[1;34mINFO[m] |  |  +- jakarta.ws.rs:jakarta.ws.rs-api:jar:2.1.6:compile
+[[1;34mINFO[m] |  |  \- org.apache.cxf:cxf-rt-security:jar:3.4.10:compile
+[[1;34mINFO[m] |  \- org.apache.cxf:cxf-rt-rs-client:jar:3.4.10:compile
+[[1;34mINFO[m] +- io.micrometer:micrometer-registry-prometheus:jar:1.9.17:compile
+[[1;34mINFO[m] |  \- io.prometheus:simpleclient_common:jar:0.15.0:compile
+[[1;34mINFO[m] |     \- io.prometheus:simpleclient:jar:0.15.0:compile
+[[1;34mINFO[m] |        +- io.prometheus:simpleclient_tracer_otel:jar:0.15.0:compile
+[[1;34mINFO[m] |        |  \- io.prometheus:simpleclient_tracer_common:jar:0.15.0:compile
+[[1;34mINFO[m] |        \- io.prometheus:simpleclient_tracer_otel_agent:jar:0.15.0:compile
+[[1;34mINFO[m] +- org.apache.httpcomponents:httpmime:jar:4.5.14:compile
+[[1;34mINFO[m] +- org.springframework.boot:spring-boot-starter-data-jpa:jar:2.7.18:compile
+[[1;34mINFO[m] |  +- jakarta.transaction:jakarta.transaction-api:jar:1.3.3:compile
+[[1;34mINFO[m] |  +- jakarta.persistence:jakarta.persistence-api:jar:2.2.3:compile
+[[1;34mINFO[m] |  +- org.hibernate:hibernate-core:jar:5.6.15.Final:compile
+[[1;34mINFO[m] |  |  +- org.jboss.logging:jboss-logging:jar:3.4.3.Final:compile
+[[1;34mINFO[m] |  |  +- antlr:antlr:jar:2.7.7:compile
+[[1;34mINFO[m] |  |  +- org.jboss:jandex:jar:2.4.2.Final:compile
+[[1;34mINFO[m] |  |  +- com.fasterxml:classmate:jar:1.5.1:compile
+[[1;34mINFO[m] |  |  +- org.hibernate.common:hibernate-commons-annotations:jar:5.1.2.Final:compile
+[[1;34mINFO[m] |  |  \- org.glassfish.jaxb:jaxb-runtime:jar:2.3.9:compile
+[[1;34mINFO[m] |  |     +- org.glassfish.jaxb:txw2:jar:2.3.9:compile
+[[1;34mINFO[m] |  |     \- com.sun.istack:istack-commons-runtime:jar:3.0.12:compile
+[[1;34mINFO[m] |  +- org.springframework.data:spring-data-jpa:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- org.springframework.data:spring-data-commons:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  \- org.springframework:spring-orm:jar:5.3.31:compile
+[[1;34mINFO[m] |  \- org.springframework:spring-aspects:jar:5.3.31:compile
+[[1;34mINFO[m] +- org.springframework.boot:spring-boot-starter-test:jar:2.7.18:test
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-test:jar:2.7.18:test
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-test-autoconfigure:jar:2.7.18:test
+[[1;34mINFO[m] |  +- com.jayway.jsonpath:json-path:jar:2.7.0:compile
+[[1;34mINFO[m] |  |  \- net.minidev:json-smart:jar:2.4.11:compile
+[[1;34mINFO[m] |  |     \- net.minidev:accessors-smart:jar:2.4.11:compile
+[[1;34mINFO[m] |  +- jakarta.xml.bind:jakarta.xml.bind-api:jar:2.3.3:compile
+[[1;34mINFO[m] |  +- org.hamcrest:hamcrest:jar:2.2:compile
+[[1;34mINFO[m] |  +- org.skyscreamer:jsonassert:jar:1.5.1:test
+[[1;34mINFO[m] |  +- org.springframework:spring-core:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  \- org.springframework:spring-jcl:jar:5.3.31:compile
+[[1;34mINFO[m] |  +- org.springframework:spring-test:jar:5.3.31:test
+[[1;34mINFO[m] |  \- org.xmlunit:xmlunit-core:jar:2.9.1:test
+[[1;34mINFO[m] +- org.junit.vintage:junit-vintage-engine:jar:5.8.2:test
+[[1;34mINFO[m] |  +- org.junit.platform:junit-platform-engine:jar:1.8.2:test
+[[1;34mINFO[m] |  |  +- org.opentest4j:opentest4j:jar:1.2.0:test
+[[1;34mINFO[m] |  |  \- org.junit.platform:junit-platform-commons:jar:1.8.2:test
+[[1;34mINFO[m] |  \- org.apiguardian:apiguardian-api:jar:1.1.2:test
+[[1;34mINFO[m] +- org.apache.httpcomponents:httpclient:jar:4.5.14:compile
+[[1;34mINFO[m] |  \- commons-codec:commons-codec:jar:1.15:compile
+[[1;34mINFO[m] +- org.apache.httpcomponents:httpcore:jar:4.4.4:compile
+[[1;34mINFO[m] +- org.springframework.cloud:spring-cloud-contract-wiremock:jar:2.2.8.RELEASE:test
+[[1;34mINFO[m] +- org.onap.so:aai-client:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  +- org.onap.so:aai-fluent-uri-builder:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  |  +- com.google.guava:guava:jar:28.1-jre:compile
+[[1;34mINFO[m] |  |  |  +- com.google.guava:failureaccess:jar:1.0.1:compile
+[[1;34mINFO[m] |  |  |  +- com.google.guava:listenablefuture:jar:9999.0-empty-to-avoid-conflict-with-guava:compile
+[[1;34mINFO[m] |  |  |  +- com.google.code.findbugs:jsr305:jar:3.0.2:compile
+[[1;34mINFO[m] |  |  |  +- org.checkerframework:checker-qual:jar:2.8.1:compile
+[[1;34mINFO[m] |  |  |  +- com.google.errorprone:error_prone_annotations:jar:2.3.2:compile
+[[1;34mINFO[m] |  |  |  +- com.google.j2objc:j2objc-annotations:jar:1.3:compile
+[[1;34mINFO[m] |  |  |  \- org.codehaus.mojo:animal-sniffer-annotations:jar:1.18:compile
+[[1;34mINFO[m] |  |  +- org.reflections:reflections:jar:0.10.2:compile
+[[1;34mINFO[m] |  |  |  \- org.javassist:javassist:jar:3.28.0-GA:compile
+[[1;34mINFO[m] |  |  +- org.onap.aai.schema-service:aai-annotations:jar:1.9.2:compile
+[[1;34mINFO[m] |  |  \- org.apache.commons:commons-lang3:jar:3.12.0:compile
+[[1;34mINFO[m] |  +- org.onap.so.common:common:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  |  +- org.onap.so:utils:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  |  |  \- org.camunda.bpm:camunda-external-task-client:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |     +- org.camunda.commons:camunda-commons-logging:jar:1.10.0:compile
+[[1;34mINFO[m] |  |  |     \- org.camunda.commons:camunda-commons-typed-values:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |        \- org.camunda.commons:camunda-commons-utils:jar:1.10.0:compile
+[[1;34mINFO[m] |  |  +- org.onap.so:logger:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  |  |  \- ch.qos.logback:logback-core:jar:1.2.11:compile
+[[1;34mINFO[m] |  |  +- org.onap.so.common.clients:clients:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  |  |  +- org.onap.so:clients-base:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  |  |  |  +- org.javatuples:javatuples:jar:1.2:compile
+[[1;34mINFO[m] |  |  |  |  \- net.jodah:failsafe:jar:2.0.1:compile
+[[1;34mINFO[m] |  |  |  +- org.glassfish.jersey.core:jersey-client:jar:2.35:compile
+[[1;34mINFO[m] |  |  |  |  +- org.glassfish.jersey.core:jersey-common:jar:2.35:compile
+[[1;34mINFO[m] |  |  |  |  |  \- org.glassfish.hk2:osgi-resource-locator:jar:1.0.3:compile
+[[1;34mINFO[m] |  |  |  |  \- org.glassfish.hk2.external:jakarta.inject:jar:2.6.1:compile
+[[1;34mINFO[m] |  |  |  +- org.glassfish.jersey.inject:jersey-hk2:jar:2.35:compile
+[[1;34mINFO[m] |  |  |  |  \- org.glassfish.hk2:hk2-locator:jar:2.6.1:compile
+[[1;34mINFO[m] |  |  |  |     +- org.glassfish.hk2.external:aopalliance-repackaged:jar:2.6.1:compile
+[[1;34mINFO[m] |  |  |  |     +- org.glassfish.hk2:hk2-api:jar:2.6.1:compile
+[[1;34mINFO[m] |  |  |  |     \- org.glassfish.hk2:hk2-utils:jar:2.6.1:compile
+[[1;34mINFO[m] |  |  |  \- org.apache.kafka:kafka-clients:jar:3.1.2:compile
+[[1;34mINFO[m] |  |  |     +- com.github.luben:zstd-jni:jar:1.5.0-4:runtime
+[[1;34mINFO[m] |  |  |     +- org.lz4:lz4-java:jar:1.8.0:runtime
+[[1;34mINFO[m] |  |  |     \- org.xerial.snappy:snappy-java:jar:1.1.8.4:runtime
+[[1;34mINFO[m] |  |  +- org.springframework.boot:spring-boot-starter-security:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  |  +- org.springframework.security:spring-security-config:jar:5.7.11:compile
+[[1;34mINFO[m] |  |  |  |  \- org.springframework.security:spring-security-core:jar:5.7.11:compile
+[[1;34mINFO[m] |  |  |  \- org.springframework.security:spring-security-web:jar:5.7.11:compile
+[[1;34mINFO[m] |  |  +- org.modelmapper:modelmapper:jar:2.3.2:compile
+[[1;34mINFO[m] |  |  +- org.apache.tomcat:tomcat-catalina:jar:9.0.105:compile
+[[1;34mINFO[m] |  |  |  +- org.apache.tomcat:tomcat-servlet-api:jar:9.0.105:compile
+[[1;34mINFO[m] |  |  |  +- org.apache.tomcat:tomcat-jsp-api:jar:9.0.83:compile
+[[1;34mINFO[m] |  |  |  |  \- org.apache.tomcat:tomcat-el-api:jar:9.0.83:compile
+[[1;34mINFO[m] |  |  |  +- org.apache.tomcat:tomcat-juli:jar:9.0.105:compile
+[[1;34mINFO[m] |  |  |  +- org.apache.tomcat:tomcat-annotations-api:jar:9.0.83:compile
+[[1;34mINFO[m] |  |  |  +- org.apache.tomcat:tomcat-api:jar:9.0.105:compile
+[[1;34mINFO[m] |  |  |  +- org.apache.tomcat:tomcat-jni:jar:9.0.105:compile
+[[1;34mINFO[m] |  |  |  +- org.apache.tomcat:tomcat-coyote:jar:9.0.105:compile
+[[1;34mINFO[m] |  |  |  +- org.apache.tomcat:tomcat-util:jar:9.0.105:compile
+[[1;34mINFO[m] |  |  |  +- org.apache.tomcat:tomcat-util-scan:jar:9.0.105:compile
+[[1;34mINFO[m] |  |  |  \- org.apache.tomcat:tomcat-jaspic-api:jar:9.0.105:compile
+[[1;34mINFO[m] |  |  +- org.slf4j:slf4j-ext:jar:1.7.36:compile
+[[1;34mINFO[m] |  |  +- com.google.code.gson:gson:jar:2.9.1:compile
+[[1;34mINFO[m] |  |  +- org.springframework.retry:spring-retry:jar:1.3.1:compile
+[[1;34mINFO[m] |  |  +- org.json:json:jar:20250517:compile
+[[1;34mINFO[m] |  |  +- org.onap.appc.client:client-kit:jar:1.7.2:compile
+[[1;34mINFO[m] |  |  \- javax.validation:validation-api:jar:2.0.1.Final:compile
+[[1;34mINFO[m] |  +- org.ehcache:ehcache:jar:3.10.8:compile
+[[1;34mINFO[m] |  |  \- javax.cache:cache-api:jar:1.1.1:compile
+[[1;34mINFO[m] |  +- javax.servlet:javax.servlet-api:jar:4.0.1:compile
+[[1;34mINFO[m] |  +- org.onap.aai.schema-service:aai-schema:jar:1.12.10:compile
+[[1;34mINFO[m] |  |  +- org.jvnet.jaxb2_commons:jaxb2-basics:jar:0.11.1:compile
+[[1;34mINFO[m] |  |  |  +- org.jvnet.jaxb2_commons:jaxb2-basics-runtime:jar:0.11.1:compile
+[[1;34mINFO[m] |  |  |  +- org.jvnet.jaxb2_commons:jaxb2-basics-tools:jar:0.11.1:compile
+[[1;34mINFO[m] |  |  |  |  \- org.slf4j:jcl-over-slf4j:jar:1.7.36:compile
+[[1;34mINFO[m] |  |  |  \- com.google.code.javaparser:javaparser:jar:1.0.11:compile
+[[1;34mINFO[m] |  |  \- com.googlecode.json-simple:json-simple:jar:1.1.1:compile
+[[1;34mINFO[m] |  \- org.antlr:antlr4-runtime:jar:4.7:compile
+[[1;34mINFO[m] +- com.sun.xml.ws:jaxws-ri:pom:2.3.0:compile
+[[1;34mINFO[m] |  +- com.sun.org.apache.xml.internal:resolver:jar:20050927:compile
+[[1;34mINFO[m] |  +- com.sun.xml.ws:jaxws-rt:jar:2.3.0:compile
+[[1;34mINFO[m] |  |  +- com.sun.xml.bind:jaxb-core:jar:2.3.0:compile
+[[1;34mINFO[m] |  |  +- com.sun.xml.bind:jaxb-impl:jar:2.3.0:compile
+[[1;34mINFO[m] |  |  +- com.sun.xml.ws:policy:jar:2.7.2:compile
+[[1;34mINFO[m] |  |  +- org.glassfish.gmbal:gmbal-api-only:jar:3.1.0-b001:compile
+[[1;34mINFO[m] |  |  |  \- org.glassfish.external:management-api:jar:3.0.0-b012:compile
+[[1;34mINFO[m] |  |  +- com.sun.xml.stream.buffer:streambuffer:jar:1.5.4:compile
+[[1;34mINFO[m] |  |  +- org.jvnet.mimepull:mimepull:jar:1.9.7:compile
+[[1;34mINFO[m] |  |  +- com.sun.xml.fastinfoset:FastInfoset:jar:1.2.13:compile
+[[1;34mINFO[m] |  |  +- org.glassfish.ha:ha-api:jar:3.1.9:compile
+[[1;34mINFO[m] |  |  +- org.codehaus.woodstox:woodstox-core-asl:jar:4.4.1:runtime
+[[1;34mINFO[m] |  |  \- org.codehaus.woodstox:stax2-api:jar:3.1.4:compile
+[[1;34mINFO[m] |  +- com.sun.xml.ws:jaxws-tools:jar:2.3.0:compile
+[[1;34mINFO[m] |  |  +- com.sun.xml.bind:jaxb-xjc:jar:2.3.0:compile
+[[1;34mINFO[m] |  |  \- com.sun.xml.bind:jaxb-jxc:jar:2.3.0:compile
+[[1;34mINFO[m] |  +- com.sun.xml.ws:jaxws-eclipselink-plugin:jar:2.3.0:compile
+[[1;34mINFO[m] |  |  +- javax.mail:mail:jar:1.4.7:compile
+[[1;34mINFO[m] |  |  \- org.eclipse.persistence:eclipselink:jar:2.6.4:compile
+[[1;34mINFO[m] |  |     +- org.eclipse.persistence:javax.persistence:jar:2.1.1:compile
+[[1;34mINFO[m] |  |     +- org.eclipse.persistence:commonj.sdo:jar:2.1.1:compile
+[[1;34mINFO[m] |  |     \- org.glassfish:javax.json:jar:1.0.4:compile
+[[1;34mINFO[m] |  +- com.sun.xml.ws:sdo-eclipselink-plugin:jar:2.3.0:compile
+[[1;34mINFO[m] |  |  \- commonj.sdo:commonj.sdo:jar:2.1.1.v201112051852:compile
+[[1;34mINFO[m] |  +- com.sun.xml.ws:release-documentation:zip:docbook:2.3.0:compile
+[[1;34mINFO[m] |  +- com.sun.xml.ws:samples:zip:2.3.0:compile
+[[1;34mINFO[m] |  +- javax.xml.ws:jaxws-api:jar:2.3.1:compile
+[[1;34mINFO[m] |  +- javax.xml.bind:jaxb-api:jar:2.3.1:compile
+[[1;34mINFO[m] |  |  \- javax.activation:javax.activation-api:jar:1.2.0:compile
+[[1;34mINFO[m] |  +- javax.xml.soap:javax.xml.soap-api:jar:1.4.0:compile
+[[1;34mINFO[m] |  \- javax.jws:jsr181-api:jar:1.0-MR1:compile
+[[1;34mINFO[m] +- org.projectlombok:lombok:jar:1.18.30:provided
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-slf4j:jar:1.6.9:compile
+[[1;34mINFO[m] |  \- org.slf4j:slf4j-api:jar:1.7.36:compile
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-filter-base:jar:1.6.9:compile
+[[1;34mINFO[m] |  \- org.aspectj:aspectjrt:jar:1.9.7:compile
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-filter-spring:jar:1.6.9:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-core:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:2.14.3:compile
+[[1;34mINFO[m] |  \- jakarta.activation:jakarta.activation-api:jar:1.2.2:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-databind:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-annotations:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:jar:2.14.3:compile
+[[1;34mINFO[m] +- javax.ws.rs:javax.ws.rs-api:jar:2.1:compile
+[[1;34mINFO[m] +- javax.annotation:javax.annotation-api:jar:1.3.2:compile
+[[1;34mINFO[m] +- javax.inject:javax.inject:jar:1:compile
+[[1;34mINFO[m] +- org.mockito:mockito-core:jar:4.5.1:test
+[[1;34mINFO[m] |  +- net.bytebuddy:byte-buddy:jar:1.12.23:compile
+[[1;34mINFO[m] |  +- net.bytebuddy:byte-buddy-agent:jar:1.12.23:test
+[[1;34mINFO[m] |  \- org.objenesis:objenesis:jar:3.2:test
+[[1;34mINFO[m] +- org.hamcrest:hamcrest-core:jar:2.2:compile
+[[1;34mINFO[m] +- org.hamcrest:hamcrest-library:jar:2.2:compile
+[[1;34mINFO[m] +- junit:junit:jar:4.13.2:test
+[[1;34mINFO[m] +- xmlunit:xmlunit:jar:1.6:test
+[[1;34mINFO[m] +- com.github.tomakehurst:wiremock-jre8-standalone:jar:2.35.0:test
+[[1;34mINFO[m] +- com.openpojo:openpojo:jar:0.8.13:compile
+[[1;34mINFO[m] +- org.assertj:assertj-core:jar:3.16.0:test
+[[1;34mINFO[m] \- com.googlecode.junit-toolbox:junit-toolbox:jar:2.4:test
+[[1;34mINFO[m]    \- commons-io:commons-io:jar:2.19.0:compile
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m------------< [0;36morg.onap.so.adapters.so-cnf-adapter:so-cnfm[0;1m >-------------[m
+[[1;34mINFO[m] [1mBuilding SO CNFM (Cloud-Native Network Function Manager) 1.15.0-SNAPSHOT [3/10][m
+[[1;34mINFO[m] [1m--------------------------------[ pom ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-dependency-plugin:2.8:tree[m [1m(default-cli)[m @ [36mso-cnfm[0;1m ---[m
+[[1;34mINFO[m] org.onap.so.adapters.so-cnf-adapter:so-cnfm:pom:1.15.0-SNAPSHOT
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-slf4j:jar:1.6.9:compile
+[[1;34mINFO[m] |  \- org.slf4j:slf4j-api:jar:1.7.36:compile
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-filter-base:jar:1.6.9:compile
+[[1;34mINFO[m] |  \- org.aspectj:aspectjrt:jar:1.9.7:compile
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-filter-spring:jar:1.6.9:compile
+[[1;34mINFO[m] |  \- org.springframework:spring-webmvc:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-aop:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-beans:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-context:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-core:jar:5.3.31:compile
+[[1;34mINFO[m] |     |  \- org.springframework:spring-jcl:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-expression:jar:5.3.31:compile
+[[1;34mINFO[m] |     \- org.springframework:spring-web:jar:5.3.31:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-core:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:2.14.3:compile
+[[1;34mINFO[m] |  +- jakarta.xml.bind:jakarta.xml.bind-api:jar:2.3.3:compile
+[[1;34mINFO[m] |  \- jakarta.activation:jakarta.activation-api:jar:1.2.2:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-databind:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-annotations:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:jar:2.14.3:compile
+[[1;34mINFO[m] +- javax.ws.rs:javax.ws.rs-api:jar:2.1:compile
+[[1;34mINFO[m] +- javax.annotation:javax.annotation-api:jar:1.3.2:compile
+[[1;34mINFO[m] +- javax.inject:javax.inject:jar:1:compile
+[[1;34mINFO[m] +- org.mockito:mockito-core:jar:4.5.1:test
+[[1;34mINFO[m] |  +- net.bytebuddy:byte-buddy:jar:1.12.23:test
+[[1;34mINFO[m] |  +- net.bytebuddy:byte-buddy-agent:jar:1.12.23:test
+[[1;34mINFO[m] |  \- org.objenesis:objenesis:jar:3.2:test
+[[1;34mINFO[m] +- org.hamcrest:hamcrest-core:jar:2.2:compile
+[[1;34mINFO[m] |  \- org.hamcrest:hamcrest:jar:2.2:compile
+[[1;34mINFO[m] +- org.hamcrest:hamcrest-library:jar:2.2:compile
+[[1;34mINFO[m] +- junit:junit:jar:4.13.2:test
+[[1;34mINFO[m] +- xmlunit:xmlunit:jar:1.6:test
+[[1;34mINFO[m] +- com.github.tomakehurst:wiremock-jre8-standalone:jar:2.35.0:test
+[[1;34mINFO[m] +- com.openpojo:openpojo:jar:0.8.13:compile
+[[1;34mINFO[m] +- org.assertj:assertj-core:jar:3.16.0:test
+[[1;34mINFO[m] +- com.googlecode.junit-toolbox:junit-toolbox:jar:2.4:test
+[[1;34mINFO[m] |  \- commons-io:commons-io:jar:2.19.0:compile
+[[1;34mINFO[m] \- org.projectlombok:lombok:jar:1.18.38:compile
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m----< [0;36morg.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm[0;1m >-----[m
+[[1;34mINFO[m] [1mBuilding SO CNFM LCM Manager 1.15.0-SNAPSHOT                      [4/10][m
+[[1;34mINFO[m] [1m--------------------------------[ pom ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-dependency-plugin:2.8:tree[m [1m(default-cli)[m @ [36mso-cnfm-lcm[0;1m ---[m
+[[1;34mINFO[m] org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm:pom:1.15.0-SNAPSHOT
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-slf4j:jar:1.6.9:compile
+[[1;34mINFO[m] |  \- org.slf4j:slf4j-api:jar:1.7.36:compile
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-filter-base:jar:1.6.9:compile
+[[1;34mINFO[m] |  \- org.aspectj:aspectjrt:jar:1.9.7:compile
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-filter-spring:jar:1.6.9:compile
+[[1;34mINFO[m] |  \- org.springframework:spring-webmvc:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-aop:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-beans:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-context:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-core:jar:5.3.31:compile
+[[1;34mINFO[m] |     |  \- org.springframework:spring-jcl:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-expression:jar:5.3.31:compile
+[[1;34mINFO[m] |     \- org.springframework:spring-web:jar:5.3.31:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-core:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:2.14.3:compile
+[[1;34mINFO[m] |  +- jakarta.xml.bind:jakarta.xml.bind-api:jar:2.3.3:compile
+[[1;34mINFO[m] |  \- jakarta.activation:jakarta.activation-api:jar:1.2.2:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-databind:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-annotations:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:jar:2.14.3:compile
+[[1;34mINFO[m] +- javax.ws.rs:javax.ws.rs-api:jar:2.1:compile
+[[1;34mINFO[m] +- javax.annotation:javax.annotation-api:jar:1.3.2:compile
+[[1;34mINFO[m] +- javax.inject:javax.inject:jar:1:compile
+[[1;34mINFO[m] +- org.mockito:mockito-core:jar:4.5.1:test
+[[1;34mINFO[m] |  +- net.bytebuddy:byte-buddy:jar:1.12.23:test
+[[1;34mINFO[m] |  +- net.bytebuddy:byte-buddy-agent:jar:1.12.23:test
+[[1;34mINFO[m] |  \- org.objenesis:objenesis:jar:3.2:test
+[[1;34mINFO[m] +- org.hamcrest:hamcrest-core:jar:2.2:compile
+[[1;34mINFO[m] |  \- org.hamcrest:hamcrest:jar:2.2:compile
+[[1;34mINFO[m] +- org.hamcrest:hamcrest-library:jar:2.2:compile
+[[1;34mINFO[m] +- junit:junit:jar:4.13.2:test
+[[1;34mINFO[m] +- xmlunit:xmlunit:jar:1.6:test
+[[1;34mINFO[m] +- com.github.tomakehurst:wiremock-jre8-standalone:jar:2.35.0:test
+[[1;34mINFO[m] +- com.openpojo:openpojo:jar:0.8.13:compile
+[[1;34mINFO[m] +- org.assertj:assertj-core:jar:3.16.0:test
+[[1;34mINFO[m] +- com.googlecode.junit-toolbox:junit-toolbox:jar:2.4:test
+[[1;34mINFO[m] |  \- commons-io:commons-io:jar:2.19.0:compile
+[[1;34mINFO[m] \- org.projectlombok:lombok:jar:1.18.38:compile
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--< [0;36morg.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-api[0;1m >---[m
+[[1;34mINFO[m] [1mBuilding SO CNFM LCM Manager Api 1.15.0-SNAPSHOT                  [5/10][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-dependency-plugin:2.8:tree[m [1m(default-cli)[m @ [36mso-cnfm-lcm-api[0;1m ---[m
+[[1;34mINFO[m] org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-api:jar:1.15.0-SNAPSHOT
+[[1;34mINFO[m] +- com.google.code.gson:gson:jar:2.8.9:compile
+[[1;34mINFO[m] +- io.swagger.core.v3:swagger-annotations:jar:2.1.13:compile
+[[1;34mINFO[m] +- javax.xml.bind:jaxb-api:jar:2.3.1:compile
+[[1;34mINFO[m] |  \- javax.activation:javax.activation-api:jar:1.2.0:compile
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-slf4j:jar:1.6.9:compile
+[[1;34mINFO[m] |  \- org.slf4j:slf4j-api:jar:1.7.36:compile
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-filter-base:jar:1.6.9:compile
+[[1;34mINFO[m] |  \- org.aspectj:aspectjrt:jar:1.9.7:compile
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-filter-spring:jar:1.6.9:compile
+[[1;34mINFO[m] |  \- org.springframework:spring-webmvc:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-aop:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-beans:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-context:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-core:jar:5.3.31:compile
+[[1;34mINFO[m] |     |  \- org.springframework:spring-jcl:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-expression:jar:5.3.31:compile
+[[1;34mINFO[m] |     \- org.springframework:spring-web:jar:5.3.31:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-core:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:2.14.3:compile
+[[1;34mINFO[m] |  +- jakarta.xml.bind:jakarta.xml.bind-api:jar:2.3.3:compile
+[[1;34mINFO[m] |  \- jakarta.activation:jakarta.activation-api:jar:1.2.2:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-databind:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-annotations:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:jar:2.14.3:compile
+[[1;34mINFO[m] +- javax.ws.rs:javax.ws.rs-api:jar:2.1:compile
+[[1;34mINFO[m] +- javax.annotation:javax.annotation-api:jar:1.3.2:compile
+[[1;34mINFO[m] +- javax.inject:javax.inject:jar:1:compile
+[[1;34mINFO[m] +- org.mockito:mockito-core:jar:4.5.1:test
+[[1;34mINFO[m] |  +- net.bytebuddy:byte-buddy:jar:1.12.23:test
+[[1;34mINFO[m] |  +- net.bytebuddy:byte-buddy-agent:jar:1.12.23:test
+[[1;34mINFO[m] |  \- org.objenesis:objenesis:jar:3.2:test
+[[1;34mINFO[m] +- org.hamcrest:hamcrest-core:jar:2.2:compile
+[[1;34mINFO[m] |  \- org.hamcrest:hamcrest:jar:2.2:compile
+[[1;34mINFO[m] +- org.hamcrest:hamcrest-library:jar:2.2:compile
+[[1;34mINFO[m] +- junit:junit:jar:4.13.2:test
+[[1;34mINFO[m] +- xmlunit:xmlunit:jar:1.6:test
+[[1;34mINFO[m] +- com.github.tomakehurst:wiremock-jre8-standalone:jar:2.35.0:test
+[[1;34mINFO[m] +- com.openpojo:openpojo:jar:0.8.13:compile
+[[1;34mINFO[m] +- org.assertj:assertj-core:jar:3.16.0:test
+[[1;34mINFO[m] +- com.googlecode.junit-toolbox:junit-toolbox:jar:2.4:test
+[[1;34mINFO[m] |  \- commons-io:commons-io:jar:2.19.0:compile
+[[1;34mINFO[m] \- org.projectlombok:lombok:jar:1.18.38:compile
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--< [0;36morg.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-database-service[0;1m >--[m
+[[1;34mINFO[m] [1mBuilding SO CNFM LCM Database Service 1.15.0-SNAPSHOT             [6/10][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-dependency-plugin:2.8:tree[m [1m(default-cli)[m @ [36mso-cnfm-lcm-database-service[0;1m ---[m
+[[1;34mINFO[m] org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-database-service:jar:1.15.0-SNAPSHOT
+[[1;34mINFO[m] +- org.springframework.boot:spring-boot-starter-data-jpa:jar:2.7.18:compile
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-starter-aop:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- org.springframework:spring-aop:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  \- org.aspectj:aspectjweaver:jar:1.9.7:compile
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-starter-jdbc:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  \- org.springframework:spring-jdbc:jar:5.3.31:compile
+[[1;34mINFO[m] |  +- jakarta.transaction:jakarta.transaction-api:jar:1.3.3:compile
+[[1;34mINFO[m] |  +- jakarta.persistence:jakarta.persistence-api:jar:2.2.3:compile
+[[1;34mINFO[m] |  +- org.hibernate:hibernate-core:jar:5.6.15.Final:compile
+[[1;34mINFO[m] |  |  +- org.jboss.logging:jboss-logging:jar:3.4.3.Final:compile
+[[1;34mINFO[m] |  |  +- antlr:antlr:jar:2.7.7:compile
+[[1;34mINFO[m] |  |  +- org.jboss:jandex:jar:2.4.2.Final:compile
+[[1;34mINFO[m] |  |  +- com.fasterxml:classmate:jar:1.5.1:compile
+[[1;34mINFO[m] |  |  +- org.hibernate.common:hibernate-commons-annotations:jar:5.1.2.Final:compile
+[[1;34mINFO[m] |  |  \- org.glassfish.jaxb:jaxb-runtime:jar:2.3.9:compile
+[[1;34mINFO[m] |  |     +- org.glassfish.jaxb:txw2:jar:2.3.9:compile
+[[1;34mINFO[m] |  |     +- com.sun.istack:istack-commons-runtime:jar:3.0.12:compile
+[[1;34mINFO[m] |  |     \- com.sun.activation:jakarta.activation:jar:1.2.2:runtime
+[[1;34mINFO[m] |  +- org.springframework.data:spring-data-jpa:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- org.springframework.data:spring-data-commons:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- org.springframework:spring-orm:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  +- org.springframework:spring-context:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  +- org.springframework:spring-tx:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  \- org.springframework:spring-beans:jar:5.3.31:compile
+[[1;34mINFO[m] |  \- org.springframework:spring-aspects:jar:5.3.31:compile
+[[1;34mINFO[m] +- org.mariadb.jdbc:mariadb-java-client:jar:2.7.7:compile
+[[1;34mINFO[m] +- org.flywaydb:flyway-core:jar:6.4.4:compile
+[[1;34mINFO[m] +- com.h2database:h2:jar:1.4.200:test
+[[1;34mINFO[m] +- org.springframework.boot:spring-boot-starter-test:jar:2.7.18:test
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-starter:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- org.springframework.boot:spring-boot:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- org.springframework.boot:spring-boot-autoconfigure:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- org.springframework.boot:spring-boot-starter-logging:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  |  +- org.apache.logging.log4j:log4j-to-slf4j:jar:2.17.2:compile
+[[1;34mINFO[m] |  |  |  |  \- org.apache.logging.log4j:log4j-api:jar:2.17.2:compile
+[[1;34mINFO[m] |  |  |  \- org.slf4j:jul-to-slf4j:jar:1.7.36:compile
+[[1;34mINFO[m] |  |  +- jakarta.annotation:jakarta.annotation-api:jar:1.3.5:compile
+[[1;34mINFO[m] |  |  \- org.yaml:snakeyaml:jar:1.31:compile
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-test:jar:2.7.18:test
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-test-autoconfigure:jar:2.7.18:test
+[[1;34mINFO[m] |  +- com.jayway.jsonpath:json-path:jar:2.7.0:test
+[[1;34mINFO[m] |  |  \- net.minidev:json-smart:jar:2.4.11:test
+[[1;34mINFO[m] |  |     \- net.minidev:accessors-smart:jar:2.4.11:test
+[[1;34mINFO[m] |  |        \- org.ow2.asm:asm:jar:9.3:test
+[[1;34mINFO[m] |  +- jakarta.xml.bind:jakarta.xml.bind-api:jar:2.3.3:compile
+[[1;34mINFO[m] |  +- org.hamcrest:hamcrest:jar:2.2:compile
+[[1;34mINFO[m] |  +- org.skyscreamer:jsonassert:jar:1.5.1:test
+[[1;34mINFO[m] |  +- org.springframework:spring-core:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  \- org.springframework:spring-jcl:jar:5.3.31:compile
+[[1;34mINFO[m] |  +- org.springframework:spring-test:jar:5.3.31:test
+[[1;34mINFO[m] |  \- org.xmlunit:xmlunit-core:jar:2.9.1:test
+[[1;34mINFO[m] +- org.junit.vintage:junit-vintage-engine:jar:5.8.2:test
+[[1;34mINFO[m] |  +- org.junit.platform:junit-platform-engine:jar:1.8.2:test
+[[1;34mINFO[m] |  |  +- org.opentest4j:opentest4j:jar:1.2.0:test
+[[1;34mINFO[m] |  |  \- org.junit.platform:junit-platform-commons:jar:1.8.2:test
+[[1;34mINFO[m] |  \- org.apiguardian:apiguardian-api:jar:1.1.2:test
+[[1;34mINFO[m] +- nl.jqno.equalsverifier:equalsverifier:jar:3.4.1:test
+[[1;34mINFO[m] +- org.onap.so.common:common:jar:1.18.0-SNAPSHOT:test
+[[1;34mINFO[m] |  +- org.onap.so:utils:jar:1.18.0-SNAPSHOT:test
+[[1;34mINFO[m] |  |  +- com.sun.xml.bind:jaxb-core:jar:2.3.0:test
+[[1;34mINFO[m] |  |  +- com.sun.xml.bind:jaxb-impl:jar:2.3.0:test
+[[1;34mINFO[m] |  |  \- org.camunda.bpm:camunda-external-task-client:jar:7.17.0:test
+[[1;34mINFO[m] |  |     +- org.camunda.commons:camunda-commons-logging:jar:1.10.0:test
+[[1;34mINFO[m] |  |     \- org.camunda.commons:camunda-commons-typed-values:jar:7.17.0:test
+[[1;34mINFO[m] |  |        \- org.camunda.commons:camunda-commons-utils:jar:1.10.0:test
+[[1;34mINFO[m] |  +- org.onap.so:logger:jar:1.18.0-SNAPSHOT:test
+[[1;34mINFO[m] |  |  +- ch.qos.logback:logback-classic:jar:1.2.11:compile
+[[1;34mINFO[m] |  |  \- ch.qos.logback:logback-core:jar:1.2.11:compile
+[[1;34mINFO[m] |  +- org.onap.so.common.clients:clients:jar:1.18.0-SNAPSHOT:test
+[[1;34mINFO[m] |  |  +- org.onap.so:clients-base:jar:1.18.0-SNAPSHOT:test
+[[1;34mINFO[m] |  |  |  +- javax.cache:cache-api:jar:1.1.1:test
+[[1;34mINFO[m] |  |  |  +- org.javatuples:javatuples:jar:1.2:test
+[[1;34mINFO[m] |  |  |  \- net.jodah:failsafe:jar:2.0.1:test
+[[1;34mINFO[m] |  |  +- com.google.guava:guava:jar:28.1-jre:test
+[[1;34mINFO[m] |  |  |  +- com.google.guava:failureaccess:jar:1.0.1:test
+[[1;34mINFO[m] |  |  |  +- com.google.guava:listenablefuture:jar:9999.0-empty-to-avoid-conflict-with-guava:test
+[[1;34mINFO[m] |  |  |  +- com.google.code.findbugs:jsr305:jar:3.0.2:test
+[[1;34mINFO[m] |  |  |  +- org.checkerframework:checker-qual:jar:2.8.1:test
+[[1;34mINFO[m] |  |  |  +- com.google.errorprone:error_prone_annotations:jar:2.3.2:test
+[[1;34mINFO[m] |  |  |  +- com.google.j2objc:j2objc-annotations:jar:1.3:test
+[[1;34mINFO[m] |  |  |  \- org.codehaus.mojo:animal-sniffer-annotations:jar:1.18:test
+[[1;34mINFO[m] |  |  +- org.glassfish.jersey.core:jersey-client:jar:2.35:test
+[[1;34mINFO[m] |  |  |  +- jakarta.ws.rs:jakarta.ws.rs-api:jar:2.1.6:test
+[[1;34mINFO[m] |  |  |  +- org.glassfish.jersey.core:jersey-common:jar:2.35:test
+[[1;34mINFO[m] |  |  |  |  \- org.glassfish.hk2:osgi-resource-locator:jar:1.0.3:test
+[[1;34mINFO[m] |  |  |  \- org.glassfish.hk2.external:jakarta.inject:jar:2.6.1:test
+[[1;34mINFO[m] |  |  +- org.glassfish.jersey.inject:jersey-hk2:jar:2.35:test
+[[1;34mINFO[m] |  |  |  \- org.glassfish.hk2:hk2-locator:jar:2.6.1:test
+[[1;34mINFO[m] |  |  |     +- org.glassfish.hk2.external:aopalliance-repackaged:jar:2.6.1:test
+[[1;34mINFO[m] |  |  |     +- org.glassfish.hk2:hk2-api:jar:2.6.1:test
+[[1;34mINFO[m] |  |  |     \- org.glassfish.hk2:hk2-utils:jar:2.6.1:test
+[[1;34mINFO[m] |  |  \- org.apache.kafka:kafka-clients:jar:3.1.2:test
+[[1;34mINFO[m] |  |     +- com.github.luben:zstd-jni:jar:1.5.0-4:test
+[[1;34mINFO[m] |  |     +- org.lz4:lz4-java:jar:1.8.0:test
+[[1;34mINFO[m] |  |     \- org.xerial.snappy:snappy-java:jar:1.1.8.4:test
+[[1;34mINFO[m] |  +- org.apache.httpcomponents:httpclient:jar:4.5.14:test
+[[1;34mINFO[m] |  |  +- org.apache.httpcomponents:httpcore:jar:4.4.4:compile
+[[1;34mINFO[m] |  |  \- commons-codec:commons-codec:jar:1.15:compile
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-starter-security:jar:2.7.18:test
+[[1;34mINFO[m] |  |  +- org.springframework.security:spring-security-config:jar:5.7.11:test
+[[1;34mINFO[m] |  |  |  \- org.springframework.security:spring-security-core:jar:5.7.11:test
+[[1;34mINFO[m] |  |  |     \- org.springframework.security:spring-security-crypto:jar:5.7.11:test
+[[1;34mINFO[m] |  |  \- org.springframework.security:spring-security-web:jar:5.7.11:test
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-starter-actuator:jar:2.7.18:test
+[[1;34mINFO[m] |  |  +- org.springframework.boot:spring-boot-actuator-autoconfigure:jar:2.7.18:test
+[[1;34mINFO[m] |  |  |  +- org.springframework.boot:spring-boot-actuator:jar:2.7.18:test
+[[1;34mINFO[m] |  |  |  \- com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:2.13.5:test
+[[1;34mINFO[m] |  |  \- io.micrometer:micrometer-core:jar:1.9.17:test
+[[1;34mINFO[m] |  |     +- org.hdrhistogram:HdrHistogram:jar:2.1.12:test
+[[1;34mINFO[m] |  |     \- org.latencyutils:LatencyUtils:jar:2.0.3:test
+[[1;34mINFO[m] |  +- org.springframework:spring-web:jar:5.3.31:compile
+[[1;34mINFO[m] |  +- org.springframework:spring-webmvc:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  \- org.springframework:spring-expression:jar:5.3.31:compile
+[[1;34mINFO[m] |  +- org.modelmapper:modelmapper:jar:2.3.2:test
+[[1;34mINFO[m] |  +- org.apache.tomcat:tomcat-catalina:jar:9.0.105:test
+[[1;34mINFO[m] |  |  +- org.apache.tomcat:tomcat-servlet-api:jar:9.0.105:test
+[[1;34mINFO[m] |  |  +- org.apache.tomcat:tomcat-jsp-api:jar:9.0.83:test
+[[1;34mINFO[m] |  |  |  \- org.apache.tomcat:tomcat-el-api:jar:9.0.83:test
+[[1;34mINFO[m] |  |  +- org.apache.tomcat:tomcat-juli:jar:9.0.105:test
+[[1;34mINFO[m] |  |  +- org.apache.tomcat:tomcat-annotations-api:jar:9.0.83:test
+[[1;34mINFO[m] |  |  +- org.apache.tomcat:tomcat-api:jar:9.0.105:test
+[[1;34mINFO[m] |  |  +- org.apache.tomcat:tomcat-jni:jar:9.0.105:test
+[[1;34mINFO[m] |  |  +- org.apache.tomcat:tomcat-coyote:jar:9.0.105:test
+[[1;34mINFO[m] |  |  +- org.apache.tomcat:tomcat-util:jar:9.0.105:test
+[[1;34mINFO[m] |  |  +- org.apache.tomcat:tomcat-util-scan:jar:9.0.105:test
+[[1;34mINFO[m] |  |  \- org.apache.tomcat:tomcat-jaspic-api:jar:9.0.105:test
+[[1;34mINFO[m] |  +- org.slf4j:slf4j-ext:jar:1.7.36:test
+[[1;34mINFO[m] |  +- org.slf4j:slf4j-api:jar:1.7.36:compile
+[[1;34mINFO[m] |  +- com.google.code.gson:gson:jar:2.9.1:test
+[[1;34mINFO[m] |  +- org.springframework.retry:spring-retry:jar:1.3.1:test
+[[1;34mINFO[m] |  +- org.json:json:jar:20250517:test
+[[1;34mINFO[m] |  +- org.reflections:reflections:jar:0.9.11:test
+[[1;34mINFO[m] |  |  \- org.javassist:javassist:jar:3.21.0-GA:test
+[[1;34mINFO[m] |  +- com.zaxxer:HikariCP:jar:4.0.3:compile
+[[1;34mINFO[m] |  +- org.onap.appc.client:client-lib:jar:1.7.2:test
+[[1;34mINFO[m] |  |  +- com.att.nsa:cambriaClient:jar:0.0.1:test
+[[1;34mINFO[m] |  |  |  \- com.att.nsa:saClientLibrary:jar:0.0.1:test
+[[1;34mINFO[m] |  |  |     +- org.apache.httpcomponents:httpclient-cache:jar:4.5.14:test
+[[1;34mINFO[m] |  |  |     |  \- commons-logging:commons-logging:jar:1.2:test
+[[1;34mINFO[m] |  |  |     +- com.att.nsa:saToolkit:jar:0.0.1:test
+[[1;34mINFO[m] |  |  |     \- jline:jline:jar:2.12.1:test
+[[1;34mINFO[m] |  |  +- com.att.eelf:eelf-core:jar:1.0.0:test
+[[1;34mINFO[m] |  |  \- org.apache.commons:commons-lang3:jar:3.12.0:test
+[[1;34mINFO[m] |  +- org.onap.appc.client:client-kit:jar:1.7.2:test
+[[1;34mINFO[m] |  \- javax.validation:validation-api:jar:2.0.1.Final:test
+[[1;34mINFO[m] +- com.openpojo:openpojo:jar:0.8.3:test
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-slf4j:jar:1.6.9:compile
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-filter-base:jar:1.6.9:compile
+[[1;34mINFO[m] |  \- org.aspectj:aspectjrt:jar:1.9.7:compile
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-filter-spring:jar:1.6.9:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-core:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:2.14.3:compile
+[[1;34mINFO[m] |  \- jakarta.activation:jakarta.activation-api:jar:1.2.2:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-databind:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-annotations:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:jar:2.14.3:compile
+[[1;34mINFO[m] +- javax.ws.rs:javax.ws.rs-api:jar:2.1:compile
+[[1;34mINFO[m] +- javax.annotation:javax.annotation-api:jar:1.3.2:compile
+[[1;34mINFO[m] +- javax.inject:javax.inject:jar:1:compile
+[[1;34mINFO[m] +- org.mockito:mockito-core:jar:4.5.1:test
+[[1;34mINFO[m] |  +- net.bytebuddy:byte-buddy:jar:1.12.23:compile
+[[1;34mINFO[m] |  +- net.bytebuddy:byte-buddy-agent:jar:1.12.23:test
+[[1;34mINFO[m] |  \- org.objenesis:objenesis:jar:3.2:test
+[[1;34mINFO[m] +- org.hamcrest:hamcrest-core:jar:2.2:compile
+[[1;34mINFO[m] +- org.hamcrest:hamcrest-library:jar:2.2:compile
+[[1;34mINFO[m] +- junit:junit:jar:4.13.2:test
+[[1;34mINFO[m] +- xmlunit:xmlunit:jar:1.6:test
+[[1;34mINFO[m] +- com.github.tomakehurst:wiremock-jre8-standalone:jar:2.35.0:test
+[[1;34mINFO[m] +- org.assertj:assertj-core:jar:3.16.0:test
+[[1;34mINFO[m] +- com.googlecode.junit-toolbox:junit-toolbox:jar:2.4:test
+[[1;34mINFO[m] |  \- commons-io:commons-io:jar:2.19.0:compile
+[[1;34mINFO[m] \- org.projectlombok:lombok:jar:1.18.38:compile
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--< [0;36morg.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-bpmn-flows[0;1m >--[m
+[[1;34mINFO[m] [1mBuilding SO CNFM LCM BPMN Flows 1.15.0-SNAPSHOT                   [7/10][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+Downloading from camunda-bpm: https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-api/1.15.0-SNAPSHOT/maven-metadata.xml
+Downloading from onap-snapshots: https://nexus.onap.org/content/repositories/snapshots/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-api/1.15.0-SNAPSHOT/maven-metadata.xml
+Downloading from central: https://repo1.maven.org/maven2/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-api/1.15.0-SNAPSHOT/maven-metadata.xml
+Downloading from camunda-public: https://artifacts.camunda.com/artifactory/public/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-api/1.15.0-SNAPSHOT/maven-metadata.xml
+Progress (1): 815 B                   Downloaded from onap-snapshots: https://nexus.onap.org/content/repositories/snapshots/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-api/1.15.0-SNAPSHOT/maven-metadata.xml (815 B at 1.2 kB/s)
+[[1;33mWARNING[m] Could not transfer metadata org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-api:1.15.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-api/1.15.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+Downloading from central: https://repo1.maven.org/maven2/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-database-service/1.15.0-SNAPSHOT/maven-metadata.xml
+Downloading from onap-snapshots: https://nexus.onap.org/content/repositories/snapshots/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-database-service/1.15.0-SNAPSHOT/maven-metadata.xml
+Downloading from camunda-bpm: https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-database-service/1.15.0-SNAPSHOT/maven-metadata.xml
+Downloading from camunda-public: https://artifacts.camunda.com/artifactory/public/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-database-service/1.15.0-SNAPSHOT/maven-metadata.xml
+Progress (1): 828 B                   Downloaded from onap-snapshots: https://nexus.onap.org/content/repositories/snapshots/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-database-service/1.15.0-SNAPSHOT/maven-metadata.xml (828 B at 3.6 kB/s)
+[[1;33mWARNING[m] Could not transfer metadata org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-database-service:1.15.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-database-service/1.15.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;33mWARNING[m] org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-api:1.15.0-SNAPSHOT/maven-metadata.xmlfailed to transfer from https://artifacts.camunda.com/artifactory/camunda-bpm/ during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of camunda-bpm has elapsed or updates are forced. Original error: Could not transfer metadata org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-api:1.15.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-api/1.15.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;33mWARNING[m] org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-database-service:1.15.0-SNAPSHOT/maven-metadata.xmlfailed to transfer from https://artifacts.camunda.com/artifactory/camunda-bpm/ during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of camunda-bpm has elapsed or updates are forced. Original error: Could not transfer metadata org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-database-service:1.15.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-database-service/1.15.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+Downloading from onap-snapshots: https://nexus.onap.org/content/repositories/snapshots/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-api/1.15.0-SNAPSHOT/so-cnfm-lcm-api-1.15.0-20260420.085228-3.jar
+Downloading from onap-snapshots: https://nexus.onap.org/content/repositories/snapshots/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-database-service/1.15.0-SNAPSHOT/so-cnfm-lcm-database-service-1.15.0-20260420.085240-3.jar
+Progress (1): 4.1/144 kBProgress (1): 7.3/144 kBProgress (1): 11/144 kB Progress (1): 14/144 kBProgress (1): 18/144 kBProgress (1): 22/144 kBProgress (1): 26/144 kBProgress (1): 30/144 kBProgress (1): 34/144 kBProgress (1): 38/144 kBProgress (1): 41/144 kBProgress (1): 45/144 kBProgress (1): 49/144 kBProgress (1): 53/144 kBProgress (1): 58/144 kBProgress (1): 62/144 kBProgress (1): 66/144 kBProgress (1): 70/144 kBProgress (1): 74/144 kBProgress (1): 78/144 kBProgress (1): 82/144 kBProgress (1): 86/144 kBProgress (1): 90/144 kBProgress (1): 94/144 kBProgress (1): 99/144 kBProgress (1): 103/144 kBProgress (1): 107/144 kBProgress (1): 111/144 kBProgress (1): 115/144 kBProgress (2): 115/144 kB | 4.1/37 kBProgress (2): 115/144 kB | 7.3/37 kBProgress (2): 119/144 kB | 7.3/37 kBProgress (2): 123/144 kB | 7.3/37 kBProgress (2): 127/144 kB | 7.3/37 kBProgress (2): 131/144 kB | 7.3/37 kBProgress (2): 135/144 kB | 7.3/37 kBProgress (2): 140/144 kB | 7.3/37 kBProgress (2): 144/144 kB | 7.3/37 kBProgress (2): 144 kB | 7.3/37 kB    Progress (2): 144 kB | 11/37 kB Progress (2): 144 kB | 14/37 kBProgress (2): 144 kB | 18/37 kBProgress (2): 144 kB | 22/37 kBProgress (2): 144 kB | 26/37 kBProgress (2): 144 kB | 30/37 kB                               Downloaded from onap-snapshots: https://nexus.onap.org/content/repositories/snapshots/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-api/1.15.0-SNAPSHOT/so-cnfm-lcm-api-1.15.0-20260420.085228-3.jar (144 kB at 228 kB/s)
+Progress (1): 34/37 kBProgress (1): 37 kB                      Downloaded from onap-snapshots: https://nexus.onap.org/content/repositories/snapshots/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-database-service/1.15.0-SNAPSHOT/so-cnfm-lcm-database-service-1.15.0-20260420.085240-3.jar (37 kB at 47 kB/s)
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-dependency-plugin:2.8:tree[m [1m(default-cli)[m @ [36mso-cnfm-lcm-bpmn-flows[0;1m ---[m
+[[1;33mWARNING[m] org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-api:1.15.0-SNAPSHOT/maven-metadata.xmlfailed to transfer from https://artifacts.camunda.com/artifactory/camunda-bpm/ during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of camunda-bpm has elapsed or updates are forced. Original error: Could not transfer metadata org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-api:1.15.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-api/1.15.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;33mWARNING[m] org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-database-service:1.15.0-SNAPSHOT/maven-metadata.xmlfailed to transfer from https://artifacts.camunda.com/artifactory/camunda-bpm/ during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of camunda-bpm has elapsed or updates are forced. Original error: Could not transfer metadata org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-database-service:1.15.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-database-service/1.15.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;34mINFO[m] org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-bpmn-flows:jar:1.15.0-SNAPSHOT
+[[1;34mINFO[m] +- org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-api:jar:1.15.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  +- com.google.code.gson:gson:jar:2.9.1:compile
+[[1;34mINFO[m] |  +- io.swagger.core.v3:swagger-annotations:jar:2.1.13:compile
+[[1;34mINFO[m] |  \- javax.xml.bind:jaxb-api:jar:2.3.1:compile
+[[1;34mINFO[m] |     \- javax.activation:javax.activation-api:jar:1.2.0:compile
+[[1;34mINFO[m] +- org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-database-service:jar:1.15.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-starter-data-jpa:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- org.springframework.boot:spring-boot-starter-aop:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- org.springframework.boot:spring-boot-starter-jdbc:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- jakarta.transaction:jakarta.transaction-api:jar:1.3.3:compile
+[[1;34mINFO[m] |  |  +- jakarta.persistence:jakarta.persistence-api:jar:2.2.3:compile
+[[1;34mINFO[m] |  |  \- org.springframework.data:spring-data-jpa:jar:2.7.18:compile
+[[1;34mINFO[m] |  |     \- org.springframework.data:spring-data-commons:jar:2.7.18:compile
+[[1;34mINFO[m] |  +- org.mariadb.jdbc:mariadb-java-client:jar:2.7.7:compile
+[[1;34mINFO[m] |  \- org.flywaydb:flyway-core:jar:6.4.4:compile
+[[1;34mINFO[m] +- org.onap.so:aai-client:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  +- org.onap.so:aai-fluent-uri-builder:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  |  \- com.google.guava:guava:jar:28.1-jre:compile
+[[1;34mINFO[m] |  |     +- com.google.guava:failureaccess:jar:1.0.1:compile
+[[1;34mINFO[m] |  |     +- com.google.guava:listenablefuture:jar:9999.0-empty-to-avoid-conflict-with-guava:compile
+[[1;34mINFO[m] |  |     +- org.checkerframework:checker-qual:jar:2.8.1:compile
+[[1;34mINFO[m] |  |     +- com.google.errorprone:error_prone_annotations:jar:2.3.2:compile
+[[1;34mINFO[m] |  |     +- com.google.j2objc:j2objc-annotations:jar:1.3:compile
+[[1;34mINFO[m] |  |     \- org.codehaus.mojo:animal-sniffer-annotations:jar:1.18:compile
+[[1;34mINFO[m] |  +- org.ehcache:ehcache:jar:3.10.8:compile
+[[1;34mINFO[m] |  |  \- org.glassfish.jaxb:jaxb-runtime:jar:2.3.9:compile
+[[1;34mINFO[m] |  |     +- org.glassfish.jaxb:txw2:jar:2.3.9:compile
+[[1;34mINFO[m] |  |     +- com.sun.istack:istack-commons-runtime:jar:3.0.12:compile
+[[1;34mINFO[m] |  |     \- com.sun.activation:jakarta.activation:jar:1.2.2:runtime
+[[1;34mINFO[m] |  +- javax.servlet:javax.servlet-api:jar:4.0.1:compile
+[[1;34mINFO[m] |  \- org.antlr:antlr4-runtime:jar:4.7:compile
+[[1;34mINFO[m] +- org.onap.aai.schema-service:aai-schema:jar:1.12.10:compile
+[[1;34mINFO[m] |  +- org.onap.aai.schema-service:aai-annotations:jar:1.12.10:compile
+[[1;34mINFO[m] |  +- org.jvnet.jaxb2_commons:jaxb2-basics:jar:0.11.1:compile
+[[1;34mINFO[m] |  |  +- org.jvnet.jaxb2_commons:jaxb2-basics-runtime:jar:0.11.1:compile
+[[1;34mINFO[m] |  |  +- org.jvnet.jaxb2_commons:jaxb2-basics-tools:jar:0.11.1:compile
+[[1;34mINFO[m] |  |  |  \- org.slf4j:jcl-over-slf4j:jar:1.7.36:compile
+[[1;34mINFO[m] |  |  \- com.google.code.javaparser:javaparser:jar:1.0.11:compile
+[[1;34mINFO[m] |  +- com.googlecode.json-simple:json-simple:jar:1.1.1:compile
+[[1;34mINFO[m] |  \- commons-io:commons-io:jar:2.19.0:compile
+[[1;34mINFO[m] +- org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter-rest:jar:7.17.0:compile
+[[1;34mINFO[m] |  +- org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  +- org.camunda.bpm:camunda-engine-spring:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |  \- org.camunda.bpm:camunda-engine:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |     +- org.camunda.bpm.model:camunda-bpmn-model:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |     |  \- org.camunda.bpm.model:camunda-xml-model:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |     +- org.camunda.bpm.model:camunda-cmmn-model:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |     +- org.camunda.bpm.dmn:camunda-engine-dmn:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |     |  +- org.camunda.bpm.model:camunda-dmn-model:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |     |  +- org.camunda.bpm.dmn:camunda-engine-feel-api:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |     |  +- org.camunda.bpm.dmn:camunda-engine-feel-juel:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |     |  +- org.camunda.bpm.dmn:camunda-engine-feel-scala:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |     |  \- org.camunda.feel:feel-engine:jar:scala-shaded:1.13.3:compile
+[[1;34mINFO[m] |  |  |     +- org.mybatis:mybatis:jar:3.5.6:compile
+[[1;34mINFO[m] |  |  |     +- joda-time:joda-time:jar:2.1:compile
+[[1;34mINFO[m] |  |  |     +- org.camunda.connect:camunda-connect-core:jar:1.5.2:compile
+[[1;34mINFO[m] |  |  |     \- org.camunda.connect:camunda-connect-connectors-all:jar:1.5.2:runtime
+[[1;34mINFO[m] |  |  +- org.springframework:spring-context:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  +- org.springframework:spring-jdbc:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  +- org.springframework:spring-tx:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  +- org.springframework:spring-orm:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  +- org.springframework.boot:spring-boot-autoconfigure:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- com.fasterxml.uuid:java-uuid-generator:jar:3.2.0:compile
+[[1;34mINFO[m] |  |  \- com.sun.xml.bind:jaxb-impl:jar:2.3.6:compile
+[[1;34mINFO[m] |  +- org.camunda.bpm:camunda-engine-rest-jaxrs2:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  +- commons-fileupload:commons-fileupload:jar:1.5:compile
+[[1;34mINFO[m] |  |  \- com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:2.13.5:compile
+[[1;34mINFO[m] |  \- org.springframework.boot:spring-boot-starter-jersey:jar:2.7.18:compile
+[[1;34mINFO[m] |     +- org.springframework.boot:spring-boot-starter-json:jar:2.7.18:compile
+[[1;34mINFO[m] |     |  +- com.fasterxml.jackson.datatype:jackson-datatype-jdk8:jar:2.13.5:compile
+[[1;34mINFO[m] |     |  \- com.fasterxml.jackson.module:jackson-module-parameter-names:jar:2.13.5:compile
+[[1;34mINFO[m] |     +- org.springframework.boot:spring-boot-starter-tomcat:jar:2.7.18:compile
+[[1;34mINFO[m] |     |  +- org.apache.tomcat.embed:tomcat-embed-core:jar:9.0.83:compile
+[[1;34mINFO[m] |     |  +- org.apache.tomcat.embed:tomcat-embed-el:jar:9.0.83:compile
+[[1;34mINFO[m] |     |  \- org.apache.tomcat.embed:tomcat-embed-websocket:jar:9.0.83:compile
+[[1;34mINFO[m] |     +- org.springframework.boot:spring-boot-starter-validation:jar:2.7.18:compile
+[[1;34mINFO[m] |     |  \- org.hibernate.validator:hibernate-validator:jar:6.2.5.Final:compile
+[[1;34mINFO[m] |     +- org.glassfish.jersey.core:jersey-server:jar:2.35:compile
+[[1;34mINFO[m] |     |  +- org.glassfish.jersey.core:jersey-common:jar:2.35:compile
+[[1;34mINFO[m] |     |  |  \- org.glassfish.hk2:osgi-resource-locator:jar:1.0.3:compile
+[[1;34mINFO[m] |     |  +- jakarta.ws.rs:jakarta.ws.rs-api:jar:2.1.6:compile
+[[1;34mINFO[m] |     |  +- org.glassfish.hk2.external:jakarta.inject:jar:2.6.1:compile
+[[1;34mINFO[m] |     |  \- jakarta.validation:jakarta.validation-api:jar:2.0.2:compile
+[[1;34mINFO[m] |     +- org.glassfish.jersey.containers:jersey-container-servlet-core:jar:2.35:compile
+[[1;34mINFO[m] |     +- org.glassfish.jersey.containers:jersey-container-servlet:jar:2.35:compile
+[[1;34mINFO[m] |     +- org.glassfish.jersey.ext:jersey-bean-validation:jar:2.35:compile
+[[1;34mINFO[m] |     +- org.glassfish.jersey.ext:jersey-spring5:jar:2.35:compile
+[[1;34mINFO[m] |     |  +- org.glassfish.hk2:hk2:jar:2.6.1:compile
+[[1;34mINFO[m] |     |  |  +- org.glassfish.hk2:hk2-utils:jar:2.6.1:compile
+[[1;34mINFO[m] |     |  |  +- org.glassfish.hk2:hk2-api:jar:2.6.1:compile
+[[1;34mINFO[m] |     |  |  +- org.glassfish.hk2:hk2-core:jar:2.6.1:compile
+[[1;34mINFO[m] |     |  |  +- org.glassfish.hk2:hk2-runlevel:jar:2.6.1:compile
+[[1;34mINFO[m] |     |  |  \- org.glassfish.hk2:class-model:jar:2.6.1:compile
+[[1;34mINFO[m] |     |  |     +- org.ow2.asm:asm-analysis:jar:7.1:compile
+[[1;34mINFO[m] |     |  |     +- org.ow2.asm:asm-commons:jar:7.1:compile
+[[1;34mINFO[m] |     |  |     +- org.ow2.asm:asm-tree:jar:7.1:compile
+[[1;34mINFO[m] |     |  |     \- org.ow2.asm:asm-util:jar:7.1:compile
+[[1;34mINFO[m] |     |  \- org.glassfish.hk2:spring-bridge:jar:2.6.1:compile
+[[1;34mINFO[m] |     \- org.glassfish.jersey.media:jersey-media-json-jackson:jar:2.35:compile
+[[1;34mINFO[m] |        \- org.glassfish.jersey.ext:jersey-entity-filtering:jar:2.35:compile
+[[1;34mINFO[m] +- org.yaml:snakeyaml:jar:1.31:compile
+[[1;34mINFO[m] +- com.shazam:shazamcrest:jar:0.11:compile
+[[1;34mINFO[m] |  \- org.skyscreamer:jsonassert:jar:1.5.1:compile
+[[1;34mINFO[m] +- com.h2database:h2:jar:1.4.200:test
+[[1;34mINFO[m] +- org.junit.vintage:junit-vintage-engine:jar:5.8.2:test
+[[1;34mINFO[m] |  +- org.junit.platform:junit-platform-engine:jar:1.8.2:test
+[[1;34mINFO[m] |  |  +- org.opentest4j:opentest4j:jar:1.2.0:test
+[[1;34mINFO[m] |  |  \- org.junit.platform:junit-platform-commons:jar:1.8.2:test
+[[1;34mINFO[m] |  \- org.apiguardian:apiguardian-api:jar:1.1.2:test
+[[1;34mINFO[m] +- org.hamcrest:hamcrest:jar:2.2:test
+[[1;34mINFO[m] +- nl.jqno.equalsverifier:equalsverifier:jar:3.4.1:test
+[[1;34mINFO[m] +- org.springframework.cloud:spring-cloud-contract-wiremock:jar:2.2.8.RELEASE:test
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-starter:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- org.springframework.boot:spring-boot-starter-logging:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  |  +- org.apache.logging.log4j:log4j-to-slf4j:jar:2.17.2:compile
+[[1;34mINFO[m] |  |  |  |  \- org.apache.logging.log4j:log4j-api:jar:2.17.2:compile
+[[1;34mINFO[m] |  |  |  \- org.slf4j:jul-to-slf4j:jar:1.7.36:compile
+[[1;34mINFO[m] |  |  \- jakarta.annotation:jakarta.annotation-api:jar:1.3.5:compile
+[[1;34mINFO[m] |  +- org.springframework:spring-web:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  \- org.springframework:spring-beans:jar:5.3.31:compile
+[[1;34mINFO[m] |  \- org.apache.httpcomponents:httpclient:jar:4.5.14:compile
+[[1;34mINFO[m] |     \- org.apache.httpcomponents:httpcore:jar:4.4.4:compile
+[[1;34mINFO[m] +- org.springframework.boot:spring-boot-starter-test:jar:2.7.18:test
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-test:jar:2.7.18:test
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-test-autoconfigure:jar:2.7.18:test
+[[1;34mINFO[m] |  +- com.jayway.jsonpath:json-path:jar:2.7.0:compile
+[[1;34mINFO[m] |  |  \- net.minidev:json-smart:jar:2.4.11:compile
+[[1;34mINFO[m] |  |     \- net.minidev:accessors-smart:jar:2.4.11:compile
+[[1;34mINFO[m] |  |        \- org.ow2.asm:asm:jar:9.3:compile
+[[1;34mINFO[m] |  +- jakarta.xml.bind:jakarta.xml.bind-api:jar:2.3.3:compile
+[[1;34mINFO[m] |  +- org.springframework:spring-core:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  \- org.springframework:spring-jcl:jar:5.3.31:compile
+[[1;34mINFO[m] |  +- org.springframework:spring-test:jar:5.3.31:test
+[[1;34mINFO[m] |  \- org.xmlunit:xmlunit-core:jar:2.9.1:test
+[[1;34mINFO[m] +- org.onap.so.common:common:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  +- org.onap.so:utils:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  |  +- com.sun.xml.bind:jaxb-core:jar:2.3.0:compile
+[[1;34mINFO[m] |  |  \- org.camunda.bpm:camunda-external-task-client:jar:7.17.0:compile
+[[1;34mINFO[m] |  |     +- org.camunda.commons:camunda-commons-logging:jar:1.10.0:compile
+[[1;34mINFO[m] |  |     \- org.camunda.commons:camunda-commons-typed-values:jar:7.17.0:compile
+[[1;34mINFO[m] |  |        \- org.camunda.commons:camunda-commons-utils:jar:1.10.0:compile
+[[1;34mINFO[m] |  +- org.onap.so:logger:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  |  +- ch.qos.logback:logback-classic:jar:1.2.11:compile
+[[1;34mINFO[m] |  |  \- ch.qos.logback:logback-core:jar:1.2.11:compile
+[[1;34mINFO[m] |  +- org.onap.so.common.clients:clients:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  |  +- org.glassfish.jersey.core:jersey-client:jar:2.35:compile
+[[1;34mINFO[m] |  |  +- org.glassfish.jersey.inject:jersey-hk2:jar:2.35:compile
+[[1;34mINFO[m] |  |  |  \- org.glassfish.hk2:hk2-locator:jar:2.6.1:compile
+[[1;34mINFO[m] |  |  |     \- org.glassfish.hk2.external:aopalliance-repackaged:jar:2.6.1:compile
+[[1;34mINFO[m] |  |  \- org.apache.kafka:kafka-clients:jar:3.1.2:compile
+[[1;34mINFO[m] |  |     +- com.github.luben:zstd-jni:jar:1.5.0-4:runtime
+[[1;34mINFO[m] |  |     +- org.lz4:lz4-java:jar:1.8.0:runtime
+[[1;34mINFO[m] |  |     \- org.xerial.snappy:snappy-java:jar:1.1.8.4:runtime
+[[1;34mINFO[m] |  +- org.springframework:spring-aspects:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  \- org.aspectj:aspectjweaver:jar:1.9.7:compile
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-starter-security:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- org.springframework:spring-aop:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  +- org.springframework.security:spring-security-config:jar:5.7.11:compile
+[[1;34mINFO[m] |  |  |  \- org.springframework.security:spring-security-core:jar:5.7.11:compile
+[[1;34mINFO[m] |  |  |     \- org.springframework.security:spring-security-crypto:jar:5.7.11:compile
+[[1;34mINFO[m] |  |  \- org.springframework.security:spring-security-web:jar:5.7.11:compile
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-starter-actuator:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- org.springframework.boot:spring-boot-actuator-autoconfigure:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  |  \- org.springframework.boot:spring-boot-actuator:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  \- io.micrometer:micrometer-core:jar:1.9.17:compile
+[[1;34mINFO[m] |  |     +- org.hdrhistogram:HdrHistogram:jar:2.1.12:compile
+[[1;34mINFO[m] |  |     \- org.latencyutils:LatencyUtils:jar:2.0.3:runtime
+[[1;34mINFO[m] |  +- org.hibernate:hibernate-core:jar:5.6.15.Final:compile
+[[1;34mINFO[m] |  |  +- org.jboss.logging:jboss-logging:jar:3.4.3.Final:compile
+[[1;34mINFO[m] |  |  +- javax.persistence:javax.persistence-api:jar:2.2:compile
+[[1;34mINFO[m] |  |  +- antlr:antlr:jar:2.7.7:compile
+[[1;34mINFO[m] |  |  +- org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec:jar:1.1.1.Final:compile
+[[1;34mINFO[m] |  |  +- org.jboss:jandex:jar:2.4.2.Final:compile
+[[1;34mINFO[m] |  |  +- com.fasterxml:classmate:jar:1.5.1:compile
+[[1;34mINFO[m] |  |  \- org.hibernate.common:hibernate-commons-annotations:jar:5.1.2.Final:compile
+[[1;34mINFO[m] |  +- org.springframework:spring-webmvc:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  \- org.springframework:spring-expression:jar:5.3.31:compile
+[[1;34mINFO[m] |  +- org.modelmapper:modelmapper:jar:2.3.2:compile
+[[1;34mINFO[m] |  +- org.slf4j:slf4j-ext:jar:1.7.36:compile
+[[1;34mINFO[m] |  +- org.slf4j:slf4j-api:jar:1.7.36:compile
+[[1;34mINFO[m] |  +- org.springframework.retry:spring-retry:jar:1.3.1:compile
+[[1;34mINFO[m] |  +- org.json:json:jar:20250517:compile
+[[1;34mINFO[m] |  +- org.reflections:reflections:jar:0.9.11:compile
+[[1;34mINFO[m] |  |  \- org.javassist:javassist:jar:3.21.0-GA:compile
+[[1;34mINFO[m] |  +- com.zaxxer:HikariCP:jar:4.0.3:compile
+[[1;34mINFO[m] |  +- org.onap.appc.client:client-lib:jar:1.7.2:compile
+[[1;34mINFO[m] |  |  +- com.att.nsa:cambriaClient:jar:0.0.1:compile
+[[1;34mINFO[m] |  |  |  \- com.att.nsa:saClientLibrary:jar:0.0.1:compile
+[[1;34mINFO[m] |  |  |     +- org.apache.httpcomponents:httpclient-cache:jar:4.5.14:compile
+[[1;34mINFO[m] |  |  |     |  \- commons-logging:commons-logging:jar:1.2:compile
+[[1;34mINFO[m] |  |  |     +- com.att.nsa:saToolkit:jar:0.0.1:compile
+[[1;34mINFO[m] |  |  |     \- jline:jline:jar:2.12.1:compile
+[[1;34mINFO[m] |  |  \- com.att.eelf:eelf-core:jar:1.0.0:compile
+[[1;34mINFO[m] |  +- org.onap.appc.client:client-kit:jar:1.7.2:compile
+[[1;34mINFO[m] |  \- javax.validation:validation-api:jar:2.0.1.Final:compile
+[[1;34mINFO[m] +- org.onap.so:clients-base:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot:jar:2.7.18:compile
+[[1;34mINFO[m] |  +- javax.cache:cache-api:jar:1.1.1:compile
+[[1;34mINFO[m] |  +- org.javatuples:javatuples:jar:1.2:compile
+[[1;34mINFO[m] |  \- net.jodah:failsafe:jar:2.0.1:compile
+[[1;34mINFO[m] +- io.kubernetes:client-java:jar:16.0.0:compile
+[[1;34mINFO[m] |  +- io.prometheus:simpleclient:jar:0.15.0:compile
+[[1;34mINFO[m] |  |  +- io.prometheus:simpleclient_tracer_otel:jar:0.15.0:compile
+[[1;34mINFO[m] |  |  |  \- io.prometheus:simpleclient_tracer_common:jar:0.15.0:compile
+[[1;34mINFO[m] |  |  \- io.prometheus:simpleclient_tracer_otel_agent:jar:0.15.0:compile
+[[1;34mINFO[m] |  +- io.prometheus:simpleclient_httpserver:jar:0.15.0:compile
+[[1;34mINFO[m] |  |  \- io.prometheus:simpleclient_common:jar:0.15.0:compile
+[[1;34mINFO[m] |  +- io.kubernetes:client-java-api:jar:16.0.0:compile
+[[1;34mINFO[m] |  |  +- io.swagger:swagger-annotations:jar:1.6.6:compile
+[[1;34mINFO[m] |  |  +- com.squareup.okhttp3:okhttp:jar:4.9.3:compile
+[[1;34mINFO[m] |  |  |  \- com.squareup.okio:okio:jar:2.8.0:compile
+[[1;34mINFO[m] |  |  +- com.squareup.okhttp3:logging-interceptor:jar:4.9.3:compile
+[[1;34mINFO[m] |  |  |  \- org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.6.21:compile
+[[1;34mINFO[m] |  |  |     \- org.jetbrains.kotlin:kotlin-stdlib-jdk7:jar:1.6.21:compile
+[[1;34mINFO[m] |  |  +- io.gsonfire:gson-fire:jar:1.8.5:compile
+[[1;34mINFO[m] |  |  \- com.google.code.findbugs:jsr305:jar:3.0.2:compile
+[[1;34mINFO[m] |  +- io.kubernetes:client-java-proto:jar:16.0.0:compile
+[[1;34mINFO[m] |  +- commons-codec:commons-codec:jar:1.15:compile
+[[1;34mINFO[m] |  +- org.apache.commons:commons-compress:jar:1.21:compile
+[[1;34mINFO[m] |  +- org.apache.commons:commons-lang3:jar:3.12.0:compile
+[[1;34mINFO[m] |  +- org.bouncycastle:bcpkix-jdk18on:jar:1.71:compile
+[[1;34mINFO[m] |  |  +- org.bouncycastle:bcprov-jdk18on:jar:1.71:compile
+[[1;34mINFO[m] |  |  \- org.bouncycastle:bcutil-jdk18on:jar:1.71:compile
+[[1;34mINFO[m] |  +- com.google.protobuf:protobuf-java:jar:3.21.2:compile
+[[1;34mINFO[m] |  +- org.apache.commons:commons-collections4:jar:4.4:compile
+[[1;34mINFO[m] |  \- org.bitbucket.b_c:jose4j:jar:0.7.12:compile
+[[1;34mINFO[m] +- org.jetbrains.kotlin:kotlin-stdlib:jar:1.6.21:compile
+[[1;34mINFO[m] |  +- org.jetbrains.kotlin:kotlin-stdlib-common:jar:1.6.21:compile
+[[1;34mINFO[m] |  \- org.jetbrains:annotations:jar:13.0:compile
+[[1;34mINFO[m] +- org.mockito:mockito-inline:jar:4.5.1:test
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-slf4j:jar:1.6.9:compile
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-filter-base:jar:1.6.9:compile
+[[1;34mINFO[m] |  \- org.aspectj:aspectjrt:jar:1.9.7:compile
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-filter-spring:jar:1.6.9:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-core:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:2.14.3:compile
+[[1;34mINFO[m] |  \- jakarta.activation:jakarta.activation-api:jar:1.2.2:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-databind:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-annotations:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:jar:2.14.3:compile
+[[1;34mINFO[m] +- javax.ws.rs:javax.ws.rs-api:jar:2.1:compile
+[[1;34mINFO[m] +- javax.annotation:javax.annotation-api:jar:1.3.2:compile
+[[1;34mINFO[m] +- javax.inject:javax.inject:jar:1:compile
+[[1;34mINFO[m] +- org.mockito:mockito-core:jar:4.5.1:test
+[[1;34mINFO[m] |  +- net.bytebuddy:byte-buddy:jar:1.12.23:compile
+[[1;34mINFO[m] |  +- net.bytebuddy:byte-buddy-agent:jar:1.12.23:test
+[[1;34mINFO[m] |  \- org.objenesis:objenesis:jar:3.2:test
+[[1;34mINFO[m] +- org.hamcrest:hamcrest-core:jar:2.2:compile
+[[1;34mINFO[m] +- org.hamcrest:hamcrest-library:jar:2.2:compile
+[[1;34mINFO[m] +- junit:junit:jar:4.13.2:test
+[[1;34mINFO[m] +- xmlunit:xmlunit:jar:1.6:test
+[[1;34mINFO[m] +- com.github.tomakehurst:wiremock-jre8-standalone:jar:2.35.0:test
+[[1;34mINFO[m] +- com.openpojo:openpojo:jar:0.8.13:compile
+[[1;34mINFO[m] +- org.assertj:assertj-core:jar:3.16.0:test
+[[1;34mINFO[m] +- com.googlecode.junit-toolbox:junit-toolbox:jar:2.4:test
+[[1;34mINFO[m] \- org.projectlombok:lombok:jar:1.18.38:compile
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--< [0;36morg.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-service[0;1m >--[m
+[[1;34mINFO[m] [1mBuilding SO CNFM LCM Service 1.15.0-SNAPSHOT                      [8/10][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+Downloading from central: https://repo1.maven.org/maven2/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-bpmn-flows/1.15.0-SNAPSHOT/maven-metadata.xml
+Downloading from camunda-bpm: https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-bpmn-flows/1.15.0-SNAPSHOT/maven-metadata.xml
+Downloading from onap-snapshots: https://nexus.onap.org/content/repositories/snapshots/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-bpmn-flows/1.15.0-SNAPSHOT/maven-metadata.xml
+Downloading from camunda-public: https://artifacts.camunda.com/artifactory/public/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-bpmn-flows/1.15.0-SNAPSHOT/maven-metadata.xml
+Progress (1): 822 B                   Downloaded from onap-snapshots: https://nexus.onap.org/content/repositories/snapshots/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-bpmn-flows/1.15.0-SNAPSHOT/maven-metadata.xml (822 B at 3.6 kB/s)
+[[1;33mWARNING[m] Could not transfer metadata org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-bpmn-flows:1.15.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-bpmn-flows/1.15.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;33mWARNING[m] org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-api:1.15.0-SNAPSHOT/maven-metadata.xmlfailed to transfer from https://artifacts.camunda.com/artifactory/camunda-bpm/ during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of camunda-bpm has elapsed or updates are forced. Original error: Could not transfer metadata org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-api:1.15.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-api/1.15.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;33mWARNING[m] org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-bpmn-flows:1.15.0-SNAPSHOT/maven-metadata.xmlfailed to transfer from https://artifacts.camunda.com/artifactory/camunda-bpm/ during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of camunda-bpm has elapsed or updates are forced. Original error: Could not transfer metadata org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-bpmn-flows:1.15.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-bpmn-flows/1.15.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;33mWARNING[m] org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-database-service:1.15.0-SNAPSHOT/maven-metadata.xmlfailed to transfer from https://artifacts.camunda.com/artifactory/camunda-bpm/ during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of camunda-bpm has elapsed or updates are forced. Original error: Could not transfer metadata org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-database-service:1.15.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-database-service/1.15.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+Downloading from onap-snapshots: https://nexus.onap.org/content/repositories/snapshots/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-bpmn-flows/1.15.0-SNAPSHOT/so-cnfm-lcm-bpmn-flows-1.15.0-20260420.085409-3.jar
+Progress (1): 4.1/169 kBProgress (1): 7.3/169 kBProgress (1): 11/169 kB Progress (1): 14/169 kBProgress (1): 18/169 kBProgress (1): 22/169 kBProgress (1): 26/169 kBProgress (1): 30/169 kBProgress (1): 34/169 kBProgress (1): 38/169 kBProgress (1): 41/169 kBProgress (1): 45/169 kBProgress (1): 49/169 kBProgress (1): 53/169 kBProgress (1): 58/169 kBProgress (1): 62/169 kBProgress (1): 66/169 kBProgress (1): 70/169 kBProgress (1): 74/169 kBProgress (1): 78/169 kBProgress (1): 82/169 kBProgress (1): 86/169 kBProgress (1): 90/169 kBProgress (1): 94/169 kBProgress (1): 99/169 kBProgress (1): 103/169 kBProgress (1): 107/169 kBProgress (1): 111/169 kBProgress (1): 115/169 kBProgress (1): 119/169 kBProgress (1): 123/169 kBProgress (1): 127/169 kBProgress (1): 131/169 kBProgress (1): 135/169 kBProgress (1): 140/169 kBProgress (1): 144/169 kBProgress (1): 148/169 kBProgress (1): 152/169 kBProgress (1): 156/169 kBProgress (1): 160/169 kBProgress (1): 164/169 kBProgress (1): 168/169 kBProgress (1): 169 kB                        Downloaded from onap-snapshots: https://nexus.onap.org/content/repositories/snapshots/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-bpmn-flows/1.15.0-SNAPSHOT/so-cnfm-lcm-bpmn-flows-1.15.0-20260420.085409-3.jar (169 kB at 269 kB/s)
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-dependency-plugin:2.8:tree[m [1m(default-cli)[m @ [36mso-cnfm-lcm-service[0;1m ---[m
+[[1;33mWARNING[m] org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-api:1.15.0-SNAPSHOT/maven-metadata.xmlfailed to transfer from https://artifacts.camunda.com/artifactory/camunda-bpm/ during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of camunda-bpm has elapsed or updates are forced. Original error: Could not transfer metadata org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-api:1.15.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-api/1.15.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;33mWARNING[m] org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-bpmn-flows:1.15.0-SNAPSHOT/maven-metadata.xmlfailed to transfer from https://artifacts.camunda.com/artifactory/camunda-bpm/ during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of camunda-bpm has elapsed or updates are forced. Original error: Could not transfer metadata org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-bpmn-flows:1.15.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-bpmn-flows/1.15.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;33mWARNING[m] org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-database-service:1.15.0-SNAPSHOT/maven-metadata.xmlfailed to transfer from https://artifacts.camunda.com/artifactory/camunda-bpm/ during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of camunda-bpm has elapsed or updates are forced. Original error: Could not transfer metadata org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-database-service:1.15.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-database-service/1.15.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;34mINFO[m] org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-service:jar:1.15.0-SNAPSHOT
+[[1;34mINFO[m] +- org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-api:jar:1.15.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  +- com.google.code.gson:gson:jar:2.9.1:compile
+[[1;34mINFO[m] |  +- io.swagger.core.v3:swagger-annotations:jar:2.1.13:compile
+[[1;34mINFO[m] |  \- javax.xml.bind:jaxb-api:jar:2.3.1:compile
+[[1;34mINFO[m] |     \- javax.activation:javax.activation-api:jar:1.2.0:compile
+[[1;34mINFO[m] +- org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-bpmn-flows:jar:1.15.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  +- org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-database-service:jar:1.15.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  |  +- org.springframework.boot:spring-boot-starter-data-jpa:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  |  +- org.springframework.boot:spring-boot-starter-aop:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  |  +- org.springframework.boot:spring-boot-starter-jdbc:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  |  +- jakarta.transaction:jakarta.transaction-api:jar:1.3.3:compile
+[[1;34mINFO[m] |  |  |  +- jakarta.persistence:jakarta.persistence-api:jar:2.2.3:compile
+[[1;34mINFO[m] |  |  |  \- org.springframework.data:spring-data-jpa:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  |     \- org.springframework.data:spring-data-commons:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- org.mariadb.jdbc:mariadb-java-client:jar:2.7.7:compile
+[[1;34mINFO[m] |  |  \- org.flywaydb:flyway-core:jar:6.4.4:compile
+[[1;34mINFO[m] |  +- org.onap.so:aai-client:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  |  +- org.onap.so:aai-fluent-uri-builder:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  |  +- org.ehcache:ehcache:jar:3.10.8:compile
+[[1;34mINFO[m] |  |  +- javax.servlet:javax.servlet-api:jar:4.0.1:compile
+[[1;34mINFO[m] |  |  \- org.antlr:antlr4-runtime:jar:4.7:compile
+[[1;34mINFO[m] |  +- org.onap.aai.schema-service:aai-schema:jar:1.12.10:compile
+[[1;34mINFO[m] |  |  +- org.onap.aai.schema-service:aai-annotations:jar:1.12.10:compile
+[[1;34mINFO[m] |  |  +- org.jvnet.jaxb2_commons:jaxb2-basics:jar:0.11.1:compile
+[[1;34mINFO[m] |  |  |  +- org.jvnet.jaxb2_commons:jaxb2-basics-runtime:jar:0.11.1:compile
+[[1;34mINFO[m] |  |  |  +- org.jvnet.jaxb2_commons:jaxb2-basics-tools:jar:0.11.1:compile
+[[1;34mINFO[m] |  |  |  |  \- org.slf4j:jcl-over-slf4j:jar:1.7.36:compile
+[[1;34mINFO[m] |  |  |  \- com.google.code.javaparser:javaparser:jar:1.0.11:compile
+[[1;34mINFO[m] |  |  \- com.googlecode.json-simple:json-simple:jar:1.1.1:compile
+[[1;34mINFO[m] |  +- org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter-rest:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  +- org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |  +- org.camunda.bpm:camunda-engine-spring:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |  |  \- org.camunda.bpm:camunda-engine:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |  |     +- org.camunda.bpm.model:camunda-bpmn-model:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |  |     |  \- org.camunda.bpm.model:camunda-xml-model:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |  |     +- org.camunda.bpm.model:camunda-cmmn-model:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |  |     +- org.camunda.bpm.dmn:camunda-engine-dmn:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |  |     |  +- org.camunda.bpm.model:camunda-dmn-model:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |  |     |  +- org.camunda.bpm.dmn:camunda-engine-feel-api:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |  |     |  +- org.camunda.bpm.dmn:camunda-engine-feel-juel:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |  |     |  +- org.camunda.bpm.dmn:camunda-engine-feel-scala:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |  |     |  \- org.camunda.feel:feel-engine:jar:scala-shaded:1.13.3:compile
+[[1;34mINFO[m] |  |  |  |     +- org.mybatis:mybatis:jar:3.5.6:compile
+[[1;34mINFO[m] |  |  |  |     +- joda-time:joda-time:jar:2.1:compile
+[[1;34mINFO[m] |  |  |  |     +- org.camunda.connect:camunda-connect-core:jar:1.5.2:compile
+[[1;34mINFO[m] |  |  |  |     \- org.camunda.connect:camunda-connect-connectors-all:jar:1.5.2:runtime
+[[1;34mINFO[m] |  |  |  +- org.springframework:spring-jdbc:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  |  +- org.springframework:spring-tx:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  |  +- org.springframework:spring-orm:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  |  \- com.fasterxml.uuid:java-uuid-generator:jar:3.2.0:compile
+[[1;34mINFO[m] |  |  +- org.camunda.bpm:camunda-engine-rest-jaxrs2:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |  \- commons-fileupload:commons-fileupload:jar:1.5:compile
+[[1;34mINFO[m] |  |  \- org.springframework.boot:spring-boot-starter-jersey:jar:2.7.18:compile
+[[1;34mINFO[m] |  |     +- org.springframework.boot:spring-boot-starter-validation:jar:2.7.18:compile
+[[1;34mINFO[m] |  |     |  \- org.hibernate.validator:hibernate-validator:jar:6.2.5.Final:compile
+[[1;34mINFO[m] |  |     +- org.glassfish.jersey.core:jersey-server:jar:2.35:compile
+[[1;34mINFO[m] |  |     |  \- jakarta.validation:jakarta.validation-api:jar:2.0.2:compile
+[[1;34mINFO[m] |  |     +- org.glassfish.jersey.containers:jersey-container-servlet-core:jar:2.35:compile
+[[1;34mINFO[m] |  |     +- org.glassfish.jersey.containers:jersey-container-servlet:jar:2.35:compile
+[[1;34mINFO[m] |  |     +- org.glassfish.jersey.ext:jersey-bean-validation:jar:2.35:compile
+[[1;34mINFO[m] |  |     +- org.glassfish.jersey.ext:jersey-spring5:jar:2.35:compile
+[[1;34mINFO[m] |  |     |  +- org.glassfish.hk2:hk2:jar:2.6.1:compile
+[[1;34mINFO[m] |  |     |  |  +- org.glassfish.hk2:hk2-core:jar:2.6.1:compile
+[[1;34mINFO[m] |  |     |  |  +- org.glassfish.hk2:hk2-runlevel:jar:2.6.1:compile
+[[1;34mINFO[m] |  |     |  |  \- org.glassfish.hk2:class-model:jar:2.6.1:compile
+[[1;34mINFO[m] |  |     |  |     +- org.ow2.asm:asm-analysis:jar:7.1:compile
+[[1;34mINFO[m] |  |     |  |     +- org.ow2.asm:asm-commons:jar:7.1:compile
+[[1;34mINFO[m] |  |     |  |     +- org.ow2.asm:asm-tree:jar:7.1:compile
+[[1;34mINFO[m] |  |     |  |     \- org.ow2.asm:asm-util:jar:7.1:compile
+[[1;34mINFO[m] |  |     |  \- org.glassfish.hk2:spring-bridge:jar:2.6.1:compile
+[[1;34mINFO[m] |  |     \- org.glassfish.jersey.media:jersey-media-json-jackson:jar:2.35:compile
+[[1;34mINFO[m] |  |        \- org.glassfish.jersey.ext:jersey-entity-filtering:jar:2.35:compile
+[[1;34mINFO[m] |  +- org.yaml:snakeyaml:jar:1.31:compile
+[[1;34mINFO[m] |  +- com.shazam:shazamcrest:jar:0.11:compile
+[[1;34mINFO[m] |  +- org.onap.so:clients-base:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  |  +- org.springframework.boot:spring-boot:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- javax.cache:cache-api:jar:1.1.1:compile
+[[1;34mINFO[m] |  |  +- org.javatuples:javatuples:jar:1.2:compile
+[[1;34mINFO[m] |  |  \- net.jodah:failsafe:jar:2.0.1:compile
+[[1;34mINFO[m] |  +- io.kubernetes:client-java:jar:13.0.2:compile
+[[1;34mINFO[m] |  |  +- io.prometheus:simpleclient:jar:0.15.0:compile
+[[1;34mINFO[m] |  |  |  +- io.prometheus:simpleclient_tracer_otel:jar:0.15.0:compile
+[[1;34mINFO[m] |  |  |  |  \- io.prometheus:simpleclient_tracer_common:jar:0.15.0:compile
+[[1;34mINFO[m] |  |  |  \- io.prometheus:simpleclient_tracer_otel_agent:jar:0.15.0:compile
+[[1;34mINFO[m] |  |  +- io.prometheus:simpleclient_httpserver:jar:0.15.0:compile
+[[1;34mINFO[m] |  |  |  \- io.prometheus:simpleclient_common:jar:0.15.0:compile
+[[1;34mINFO[m] |  |  +- io.kubernetes:client-java-api:jar:13.0.2:compile
+[[1;34mINFO[m] |  |  |  +- io.swagger:swagger-annotations:jar:1.6.2:compile
+[[1;34mINFO[m] |  |  |  +- com.squareup.okhttp3:okhttp:jar:4.9.3:compile
+[[1;34mINFO[m] |  |  |  |  \- com.squareup.okio:okio:jar:2.8.0:compile
+[[1;34mINFO[m] |  |  |  +- com.squareup.okhttp3:logging-interceptor:jar:4.9.3:compile
+[[1;34mINFO[m] |  |  |  |  \- org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.6.21:compile
+[[1;34mINFO[m] |  |  |  |     \- org.jetbrains.kotlin:kotlin-stdlib-jdk7:jar:1.6.21:compile
+[[1;34mINFO[m] |  |  |  +- io.gsonfire:gson-fire:jar:1.8.5:compile
+[[1;34mINFO[m] |  |  |  \- com.google.code.findbugs:jsr305:jar:3.0.2:compile
+[[1;34mINFO[m] |  |  +- io.kubernetes:client-java-proto:jar:13.0.2:compile
+[[1;34mINFO[m] |  |  +- commons-codec:commons-codec:jar:1.15:compile
+[[1;34mINFO[m] |  |  +- org.apache.commons:commons-compress:jar:1.21:compile
+[[1;34mINFO[m] |  |  +- org.apache.commons:commons-lang3:jar:3.12.0:compile
+[[1;34mINFO[m] |  |  +- org.bouncycastle:bcprov-ext-jdk15on:jar:1.69:compile
+[[1;34mINFO[m] |  |  +- org.bouncycastle:bcpkix-jdk15on:jar:1.69:compile
+[[1;34mINFO[m] |  |  |  +- org.bouncycastle:bcprov-jdk15on:jar:1.69:compile
+[[1;34mINFO[m] |  |  |  \- org.bouncycastle:bcutil-jdk15on:jar:1.69:compile
+[[1;34mINFO[m] |  |  +- com.google.protobuf:protobuf-java:jar:3.17.3:compile
+[[1;34mINFO[m] |  |  +- org.apache.commons:commons-collections4:jar:4.4:compile
+[[1;34mINFO[m] |  |  \- org.bitbucket.b_c:jose4j:jar:0.7.8:compile
+[[1;34mINFO[m] |  \- org.jetbrains.kotlin:kotlin-stdlib:jar:1.6.21:compile
+[[1;34mINFO[m] |     +- org.jetbrains.kotlin:kotlin-stdlib-common:jar:1.6.21:compile
+[[1;34mINFO[m] |     \- org.jetbrains:annotations:jar:13.0:compile
+[[1;34mINFO[m] +- org.springframework.boot:spring-boot-starter-web:jar:2.7.18:compile
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-starter:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- org.springframework.boot:spring-boot-autoconfigure:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- org.springframework.boot:spring-boot-starter-logging:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  |  +- org.apache.logging.log4j:log4j-to-slf4j:jar:2.17.2:compile
+[[1;34mINFO[m] |  |  |  |  \- org.apache.logging.log4j:log4j-api:jar:2.17.2:compile
+[[1;34mINFO[m] |  |  |  \- org.slf4j:jul-to-slf4j:jar:1.7.36:compile
+[[1;34mINFO[m] |  |  \- jakarta.annotation:jakarta.annotation-api:jar:1.3.5:compile
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-starter-json:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- com.fasterxml.jackson.datatype:jackson-datatype-jdk8:jar:2.13.5:compile
+[[1;34mINFO[m] |  |  +- com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:2.13.5:compile
+[[1;34mINFO[m] |  |  \- com.fasterxml.jackson.module:jackson-module-parameter-names:jar:2.13.5:compile
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-starter-tomcat:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- org.apache.tomcat.embed:tomcat-embed-core:jar:9.0.83:compile
+[[1;34mINFO[m] |  |  +- org.apache.tomcat.embed:tomcat-embed-el:jar:9.0.83:compile
+[[1;34mINFO[m] |  |  \- org.apache.tomcat.embed:tomcat-embed-websocket:jar:9.0.83:compile
+[[1;34mINFO[m] |  +- org.springframework:spring-web:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  \- org.springframework:spring-beans:jar:5.3.31:compile
+[[1;34mINFO[m] |  \- org.springframework:spring-webmvc:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-context:jar:5.3.31:compile
+[[1;34mINFO[m] |     \- org.springframework:spring-expression:jar:5.3.31:compile
+[[1;34mINFO[m] +- org.springframework.boot:spring-boot-starter-security:jar:2.7.18:compile
+[[1;34mINFO[m] |  +- org.springframework:spring-aop:jar:5.3.31:compile
+[[1;34mINFO[m] |  +- org.springframework.security:spring-security-config:jar:5.7.11:compile
+[[1;34mINFO[m] |  |  \- org.springframework.security:spring-security-core:jar:5.7.11:compile
+[[1;34mINFO[m] |  |     \- org.springframework.security:spring-security-crypto:jar:5.7.11:compile
+[[1;34mINFO[m] |  \- org.springframework.security:spring-security-web:jar:5.7.11:compile
+[[1;34mINFO[m] +- org.springframework.boot:spring-boot-starter-actuator:jar:2.7.18:compile
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-actuator-autoconfigure:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  \- org.springframework.boot:spring-boot-actuator:jar:2.7.18:compile
+[[1;34mINFO[m] |  \- io.micrometer:micrometer-core:jar:1.9.17:compile
+[[1;34mINFO[m] |     +- org.hdrhistogram:HdrHistogram:jar:2.1.12:compile
+[[1;34mINFO[m] |     \- org.latencyutils:LatencyUtils:jar:2.0.3:runtime
+[[1;34mINFO[m] +- org.onap.so.common:common:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  +- org.onap.so:utils:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  |  +- com.sun.xml.bind:jaxb-core:jar:2.3.0:compile
+[[1;34mINFO[m] |  |  +- com.sun.xml.bind:jaxb-impl:jar:2.3.0:compile
+[[1;34mINFO[m] |  |  \- org.camunda.bpm:camunda-external-task-client:jar:7.17.0:compile
+[[1;34mINFO[m] |  |     +- org.camunda.commons:camunda-commons-logging:jar:1.10.0:compile
+[[1;34mINFO[m] |  |     \- org.camunda.commons:camunda-commons-typed-values:jar:7.17.0:compile
+[[1;34mINFO[m] |  |        \- org.camunda.commons:camunda-commons-utils:jar:1.10.0:compile
+[[1;34mINFO[m] |  +- org.onap.so:logger:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  |  +- ch.qos.logback:logback-classic:jar:1.2.11:compile
+[[1;34mINFO[m] |  |  \- ch.qos.logback:logback-core:jar:1.2.11:compile
+[[1;34mINFO[m] |  +- org.onap.so.common.clients:clients:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  |  +- com.google.guava:guava:jar:28.1-jre:compile
+[[1;34mINFO[m] |  |  |  +- com.google.guava:failureaccess:jar:1.0.1:compile
+[[1;34mINFO[m] |  |  |  +- com.google.guava:listenablefuture:jar:9999.0-empty-to-avoid-conflict-with-guava:compile
+[[1;34mINFO[m] |  |  |  +- org.checkerframework:checker-qual:jar:2.8.1:compile
+[[1;34mINFO[m] |  |  |  +- com.google.errorprone:error_prone_annotations:jar:2.3.2:compile
+[[1;34mINFO[m] |  |  |  +- com.google.j2objc:j2objc-annotations:jar:1.3:compile
+[[1;34mINFO[m] |  |  |  \- org.codehaus.mojo:animal-sniffer-annotations:jar:1.18:compile
+[[1;34mINFO[m] |  |  +- org.glassfish.jersey.core:jersey-client:jar:2.35:compile
+[[1;34mINFO[m] |  |  |  +- jakarta.ws.rs:jakarta.ws.rs-api:jar:2.1.6:compile
+[[1;34mINFO[m] |  |  |  +- org.glassfish.jersey.core:jersey-common:jar:2.35:compile
+[[1;34mINFO[m] |  |  |  |  \- org.glassfish.hk2:osgi-resource-locator:jar:1.0.3:compile
+[[1;34mINFO[m] |  |  |  \- org.glassfish.hk2.external:jakarta.inject:jar:2.6.1:compile
+[[1;34mINFO[m] |  |  +- org.glassfish.jersey.inject:jersey-hk2:jar:2.35:compile
+[[1;34mINFO[m] |  |  |  \- org.glassfish.hk2:hk2-locator:jar:2.6.1:compile
+[[1;34mINFO[m] |  |  |     +- org.glassfish.hk2.external:aopalliance-repackaged:jar:2.6.1:compile
+[[1;34mINFO[m] |  |  |     +- org.glassfish.hk2:hk2-api:jar:2.6.1:compile
+[[1;34mINFO[m] |  |  |     \- org.glassfish.hk2:hk2-utils:jar:2.6.1:compile
+[[1;34mINFO[m] |  |  \- org.apache.kafka:kafka-clients:jar:3.1.2:compile
+[[1;34mINFO[m] |  |     +- com.github.luben:zstd-jni:jar:1.5.0-4:runtime
+[[1;34mINFO[m] |  |     +- org.lz4:lz4-java:jar:1.8.0:runtime
+[[1;34mINFO[m] |  |     \- org.xerial.snappy:snappy-java:jar:1.1.8.4:runtime
+[[1;34mINFO[m] |  +- org.apache.httpcomponents:httpclient:jar:4.5.14:compile
+[[1;34mINFO[m] |  |  \- org.apache.httpcomponents:httpcore:jar:4.4.4:compile
+[[1;34mINFO[m] |  +- org.springframework:spring-aspects:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  \- org.aspectj:aspectjweaver:jar:1.9.7:compile
+[[1;34mINFO[m] |  +- org.hibernate:hibernate-core:jar:5.6.15.Final:compile
+[[1;34mINFO[m] |  |  +- org.jboss.logging:jboss-logging:jar:3.4.3.Final:compile
+[[1;34mINFO[m] |  |  +- javax.persistence:javax.persistence-api:jar:2.2:compile
+[[1;34mINFO[m] |  |  +- antlr:antlr:jar:2.7.7:compile
+[[1;34mINFO[m] |  |  +- org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec:jar:1.1.1.Final:compile
+[[1;34mINFO[m] |  |  +- org.jboss:jandex:jar:2.4.2.Final:compile
+[[1;34mINFO[m] |  |  +- com.fasterxml:classmate:jar:1.5.1:compile
+[[1;34mINFO[m] |  |  +- org.hibernate.common:hibernate-commons-annotations:jar:5.1.2.Final:compile
+[[1;34mINFO[m] |  |  \- org.glassfish.jaxb:jaxb-runtime:jar:2.3.9:compile
+[[1;34mINFO[m] |  |     +- org.glassfish.jaxb:txw2:jar:2.3.9:compile
+[[1;34mINFO[m] |  |     +- com.sun.istack:istack-commons-runtime:jar:3.0.12:compile
+[[1;34mINFO[m] |  |     \- com.sun.activation:jakarta.activation:jar:1.2.2:runtime
+[[1;34mINFO[m] |  +- org.modelmapper:modelmapper:jar:2.3.2:compile
+[[1;34mINFO[m] |  +- org.apache.tomcat:tomcat-catalina:jar:9.0.105:compile
+[[1;34mINFO[m] |  |  +- org.apache.tomcat:tomcat-servlet-api:jar:9.0.105:compile
+[[1;34mINFO[m] |  |  +- org.apache.tomcat:tomcat-jsp-api:jar:9.0.83:compile
+[[1;34mINFO[m] |  |  |  \- org.apache.tomcat:tomcat-el-api:jar:9.0.83:compile
+[[1;34mINFO[m] |  |  +- org.apache.tomcat:tomcat-juli:jar:9.0.105:compile
+[[1;34mINFO[m] |  |  +- org.apache.tomcat:tomcat-annotations-api:jar:9.0.83:compile
+[[1;34mINFO[m] |  |  +- org.apache.tomcat:tomcat-api:jar:9.0.105:compile
+[[1;34mINFO[m] |  |  +- org.apache.tomcat:tomcat-jni:jar:9.0.105:compile
+[[1;34mINFO[m] |  |  +- org.apache.tomcat:tomcat-coyote:jar:9.0.105:compile
+[[1;34mINFO[m] |  |  +- org.apache.tomcat:tomcat-util:jar:9.0.105:compile
+[[1;34mINFO[m] |  |  +- org.apache.tomcat:tomcat-util-scan:jar:9.0.105:compile
+[[1;34mINFO[m] |  |  \- org.apache.tomcat:tomcat-jaspic-api:jar:9.0.105:compile
+[[1;34mINFO[m] |  +- org.slf4j:slf4j-ext:jar:1.7.36:compile
+[[1;34mINFO[m] |  +- org.slf4j:slf4j-api:jar:1.7.36:compile
+[[1;34mINFO[m] |  +- org.springframework.retry:spring-retry:jar:1.3.1:compile
+[[1;34mINFO[m] |  +- org.json:json:jar:20250517:compile
+[[1;34mINFO[m] |  +- org.reflections:reflections:jar:0.9.11:compile
+[[1;34mINFO[m] |  |  \- org.javassist:javassist:jar:3.21.0-GA:compile
+[[1;34mINFO[m] |  +- com.zaxxer:HikariCP:jar:4.0.3:compile
+[[1;34mINFO[m] |  +- org.onap.appc.client:client-lib:jar:1.7.2:compile
+[[1;34mINFO[m] |  |  +- com.att.nsa:cambriaClient:jar:0.0.1:compile
+[[1;34mINFO[m] |  |  |  \- com.att.nsa:saClientLibrary:jar:0.0.1:compile
+[[1;34mINFO[m] |  |  |     +- org.apache.httpcomponents:httpclient-cache:jar:4.5.14:compile
+[[1;34mINFO[m] |  |  |     |  \- commons-logging:commons-logging:jar:1.2:compile
+[[1;34mINFO[m] |  |  |     +- com.att.nsa:saToolkit:jar:0.0.1:compile
+[[1;34mINFO[m] |  |  |     \- jline:jline:jar:2.12.1:compile
+[[1;34mINFO[m] |  |  \- com.att.eelf:eelf-core:jar:1.0.0:compile
+[[1;34mINFO[m] |  +- org.onap.appc.client:client-kit:jar:1.7.2:compile
+[[1;34mINFO[m] |  \- javax.validation:validation-api:jar:2.0.1.Final:compile
+[[1;34mINFO[m] +- org.springframework.boot:spring-boot-starter-test:jar:2.7.18:test
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-test:jar:2.7.18:test
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-test-autoconfigure:jar:2.7.18:test
+[[1;34mINFO[m] |  +- com.jayway.jsonpath:json-path:jar:2.7.0:compile
+[[1;34mINFO[m] |  |  \- net.minidev:json-smart:jar:2.4.11:compile
+[[1;34mINFO[m] |  |     \- net.minidev:accessors-smart:jar:2.4.11:compile
+[[1;34mINFO[m] |  |        \- org.ow2.asm:asm:jar:9.3:compile
+[[1;34mINFO[m] |  +- jakarta.xml.bind:jakarta.xml.bind-api:jar:2.3.3:compile
+[[1;34mINFO[m] |  +- org.hamcrest:hamcrest:jar:2.2:compile
+[[1;34mINFO[m] |  +- org.skyscreamer:jsonassert:jar:1.5.1:compile
+[[1;34mINFO[m] |  +- org.springframework:spring-core:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  \- org.springframework:spring-jcl:jar:5.3.31:compile
+[[1;34mINFO[m] |  +- org.springframework:spring-test:jar:5.3.31:test
+[[1;34mINFO[m] |  \- org.xmlunit:xmlunit-core:jar:2.9.1:test
+[[1;34mINFO[m] +- junit:junit:jar:4.13.2:test
+[[1;34mINFO[m] +- org.junit.vintage:junit-vintage-engine:jar:5.8.2:test
+[[1;34mINFO[m] |  +- org.junit.platform:junit-platform-engine:jar:1.8.2:test
+[[1;34mINFO[m] |  |  +- org.opentest4j:opentest4j:jar:1.2.0:test
+[[1;34mINFO[m] |  |  \- org.junit.platform:junit-platform-commons:jar:1.8.2:test
+[[1;34mINFO[m] |  \- org.apiguardian:apiguardian-api:jar:1.1.2:test
+[[1;34mINFO[m] +- com.h2database:h2:jar:1.4.200:test
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-slf4j:jar:1.6.9:compile
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-filter-base:jar:1.6.9:compile
+[[1;34mINFO[m] |  \- org.aspectj:aspectjrt:jar:1.9.7:compile
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-filter-spring:jar:1.6.9:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-core:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:2.14.3:compile
+[[1;34mINFO[m] |  \- jakarta.activation:jakarta.activation-api:jar:1.2.2:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-databind:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-annotations:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:jar:2.14.3:compile
+[[1;34mINFO[m] +- javax.ws.rs:javax.ws.rs-api:jar:2.1:compile
+[[1;34mINFO[m] +- javax.annotation:javax.annotation-api:jar:1.3.2:compile
+[[1;34mINFO[m] +- javax.inject:javax.inject:jar:1:compile
+[[1;34mINFO[m] +- org.mockito:mockito-core:jar:4.5.1:test
+[[1;34mINFO[m] |  +- net.bytebuddy:byte-buddy:jar:1.12.23:compile
+[[1;34mINFO[m] |  +- net.bytebuddy:byte-buddy-agent:jar:1.12.23:test
+[[1;34mINFO[m] |  \- org.objenesis:objenesis:jar:3.2:test
+[[1;34mINFO[m] +- org.hamcrest:hamcrest-core:jar:2.2:compile
+[[1;34mINFO[m] +- org.hamcrest:hamcrest-library:jar:2.2:compile
+[[1;34mINFO[m] +- xmlunit:xmlunit:jar:1.6:test
+[[1;34mINFO[m] +- com.github.tomakehurst:wiremock-jre8-standalone:jar:2.35.0:test
+[[1;34mINFO[m] +- com.openpojo:openpojo:jar:0.8.13:compile
+[[1;34mINFO[m] +- org.assertj:assertj-core:jar:3.16.0:test
+[[1;34mINFO[m] +- com.googlecode.junit-toolbox:junit-toolbox:jar:2.4:test
+[[1;34mINFO[m] |  \- commons-io:commons-io:jar:2.19.0:compile
+[[1;34mINFO[m] \- org.projectlombok:lombok:jar:1.18.38:compile
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--< [0;36morg.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-application[0;1m >--[m
+[[1;34mINFO[m] [1mBuilding SO CNFM LCM Application 1.15.0-SNAPSHOT                  [9/10][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+Downloading from central: https://repo1.maven.org/maven2/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-service/1.15.0-SNAPSHOT/maven-metadata.xml
+Downloading from onap-snapshots: https://nexus.onap.org/content/repositories/snapshots/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-service/1.15.0-SNAPSHOT/maven-metadata.xml
+Downloading from camunda-bpm: https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-service/1.15.0-SNAPSHOT/maven-metadata.xml
+Downloading from camunda-public: https://artifacts.camunda.com/artifactory/public/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-service/1.15.0-SNAPSHOT/maven-metadata.xml
+Progress (1): 819 B                   Downloaded from onap-snapshots: https://nexus.onap.org/content/repositories/snapshots/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-service/1.15.0-SNAPSHOT/maven-metadata.xml (819 B at 3.5 kB/s)
+[[1;33mWARNING[m] Could not transfer metadata org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-service:1.15.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-service/1.15.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;33mWARNING[m] org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-service:1.15.0-SNAPSHOT/maven-metadata.xmlfailed to transfer from https://artifacts.camunda.com/artifactory/camunda-bpm/ during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of camunda-bpm has elapsed or updates are forced. Original error: Could not transfer metadata org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-service:1.15.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-service/1.15.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;33mWARNING[m] org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-api:1.15.0-SNAPSHOT/maven-metadata.xmlfailed to transfer from https://artifacts.camunda.com/artifactory/camunda-bpm/ during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of camunda-bpm has elapsed or updates are forced. Original error: Could not transfer metadata org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-api:1.15.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-api/1.15.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;33mWARNING[m] org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-bpmn-flows:1.15.0-SNAPSHOT/maven-metadata.xmlfailed to transfer from https://artifacts.camunda.com/artifactory/camunda-bpm/ during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of camunda-bpm has elapsed or updates are forced. Original error: Could not transfer metadata org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-bpmn-flows:1.15.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-bpmn-flows/1.15.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;33mWARNING[m] org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-database-service:1.15.0-SNAPSHOT/maven-metadata.xmlfailed to transfer from https://artifacts.camunda.com/artifactory/camunda-bpm/ during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of camunda-bpm has elapsed or updates are forced. Original error: Could not transfer metadata org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-database-service:1.15.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-database-service/1.15.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+Downloading from onap-snapshots: https://nexus.onap.org/content/repositories/snapshots/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-service/1.15.0-SNAPSHOT/so-cnfm-lcm-service-1.15.0-20260420.085433-3.jar
+Progress (1): 4.1/18 kBProgress (1): 6.7/18 kBProgress (1): 11/18 kB Progress (1): 14/18 kBProgress (1): 18/18 kBProgress (1): 18 kB                      Downloaded from onap-snapshots: https://nexus.onap.org/content/repositories/snapshots/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-service/1.15.0-SNAPSHOT/so-cnfm-lcm-service-1.15.0-20260420.085433-3.jar (18 kB at 77 kB/s)
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-dependency-plugin:2.8:tree[m [1m(default-cli)[m @ [36mso-cnfm-lcm-application[0;1m ---[m
+[[1;33mWARNING[m] org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-service:1.15.0-SNAPSHOT/maven-metadata.xmlfailed to transfer from https://artifacts.camunda.com/artifactory/camunda-bpm/ during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of camunda-bpm has elapsed or updates are forced. Original error: Could not transfer metadata org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-service:1.15.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-service/1.15.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;33mWARNING[m] org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-api:1.15.0-SNAPSHOT/maven-metadata.xmlfailed to transfer from https://artifacts.camunda.com/artifactory/camunda-bpm/ during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of camunda-bpm has elapsed or updates are forced. Original error: Could not transfer metadata org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-api:1.15.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-api/1.15.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;33mWARNING[m] org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-bpmn-flows:1.15.0-SNAPSHOT/maven-metadata.xmlfailed to transfer from https://artifacts.camunda.com/artifactory/camunda-bpm/ during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of camunda-bpm has elapsed or updates are forced. Original error: Could not transfer metadata org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-bpmn-flows:1.15.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-bpmn-flows/1.15.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;33mWARNING[m] org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-database-service:1.15.0-SNAPSHOT/maven-metadata.xmlfailed to transfer from https://artifacts.camunda.com/artifactory/camunda-bpm/ during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of camunda-bpm has elapsed or updates are forced. Original error: Could not transfer metadata org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-database-service:1.15.0-SNAPSHOT/maven-metadata.xml from/to camunda-bpm (https://artifacts.camunda.com/artifactory/camunda-bpm/): authentication failed for https://artifacts.camunda.com/artifactory/camunda-bpm/org/onap/so/adapters/so-cnf-adapter/so-cnfm/lcm/so-cnfm-lcm-database-service/1.15.0-SNAPSHOT/maven-metadata.xml, status: 401 Unauthorized
+[[1;34mINFO[m] org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-application:jar:1.15.0-SNAPSHOT
+[[1;34mINFO[m] +- org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-service:jar:1.15.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  +- org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-api:jar:1.15.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  |  +- com.google.code.gson:gson:jar:2.9.1:compile
+[[1;34mINFO[m] |  |  +- io.swagger.core.v3:swagger-annotations:jar:2.1.13:compile
+[[1;34mINFO[m] |  |  \- javax.xml.bind:jaxb-api:jar:2.3.1:compile
+[[1;34mINFO[m] |  |     \- javax.activation:javax.activation-api:jar:1.2.0:compile
+[[1;34mINFO[m] |  +- org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-bpmn-flows:jar:1.15.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  |  +- org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm:so-cnfm-lcm-database-service:jar:1.15.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  |  |  +- org.springframework.boot:spring-boot-starter-data-jpa:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  |  |  +- org.springframework.boot:spring-boot-starter-aop:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  |  |  +- org.springframework.boot:spring-boot-starter-jdbc:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  |  |  +- jakarta.transaction:jakarta.transaction-api:jar:1.3.3:compile
+[[1;34mINFO[m] |  |  |  |  +- jakarta.persistence:jakarta.persistence-api:jar:2.2.3:compile
+[[1;34mINFO[m] |  |  |  |  \- org.springframework.data:spring-data-jpa:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  |  |     \- org.springframework.data:spring-data-commons:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  |  +- org.mariadb.jdbc:mariadb-java-client:jar:2.7.7:compile
+[[1;34mINFO[m] |  |  |  \- org.flywaydb:flyway-core:jar:6.4.4:compile
+[[1;34mINFO[m] |  |  +- org.onap.so:aai-client:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  |  |  +- org.onap.so:aai-fluent-uri-builder:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  |  |  +- org.ehcache:ehcache:jar:3.10.8:compile
+[[1;34mINFO[m] |  |  |  +- javax.servlet:javax.servlet-api:jar:4.0.1:compile
+[[1;34mINFO[m] |  |  |  \- org.antlr:antlr4-runtime:jar:4.7:compile
+[[1;34mINFO[m] |  |  +- org.onap.aai.schema-service:aai-schema:jar:1.12.10:compile
+[[1;34mINFO[m] |  |  |  +- org.onap.aai.schema-service:aai-annotations:jar:1.12.10:compile
+[[1;34mINFO[m] |  |  |  +- org.jvnet.jaxb2_commons:jaxb2-basics:jar:0.11.1:compile
+[[1;34mINFO[m] |  |  |  |  +- org.jvnet.jaxb2_commons:jaxb2-basics-runtime:jar:0.11.1:compile
+[[1;34mINFO[m] |  |  |  |  +- org.jvnet.jaxb2_commons:jaxb2-basics-tools:jar:0.11.1:compile
+[[1;34mINFO[m] |  |  |  |  |  \- org.slf4j:jcl-over-slf4j:jar:1.7.36:compile
+[[1;34mINFO[m] |  |  |  |  \- com.google.code.javaparser:javaparser:jar:1.0.11:compile
+[[1;34mINFO[m] |  |  |  \- com.googlecode.json-simple:json-simple:jar:1.1.1:compile
+[[1;34mINFO[m] |  |  +- org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter-rest:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |  +- org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |  |  +- org.camunda.bpm:camunda-engine-spring:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |  |  |  \- org.camunda.bpm:camunda-engine:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |  |  |     +- org.camunda.bpm.model:camunda-bpmn-model:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |  |  |     |  \- org.camunda.bpm.model:camunda-xml-model:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |  |  |     +- org.camunda.bpm.model:camunda-cmmn-model:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |  |  |     +- org.camunda.bpm.dmn:camunda-engine-dmn:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |  |  |     |  +- org.camunda.bpm.model:camunda-dmn-model:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |  |  |     |  +- org.camunda.bpm.dmn:camunda-engine-feel-api:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |  |  |     |  +- org.camunda.bpm.dmn:camunda-engine-feel-juel:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |  |  |     |  +- org.camunda.bpm.dmn:camunda-engine-feel-scala:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |  |  |     |  \- org.camunda.feel:feel-engine:jar:scala-shaded:1.13.3:compile
+[[1;34mINFO[m] |  |  |  |  |     +- org.mybatis:mybatis:jar:3.5.6:compile
+[[1;34mINFO[m] |  |  |  |  |     +- joda-time:joda-time:jar:2.1:compile
+[[1;34mINFO[m] |  |  |  |  |     +- org.camunda.connect:camunda-connect-core:jar:1.5.2:compile
+[[1;34mINFO[m] |  |  |  |  |     \- org.camunda.connect:camunda-connect-connectors-all:jar:1.5.2:runtime
+[[1;34mINFO[m] |  |  |  |  +- org.springframework:spring-jdbc:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  |  |  +- org.springframework:spring-tx:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  |  |  +- org.springframework:spring-orm:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  |  |  \- com.fasterxml.uuid:java-uuid-generator:jar:3.2.0:compile
+[[1;34mINFO[m] |  |  |  +- org.camunda.bpm:camunda-engine-rest-jaxrs2:jar:7.17.0:compile
+[[1;34mINFO[m] |  |  |  |  \- commons-fileupload:commons-fileupload:jar:1.5:compile
+[[1;34mINFO[m] |  |  |  \- org.springframework.boot:spring-boot-starter-jersey:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  |     +- org.springframework.boot:spring-boot-starter-validation:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  |     |  \- org.hibernate.validator:hibernate-validator:jar:6.2.5.Final:compile
+[[1;34mINFO[m] |  |  |     +- org.glassfish.jersey.core:jersey-server:jar:2.35:compile
+[[1;34mINFO[m] |  |  |     |  \- jakarta.validation:jakarta.validation-api:jar:2.0.2:compile
+[[1;34mINFO[m] |  |  |     +- org.glassfish.jersey.containers:jersey-container-servlet-core:jar:2.35:compile
+[[1;34mINFO[m] |  |  |     +- org.glassfish.jersey.containers:jersey-container-servlet:jar:2.35:compile
+[[1;34mINFO[m] |  |  |     +- org.glassfish.jersey.ext:jersey-bean-validation:jar:2.35:compile
+[[1;34mINFO[m] |  |  |     +- org.glassfish.jersey.ext:jersey-spring5:jar:2.35:compile
+[[1;34mINFO[m] |  |  |     |  +- org.glassfish.hk2:hk2:jar:2.6.1:compile
+[[1;34mINFO[m] |  |  |     |  |  +- org.glassfish.hk2:hk2-core:jar:2.6.1:compile
+[[1;34mINFO[m] |  |  |     |  |  +- org.glassfish.hk2:hk2-runlevel:jar:2.6.1:compile
+[[1;34mINFO[m] |  |  |     |  |  \- org.glassfish.hk2:class-model:jar:2.6.1:compile
+[[1;34mINFO[m] |  |  |     |  |     +- org.ow2.asm:asm-analysis:jar:7.1:compile
+[[1;34mINFO[m] |  |  |     |  |     +- org.ow2.asm:asm-commons:jar:7.1:compile
+[[1;34mINFO[m] |  |  |     |  |     +- org.ow2.asm:asm-tree:jar:7.1:compile
+[[1;34mINFO[m] |  |  |     |  |     \- org.ow2.asm:asm-util:jar:7.1:compile
+[[1;34mINFO[m] |  |  |     |  \- org.glassfish.hk2:spring-bridge:jar:2.6.1:compile
+[[1;34mINFO[m] |  |  |     \- org.glassfish.jersey.media:jersey-media-json-jackson:jar:2.35:compile
+[[1;34mINFO[m] |  |  |        \- org.glassfish.jersey.ext:jersey-entity-filtering:jar:2.35:compile
+[[1;34mINFO[m] |  |  +- org.yaml:snakeyaml:jar:1.31:compile
+[[1;34mINFO[m] |  |  +- com.shazam:shazamcrest:jar:0.11:compile
+[[1;34mINFO[m] |  |  |  \- org.skyscreamer:jsonassert:jar:1.5.1:compile
+[[1;34mINFO[m] |  |  +- org.onap.so:clients-base:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |  |  |  +- org.springframework.boot:spring-boot:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  |  +- javax.cache:cache-api:jar:1.1.1:compile
+[[1;34mINFO[m] |  |  |  +- org.javatuples:javatuples:jar:1.2:compile
+[[1;34mINFO[m] |  |  |  \- net.jodah:failsafe:jar:2.0.1:compile
+[[1;34mINFO[m] |  |  +- io.kubernetes:client-java:jar:13.0.2:compile
+[[1;34mINFO[m] |  |  |  +- io.prometheus:simpleclient:jar:0.15.0:compile
+[[1;34mINFO[m] |  |  |  |  +- io.prometheus:simpleclient_tracer_otel:jar:0.15.0:compile
+[[1;34mINFO[m] |  |  |  |  |  \- io.prometheus:simpleclient_tracer_common:jar:0.15.0:compile
+[[1;34mINFO[m] |  |  |  |  \- io.prometheus:simpleclient_tracer_otel_agent:jar:0.15.0:compile
+[[1;34mINFO[m] |  |  |  +- io.prometheus:simpleclient_httpserver:jar:0.15.0:compile
+[[1;34mINFO[m] |  |  |  |  \- io.prometheus:simpleclient_common:jar:0.15.0:compile
+[[1;34mINFO[m] |  |  |  +- io.kubernetes:client-java-api:jar:13.0.2:compile
+[[1;34mINFO[m] |  |  |  |  +- io.swagger:swagger-annotations:jar:1.6.2:compile
+[[1;34mINFO[m] |  |  |  |  +- com.squareup.okhttp3:okhttp:jar:4.9.3:compile
+[[1;34mINFO[m] |  |  |  |  |  \- com.squareup.okio:okio:jar:2.8.0:compile
+[[1;34mINFO[m] |  |  |  |  +- com.squareup.okhttp3:logging-interceptor:jar:4.9.3:compile
+[[1;34mINFO[m] |  |  |  |  |  \- org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.6.21:compile
+[[1;34mINFO[m] |  |  |  |  |     \- org.jetbrains.kotlin:kotlin-stdlib-jdk7:jar:1.6.21:compile
+[[1;34mINFO[m] |  |  |  |  +- io.gsonfire:gson-fire:jar:1.8.5:compile
+[[1;34mINFO[m] |  |  |  |  \- com.google.code.findbugs:jsr305:jar:3.0.2:compile
+[[1;34mINFO[m] |  |  |  +- io.kubernetes:client-java-proto:jar:13.0.2:compile
+[[1;34mINFO[m] |  |  |  +- commons-codec:commons-codec:jar:1.15:compile
+[[1;34mINFO[m] |  |  |  +- org.apache.commons:commons-compress:jar:1.21:compile
+[[1;34mINFO[m] |  |  |  +- org.apache.commons:commons-lang3:jar:3.12.0:compile
+[[1;34mINFO[m] |  |  |  +- org.bouncycastle:bcprov-ext-jdk15on:jar:1.69:compile
+[[1;34mINFO[m] |  |  |  +- org.bouncycastle:bcpkix-jdk15on:jar:1.69:compile
+[[1;34mINFO[m] |  |  |  |  +- org.bouncycastle:bcprov-jdk15on:jar:1.69:compile
+[[1;34mINFO[m] |  |  |  |  \- org.bouncycastle:bcutil-jdk15on:jar:1.69:compile
+[[1;34mINFO[m] |  |  |  +- com.google.protobuf:protobuf-java:jar:3.17.3:compile
+[[1;34mINFO[m] |  |  |  +- org.apache.commons:commons-collections4:jar:4.4:compile
+[[1;34mINFO[m] |  |  |  \- org.bitbucket.b_c:jose4j:jar:0.7.8:compile
+[[1;34mINFO[m] |  |  \- org.jetbrains.kotlin:kotlin-stdlib:jar:1.6.21:compile
+[[1;34mINFO[m] |  |     +- org.jetbrains.kotlin:kotlin-stdlib-common:jar:1.6.21:compile
+[[1;34mINFO[m] |  |     \- org.jetbrains:annotations:jar:13.0:compile
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-starter-web:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- org.springframework.boot:spring-boot-starter:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  |  +- org.springframework.boot:spring-boot-autoconfigure:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  |  +- org.springframework.boot:spring-boot-starter-logging:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  |  |  +- org.apache.logging.log4j:log4j-to-slf4j:jar:2.17.2:compile
+[[1;34mINFO[m] |  |  |  |  |  \- org.apache.logging.log4j:log4j-api:jar:2.17.2:compile
+[[1;34mINFO[m] |  |  |  |  \- org.slf4j:jul-to-slf4j:jar:1.7.36:compile
+[[1;34mINFO[m] |  |  |  \- jakarta.annotation:jakarta.annotation-api:jar:1.3.5:compile
+[[1;34mINFO[m] |  |  +- org.springframework.boot:spring-boot-starter-json:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  |  +- com.fasterxml.jackson.datatype:jackson-datatype-jdk8:jar:2.13.5:compile
+[[1;34mINFO[m] |  |  |  +- com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:2.13.5:compile
+[[1;34mINFO[m] |  |  |  \- com.fasterxml.jackson.module:jackson-module-parameter-names:jar:2.13.5:compile
+[[1;34mINFO[m] |  |  +- org.springframework.boot:spring-boot-starter-tomcat:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  |  +- org.apache.tomcat.embed:tomcat-embed-core:jar:9.0.83:compile
+[[1;34mINFO[m] |  |  |  +- org.apache.tomcat.embed:tomcat-embed-el:jar:9.0.83:compile
+[[1;34mINFO[m] |  |  |  \- org.apache.tomcat.embed:tomcat-embed-websocket:jar:9.0.83:compile
+[[1;34mINFO[m] |  |  \- org.springframework:spring-web:jar:5.3.31:compile
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-starter-security:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- org.springframework:spring-aop:jar:5.3.31:compile
+[[1;34mINFO[m] |  |  +- org.springframework.security:spring-security-config:jar:5.7.11:compile
+[[1;34mINFO[m] |  |  |  \- org.springframework.security:spring-security-core:jar:5.7.11:compile
+[[1;34mINFO[m] |  |  |     \- org.springframework.security:spring-security-crypto:jar:5.7.11:compile
+[[1;34mINFO[m] |  |  \- org.springframework.security:spring-security-web:jar:5.7.11:compile
+[[1;34mINFO[m] |  +- org.springframework.boot:spring-boot-starter-actuator:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  +- org.springframework.boot:spring-boot-actuator-autoconfigure:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  |  \- org.springframework.boot:spring-boot-actuator:jar:2.7.18:compile
+[[1;34mINFO[m] |  |  \- io.micrometer:micrometer-core:jar:1.9.17:compile
+[[1;34mINFO[m] |  |     +- org.hdrhistogram:HdrHistogram:jar:2.1.12:compile
+[[1;34mINFO[m] |  |     \- org.latencyutils:LatencyUtils:jar:2.0.3:runtime
+[[1;34mINFO[m] |  \- org.onap.so.common:common:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |     +- org.onap.so:utils:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |     |  +- com.jayway.jsonpath:json-path:jar:2.7.0:compile
+[[1;34mINFO[m] |     |  |  \- net.minidev:json-smart:jar:2.4.11:compile
+[[1;34mINFO[m] |     |  |     \- net.minidev:accessors-smart:jar:2.4.11:compile
+[[1;34mINFO[m] |     |  |        \- org.ow2.asm:asm:jar:9.3:compile
+[[1;34mINFO[m] |     |  +- com.sun.xml.bind:jaxb-core:jar:2.3.0:compile
+[[1;34mINFO[m] |     |  +- com.sun.xml.bind:jaxb-impl:jar:2.3.0:compile
+[[1;34mINFO[m] |     |  \- org.camunda.bpm:camunda-external-task-client:jar:7.17.0:compile
+[[1;34mINFO[m] |     |     +- org.camunda.commons:camunda-commons-logging:jar:1.10.0:compile
+[[1;34mINFO[m] |     |     \- org.camunda.commons:camunda-commons-typed-values:jar:7.17.0:compile
+[[1;34mINFO[m] |     |        \- org.camunda.commons:camunda-commons-utils:jar:1.10.0:compile
+[[1;34mINFO[m] |     +- org.onap.so:logger:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |     |  +- ch.qos.logback:logback-classic:jar:1.2.11:compile
+[[1;34mINFO[m] |     |  \- ch.qos.logback:logback-core:jar:1.2.11:compile
+[[1;34mINFO[m] |     +- org.onap.so.common.clients:clients:jar:1.18.0-SNAPSHOT:compile
+[[1;34mINFO[m] |     |  +- com.google.guava:guava:jar:28.1-jre:compile
+[[1;34mINFO[m] |     |  |  +- com.google.guava:failureaccess:jar:1.0.1:compile
+[[1;34mINFO[m] |     |  |  +- com.google.guava:listenablefuture:jar:9999.0-empty-to-avoid-conflict-with-guava:compile
+[[1;34mINFO[m] |     |  |  +- org.checkerframework:checker-qual:jar:2.8.1:compile
+[[1;34mINFO[m] |     |  |  +- com.google.errorprone:error_prone_annotations:jar:2.3.2:compile
+[[1;34mINFO[m] |     |  |  +- com.google.j2objc:j2objc-annotations:jar:1.3:compile
+[[1;34mINFO[m] |     |  |  \- org.codehaus.mojo:animal-sniffer-annotations:jar:1.18:compile
+[[1;34mINFO[m] |     |  +- org.glassfish.jersey.core:jersey-client:jar:2.35:compile
+[[1;34mINFO[m] |     |  |  +- jakarta.ws.rs:jakarta.ws.rs-api:jar:2.1.6:compile
+[[1;34mINFO[m] |     |  |  +- org.glassfish.jersey.core:jersey-common:jar:2.35:compile
+[[1;34mINFO[m] |     |  |  |  \- org.glassfish.hk2:osgi-resource-locator:jar:1.0.3:compile
+[[1;34mINFO[m] |     |  |  \- org.glassfish.hk2.external:jakarta.inject:jar:2.6.1:compile
+[[1;34mINFO[m] |     |  +- org.glassfish.jersey.inject:jersey-hk2:jar:2.35:compile
+[[1;34mINFO[m] |     |  |  \- org.glassfish.hk2:hk2-locator:jar:2.6.1:compile
+[[1;34mINFO[m] |     |  |     +- org.glassfish.hk2.external:aopalliance-repackaged:jar:2.6.1:compile
+[[1;34mINFO[m] |     |  |     +- org.glassfish.hk2:hk2-api:jar:2.6.1:compile
+[[1;34mINFO[m] |     |  |     \- org.glassfish.hk2:hk2-utils:jar:2.6.1:compile
+[[1;34mINFO[m] |     |  \- org.apache.kafka:kafka-clients:jar:3.1.2:compile
+[[1;34mINFO[m] |     |     +- com.github.luben:zstd-jni:jar:1.5.0-4:runtime
+[[1;34mINFO[m] |     |     +- org.lz4:lz4-java:jar:1.8.0:runtime
+[[1;34mINFO[m] |     |     \- org.xerial.snappy:snappy-java:jar:1.1.8.4:runtime
+[[1;34mINFO[m] |     +- org.apache.httpcomponents:httpclient:jar:4.5.14:compile
+[[1;34mINFO[m] |     |  \- org.apache.httpcomponents:httpcore:jar:4.4.4:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-aspects:jar:5.3.31:compile
+[[1;34mINFO[m] |     |  \- org.aspectj:aspectjweaver:jar:1.9.7:compile
+[[1;34mINFO[m] |     +- org.hibernate:hibernate-core:jar:5.6.15.Final:compile
+[[1;34mINFO[m] |     |  +- org.jboss.logging:jboss-logging:jar:3.4.3.Final:compile
+[[1;34mINFO[m] |     |  +- javax.persistence:javax.persistence-api:jar:2.2:compile
+[[1;34mINFO[m] |     |  +- antlr:antlr:jar:2.7.7:compile
+[[1;34mINFO[m] |     |  +- org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec:jar:1.1.1.Final:compile
+[[1;34mINFO[m] |     |  +- org.jboss:jandex:jar:2.4.2.Final:compile
+[[1;34mINFO[m] |     |  +- com.fasterxml:classmate:jar:1.5.1:compile
+[[1;34mINFO[m] |     |  +- org.hibernate.common:hibernate-commons-annotations:jar:5.1.2.Final:compile
+[[1;34mINFO[m] |     |  \- org.glassfish.jaxb:jaxb-runtime:jar:2.3.9:compile
+[[1;34mINFO[m] |     |     +- org.glassfish.jaxb:txw2:jar:2.3.9:compile
+[[1;34mINFO[m] |     |     +- com.sun.istack:istack-commons-runtime:jar:3.0.12:compile
+[[1;34mINFO[m] |     |     \- com.sun.activation:jakarta.activation:jar:1.2.2:runtime
+[[1;34mINFO[m] |     +- org.modelmapper:modelmapper:jar:2.3.2:compile
+[[1;34mINFO[m] |     +- org.apache.tomcat:tomcat-catalina:jar:9.0.105:compile
+[[1;34mINFO[m] |     |  +- org.apache.tomcat:tomcat-servlet-api:jar:9.0.105:compile
+[[1;34mINFO[m] |     |  +- org.apache.tomcat:tomcat-jsp-api:jar:9.0.83:compile
+[[1;34mINFO[m] |     |  |  \- org.apache.tomcat:tomcat-el-api:jar:9.0.83:compile
+[[1;34mINFO[m] |     |  +- org.apache.tomcat:tomcat-juli:jar:9.0.105:compile
+[[1;34mINFO[m] |     |  +- org.apache.tomcat:tomcat-annotations-api:jar:9.0.83:compile
+[[1;34mINFO[m] |     |  +- org.apache.tomcat:tomcat-api:jar:9.0.105:compile
+[[1;34mINFO[m] |     |  +- org.apache.tomcat:tomcat-jni:jar:9.0.105:compile
+[[1;34mINFO[m] |     |  +- org.apache.tomcat:tomcat-coyote:jar:9.0.105:compile
+[[1;34mINFO[m] |     |  +- org.apache.tomcat:tomcat-util:jar:9.0.105:compile
+[[1;34mINFO[m] |     |  +- org.apache.tomcat:tomcat-util-scan:jar:9.0.105:compile
+[[1;34mINFO[m] |     |  \- org.apache.tomcat:tomcat-jaspic-api:jar:9.0.105:compile
+[[1;34mINFO[m] |     +- org.slf4j:slf4j-ext:jar:1.7.36:compile
+[[1;34mINFO[m] |     +- org.springframework.retry:spring-retry:jar:1.3.1:compile
+[[1;34mINFO[m] |     +- org.json:json:jar:20250517:compile
+[[1;34mINFO[m] |     +- org.reflections:reflections:jar:0.9.11:compile
+[[1;34mINFO[m] |     |  \- org.javassist:javassist:jar:3.21.0-GA:compile
+[[1;34mINFO[m] |     +- com.zaxxer:HikariCP:jar:4.0.3:compile
+[[1;34mINFO[m] |     +- org.onap.appc.client:client-lib:jar:1.7.2:compile
+[[1;34mINFO[m] |     |  +- com.att.nsa:cambriaClient:jar:0.0.1:compile
+[[1;34mINFO[m] |     |  |  \- com.att.nsa:saClientLibrary:jar:0.0.1:compile
+[[1;34mINFO[m] |     |  |     +- org.apache.httpcomponents:httpclient-cache:jar:4.5.14:compile
+[[1;34mINFO[m] |     |  |     |  \- commons-logging:commons-logging:jar:1.2:compile
+[[1;34mINFO[m] |     |  |     +- com.att.nsa:saToolkit:jar:0.0.1:compile
+[[1;34mINFO[m] |     |  |     \- jline:jline:jar:2.12.1:compile
+[[1;34mINFO[m] |     |  \- com.att.eelf:eelf-core:jar:1.0.0:compile
+[[1;34mINFO[m] |     +- org.onap.appc.client:client-kit:jar:1.7.2:compile
+[[1;34mINFO[m] |     \- javax.validation:validation-api:jar:2.0.1.Final:compile
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-slf4j:jar:1.6.9:compile
+[[1;34mINFO[m] |  \- org.slf4j:slf4j-api:jar:1.7.36:compile
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-filter-base:jar:1.6.9:compile
+[[1;34mINFO[m] |  \- org.aspectj:aspectjrt:jar:1.9.7:compile
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-filter-spring:jar:1.6.9:compile
+[[1;34mINFO[m] |  \- org.springframework:spring-webmvc:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-beans:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-context:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-core:jar:5.3.31:compile
+[[1;34mINFO[m] |     |  \- org.springframework:spring-jcl:jar:5.3.31:compile
+[[1;34mINFO[m] |     \- org.springframework:spring-expression:jar:5.3.31:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-core:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:2.14.3:compile
+[[1;34mINFO[m] |  +- jakarta.xml.bind:jakarta.xml.bind-api:jar:2.3.3:compile
+[[1;34mINFO[m] |  \- jakarta.activation:jakarta.activation-api:jar:1.2.2:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-databind:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-annotations:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:jar:2.14.3:compile
+[[1;34mINFO[m] +- javax.ws.rs:javax.ws.rs-api:jar:2.1:compile
+[[1;34mINFO[m] +- javax.annotation:javax.annotation-api:jar:1.3.2:compile
+[[1;34mINFO[m] +- javax.inject:javax.inject:jar:1:compile
+[[1;34mINFO[m] +- org.mockito:mockito-core:jar:4.5.1:test
+[[1;34mINFO[m] |  +- net.bytebuddy:byte-buddy:jar:1.12.23:compile
+[[1;34mINFO[m] |  +- net.bytebuddy:byte-buddy-agent:jar:1.12.23:test
+[[1;34mINFO[m] |  \- org.objenesis:objenesis:jar:3.2:test
+[[1;34mINFO[m] +- org.hamcrest:hamcrest-core:jar:2.2:compile
+[[1;34mINFO[m] |  \- org.hamcrest:hamcrest:jar:2.2:compile
+[[1;34mINFO[m] +- org.hamcrest:hamcrest-library:jar:2.2:compile
+[[1;34mINFO[m] +- junit:junit:jar:4.13.2:test
+[[1;34mINFO[m] +- xmlunit:xmlunit:jar:1.6:test
+[[1;34mINFO[m] +- com.github.tomakehurst:wiremock-jre8-standalone:jar:2.35.0:test
+[[1;34mINFO[m] +- com.openpojo:openpojo:jar:0.8.13:compile
+[[1;34mINFO[m] +- org.assertj:assertj-core:jar:3.16.0:test
+[[1;34mINFO[m] +- com.googlecode.junit-toolbox:junit-toolbox:jar:2.4:test
+[[1;34mINFO[m] |  \- commons-io:commons-io:jar:2.19.0:compile
+[[1;34mINFO[m] \- org.projectlombok:lombok:jar:1.18.38:compile
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m------------< [0;36morg.onap.so.adapters.so-cnf-adapter:packages[0;1m >------------[m
+[[1;34mINFO[m] [1mBuilding Packages 1.15.0-SNAPSHOT                                [10/10][m
+[[1;34mINFO[m] [1m--------------------------------[ pom ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-dependency-plugin:2.8:tree[m [1m(default-cli)[m @ [36mpackages[0;1m ---[m
+[[1;34mINFO[m] org.onap.so.adapters.so-cnf-adapter:packages:pom:1.15.0-SNAPSHOT
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-slf4j:jar:1.6.9:compile
+[[1;34mINFO[m] |  \- org.slf4j:slf4j-api:jar:1.7.36:compile
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-filter-base:jar:1.6.9:compile
+[[1;34mINFO[m] |  \- org.aspectj:aspectjrt:jar:1.9.7:compile
+[[1;34mINFO[m] +- org.onap.logging-analytics:logging-filter-spring:jar:1.6.9:compile
+[[1;34mINFO[m] |  \- org.springframework:spring-webmvc:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-aop:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-beans:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-context:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-core:jar:5.3.31:compile
+[[1;34mINFO[m] |     |  \- org.springframework:spring-jcl:jar:5.3.31:compile
+[[1;34mINFO[m] |     +- org.springframework:spring-expression:jar:5.3.31:compile
+[[1;34mINFO[m] |     \- org.springframework:spring-web:jar:5.3.31:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-core:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:2.14.3:compile
+[[1;34mINFO[m] |  +- jakarta.xml.bind:jakarta.xml.bind-api:jar:2.3.3:compile
+[[1;34mINFO[m] |  \- jakarta.activation:jakarta.activation-api:jar:1.2.2:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-databind:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.core:jackson-annotations:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:jar:2.14.3:compile
+[[1;34mINFO[m] +- com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:jar:2.14.3:compile
+[[1;34mINFO[m] +- javax.ws.rs:javax.ws.rs-api:jar:2.1:compile
+[[1;34mINFO[m] +- javax.annotation:javax.annotation-api:jar:1.3.2:compile
+[[1;34mINFO[m] +- javax.inject:javax.inject:jar:1:compile
+[[1;34mINFO[m] +- org.mockito:mockito-core:jar:4.5.1:test
+[[1;34mINFO[m] |  +- net.bytebuddy:byte-buddy:jar:1.12.23:test
+[[1;34mINFO[m] |  +- net.bytebuddy:byte-buddy-agent:jar:1.12.23:test
+[[1;34mINFO[m] |  \- org.objenesis:objenesis:jar:3.2:test
+[[1;34mINFO[m] +- org.hamcrest:hamcrest-core:jar:2.2:compile
+[[1;34mINFO[m] |  \- org.hamcrest:hamcrest:jar:2.2:compile
+[[1;34mINFO[m] +- org.hamcrest:hamcrest-library:jar:2.2:compile
+[[1;34mINFO[m] +- junit:junit:jar:4.13.2:test
+[[1;34mINFO[m] +- xmlunit:xmlunit:jar:1.6:test
+[[1;34mINFO[m] +- com.github.tomakehurst:wiremock-jre8-standalone:jar:2.35.0:test
+[[1;34mINFO[m] +- com.openpojo:openpojo:jar:0.8.13:compile
+[[1;34mINFO[m] +- org.assertj:assertj-core:jar:3.16.0:test
+[[1;34mINFO[m] +- com.googlecode.junit-toolbox:junit-toolbox:jar:2.4:test
+[[1;34mINFO[m] |  \- commons-io:commons-io:jar:2.19.0:compile
+[[1;34mINFO[m] \- org.projectlombok:lombok:jar:1.18.38:compile
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1mReactor Summary for SO CNF Adapter 1.15.0-SNAPSHOT:[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] SO CNF Adapter ..................................... [1;32mSUCCESS[m [  2.221 s]
+[[1;34mINFO[m] SO CNF Application Jar ............................. [1;32mSUCCESS[m [  1.333 s]
+[[1;34mINFO[m] SO CNFM (Cloud-Native Network Function Manager) .... [1;32mSUCCESS[m [  0.036 s]
+[[1;34mINFO[m] SO CNFM LCM Manager ................................ [1;32mSUCCESS[m [  0.033 s]
+[[1;34mINFO[m] SO CNFM LCM Manager Api ............................ [1;32mSUCCESS[m [  0.074 s]
+[[1;34mINFO[m] SO CNFM LCM Database Service ....................... [1;32mSUCCESS[m [  0.166 s]
+[[1;34mINFO[m] SO CNFM LCM BPMN Flows ............................. [1;32mSUCCESS[m [  2.182 s]
+[[1;34mINFO[m] SO CNFM LCM Service ................................ [1;32mSUCCESS[m [  1.120 s]
+[[1;34mINFO[m] SO CNFM LCM Application ............................ [1;32mSUCCESS[m [  0.766 s]
+[[1;34mINFO[m] Packages ........................................... [1;32mSUCCESS[m [  0.032 s]
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1;32mBUILD SUCCESS[m
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] Total time:  11.376 s
+[[1;34mINFO[m] Finished at: 2026-05-08T13:02:26+02:00
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
