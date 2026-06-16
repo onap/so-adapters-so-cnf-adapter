@@ -30,6 +30,7 @@ import org.onap.so.adapters.cnf.service.statuscheck.SimpleStatusCheckService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +39,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import java.util.concurrent.Executor;
+
 @RestController
 public class HealthCheckController {
 
@@ -45,14 +48,17 @@ public class HealthCheckController {
     private final HealthCheckService healthCheckService;
     private final SimpleStatusCheckService simpleStatusCheckService;
     private final SoCallbackClient callbackClient;
+    private final Executor asyncExecutor;
 
     @Autowired
     public HealthCheckController(HealthCheckService healthCheckService,
                                  SimpleStatusCheckService simpleStatusCheckService,
-                                 SoCallbackClient callbackClient) {
+                                 SoCallbackClient callbackClient,
+                                 @Qualifier("cnfAsyncExecutor") Executor asyncExecutor) {
         this.healthCheckService = healthCheckService;
         this.simpleStatusCheckService = simpleStatusCheckService;
         this.callbackClient = callbackClient;
+        this.asyncExecutor = asyncExecutor;
     }
 
     @ResponseBody
@@ -62,7 +68,7 @@ public class HealthCheckController {
         logger.info("healthCheck called.");
         DeferredResult<ResponseEntity> response = new DeferredResult<>();
 
-        new Thread(() -> {
+        asyncExecutor.execute(() -> {
             logger.info("Processing health check request");
 
             HealthCheckResponse healthCheckResponse = null;
@@ -73,7 +79,7 @@ public class HealthCheckController {
                 healthCheckResponse = healthCheckService.healthCheckError(healthCheckRequest, e);
             }
             callbackClient.sendPostCallback(healthCheckRequest.getCallbackUrl(), healthCheckResponse);
-        }).start();
+        });
 
         response.setResult(ResponseEntity.accepted().build());
         return response;
@@ -86,7 +92,7 @@ public class HealthCheckController {
         logger.info("statusCheck called.");
         DeferredResult<ResponseEntity> response = new DeferredResult<>();
 
-        new Thread(() -> {
+        asyncExecutor.execute(() -> {
             logger.info("Processing status check request");
             StatusCheckResponse statusCheckResponse = null;
             try {
@@ -96,7 +102,7 @@ public class HealthCheckController {
                 statusCheckResponse = simpleStatusCheckService.statusCheckError(statusCheckRequest, e);
             }
             callbackClient.sendPostCallback(statusCheckRequest.getCallbackUrl(), statusCheckResponse);
-        }).start();
+        });
 
         response.setResult(ResponseEntity.accepted().build());
         return response;
