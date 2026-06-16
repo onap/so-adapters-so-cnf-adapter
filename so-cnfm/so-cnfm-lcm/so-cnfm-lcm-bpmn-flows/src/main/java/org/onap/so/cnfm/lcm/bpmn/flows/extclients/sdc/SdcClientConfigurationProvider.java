@@ -21,10 +21,7 @@ package org.onap.so.cnfm.lcm.bpmn.flows.extclients.sdc;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import java.nio.charset.StandardCharsets;
-import java.security.GeneralSecurityException;
 import org.apache.commons.codec.binary.Base64;
-import org.onap.so.cnfm.lcm.bpmn.flows.exceptions.BasicAuthConfigException;
-import org.onap.so.utils.CryptoUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -44,9 +41,6 @@ public class SdcClientConfigurationProvider {
     @Value("${sdc.password:#{null}}")
     private String sdcPassword;
 
-    @Value("${sdc.key:#{null}}")
-    private String sdcKey;
-
     @Value("${sdc.endpoint:https://sdc-be.onap:8443}")
     private String baseUrl;
 
@@ -54,20 +48,16 @@ public class SdcClientConfigurationProvider {
 
     private synchronized String getBasicAuth() {
         if (basicAuth == null) {
-            try {
-                final String auth = sdcUsername + ":" + CryptoUtils.decrypt(sdcPassword, sdcKey);
-                final byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(StandardCharsets.ISO_8859_1));
-                basicAuth = "Basic " + new String(encodedAuth);
-            } catch (final GeneralSecurityException exception) {
-                throw new BasicAuthConfigException("Unable to process basic auth information", exception);
-            }
+            final String auth = sdcUsername + ":" + sdcPassword;
+            final byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(StandardCharsets.ISO_8859_1));
+            basicAuth = "Basic " + new String(encodedAuth);
         }
         return basicAuth;
     }
 
     public HttpHeaders getSdcDefaultHttpHeaders() {
         final HttpHeaders headers = new HttpHeaders();
-        if (isNotBlank(sdcUsername) && isNotBlank(sdcPassword) && isNotBlank(sdcKey)) {
+        if (isNotBlank(sdcUsername) && isNotBlank(sdcPassword)) {
             headers.add(HttpHeaders.AUTHORIZATION, getBasicAuth());
         }
         headers.add("X-ECOMP-InstanceID", SERVICE_NAME);
