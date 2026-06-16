@@ -29,6 +29,7 @@ import org.onap.so.adapters.cnf.service.synchrornization.SynchronizationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +38,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import java.util.concurrent.Executor;
+
 @RestController
 public class AaiController {
 
@@ -44,14 +47,17 @@ public class AaiController {
     private final AaiService aaiService;
     private final SoCallbackClient callbackClient;
     private final SynchronizationService synchronizationService;
+    private final Executor asyncExecutor;
 
     @Autowired
     public AaiController(AaiService aaiService,
                          SoCallbackClient callbackClient,
-                         SynchronizationService synchronizationService) {
+                         SynchronizationService synchronizationService,
+                         @Qualifier("cnfAsyncExecutor") Executor asyncExecutor) {
         this.aaiService = aaiService;
         this.callbackClient = callbackClient;
         this.synchronizationService = synchronizationService;
+        this.asyncExecutor = asyncExecutor;
     }
 
     @ResponseBody
@@ -61,7 +67,7 @@ public class AaiController {
         logger.info("aai-update called.");
         DeferredResult<ResponseEntity> response = new DeferredResult<>();
 
-        new Thread(() -> {
+        asyncExecutor.execute(() -> {
             logger.info("Processing aai update");
             AaiCallbackResponse callbackResponse = new AaiCallbackResponse();
             try {
@@ -74,7 +80,7 @@ public class AaiController {
                 callbackResponse.setMessage(e.getMessage());
             }
             callbackClient.sendPostCallback(aaiRequest.getCallbackUrl(), callbackResponse);
-        }).start();
+        });
 
         response.setResult(ResponseEntity.accepted().build());
         return response;
@@ -87,7 +93,7 @@ public class AaiController {
         logger.info("aai-delete called.");
         DeferredResult<ResponseEntity> response = new DeferredResult<>();
 
-        new Thread(() -> {
+        asyncExecutor.execute(() -> {
             logger.info("Processing aai delete");
             AaiCallbackResponse callbackResponse = new AaiCallbackResponse();
             try {
@@ -100,7 +106,7 @@ public class AaiController {
                 callbackResponse.setMessage(e.getMessage());
             }
             callbackClient.sendPostCallback(aaiRequest.getCallbackUrl(), callbackResponse);
-        }).start();
+        });
 
         response.setResult(ResponseEntity.accepted().build());
         return response;

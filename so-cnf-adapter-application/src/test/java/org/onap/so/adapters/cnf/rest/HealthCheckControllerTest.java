@@ -22,6 +22,7 @@
 package org.onap.so.adapters.cnf.rest;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -36,6 +37,8 @@ import org.onap.so.adapters.cnf.service.statuscheck.SimpleStatusCheckService;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.context.request.async.DeferredResult;
+
+import java.util.concurrent.Executor;
 
 
 @SpringBootTest
@@ -53,6 +56,17 @@ public class HealthCheckControllerTest {
 
     @Mock
     SimpleStatusCheckService simpleStatusCheckService;
+
+    @Mock
+    private Executor asyncExecutor;
+
+    @Before
+    public void setup() {
+        Mockito.doAnswer(invocation -> {
+            ((Runnable) invocation.getArgument(0)).run();
+            return null;
+        }).when(asyncExecutor).execute(Mockito.any(Runnable.class));
+    }
 
     @Test
     public void healthCheckTest() throws Exception {
