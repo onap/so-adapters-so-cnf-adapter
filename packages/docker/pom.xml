@@ -27,9 +27,16 @@
         <finalName>${project.artifactId}-${project.version}</finalName>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.groovy.maven</groupId>
-                <artifactId>gmaven-plugin</artifactId>
-                <version>1.0</version>
+                <groupId>org.codehaus.gmavenplus</groupId>
+                <artifactId>gmavenplus-plugin</artifactId>
+                <version>3.0.2</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.groovy</groupId>
+                        <artifactId>groovy</artifactId>
+                        <version>4.0.15</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
                         <phase>validate</phase>
@@ -37,21 +44,23 @@
                             <goal>execute</goal>
                         </goals>
                         <configuration>
-                            <source>
-                                println 'Project version: ' + project.properties['cnf-adapter-project-version'];
-                                def versionArray;
-                                if (project.properties['cnf-adapter-project-version'] != null) {
-                                    versionArray = project.properties['cnf-adapter-project-version'].split('-');
-                                }
+                            <scripts>
+                                <script>
+                                    println 'Project version: ' + project.properties['cnf-adapter-project-version']
+                                    def versionArray
+                                    if (project.properties['cnf-adapter-project-version'] != null) {
+                                        versionArray = project.properties['cnf-adapter-project-version'].split('-')
+                                    }
 
-                                if (project.properties['cnf-adapter-project-version'].endsWith("-SNAPSHOT")) {
-                                    project.properties['project.docker.latesttag.version'] = versionArray[0] + "-SNAPSHOT-latest";
-                                } else {
-                                    project.properties['project.docker.latesttag.version'] = versionArray[0] + "-STAGING-latest";
-                                }
+                                    if (project.properties['cnf-adapter-project-version'].endsWith("-SNAPSHOT")) {
+                                        project.properties['project.docker.latesttag.version'] = versionArray[0] + "-SNAPSHOT-latest"
+                                    } else {
+                                        project.properties['project.docker.latesttag.version'] = versionArray[0] + "-STAGING-latest"
+                                    }
 
-                                println 'New tag for docker: ' + project.properties['project.docker.latesttag.version'];
-                            </source>
+                                    println 'New tag for docker: ' + project.properties['project.docker.latesttag.version']
+                                </script>
+                            </scripts>
                         </configuration>
                     </execution>
                 </executions>
