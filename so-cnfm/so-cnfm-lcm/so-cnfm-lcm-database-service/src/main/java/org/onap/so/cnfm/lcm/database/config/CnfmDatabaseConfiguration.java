@@ -26,7 +26,7 @@ import org.onap.so.cnfm.lcm.database.beans.Job;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.flyway.FlywayDataSource;
+import org.springframework.boot.autoconfigure.liquibase.LiquibaseDataSource;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
@@ -63,7 +63,7 @@ public class CnfmDatabaseConfiguration {
     }
 
     @Primary
-    @FlywayDataSource
+    @LiquibaseDataSource
     @Bean(name = CNFM_DATA_SOURCE_QUALIFIER)
     public DataSource dataSource(@Autowired(required = false) final MBeanExporter mBeanExporter) {
         if (mBeanExporter != null) {

@@ -16,6 +16,8 @@ aai:
    version: v19
    endpoint: https://aai.onap:8443
 spring:
+   liquibase:
+      change-log: classpath:db/changelog/db.changelog-master.xml
    datasource:
       hikari:
          camunda:

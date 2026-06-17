@@ -1,5 +1,3 @@
-use cnfm;
-
 CREATE TABLE IF NOT EXISTS `JOB` (
   `JOB_ID` varchar(255) NOT NULL,
   `JOB_TYPE` varchar(255) NOT NULL,

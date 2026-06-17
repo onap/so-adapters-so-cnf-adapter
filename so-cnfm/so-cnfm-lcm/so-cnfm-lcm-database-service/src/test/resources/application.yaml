@@ -14,6 +14,8 @@
 spring:
    main:
       web-application-type: none
+   liquibase:
+      enabled: false
    datasource:
       hikari:
          cnfm:

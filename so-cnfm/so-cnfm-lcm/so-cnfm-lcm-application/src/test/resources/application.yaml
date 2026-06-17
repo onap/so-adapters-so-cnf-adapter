@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: so-cnfm-lcm
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    hikari:
+      camunda:
+        jdbcUrl: jdbc:h2:mem:camunda;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+        driver-class-name: org.h2.Driver
+        pool-name: camunda-pool
+        registerMbeans: true
+      cnfm:
+        jdbcUrl: jdbc:h2:mem:cnfm;DB_CLOSE_DELAY=-1;INIT=CREATE SCHEMA IF NOT EXISTS cnfm;MODE=MYSQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE
+        driver-class-name: org.h2.Driver
+        pool-name: cnfm-pool
+        registerMbeans: true
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: validate
+aai:
+  version: v19
+  endpoint: http://localhost:8080
+sdc:
+  endpoint: http://localhost:8080
+cnfm:
+  kube-configs-dir: ${java.io.tmpdir}/kube-configs
+camunda:
+  bpm:
+    history-level: full
+    job-execution:
+      enabled: false

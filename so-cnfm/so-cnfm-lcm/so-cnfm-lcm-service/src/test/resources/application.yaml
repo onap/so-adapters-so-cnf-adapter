@@ -14,6 +14,8 @@
 spring:
    main:
       allow-bean-definition-overriding: true
+   liquibase:
+      enabled: false
    datasource:
       hikari:
          camunda:
