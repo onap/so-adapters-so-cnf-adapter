@@ -34,7 +34,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest(properties = {
-  "management.metrics.export.prometheus.enabled=true",
+  "management.prometheus.metrics.export.enabled=true",
   "management.endpoints.web.exposure.include=prometheus",
   "management.endpoint.prometheus.enabled=true",
 })

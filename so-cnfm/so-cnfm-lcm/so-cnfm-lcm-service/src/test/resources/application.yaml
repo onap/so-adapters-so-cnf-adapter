@@ -32,6 +32,11 @@ spring:
       generate-ddl: true
       hibernate:
          ddl-auto: create
+camunda:
+   bpm:
+      generic-properties:
+         properties:
+            enforce-history-time-to-live: false
 hibernate:
    dialect: org.hibernate.dialect.H2Dialect
    hbm2ddl:

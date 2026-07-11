@@ -33,3 +33,6 @@ camunda:
     history-level: full
     job-execution:
       enabled: false
+    generic-properties:
+      properties:
+        enforce-history-time-to-live: false

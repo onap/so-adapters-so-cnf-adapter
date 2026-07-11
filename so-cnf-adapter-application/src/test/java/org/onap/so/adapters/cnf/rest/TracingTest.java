@@ -15,73 +15,103 @@
  */
 package org.onap.so.adapters.cnf.rest;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Rule;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import org.junit.Test;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.actuate.observability.AutoConfigureObservability;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.util.SocketUtils;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.DefaultUriBuilderFactory;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
+import brave.handler.MutableSpan;
+import brave.handler.SpanHandler;
+import brave.propagation.TraceContext;
+import io.micrometer.observation.ObservationRegistry;
+import io.micrometer.tracing.Span;
+import io.micrometer.tracing.Tracer;
 
-import com.github.tomakehurst.wiremock.client.WireMock;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
-
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
-
-import lombok.SneakyThrows;
-
-@Ignore
-@EnableAutoConfiguration
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = {
-    "spring.sleuth.enabled=true",
-    "spring.sleuth.sampler.probability=1.0"
-})
+/**
+ * Verifies that the tracing pipeline introduced with the Spring Boot 3 migration (Micrometer Tracing + the Brave
+ * bridge, which replaced Spring Cloud Sleuth) is actually wired and reports finished spans.
+ *
+ * {@code @AutoConfigureObservability} is required: {@code @SpringBootTest} otherwise installs Spring Boot's
+ * observability test customizer, which disables tracing and registers a no-op {@code Tracer}. With it enabled, a test
+ * {@link SpanHandler} bean is collected by Boot's {@code BraveAutoConfiguration} and wired into the live Brave
+ * {@code Tracing}, so the assertion observes a real span flowing through the pipeline. This restores the behavioural
+ * verification of the original Sleuth-based test without its {@code Thread.sleep}-then-poll-WireMock flakiness: the
+ * handler captures the span synchronously on {@code end()}.
+ */
+@RunWith(SpringRunner.class)
+@AutoConfigureObservability
+@SpringBootTest
+@Import(TracingTest.TestSpanHandlerConfiguration.class)
+@TestPropertySource(properties = {"management.tracing.enabled=true", "management.tracing.sampling.probability=1.0"})
 public class TracingTest {
 
-  private static int wireMockPort = SocketUtils.findAvailableTcpPort();
+    @Autowired
+    ObservationRegistry observationRegistry;
 
-  @Rule
-  public WireMockRule wireMockRule = new WireMockRule(wireMockConfig().port(wireMockPort));
+    @Autowired
+    Tracer tracer;
 
-  @LocalServerPort
-  private int port;
+    @Autowired
+    TestSpanHandler testSpanHandler;
 
-  RestTemplate restTemplate;
-
-  @Before
-  public void setup() {
-    this.restTemplate = new RestTemplate();
-    restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:" + port));
-  }
-
-  @DynamicPropertySource
-  static void configureProperties(DynamicPropertyRegistry registry) {
-    registry.add("spring.sleuth.enabled", () -> "true");
-    registry.add("spring.zipkin.baseUrl", () -> "http://localhost:" + wireMockPort);
-    registry.add("spring.sleuth.sampler.probability", () -> "1.0");
-  }
-
-  @Test
-  @SneakyThrows
-  public void thatTracesAreExported() throws InterruptedException {
-    WireMock.stubFor(WireMock.post(WireMock.urlEqualTo("/api/v2/spans"))
-        .willReturn(WireMock.aResponse().withStatus(HttpStatus.OK.value())));
-
-    try {
-      restTemplate.getForObject("http://localhost:" + port + "/foo", String.class);
-    } catch (RestClientException e) {
-      // this provokes a 404. For the test it's not important what is returned here
+    @Test
+    public void thatTracingBeansAreAvailable() {
+        assertNotNull("ObservationRegistry bean should be present", observationRegistry);
+        assertNotNull("Tracer bean should be present", tracer);
     }
 
-    Thread.sleep(1000);
-    WireMock.verify(WireMock.postRequestedFor(WireMock.urlEqualTo("/api/v2/spans")));
-  }
+    @Test
+    public void thatFinishedSpansAreReportedThroughThePipeline() {
+        testSpanHandler.clear();
+
+        final Span span = tracer.nextSpan().name("cnf-adapter-tracing-test-span").start();
+        try (Tracer.SpanInScope ignored = tracer.withSpan(span)) {
+            // the span only needs to be opened and closed for it to be reported
+        } finally {
+            span.end();
+        }
+
+        assertTrue("A sampled span must be reported to the registered SpanHandler",
+                testSpanHandler.spanNames().contains("cnf-adapter-tracing-test-span"));
+    }
+
+    @TestConfiguration
+    static class TestSpanHandlerConfiguration {
+        @Bean
+        TestSpanHandler testSpanHandler() {
+            return new TestSpanHandler();
+        }
+    }
+
+    /**
+     * Captures the names of spans reported to Brave on {@code end()}. Brave only invokes {@code end()} for sampled
+     * spans, which is why the test forces a sampling probability of 1.0.
+     */
+    static class TestSpanHandler extends SpanHandler {
+        private final List<String> spanNames = new CopyOnWriteArrayList<>();
+
+        @Override
+        public boolean end(final TraceContext context, final MutableSpan span, final Cause cause) {
+            spanNames.add(span.name());
+            return true;
+        }
+
+        List<String> spanNames() {
+            return spanNames;
+        }
+
+        void clear() {
+            spanNames.clear();
+        }
+    }
+
 }

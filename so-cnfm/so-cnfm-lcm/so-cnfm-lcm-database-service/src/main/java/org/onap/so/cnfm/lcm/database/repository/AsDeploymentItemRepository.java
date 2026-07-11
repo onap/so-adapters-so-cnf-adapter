@@ -45,6 +45,6 @@ public interface AsDeploymentItemRepository extends JpaRepository<AsDeploymentIt
             @Param("state") final State state);
 
     @Modifying(clearAutomatically = true)
-    @Query("DELETE FROM AsDeploymentItem WHERE nfInstId = (:asInstId)")
+    @Query("DELETE FROM AsDeploymentItem WHERE asInst.asInstId = (:asInstId)")
     void deleteAsDeploymentItemUsingAsInstId(@Param("asInstId") final String asInstId);
 }

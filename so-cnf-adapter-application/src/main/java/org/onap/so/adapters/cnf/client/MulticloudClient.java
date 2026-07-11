@@ -35,7 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -233,7 +233,7 @@ public class MulticloudClient {
     }
 
     private void checkResponseStatusCode(ResponseEntity<String> result) throws BadResponseException {
-        HttpStatus statusCode = result.getStatusCode();
+        HttpStatusCode statusCode = result.getStatusCode();
         if (!statusCode.is2xxSuccessful()) {
             throw new BadResponseException("Multicloud response status error", String.valueOf(statusCode.value()));
         }

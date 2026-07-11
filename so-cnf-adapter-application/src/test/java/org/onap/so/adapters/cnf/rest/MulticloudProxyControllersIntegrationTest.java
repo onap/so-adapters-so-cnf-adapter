@@ -47,7 +47,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.util.SocketUtils;
+
+import java.io.IOException;
+import java.net.ServerSocket;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
@@ -56,7 +58,15 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule;
 @RunWith(SpringRunner.class)
 public class MulticloudProxyControllersIntegrationTest {
 
-    private static int wireMockPort = SocketUtils.findAvailableTcpPort();
+    private static int wireMockPort = findRandomPort();
+
+    private static int findRandomPort() {
+        try (ServerSocket socket = new ServerSocket(0)) {
+            return socket.getLocalPort();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @ClassRule
     public static WireMockRule wireMockRule = new WireMockRule(wireMockConfig().port(wireMockPort));

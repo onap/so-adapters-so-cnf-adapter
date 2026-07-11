@@ -49,8 +49,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
-import javax.persistence.EntityNotFoundException;
-import javax.ws.rs.core.UriBuilder;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.ws.rs.core.UriBuilder;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

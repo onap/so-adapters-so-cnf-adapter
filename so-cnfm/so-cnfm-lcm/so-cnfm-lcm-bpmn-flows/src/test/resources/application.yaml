@@ -34,20 +34,23 @@ spring:
     generate-ddl: true
     hibernate:
       ddl-auto: create
-  sleuth:
+camunda:
+  bpm:
+    generic-properties:
+      properties:
+        enforce-history-time-to-live: false
+management:
+  tracing:
     enabled: ${TRACING_ENABLED:false}
-    trace-id128: true
-    sampler:
+    sampling:
       probability: ${TRACING_SAMPLING_PROBABILITY:1.0}
-    supports-join: false
     propagation:
       type:
-      - w3c
-      - b3
-    web:
-      skip-pattern: ${TRACING_SKIP_PATTERN}
+        - w3c
+        - b3
   zipkin:
-    base-url: ${COLLECTOR_URL:http://jaeger-collector.istio-system:9411}
+    tracing:
+      endpoint: ${COLLECTOR_URL:http://jaeger-collector.istio-system:9411}/api/v2/spans
 hibernate:
   dialect: org.hibernate.dialect.H2Dialect
   hbm2ddl:

@@ -22,7 +22,7 @@ package org.onap.so.cnfm.lcm.rest;
 import static org.onap.so.cnfm.lcm.Constants.AS_LIFE_CYCLE_MANAGEMENT_BASE_URL;
 import static org.slf4j.LoggerFactory.getLogger;
 import java.net.URI;
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MediaType;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.onap.so.cnfm.lcm.lifecycle.AsLifeCycleManager;
 import org.onap.so.cnfm.lcm.model.AsInstance;

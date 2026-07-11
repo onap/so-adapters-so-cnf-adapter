@@ -25,6 +25,7 @@ import org.onap.so.security.HttpSecurityConfigurer;
 import org.slf4j.Logger;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Component;
 
 /**
@@ -39,7 +40,10 @@ public class DisabledBasicHttpSecurityConfigurer implements HttpSecurityConfigur
     @Override
     public void configure(final HttpSecurity http) throws Exception {
         logger.debug("Disabling basic auth settings ... ");
-        http.csrf().disable().authorizeRequests().antMatchers("/**").permitAll().and().httpBasic().disable();
+        http.csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(
+                        authorize -> authorize.requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
+                .httpBasic(httpBasic -> httpBasic.disable());
     }
 }
 

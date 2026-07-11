@@ -25,12 +25,11 @@ import org.onap.so.adapters.cnf.model.aai.AaiRequest;
 import org.onap.so.adapters.cnf.service.aai.KubernetesResource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.util.SocketUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
@@ -40,6 +39,8 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import static com.github.tomakehurst.wiremock.client.WireMock.exactly;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -51,7 +52,15 @@ import lombok.SneakyThrows;
 @RunWith(SpringRunner.class)
 public class AaiRepositoryTest {
 
-  private static int wireMockPort = SocketUtils.findAvailableTcpPort();
+  private static int wireMockPort = findRandomPort();
+
+  private static int findRandomPort() {
+    try (ServerSocket socket = new ServerSocket(0)) {
+      return socket.getLocalPort();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
 
   @Rule
   public WireMockRule wireMockRule = new WireMockRule(wireMockConfig().port(wireMockPort));

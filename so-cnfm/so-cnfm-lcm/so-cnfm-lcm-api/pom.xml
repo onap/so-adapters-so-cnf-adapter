@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.onap.so.adapters.so-cnf-adapter.so-cnfm.lcm</groupId>
         <artifactId>so-cnfm-lcm</artifactId>
-        <version>1.16.0-SNAPSHOT</version>
+        <version>1.17.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>so-cnfm-lcm-api</artifactId>
@@ -107,8 +107,15 @@
         </dependency>
 
         <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+        </dependency>
+        <!-- swagger-codegen-v3 emits @javax.annotation.Generated on the generated model classes; javax.annotation
+             is not part of JDK 17 and is no longer provided transitively after the Spring Boot 3 migration. -->
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <version>1.3.2</version>
         </dependency>
     </dependencies>
 </project>

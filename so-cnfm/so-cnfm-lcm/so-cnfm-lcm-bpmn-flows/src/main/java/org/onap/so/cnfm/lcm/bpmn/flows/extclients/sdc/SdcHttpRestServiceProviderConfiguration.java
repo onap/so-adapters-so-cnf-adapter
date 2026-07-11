@@ -22,9 +22,11 @@ package org.onap.so.cnfm.lcm.bpmn.flows.extclients.sdc;
 
 import java.util.Iterator;
 import javax.net.ssl.SSLContext;
-import org.apache.http.client.HttpClient;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
+import org.apache.hc.client5.http.io.HttpClientConnectionManager;
+import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
 import org.onap.logging.filter.spring.SpringClientPayloadFilter;
 import org.onap.so.cnfm.lcm.bpmn.flows.GsonProvider;
 import org.onap.so.configuration.HttpComponentsClientConfiguration;
@@ -83,7 +85,9 @@ public class SdcHttpRestServiceProviderConfiguration {
         try {
             logger.info("Setting SSLConnectionSocketFactory with Default SSL ...");
             final SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(SSLContext.getDefault());
-            final HttpClient httpClient = HttpClients.custom().setSSLSocketFactory(socketFactory).build();
+            final HttpClientConnectionManager connectionManager =
+                    PoolingHttpClientConnectionManagerBuilder.create().setSSLSocketFactory(socketFactory).build();
+            final HttpClient httpClient = HttpClients.custom().setConnectionManager(connectionManager).build();
             final HttpComponentsClientHttpRequestFactory factory =
                     new HttpComponentsClientHttpRequestFactory(httpClient);
             restTemplate.setRequestFactory(new BufferingClientHttpRequestFactory(factory));

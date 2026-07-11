@@ -19,10 +19,15 @@
  */
 package org.onap.so.cnfm.lcm;
 
+import org.onap.so.security.HttpSecurityConfigurer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  * @author Waqas Ikram (waqas.ikram@est.tech)
@@ -33,5 +38,21 @@ import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 public class TestApplication {
     public static void main(final String[] args) {
         new SpringApplication(TestApplication.class).run(args);
+    }
+
+    /**
+     * Permit-all security configurer for tests. Overrides so-common's {@code SoBasicHttpSecurityConfigurer}
+     * (which enforces HTTP Basic auth under the {@code test} profile). In production the
+     * so-cnfm-lcm-application module supplies an equivalent {@code @Primary @Component("basic")} bean, but
+     * that module is not on the so-cnfm-lcm-service test classpath. Defined as an explicit {@code @Bean}
+     * (not a {@code @Component}) to avoid a component-scan name clash on {@code "basic"}.
+     */
+    @Bean("basic")
+    @Primary
+    public HttpSecurityConfigurer basicHttpSecurityConfigurer() {
+        return http -> http.csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(
+                        authorize -> authorize.requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
+                .httpBasic(httpBasic -> httpBasic.disable());
     }
 }

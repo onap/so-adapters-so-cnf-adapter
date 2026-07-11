@@ -36,26 +36,25 @@ spring:
       - username: ${ACTUATOR_USERNAME}
         password: ${ACTUATOR_PASSWORD}
         role: ACTUATOR
-  sleuth:
+
+management:
+  tracing:
     enabled: ${TRACING_ENABLED:false}
-    trace-id128: true
-    sampler:
+    sampling:
       probability: ${TRACING_SAMPLING_PROBABILITY:1.0}
-    supports-join: false
     propagation:
       type:
-      - w3c
-      - b3
-    web:
-      skip-pattern: ${TRACING_SKIP_PATTERN}
+        - w3c
+        - b3
   zipkin:
-    base-url: ${COLLECTOR_URL:http://jaeger-collector.istio-system:9411}
+    tracing:
+      endpoint: ${COLLECTOR_URL:http://jaeger-collector.istio-system:9411}/api/v2/spans
 
 
  # jpa:
  #   show-sql: false
  #   hibernate:
- #     dialect: org.hibernate.dialect.MySQL5Dialect
+ #     dialect: org.hibernate.dialect.MySQLDialect
  #     ddl-auto: validate
  #     naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
  #     enable-lazy-load-no-trans: true

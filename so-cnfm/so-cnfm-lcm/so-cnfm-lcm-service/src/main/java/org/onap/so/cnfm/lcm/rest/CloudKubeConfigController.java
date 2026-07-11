@@ -21,7 +21,7 @@ package org.onap.so.cnfm.lcm.rest;
 
 import static org.onap.so.cnfm.lcm.Constants.BASE_URL;
 import static org.slf4j.LoggerFactory.getLogger;
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MediaType;
 import org.onap.so.cnfm.lcm.bpmn.flows.service.KubConfigProvider;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

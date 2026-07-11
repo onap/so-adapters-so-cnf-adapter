@@ -36,7 +36,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.jvnet.jaxb2_commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.onap.so.cnfm.lcm.bpmn.flows.exceptions.HelmClientExecuteException;
 import org.onap.so.cnfm.lcm.bpmn.flows.utils.PropertiesToYamlConverter;
 import org.slf4j.Logger;
