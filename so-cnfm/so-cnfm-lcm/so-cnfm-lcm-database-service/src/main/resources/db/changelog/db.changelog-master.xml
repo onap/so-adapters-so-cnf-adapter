@@ -9,4 +9,8 @@
         <sqlFile path="db/migration/V1_1__create_cnfm_tables.sql" relativeToChangelogFile="false"/>
     </changeSet>
 
+    <changeSet id="V1_2__convert_boolean_columns" author="so-migration">
+        <sqlFile path="db/migration/V1_2__convert_boolean_columns.sql" relativeToChangelogFile="false"/>
+    </changeSet>
+
 </databaseChangeLog>

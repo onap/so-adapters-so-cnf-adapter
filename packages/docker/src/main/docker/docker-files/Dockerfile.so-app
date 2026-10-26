@@ -1,4 +1,14 @@
-FROM onap/so/base-image:1.0
+FROM eclipse-temurin:21-jre-alpine
+
+RUN apk --no-cache add curl netcat-openbsd nss apache2-utils java-cacerts
+
+RUN set -eux; \
+    rm -rf "$JAVA_HOME/lib/security/cacerts"; \
+    ln -sT /etc/ssl/certs/java/cacerts "$JAVA_HOME/lib/security/cacerts"
+
+ENV MAX_RAM_PERCENTAGE=75
+
+RUN addgroup -g 1000 so && adduser -S -u 1000 -G so -s /bin/sh so
 
 ARG http_proxy
 ENV HTTP_PROXY=$http_proxy

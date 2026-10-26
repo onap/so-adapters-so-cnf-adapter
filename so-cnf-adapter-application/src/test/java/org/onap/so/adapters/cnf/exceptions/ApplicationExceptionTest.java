@@ -84,9 +84,9 @@ public class ApplicationExceptionTest {
         resource.getGVK();
         resource.getName();
 
-        ApplicationException applicationexception=new ApplicationException(1,"Error");
+        ApplicationException applicationexception=new ApplicationException(500,"Error");
 
-        applicationexception.setErrorCode(1);
+        applicationexception.setErrorCode(500);
         applicationexception.setErrorMsg("Error");
 
         applicationexception.getErrorCode();

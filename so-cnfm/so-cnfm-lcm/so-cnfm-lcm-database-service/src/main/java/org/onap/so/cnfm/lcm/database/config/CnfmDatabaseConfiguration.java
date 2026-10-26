@@ -21,7 +21,10 @@ package org.onap.so.cnfm.lcm.database.config;
 
 import static org.slf4j.LoggerFactory.getLogger;
 import jakarta.persistence.EntityManagerFactory;
+import java.util.Map;
 import javax.sql.DataSource;
+import org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl;
+import org.hibernate.cfg.AvailableSettings;
 import org.onap.so.cnfm.lcm.database.beans.Job;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +82,11 @@ public class CnfmDatabaseConfiguration {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(final EntityManagerFactoryBuilder builder,
             @Qualifier(CNFM_DATA_SOURCE_QUALIFIER) final DataSource dataSource) {
         return builder.dataSource(dataSource).packages(Job.class.getPackage().getName())
-                .persistenceUnit(PERSISTENCE_UNIT).build();
+                .persistenceUnit(PERSISTENCE_UNIT)
+                // Tables are created upper-case; keep them verbatim for MariaDB with lower_case_table_names=0.
+                .properties(Map.of(AvailableSettings.PHYSICAL_NAMING_STRATEGY,
+                        PhysicalNamingStrategyStandardImpl.class.getName()))
+                .build();
     }
 
     @Primary
