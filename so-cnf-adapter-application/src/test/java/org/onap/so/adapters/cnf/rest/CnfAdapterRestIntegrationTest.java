@@ -88,6 +88,8 @@ public class CnfAdapterRestIntegrationTest {
         registry.add("spring.security.usercredentials[0].username", () -> "test");
         registry.add("spring.security.usercredentials[0].password", () -> "test");
         registry.add("spring.security.usercredentials[0].role", () -> "ACTUATOR");
+        registry.add("so.auth.username", () -> "bpel");
+        registry.add("so.auth.password", () -> "password1$");
     }
 
     @Test
@@ -256,7 +258,7 @@ public class CnfAdapterRestIntegrationTest {
                 WireMock.urlEqualTo("/v1/instance/test-inst/status")));
         WireMock.verify(WireMock.postRequestedFor(WireMock.urlEqualTo("/callback"))
                 .withHeader("Content-Type", WireMock.containing("text/plain"))
-                .withBasicAuth(new BasicCredentials("test", "test")));
+                .withBasicAuth(new BasicCredentials("bpel", "password1$")));
     }
 
     @Test

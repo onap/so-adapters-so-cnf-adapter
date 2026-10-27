@@ -24,6 +24,7 @@ import org.onap.aaiclient.client.aai.AAIProperties;
 import org.onap.aaiclient.client.aai.AAIVersion;
 import org.onap.so.client.CacheProperties;
 import org.onap.so.spring.SpringContextHelper;
+import org.onap.so.utils.BasicAuth;
 import org.springframework.context.ApplicationContext;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -31,8 +32,8 @@ import java.net.URL;
 public class AaiPropertiesImpl implements AAIProperties {
 
     private final String endpoint;
-    private final String encryptedBasicAuth;
-    private final String encryptionKey;
+    private final String username;
+    private final String password;
     private final String aaiVersion;
     private final Long readTimeout;
     private final Long connectionTimeout;
@@ -42,8 +43,8 @@ public class AaiPropertiesImpl implements AAIProperties {
     public AaiPropertiesImpl() {
         final ApplicationContext context = SpringContextHelper.getAppContext();
         this.endpoint = context.getEnvironment().getProperty("aai.endpoint");
-        this.encryptedBasicAuth = context.getEnvironment().getProperty("aai.auth");
-        this.encryptionKey = context.getEnvironment().getProperty("mso.key");
+        this.username = context.getEnvironment().getProperty(BasicAuth.AAI_USERNAME_PROPERTY);
+        this.password = context.getEnvironment().getProperty(BasicAuth.AAI_PASSWORD_PROPERTY);
         this.aaiVersion = context.getEnvironment().getProperty("aai.version");
         this.readTimeout = context.getEnvironment().getProperty("aai.readTimeout", Long.class, 60000L);
         this.connectionTimeout = context.getEnvironment().getProperty("aai.connectionTimeout", Long.class, 60000L);
@@ -72,13 +73,13 @@ public class AaiPropertiesImpl implements AAIProperties {
     }
 
     @Override
-    public String getAuth() {
-        return encryptedBasicAuth;
+    public String getUsername() {
+        return username;
     }
 
     @Override
-    public String getKey() {
-        return encryptionKey;
+    public String getPassword() {
+        return password;
     }
 
     @Override

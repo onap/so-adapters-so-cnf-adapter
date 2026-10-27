@@ -27,13 +27,14 @@ import org.onap.aaiclient.client.aai.AAIProperties;
 import org.onap.aaiclient.client.aai.AAIVersion;
 import org.onap.so.client.CacheProperties;
 import org.onap.so.spring.SpringContextHelper;
+import org.onap.so.utils.BasicAuth;
 import org.springframework.context.ApplicationContext;
 
 public class AaiClientPropertiesImpl implements AAIProperties {
 
     private String aaiEndpoint;
-    private String auth;
-    private String key;
+    private String username;
+    private String password;
     private Long readTimeout;
     private Long connectionTimeout;
     private boolean enableCaching;
@@ -43,8 +44,8 @@ public class AaiClientPropertiesImpl implements AAIProperties {
     public AaiClientPropertiesImpl() {
         ApplicationContext context = SpringContextHelper.getAppContext();
         aaiEndpoint = context.getEnvironment().getProperty("aai.endpoint");
-        this.auth = context.getEnvironment().getProperty("aai.auth");
-        this.key = context.getEnvironment().getProperty("mso.msoKey");
+        this.username = context.getEnvironment().getProperty(BasicAuth.AAI_USERNAME_PROPERTY);
+        this.password = context.getEnvironment().getProperty(BasicAuth.AAI_PASSWORD_PROPERTY);
         this.readTimeout = context.getEnvironment().getProperty("aai.readTimeout", Long.class, 60000L);
         this.connectionTimeout = context.getEnvironment().getProperty("aai.connectionTimeout", Long.class, 60000L);
         this.enableCaching = context.getEnvironment().getProperty("aai.caching.enabled", Boolean.class, false);
@@ -67,13 +68,13 @@ public class AaiClientPropertiesImpl implements AAIProperties {
     }
 
     @Override
-    public String getAuth() {
-        return this.auth;
+    public String getUsername() {
+        return username;
     }
 
     @Override
-    public String getKey() {
-        return this.key;
+    public String getPassword() {
+        return password;
     }
 
     @Override

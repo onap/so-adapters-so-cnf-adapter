@@ -1,10 +1,9 @@
 package org.onap.so.adapters.cnf.client;
 
 import com.google.gson.Gson;
-import org.onap.so.adapters.cnf.BasicSecurityConfig;
-import org.onap.so.security.SoUserCredentialConfiguration;
-import org.onap.so.security.UserCredentials;
+import org.onap.so.utils.BasicAuth;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -23,18 +22,13 @@ public class SoCallbackClient {
     private final static Gson gson = new Gson();
 
     private final RestTemplate restTemplate;
-    private final BasicSecurityConfig userCredentialConfiguration;
-    private final String role = "ACTUATOR";
-    private final UserCredentials credentials;
+    private final String authorization;
 
     @Autowired
-    public SoCallbackClient(RestTemplate restTemplate, BasicSecurityConfig userCredentialConfiguration) {
+    public SoCallbackClient(RestTemplate restTemplate, @Value("${so.auth.username:#{null}}") String username,
+            @Value("${so.auth.password:#{null}}") String password) {
         this.restTemplate = restTemplate;
-        this.userCredentialConfiguration = userCredentialConfiguration;
-        if (!userCredentialConfiguration.getRoles().contains(role))
-            throw new RuntimeException("Missing authentication role: " + role);
-        credentials = userCredentialConfiguration.getUsercredentials().stream().filter(
-                creds -> role.equals(creds.getRole())).findAny().orElse(null);
+        this.authorization = BasicAuth.header(username, password);
     }
 
     public ResponseEntity<String> sendPostCallback(String url, Object body) {
@@ -47,7 +41,9 @@ public class SoCallbackClient {
         acceptableMediaTypes.add(MediaType.TEXT_PLAIN);
         headers.setAccept(acceptableMediaTypes);
         headers.setContentType(MediaType.TEXT_PLAIN);
-        headers.setBasicAuth(credentials.getUsername(), credentials.getPassword());
+        if (authorization != null) {
+            headers.set(HttpHeaders.AUTHORIZATION, authorization);
+        }
 
         return new HttpEntity<>(gson.toJson(body), headers);
     }

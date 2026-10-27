@@ -350,12 +350,6 @@ public class CnfAdapterService {
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
         headers.setAccept(acceptableMediaTypes);
         headers.setContentType(MediaType.APPLICATION_JSON);
-        /*
-         * try { String userCredentials = CryptoUtils.decrypt(env.getRequiredProperty("mso.cnf.adapter.auth"),
-         * env.getRequiredProperty("mso.msoKey")); if (userCredentials != null) { headers.add(HttpHeaders.AUTHORIZATION,
-         * "Basic " + DatatypeConverter.printBase64Binary(userCredentials.getBytes())); } } catch
-         * (GeneralSecurityException e) { logger.error("Security exception", e); }
-         */
         return headers;
     }
 
