@@ -49,6 +49,10 @@ public class CamundaDatabaseConfiguration {
 
     private static final String CAMUNDA_DATA_SOURCE_BEAN_NAME = "camundaBpmDataSource";
 
+    private static final String MARIADB_JDBC_URL_PREFIX = "jdbc:mariadb:";
+
+    private static final String CAMUNDA_MYSQL_DATABASE_TYPE = "mysql";
+
     private static final Logger logger = getLogger(CamundaDatabaseConfiguration.class);
 
     @Bean
@@ -82,7 +86,13 @@ public class CamundaDatabaseConfiguration {
             public void preInit(final SpringProcessEngineConfiguration processEngineConfiguration) {
                 logger.info("Setting Camunda TransactionManager ...");
                 processEngineConfiguration.setTransactionManager(camundaTransactionManager);
-
+                // MariaDB defaults to REPEATABLE_READ, which Camunda 7.23+ rejects at startup (ENGINE-12019)
+                processEngineConfiguration.setSkipIsolationLevelCheck(true);
+                final String jdbcUrl = camundaDbConfig().getJdbcUrl();
+                if (jdbcUrl != null && jdbcUrl.startsWith(MARIADB_JDBC_URL_PREFIX)) {
+                    // Camunda 7.23 has no database type for the 'MariaDB' product name; MariaDB uses its mysql dialect
+                    processEngineConfiguration.setDatabaseType(CAMUNDA_MYSQL_DATABASE_TYPE);
+                }
             }
         };
     }
