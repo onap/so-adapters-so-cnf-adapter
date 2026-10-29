@@ -35,6 +35,7 @@ import org.onap.so.rest.service.HttpRestServiceProvider;
 import org.onap.so.rest.service.HttpRestServiceProviderImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -45,6 +46,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+import io.micrometer.observation.ObservationRegistry;
 
 /**
  * @author Waqas Ikram (waqas.ikram@est.tech)
@@ -64,13 +66,15 @@ public class SdcHttpRestServiceProviderConfiguration {
     @Bean
     @Qualifier(SDC_REST_TEMPLATE_CLIENT_BEAN)
     public RestTemplate sdcAdapterRestTemplate(
-            @Autowired final HttpComponentsClientConfiguration httpComponentsClientConfiguration) {
+            @Autowired final HttpComponentsClientConfiguration httpComponentsClientConfiguration,
+            final ObjectProvider<ObservationRegistry> observationRegistry) {
 
         final HttpComponentsClientHttpRequestFactory clientHttpRequestFactory =
                 httpComponentsClientConfiguration.httpComponentsClientHttpRequestFactory();
 
         final RestTemplate restTemplate =
                 new RestTemplate(new BufferingClientHttpRequestFactory(clientHttpRequestFactory));
+        restTemplate.setObservationRegistry(observationRegistry.getIfAvailable(() -> ObservationRegistry.NOOP));
         restTemplate.getInterceptors().add(new SOSpringClientFilter());
         restTemplate.getInterceptors().add((new SpringClientPayloadFilter()));
         return restTemplate;
