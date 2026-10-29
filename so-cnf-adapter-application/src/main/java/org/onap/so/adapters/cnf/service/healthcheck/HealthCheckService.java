@@ -22,6 +22,8 @@
 package org.onap.so.adapters.cnf.service.healthcheck;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import io.micrometer.context.ContextExecutorService;
+import io.micrometer.context.ContextSnapshotFactory;
 import org.onap.so.adapters.cnf.client.MulticloudClient;
 import org.onap.so.adapters.cnf.model.CheckInstanceRequest;
 import org.onap.so.adapters.cnf.model.InstanceRequest;
@@ -53,6 +55,7 @@ public class HealthCheckService {
     private static final Logger log = LoggerFactory.getLogger(CnfAdapterService.class);
 
     private final MulticloudClient instanceApi;
+    private final ContextSnapshotFactory contextSnapshotFactory = ContextSnapshotFactory.builder().build();
 
     @Autowired
     public HealthCheckService(MulticloudClient multicloudClient) {
@@ -106,7 +109,8 @@ public class HealthCheckService {
 
         int processors = Runtime.getRuntime().availableProcessors();
         ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat("Health-check-thread-%d").build();
-        ExecutorService executorService = newFixedThreadPool(processors, threadFactory);
+        ExecutorService executorService = ContextExecutorService.wrap(newFixedThreadPool(processors, threadFactory),
+                contextSnapshotFactory::captureAll);
         HealthCheckResponse response = new HealthCheckResponse();
         List<HealthCheckInstanceResponse> healthCheckInstance = null;
         healthCheckInstance = executorService.invokeAll(threads).stream()
