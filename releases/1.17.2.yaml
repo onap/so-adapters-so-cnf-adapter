@@ -1,0 +1,11 @@
+---
+distribution_type: 'container'
+container_release_tag: '1.17.2'
+project: 'so'
+log_dir: 'so-adapters-so-cnf-adapter-maven-docker-stage-master/856/'
+ref: '2d99177ac2e3e5ce57ef238862abcfd4cfba95b4'
+containers:
+    - name: 'so/so-cnf-adapter'
+      version: '1.17.2-20261030T1001'
+    - name: 'so/so-cnfm-as-lcm'
+      version: '1.17.2-20261030T1001'
