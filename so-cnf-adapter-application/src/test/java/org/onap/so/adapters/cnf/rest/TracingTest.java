@@ -20,6 +20,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.matching;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -39,9 +40,12 @@ import org.onap.so.adapters.cnf.client.MulticloudClient;
 import org.onap.so.adapters.cnf.client.MulticloudHttpClient;
 import org.onap.so.adapters.cnf.model.CheckInstanceRequest;
 import org.onap.so.adapters.cnf.model.InstanceRequest;
+import org.onap.so.adapters.cnf.model.aai.AaiRequest;
 import org.onap.so.adapters.cnf.model.healthcheck.K8sRbInstanceHealthCheck;
 import org.onap.so.adapters.cnf.model.healthcheck.K8sRbInstanceHealthCheckSimple;
+import org.onap.so.adapters.cnf.service.aai.KubernetesResource;
 import org.onap.so.adapters.cnf.service.healthcheck.HealthCheckService;
+import org.onap.so.adapters.cnf.util.IAaiRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.actuate.observability.AutoConfigureObservability;
@@ -84,9 +88,13 @@ public class TracingTest {
     @ClassRule
     public static WireMockRule multicloud = new WireMockRule(wireMockConfig().dynamicPort());
 
+    @ClassRule
+    public static WireMockRule aai = new WireMockRule(wireMockConfig().dynamicPort());
+
     @DynamicPropertySource
-    static void multicloudEndpoint(DynamicPropertyRegistry registry) {
+    static void endpoints(DynamicPropertyRegistry registry) {
         registry.add("multicloud.endpoint", multicloud::baseUrl);
+        registry.add("aai.endpoint", aai::baseUrl);
     }
 
     @Autowired
@@ -178,6 +186,28 @@ public class TracingTest {
 
         multicloud.verify(getRequestedFor(urlEqualTo("/v1/rb/definition")).withHeader("traceparent",
                 matching("00-" + traceId + "-[0-9a-f]{16}-01")));
+    }
+
+    @Test
+    public void thatAaiRequestsAreTracedInTheCallersTrace() {
+        final String k8sResourcePath = "/aai/v24/cloud-infrastructure/cloud-regions/cloud-region/someOwner/someRegion"
+                + "/tenants/tenant/someTenant/k8s-resources/k8s-resource/someId";
+        aai.stubFor(get(urlPathEqualTo(k8sResourcePath)).willReturn(aResponse().withStatus(404)));
+        final KubernetesResource resource = new KubernetesResource();
+        resource.setId("someId");
+        resource.setName("someName");
+        final AaiRequest request = new AaiRequest();
+        request.setCloudOwner("someOwner");
+        request.setCloudRegion("someRegion");
+        request.setTenantId("someTenant");
+        testSpanHandler.clear();
+
+        final String traceId = inObservation(() -> IAaiRepository.instance(true).update(resource, request));
+
+        aai.verify(getRequestedFor(urlPathEqualTo(k8sResourcePath)).withHeader("traceparent",
+                matching("00-" + traceId + "-[0-9a-f]{16}-01")));
+        assertTrue("The AAI request must be reported as a client span",
+                testSpanHandler.spanNames().contains("http get"));
     }
 
     private String inObservation(final Runnable action) {

@@ -25,7 +25,6 @@ package org.onap.so.adapters.cnf.util;
 import org.onap.aaiclient.client.graphinventory.exceptions.BulkProcessFailed;
 import org.onap.so.adapters.cnf.model.aai.AaiRequest;
 import org.onap.so.adapters.cnf.service.aai.KubernetesResource;
-import org.onap.so.client.ClientBuilderCustomizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,12 +34,8 @@ import static java.lang.Thread.sleep;
 
 public interface IAaiRepository {
     static IAaiRepository instance(boolean enabled) {
-        return instance(enabled, null);
-    }
-
-    static IAaiRepository instance(boolean enabled, ClientBuilderCustomizer clientBuilderCustomizer) {
         if (enabled)
-            return AaiRepository.instance(clientBuilderCustomizer);
+            return AaiRepository.instance();
         else
             return AaiRepositoryDummy.instance();
     }

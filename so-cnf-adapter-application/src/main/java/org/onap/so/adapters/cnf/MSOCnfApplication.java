@@ -20,6 +20,7 @@
 
 package org.onap.so.adapters.cnf;
 
+import org.onap.so.client.ClientObservationRegistry;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -29,12 +30,14 @@ import org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfigurati
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"org.onap.so.adapters.cnf", "org.onap.so.spring", "org.onap.so.configuration"})
 @EnableAutoConfiguration(exclude = {LiquibaseAutoConfiguration.class, HibernateJpaAutoConfiguration.class,
         DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class,
         SecurityAutoConfiguration.class})
+@Import(ClientObservationRegistry.class)
 public class MSOCnfApplication {
 
     public static void main(String... args) {
