@@ -16,7 +16,6 @@
 
 package org.onap.so.adapters.cnf.util;
 
-import org.apache.http.entity.ContentType;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,6 +26,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -130,7 +130,7 @@ public class AaiRepositoryTest {
         .willReturn(
             WireMock.aResponse().withStatus(HttpStatus.OK.value()).withBodyFile("k8sResourceExistsResponse.json")));
     WireMock.stubFor(WireMock.get(WireMock.urlEqualTo(K8S_EXISTS_URL))
-        .willReturn(WireMock.aResponse().withStatus(HttpStatus.OK.value()).withBodyFile("k8sResource.json").withHeader("Content-Type", ContentType.APPLICATION_JSON.toString())));
+        .willReturn(WireMock.aResponse().withStatus(HttpStatus.OK.value()).withBodyFile("k8sResource.json").withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)));
     WireMock.stubFor(WireMock.delete(WireMock.urlEqualTo(K8S_EXISTS_URL))
         .willReturn(WireMock.aResponse().withStatus(HttpStatus.OK.value())));
     final String VFMODULE_URL = "/aai/v24/network/generic-vnfs/generic-vnf/someGenericVnfId/vf-modules/vf-module/someVfModuleId";
