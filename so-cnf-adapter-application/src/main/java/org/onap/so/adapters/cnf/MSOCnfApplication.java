@@ -31,7 +31,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"org.onap.so.adapters.cnf", "org.onap.so.spring"})
+@ComponentScan(basePackages = {"org.onap.so.adapters.cnf", "org.onap.so.spring", "org.onap.so.configuration"})
 @EnableAutoConfiguration(exclude = {LiquibaseAutoConfiguration.class, HibernateJpaAutoConfiguration.class,
         DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class,
         SecurityAutoConfiguration.class})
