@@ -27,6 +27,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.onap.so.adapters.cnf.MulticloudConfiguration;
 import org.onap.so.adapters.cnf.model.InstanceResponse;
 import org.onap.so.adapters.cnf.model.MulticloudInstanceRequest;
 import org.onap.so.adapters.cnf.model.healthcheck.K8sRbInstanceHealthCheck;
@@ -65,6 +66,8 @@ public class MulticloudClientTest {
     private RestTemplate restTemplate;
     @Mock
     private MulticloudApiUrl multicloudApiUrl;
+    @Mock
+    private MulticloudConfiguration multicloudConfiguration;
     @Captor
     private ArgumentCaptor<String> instanceIdCaptor;
 

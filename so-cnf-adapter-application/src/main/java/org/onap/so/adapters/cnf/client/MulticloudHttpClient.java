@@ -50,11 +50,13 @@ public class MulticloudHttpClient {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final RestTemplate restTemplate;
     private final String baseUrl;
+    private final MulticloudConfiguration multicloudConfiguration;
 
     @Autowired
     public MulticloudHttpClient(MulticloudConfiguration multicloudConfiguration,
             RestTemplateBuilder restTemplateBuilder) {
         this.baseUrl = multicloudConfiguration.getMulticloudUrl();
+        this.multicloudConfiguration = multicloudConfiguration;
         // The callers relay multicloud's response body whatever its status, so a 4xx/5xx must not throw.
         this.restTemplate = restTemplateBuilder.errorHandler(new PassThroughErrorHandler()).build();
     }
@@ -92,8 +94,12 @@ public class MulticloudHttpClient {
     }
 
     private String exchange(String path, HttpMethod method, HttpEntity<?> request) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.putAll(request.getHeaders());
+        multicloudConfiguration.applyAuthentication(headers);
         ResponseEntity<String> response =
-                restTemplate.exchange(URI.create(baseUrl + path), method, request, String.class);
+            restTemplate.exchange(URI.create(baseUrl + path), method,
+                new HttpEntity<>(request.getBody(), headers), String.class);
         logger.info("{} {} returned {}", method, path, response.getStatusCode());
         return response.getBody();
     }

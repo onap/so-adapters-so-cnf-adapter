@@ -23,6 +23,7 @@ package org.onap.so.adapters.cnf.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.onap.so.adapters.cnf.MulticloudConfiguration;
 import org.onap.so.adapters.cnf.model.InstanceResponse;
 import org.onap.so.adapters.cnf.model.MulticloudInstanceRequest;
 import org.onap.so.adapters.cnf.model.healthcheck.K8sRbInstanceHealthCheck;
@@ -59,10 +60,13 @@ public class MulticloudClient {
     private final RestTemplate restTemplate;
     private final MulticloudApiUrl multicloudApiUrl;
     private final ObjectMapper objectMapper;
+    private final MulticloudConfiguration multicloudConfiguration;
 
-    public MulticloudClient(RestTemplate restTemplate, MulticloudApiUrl multicloudApiUrl) {
+    public MulticloudClient(RestTemplate restTemplate, MulticloudApiUrl multicloudApiUrl,
+            MulticloudConfiguration multicloudConfiguration) {
         this.restTemplate = restTemplate;
         this.multicloudApiUrl = multicloudApiUrl;
+        this.multicloudConfiguration = multicloudConfiguration;
         this.objectMapper = new ObjectMapper();
     }
 
@@ -223,6 +227,7 @@ public class MulticloudClient {
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
         headers.setAccept(acceptableMediaTypes);
         headers.setContentType(MediaType.APPLICATION_JSON);
+        multicloudConfiguration.applyAuthentication(headers);
         return headers;
     }
 

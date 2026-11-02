@@ -45,7 +45,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.onap.so.adapters.cnf.MulticloudConfiguration;
+import org.onap.so.adapters.cnf.RestClientConfiguration;
 import org.onap.so.adapters.cnf.model.ConnectivityInfo;
+import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.boot.test.web.client.MockServerRestTemplateCustomizer;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpMethod;
@@ -54,6 +56,7 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestTemplate;
 
 public class MulticloudHttpClientTest {
 
@@ -62,6 +65,158 @@ public class MulticloudHttpClientTest {
 
     private MockRestServiceServer server;
     private MulticloudHttpClient client;
+
+        private ApplicationContextRunner contextRunner() {
+        return new ApplicationContextRunner()
+            .withUserConfiguration(MulticloudConfiguration.class, RestClientConfiguration.class,
+                MulticloudApiUrl.class, MulticloudClient.class)
+            .withBean(RestTemplateBuilder.class, RestTemplateBuilder::new)
+            .withPropertyValues("multicloud.endpoint=" + BASE_URL);
+        }
+
+        @Test
+        public void thatInvalidCredentialsFailStartupWithoutLeakingValues() {
+        String[][] invalid = {{"private-user", ""}, {"", "private-password"}, {" ", "private-password"},
+                {"private-user", "\t"}, {"private:user", "private-password"}, {" ", " "},
+                {"\u2003", "private-password"}, {"private-user", "\u2003"}};
+        for (String[] credentials : invalid) {
+                contextRunner().withInitializer(context -> context.getEnvironment().getPropertySources().addFirst(
+                    new org.springframework.core.env.MapPropertySource("auth", java.util.Map.of(
+                        "multicloud.auth.username", credentials[0],
+                        "multicloud.auth.password", credentials[1])))).run(context -> {
+                org.assertj.core.api.Assertions.assertThat(context).hasFailed();
+                org.assertj.core.api.Assertions.assertThat(context.getStartupFailure())
+                    .hasStackTraceContaining("multicloud.auth")
+                    .hasStackTraceContaining("username")
+                    .hasStackTraceContaining("password")
+                    .hasStackTraceContaining("configured together")
+                    .hasStackTraceContaining("must not be blank")
+                    .hasStackTraceContaining("colon")
+                    .hasStackTraceContaining("IllegalArgumentException")
+                    .hasStackTraceContaining("Invalid")
+                    .hasStackTraceContaining("credentials");
+                String trace = org.assertj.core.util.Throwables.getStackTrace(context.getStartupFailure());
+                org.assertj.core.api.Assertions.assertThat(trace)
+                    .doesNotContain("private-user", "private-password", "private:user");
+                });
+        }
+        }
+
+        @Test
+        public void thatAbsentOrEmptyCredentialsRemainAnonymous() {
+        for (String[] properties : new String[][] {{},
+            {"multicloud.auth.username=", "multicloud.auth.password="}}) {
+            contextRunner().withPropertyValues(properties).run(context -> {
+            org.assertj.core.api.Assertions.assertThat(context).hasNotFailed();
+            MockServerRestTemplateCustomizer customizer = new MockServerRestTemplateCustomizer();
+            MulticloudHttpClient anonymous = new MulticloudHttpClient(
+                context.getBean(MulticloudConfiguration.class), new RestTemplateBuilder(customizer));
+            customizer.getServer().expect(requestTo(BASE_URL + "/v1/instance"))
+                .andExpect(org.springframework.test.web.client.match.MockRestRequestMatchers
+                    .headerDoesNotExist("Authorization"))
+                .andRespond(withSuccess(BODY, MediaType.APPLICATION_JSON));
+            anonymous.get("/v1/instance");
+            customizer.getServer().verify();
+            MockRestServiceServer typedServer = MockRestServiceServer
+                .bindTo(context.getBean(RestTemplate.class)).build();
+            typedServer.expect(requestTo(BASE_URL + "/v1/instance"))
+                .andExpect(org.springframework.test.web.client.match.MockRestRequestMatchers
+                    .headerDoesNotExist("Authorization"))
+                .andRespond(withSuccess("[]", MediaType.APPLICATION_JSON));
+            org.assertj.core.api.Assertions.assertThat(context.getBean(MulticloudClient.class)
+                .getAllInstances()).isEmpty();
+            typedServer.verify();
+            });
+        }
+        }
+
+        @Test
+        public void thatEnvironmentCredentialsPreserveUtf8AndPasswordWhitespace() {
+        assertEnvironmentCredentialsAreLiteral(" p\u00e4ss:!@#$ ");
+        }
+
+        @Test
+        public void thatEnvironmentCredentialsDoNotEvaluateSpel() {
+        assertEnvironmentCredentialsAreLiteral("literal#{2*3}");
+        }
+
+        @Test
+        public void thatEnvironmentCredentialsDoNotResolveNestedPlaceholders() {
+        assertEnvironmentCredentialsAreLiteral("literal${HOME}");
+        }
+
+        @Test
+        public void thatEnvironmentCredentialsAcceptMalformedExpressionText() {
+        assertEnvironmentCredentialsAreLiteral("private-password#{broken(");
+        }
+
+        private void assertEnvironmentCredentialsAreLiteral(String password) {
+        contextRunner().withInitializer(new org.springframework.boot.test.context.ConfigDataApplicationContextInitializer())
+            .withInitializer(context -> context.getEnvironment().getPropertySources().addFirst(
+                new org.springframework.core.env.SystemEnvironmentPropertySource("auth-environment",
+                    java.util.Map.of("MULTICLOUD_AUTH_USERNAME", "us\u00e9r",
+                        "MULTICLOUD_AUTH_PASSWORD", password, "HOME", "resolved-home"))))
+            .run(context -> {
+                org.assertj.core.api.Assertions.assertThat(context).hasNotFailed();
+                MockRestServiceServer typedServer = MockRestServiceServer
+                    .bindTo(context.getBean(RestTemplate.class)).build();
+                String authorization = "Basic " + java.util.Base64.getEncoder().encodeToString(
+                    ("us\u00e9r:" + password).getBytes(StandardCharsets.UTF_8));
+                typedServer.expect(requestTo(BASE_URL + "/v1/instance"))
+                    .andExpect(header("Authorization", authorization))
+                    .andRespond(withSuccess("[]", MediaType.APPLICATION_JSON));
+                context.getBean(MulticloudClient.class).getAllInstances();
+                typedServer.verify();
+                MockServerRestTemplateCustomizer customizer = new MockServerRestTemplateCustomizer();
+                MulticloudHttpClient authenticated = new MulticloudHttpClient(
+                    context.getBean(MulticloudConfiguration.class), new RestTemplateBuilder(customizer));
+                customizer.getServer().expect(requestTo(BASE_URL + "/v1/instance"))
+                    .andExpect(header("Authorization", authorization))
+                    .andRespond(withSuccess(BODY, MediaType.APPLICATION_JSON));
+                authenticated.get("/v1/instance");
+                customizer.getServer().verify();
+                typedServer.reset();
+                typedServer.expect(requestTo("http://callback-or-aai/test"))
+                    .andExpect(org.springframework.test.web.client.match.MockRestRequestMatchers
+                        .headerDoesNotExist("Authorization"))
+                    .andRespond(withSuccess());
+                context.getBean(RestTemplate.class).getForObject("http://callback-or-aai/test", String.class);
+                typedServer.verify();
+            });
+        }
+
+        @Test
+        public void thatCredentialsCoverAllHttpMethodsWithoutChangingSharedTemplate() {
+        contextRunner().withPropertyValues("multicloud.auth.username=us\u00e9r",
+            "multicloud.auth.password=p\u00e4ss:!@#$").run(context -> {
+                org.assertj.core.api.Assertions.assertThat(context).hasNotFailed();
+                MockServerRestTemplateCustomizer customizer = new MockServerRestTemplateCustomizer();
+                MulticloudHttpClient authenticated = new MulticloudHttpClient(
+                    context.getBean(MulticloudConfiguration.class), new RestTemplateBuilder(customizer));
+                String authorization = "Basic " + java.util.Base64.getEncoder().encodeToString(
+                    "us\u00e9r:p\u00e4ss:!@#$".getBytes(StandardCharsets.UTF_8));
+                for (HttpMethod method : new HttpMethod[] {HttpMethod.GET, HttpMethod.DELETE,
+                    HttpMethod.POST, HttpMethod.PUT, HttpMethod.POST}) {
+                customizer.getServer().expect(requestTo(BASE_URL + "/v1/instance"))
+                    .andExpect(method(method)).andExpect(header("Authorization", authorization))
+                    .andRespond(withSuccess(BODY, MediaType.APPLICATION_JSON));
+                }
+                authenticated.get("/v1/instance");
+                authenticated.delete("/v1/instance");
+                authenticated.post("/v1/instance", connectivityInfo());
+                authenticated.put("/v1/instance", connectivityInfo());
+                authenticated.uploadMultipartFile("/v1/instance", new MockMultipartFile("file", new byte[] {1}));
+                customizer.getServer().verify();
+                RestTemplate shared = context.getBean(RestTemplate.class);
+                MockRestServiceServer sharedServer = MockRestServiceServer.bindTo(shared).build();
+                sharedServer.expect(requestTo("http://callback-or-aai/test"))
+                    .andExpect(org.springframework.test.web.client.match.MockRestRequestMatchers
+                        .headerDoesNotExist("Authorization"))
+                    .andRespond(withSuccess());
+                shared.getForObject("http://callback-or-aai/test", String.class);
+                sharedServer.verify();
+            });
+        }
 
     @Before
     public void setUp() {

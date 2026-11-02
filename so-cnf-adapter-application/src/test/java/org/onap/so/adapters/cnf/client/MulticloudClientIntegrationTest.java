@@ -29,6 +29,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.After;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -77,9 +78,19 @@ public class MulticloudClientIntegrationTest {
         WireMock.reset();
     }
 
+        @After
+        public void verifyAuthenticationOnEveryRequest() {
+                String expected = "Basic " + java.util.Base64.getEncoder().encodeToString(
+                                "us\u00e9r:p\u00e4ss:!@#$".getBytes(java.nio.charset.StandardCharsets.UTF_8));
+                WireMock.findAll(com.github.tomakehurst.wiremock.matching.RequestPatternBuilder.allRequests())
+                                .forEach(request -> assertEquals(expected, request.getHeader("Authorization")));
+        }
+
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
         registry.add("multicloud.endpoint", () -> "http://localhost:" + wireMockPort);
+        registry.add("multicloud.auth.username", () -> "us\u00e9r");
+        registry.add("multicloud.auth.password", () -> "p\u00e4ss:!@#$");
         registry.add("spring.security.usercredentials[0].username", () -> "test");
         registry.add("spring.security.usercredentials[0].password", () -> "test");
         registry.add("spring.security.usercredentials[0].role", () -> "ACTUATOR");

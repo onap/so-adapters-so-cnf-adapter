@@ -20,14 +20,51 @@
 
 package org.onap.so.adapters.cnf;
 
+import jakarta.annotation.PostConstruct;
+import java.nio.charset.StandardCharsets;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.bind.Binder;
+import org.springframework.boot.context.properties.bind.PlaceholdersResolver;
+import org.springframework.boot.context.properties.source.ConfigurationPropertySources;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+import org.springframework.http.HttpHeaders;
 
 @Configuration
 public class MulticloudConfiguration {
 
     @Value("${multicloud.endpoint}")
     private String endpoint;
+
+    private final String username;
+
+    private final String password;
+
+    private String authorization;
+
+    public MulticloudConfiguration(Environment environment) {
+        Binder binder = new Binder(ConfigurationPropertySources.get(environment), PlaceholdersResolver.NONE);
+        username = binder.bind("multicloud.auth.username", String.class).orElse("");
+        password = binder.bind("multicloud.auth.password", String.class).orElse("");
+    }
+
+    @PostConstruct
+    void validateAuthentication() {
+        if (username.isEmpty() && password.isEmpty()) {
+            return;
+        }
+        if (username.isBlank() || password.isBlank() || username.contains(":")) {
+            throw new IllegalArgumentException("Invalid multicloud.auth credentials: username and password must be "
+                    + "configured together, must not be blank, and username must not contain a colon");
+        }
+        authorization = "Basic " + HttpHeaders.encodeBasicAuth(username, password, StandardCharsets.UTF_8);
+    }
+
+    public void applyAuthentication(HttpHeaders headers) {
+        if (authorization != null) {
+            headers.set(HttpHeaders.AUTHORIZATION, authorization);
+        }
+    }
 
     public String getMulticloudUrl() {
         return endpoint;
