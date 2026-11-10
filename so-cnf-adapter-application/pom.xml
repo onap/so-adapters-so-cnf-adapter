@@ -184,6 +184,16 @@
       <version>${so-core-version}</version>
     </dependency>
     <dependency>
+      <groupId>org.onap.so.common</groupId>
+      <artifactId>common</artifactId>
+      <version>${so-core-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.onap.so.common.clients</groupId>
+      <artifactId>clients</artifactId>
+      <version>${so-core-version}</version>
+    </dependency>
+    <dependency>
       <groupId>com.sun.xml.ws</groupId>
       <artifactId>jaxws-ri</artifactId>
       <version>2.3.7</version>
