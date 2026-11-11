@@ -1,11 +1,5 @@
 FROM eclipse-temurin:21-jre-alpine
 
-RUN apk --no-cache add curl netcat-openbsd nss apache2-utils java-cacerts
-
-RUN set -eux; \
-    rm -rf "$JAVA_HOME/lib/security/cacerts"; \
-    ln -sT /etc/ssl/certs/java/cacerts "$JAVA_HOME/lib/security/cacerts"
-
 ENV MAX_RAM_PERCENTAGE=75
 
 RUN addgroup -g 1000 so && adduser -S -u 1000 -G so -s /bin/sh so
@@ -16,42 +10,33 @@ ENV http_proxy=$HTTP_PROXY
 ARG https_proxy
 ENV HTTPS_PROXY=$https_proxy
 ENV https_proxy=$HTTPS_PROXY
-ARG KUBECTL_VERSION=v1.21.1
-ARG HELM_VERSION=v3.5.2
+ARG HELM_VERSION=v3.22.1
 
-USER root
-RUN mkdir -p /app/config /app/certificates /app/logs /app/ca-certificates /app/csar /app/kube-configs
+RUN mkdir -p /app/config /app/logs /app/csar /app/kube-configs
 
 # This can basically always be the latest version
-ARG OTEL_AGENT_VERSION=2.25.0
+ARG OTEL_AGENT_VERSION=2.26.1
 RUN wget -O /app/opentelemetry-javaagent.jar \
     https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v${OTEL_AGENT_VERSION}/opentelemetry-javaagent.jar
 
 COPY maven/app.jar /app
 COPY configs/logging/logback-spring.xml /app
 COPY scripts/start-app.sh /app
-COPY scripts/wait-for.sh /app
-COPY ca-certificates/onap-ca.crt /app/ca-certificates/onap-ca.crt
 RUN chown -R so:so /app
 
-ENV TAR_FILE="helm-${HELM_VERSION}-linux-amd64.tar.gz"
+ARG TAR_FILE="helm-${HELM_VERSION}-linux-amd64.tar.gz"
 
-RUN wget -q https://get.helm.sh/${TAR_FILE} && \
+RUN wget -q https://get.helm.sh/${TAR_FILE} https://get.helm.sh/${TAR_FILE}.sha256sum && \
+    sha256sum -c ${TAR_FILE}.sha256sum && \
     tar xf ${TAR_FILE} && \
     chmod +x linux-amd64/helm && \
     mv linux-amd64/helm /usr/local/bin && \
-    rm -rf linux-amd64 ${TAR_FILE} && \
-    wget -q -O /usr/local/bin/kubectl \
-      https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
-    chmod +x /usr/local/bin/kubectl
+    rm -rf linux-amd64 ${TAR_FILE} ${TAR_FILE}.sha256sum
 
 USER so
 
 # Springboot configuration (required)
 VOLUME /app/config
-
-#  Root certificates (optional)
-VOLUME /app/ca-certificates
 
 WORKDIR /app
 ENTRYPOINT ["/app/start-app.sh"]

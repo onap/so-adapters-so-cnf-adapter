@@ -1,11 +1,5 @@
 FROM eclipse-temurin:21-jre-alpine
 
-RUN apk --no-cache add curl netcat-openbsd nss apache2-utils java-cacerts
-
-RUN set -eux; \
-    rm -rf "$JAVA_HOME/lib/security/cacerts"; \
-    ln -sT /etc/ssl/certs/java/cacerts "$JAVA_HOME/lib/security/cacerts"
-
 ENV MAX_RAM_PERCENTAGE=75
 
 RUN addgroup -g 1000 so && adduser -S -u 1000 -G so -s /bin/sh so
@@ -17,27 +11,21 @@ ARG https_proxy
 ENV HTTPS_PROXY=$https_proxy
 ENV https_proxy=$HTTPS_PROXY
 
-USER root
-RUN mkdir -p /app/config /app/certificates /app/logs /app/ca-certificates
+RUN mkdir -p /app/config /app/logs
 
 # This can basically always be the latest version
-ARG OTEL_AGENT_VERSION=2.25.0
+ARG OTEL_AGENT_VERSION=2.26.1
 RUN wget -O /app/opentelemetry-javaagent.jar \
     https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v${OTEL_AGENT_VERSION}/opentelemetry-javaagent.jar
 
 COPY maven/app.jar /app
 COPY configs/logging/logback-spring.xml /app
 COPY scripts/start-app.sh /app
-COPY scripts/wait-for.sh /app
-COPY ca-certificates/onap-ca.crt /app/ca-certificates/onap-ca.crt
 RUN chown -R so:so /app
 
 USER so
 # Springboot configuration (required)
 VOLUME /app/config
-
-#  Root certificates (optional)
-VOLUME /app/ca-certificates
 
 WORKDIR /app
 ENTRYPOINT ["/app/start-app.sh"]

@@ -1,26 +1,5 @@
 #!/bin/sh
 
-if [ `id -u` = 0 ]
-then
-    # Install certificates found in the /app/ca-certificates volume, if any.
-
-    needUpdate=FALSE
-
-    for certificate in `ls -1 /app/ca-certificates`; do
-        echo "Installing $certificate in /usr/local/share/ca-certificates"
-        cp /app/ca-certificates/$certificate /usr/local/share/ca-certificates/$certificate
-        needUpdate=TRUE
-    done
-
-    if [ $needUpdate = TRUE ]; then
-        update-ca-certificates --fresh
-    fi
-
-    # Re-exec this script as the 'onap' user.
-    this=`readlink -f $0`
-    exec su so -c  "$this"
-fi
-
 touch /app/app.jar
 
 if [ ! -z "$DB_HOST" -a -z "$DB_PORT" ]; then
@@ -82,23 +61,6 @@ fi
 
 jvmargs="-XX:MaxRAMPercentage=${MAX_RAM_PERCENTAGE:-75} ${otel_agent_args} ${JVM_ARGS} -Dspring.profiles.active=${ACTIVE_PROFILE} -Djava.security.egd=file:/dev/./urandom -Dlogs_dir=${LOG_PATH} -Dlogging.config=/app/logback-spring.xml $jksargs -Dspring.config.additional-location=$CONFIG_PATH ${SSL_DEBUG} ${DISABLE_SNI}"
 
-
-read_properties(){
-    while IFS="=" read -r key value; do
-        case "${key}" in
-          '#'*) ;;
-             *)
-               eKey=$(echo $key | tr '[:lower:]' '[:upper:]')
-               export "$eKey"="$value"
-        esac
-    done <<-EOF
-	$1
-	EOF
-}
-
-if [ -n "${AAF_SSL_CERTS_ENABLED}" ]; then
-read_properties "$(head -n 4 /app/certs/.passphrases)"
-fi
 
 echo "JVM Arguments: ${jvmargs}"
 
